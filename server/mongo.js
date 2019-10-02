@@ -9,7 +9,8 @@ const localMongoUri = `mongodb+srv://${env.localUsername}:${env.localPassword}@g
 function connect() {
   return mongoose.connect(localMongoUri, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useCreateIndex: true
   });
 }
 

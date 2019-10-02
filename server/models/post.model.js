@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const postSchema = new Schema({
-  createdAt: { type: Date, required: true },
+  createdAt: Date,
   body: { type: String, required: true },
   userHandle: { type: String, required: true }
 });
