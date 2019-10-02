@@ -8,6 +8,7 @@ router.get('/posts', getPosts);
 router.get('/users', getUsers);
 router.post('/createPost', createPost);
 router.post('/register', register);
+router.post('/login', login);
 
 module.exports = router;
 
@@ -70,7 +71,7 @@ async function register(req, res, next) {
   userService
     .registerUser(req.body)
     .then(data => {
-      if (typeof data === 'string') {
+      if (typeof data === 'object') {
         return res.status(400).json({ error: data });
       } else {
         token = userService.generateUserToken(data);
@@ -78,6 +79,26 @@ async function register(req, res, next) {
     })
     .then(() => {
       return res.status(201).json({ token });
+    })
+    .catch(err => {
+      console.error(err);
+      return res.status(500).json({ error: err.code });
+    });
+}
+
+async function login(req, res, next) {
+  let token;
+  userService
+    .loginUser(req.body)
+    .then(data => {
+      if (typeof data === 'object') {
+        return res.status(400).json({ error: data });
+      } else {
+        token = data;
+      }
+    })
+    .then(() => {
+      return res.json({ token });
     })
     .catch(err => {
       console.error(err);
