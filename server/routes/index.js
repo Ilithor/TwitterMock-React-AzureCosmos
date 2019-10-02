@@ -92,7 +92,13 @@ async function login(req, res, next) {
     .loginUser(req.body)
     .then(data => {
       if (typeof data === 'object') {
-        return res.status(400).json({ error: data });
+        if (data.password) {
+          return res
+            .status(403)
+            .json({ error: 'Wrong credentials, please try again' });
+        } else {
+          return res.status(400).json({ error: data });
+        }
       } else {
         token = data;
       }
