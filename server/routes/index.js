@@ -4,17 +4,17 @@ const userService = require('../services/user.service');
 const postService = require('../services/post.service');
 
 // Routes
-router.get('/posts', getPosts);
-router.get('/users', getUsers);
+router.get('/posts', getPostList);
+router.get('/users', getUserList);
 router.post('/createPost', createPost);
-router.post('/register', register);
-router.post('/login', login);
+router.post('/register', registerUser);
+router.post('/login', loginUser);
 
 module.exports = router;
 
-function getPosts(req, res, next) {
+function getPostList(req, res, next) {
   postService
-    .getPosts()
+    .getList()
     .then(data => {
       let posts = [];
       data.forEach(doc => {
@@ -27,28 +27,39 @@ function getPosts(req, res, next) {
           likeCount: doc.likeCount
         });
       });
+      // Returns list of posts in array
       return res.json(posts);
     })
     .catch(err => console.error(err));
 }
 
 function createPost(req, res, next) {
+  let id;
   postService
-    .createPost(req.body)
-    .then(doc => {
-      res
+    .create(req.body)
+    .then(data => {
+      // If no id, function returned with
+      // validation errors
+      if (data.id === undefined) {
+        return res.status(400).json({ error: data });
+      } else {
+        id = data.id;
+      }
+    })
+    .then(() => {
+      return res
         .status(201)
-        .json({ message: `document ${doc.id} created successfully` });
+        .json({ message: `document ${id} created successfully` });
     })
     .catch(err => {
-      res.status(500).json({ error: 'Something went wrong' });
       console.error(err);
+      res.status(500).json({ error: 'Something went wrong' });
     });
 }
 
-function getUsers(req, res, next) {
+function getUserList(req, res, next) {
   userService
-    .getUsers()
+    .getList()
     .then(data => {
       let users = [];
       data.forEach(user => {
@@ -59,6 +70,7 @@ function getUsers(req, res, next) {
           handle: user.handle
         });
       });
+      // Returns list of users in array
       return res.json(users);
     })
     .catch(err => {
@@ -66,18 +78,22 @@ function getUsers(req, res, next) {
     });
 }
 
-async function register(req, res, next) {
+async function registerUser(req, res, next) {
   let token;
   userService
-    .registerUser(req.body)
+    .register(req.body)
     .then(data => {
+      // If function returns object, user
+      // failed validation checks
       if (typeof data === 'object') {
         return res.status(400).json({ error: data });
       } else {
+        // If pass validation, generate user token
         token = userService.generateUserToken(data);
       }
     })
     .then(() => {
+      // Returns user token
       return res.status(201).json({ token });
     })
     .catch(err => {
@@ -86,11 +102,13 @@ async function register(req, res, next) {
     });
 }
 
-async function login(req, res, next) {
+async function loginUser(req, res, next) {
   let token;
   userService
-    .loginUser(req.body)
+    .login(req.body)
     .then(data => {
+      // If function returns object, user
+      // failed validation checks
       if (typeof data === 'object') {
         if (data.password) {
           return res
@@ -104,6 +122,7 @@ async function login(req, res, next) {
       }
     })
     .then(() => {
+      // Returns user token
       return res.json({ token });
     })
     .catch(err => {

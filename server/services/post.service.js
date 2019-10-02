@@ -5,18 +5,24 @@ const ObjectID = require('mongodb').ObjectID;
 require('../mongo').connect();
 
 module.exports = {
-  getPosts,
-  createPost
+  getList,
+  create
 };
 
-async function getPosts() {
+async function getList() {
   // Retrieves all posts in desc order
   return await Post.find({})
     .sort({ createdAt: -1 })
     .read(ReadPreference.NEAREST);
 }
 
-async function createPost(postParam) {
+async function create(postParam) {
+  // Validation
+  let error = {};
+  if (postParam.body.trim() === '') {
+    error.body = 'Body must not be empty';
+    return error;
+  }
   // Create new post
   const newPost = new Post(postParam);
   newPost.createdAt = new Date().toISOString();

@@ -6,48 +6,49 @@ const env = require('../environment/environment');
 require('../mongo').connect();
 
 module.exports = {
-  registerUser,
-  getUsers,
+  register,
+  getList,
   generateUserToken,
   isEmpty,
-  loginUser
+  login
 };
 
-async function getUsers() {
+async function getList() {
   return await User.find({})
     .sort({ createdAt: -1 })
     .read(ReadPreference.NEAREST);
 }
 
 // Register route
-async function registerUser(userParam) {
+async function register(userParam) {
   // Validation
-  let errors = {};
+  let error = {};
 
   if (isEmpty(userParam.handle)) {
-    errors.handle = 'Must not be empty';
+    error.handle = 'Must not be empty';
   } else if (await User.findOne({ handle: userParam.handle })) {
-    errors.handle = 'User handle already exists';
+    error.handle = 'User handle already exists';
   }
 
   if (isEmpty(userParam.email)) {
-    errors.email = 'Must not be empty';
+    error.email = 'Must not be empty';
   } else if (!isEmail(userParam.email)) {
-    errors.email = 'Must be a valid email address';
+    error.email = 'Must be a valid email address';
   } else if (await User.findOne({ email: userParam.email })) {
-    errors.email = 'Email already exists';
+    error.email = 'Email already exists';
   }
 
   if (isEmpty(userParam.password)) {
-    errors.password = 'Must not be empty';
+    error.password = 'Must not be empty';
   } else if (userParam.password !== userParam.confirmPassword) {
-    errors.password = 'Password confirmation must match';
+    error.password = 'Password confirmation must match';
   }
 
-  if (Object.keys(errors).length > 0) {
-    return errors;
+  if (Object.keys(error).length > 0) {
+    return error;
   }
 
+  // Create user
   const newUser = new User(userParam);
   newUser.createdAt = new Date().toISOString();
 
@@ -57,23 +58,24 @@ async function registerUser(userParam) {
   return newUser;
 }
 
-async function loginUser(userParam) {
+async function login(userParam) {
   const { email, password } = userParam;
 
-  let errors = {};
+  // Validation
+  let error = {};
 
   if (isEmpty(email)) {
-    errors.email = 'Must not be empty';
+    error.email = 'Must not be empty';
   }
 
   if (isEmpty(password)) {
-    errors.password = 'Must not be empty';
+    error.password = 'Must not be empty';
   }
 
-  const user = await findByCredentials(email, password, errors);
+  const user = await findByCredential(email, password, error);
 
-  if (Object.keys(errors).length > 0) {
-    return errors;
+  if (Object.keys(error).length > 0) {
+    return error;
   }
 
   const token = generateUserToken(user);
@@ -81,26 +83,28 @@ async function loginUser(userParam) {
 }
 
 function generateUserToken(user) {
+  // Generates user token
   const token = jwt.sign({ _id: user._id }, env.jwt);
   token.concat({ token });
   return token;
 }
 
-async function findByCredentials(email, password, errors) {
+async function findByCredential(email, password, error) {
   // Search for user by email/password
   const user = await User.findOne({ email });
   if (!user) {
-    errors.email = 'Invalid email';
-    return errors;
+    error.email = 'Invalid email';
+    return error;
   }
   if (password !== user.password) {
-    errors.password = 'Invalid password';
-    return errors;
+    error.password = 'Invalid password';
+    return error;
   }
   return user;
 }
 
 function isEmpty(string) {
+  // Checks if provided string is empty
   if (string.trim() === '') {
     return true;
   } else {
@@ -109,6 +113,7 @@ function isEmpty(string) {
 }
 
 function isEmail(email) {
+  // Checks if valid email
   const emailRegEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   if (email.match(emailRegEx)) {
     return true;
