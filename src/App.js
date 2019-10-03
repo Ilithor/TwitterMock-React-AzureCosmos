@@ -8,18 +8,13 @@ class App extends Component {
     this.state = { message: '' };
   }
 
-  componentDidMount() {
-    fetch('/api/HelloWorld')
-      .then(response => response.json())
-      .then(json => this.setState({ message: json }));
-  }
+  componentDidMount() {}
 
   render() {
     return (
       <div className="App">
         <div className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
-          <h2>{this.state.message}</h2>
         </div>
         <p className="App-intro">
           To get started, edit <code>src/App.js</code> and save to reload.

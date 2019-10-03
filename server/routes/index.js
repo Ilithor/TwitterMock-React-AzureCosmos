@@ -6,7 +6,7 @@ const postService = require('../services/post.service');
 // Routes
 router.get('/posts', getPostList);
 router.get('/users', getUserList);
-router.post('/createPost', createPost);
+router.post('/createPost', Authorization, createPost);
 router.post('/register', registerUser);
 router.post('/login', loginUser);
 
@@ -33,6 +33,31 @@ function getPostList(req, res, next) {
     .catch(err => console.error(err));
 }
 
+function Authorization(req, res, next) {
+  userService
+    .authUser(req)
+    .then(data => {
+      if (typeof data !== 'string') {
+          return res.status(401).json({ error: data });
+      } else {
+        return userService.findUser(data);
+      }
+    })
+    .then(doc => {
+      if (typeof doc.user === 'string') {
+        return res.status(401).json({ error: doc });
+      } else if (typeof doc.handle === 'string') {
+        req.body.userHandle = doc.handle;
+        return next();
+      }
+    })
+    .catch(err => {
+      console.error('Error while verifying token', err);
+      return res.status(403).json(err);
+    });
+}
+
+// Makes one post
 function createPost(req, res, next) {
   let id;
   postService

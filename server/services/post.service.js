@@ -28,6 +28,6 @@ async function create(postParam) {
   newPost.createdAt = new Date().toISOString();
 
   // Save post
-  await newPost.save();
+  //await newPost.save();
   return newPost;
 }

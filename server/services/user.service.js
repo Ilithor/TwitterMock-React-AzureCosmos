@@ -10,8 +10,33 @@ module.exports = {
   getList,
   generateUserToken,
   isEmpty,
-  login
+  login,
+  authUser,
+  findUser
 };
+
+async function authUser(req) {
+  let error = {};
+  let idToken, decoded;
+
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer ')
+  ) {
+    idToken = req.headers.authorization.split('Bearer ')[1];
+  } else {
+    error.token = 'No proper token provided';
+    return error;
+  }
+
+  try {
+    decoded = await jwt.verify(idToken, env.jwt);
+    return decoded._id;
+  } catch(err) {
+    error.token = 'Invalid token';
+    return error;
+  }
+}
 
 async function getList() {
   return await User.find({})
@@ -87,6 +112,16 @@ function generateUserToken(user) {
   const token = jwt.sign({ _id: user._id }, env.jwt);
   token.concat({ token });
   return token;
+}
+
+async function findUser(_id) {
+  let error = {};
+  const user = await User.findOne({ _id });
+  if (!_id) {
+    error.user = 'Does not exist';
+    return error;
+  }
+  return user;
 }
 
 async function findByCredential(email, password, error) {
