@@ -2,21 +2,17 @@ const Post = require('../models/post.model');
 const ReadPreference = require('mongodb').ReadPreference;
 const ObjectID = require('mongodb').ObjectID;
 
-require('../mongo').connect();
+require('../util/mongo').connect();
 
-module.exports = {
-  getList,
-  create
-};
-
-async function getList() {
-  // Retrieves all posts in desc order
+// Retrieves all posts in desc order
+exports.getList = async () => {
   return await Post.find({})
     .sort({ createdAt: -1 })
     .read(ReadPreference.NEAREST);
-}
+};
 
-async function create(postParam) {
+// Creates and saves new post
+exports.create = async postParam => {
   // Validation
   let error = {};
   if (postParam.body.trim() === '') {
@@ -30,4 +26,4 @@ async function create(postParam) {
   // Save post
   //await newPost.save();
   return newPost;
-}
+};
