@@ -4,13 +4,22 @@ const userService = require('../services/user.service');
 const postService = require('../services/post.service');
 const { authUser } = require('../util/auth');
 const { getPostList, createPost } = require('../handlers/posts');
-const { getUserList, registerUser, loginUser } = require('../handlers/users');
+const {
+  getUserList,
+  registerUser,
+  loginUser,
+  imageUpload
+} = require('../handlers/users');
+const { multerUploads } = require('../util/multer');
 
-// Routes
+// Post routes
 router.get('/posts', getPostList);
-router.get('/users', getUserList);
 router.post('/createPost', authUser, createPost);
+
+// User routes
+router.get('/users', getUserList);
 router.post('/register', registerUser);
 router.post('/login', loginUser);
+router.post('/user/image', authUser, multerUploads, imageUpload);
 
 module.exports = router;

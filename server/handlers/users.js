@@ -1,5 +1,8 @@
 const userService = require('../services/user.service');
 const { generateUserToken } = require('../handlers/token');
+const { dataUri } = require('../util/multer');
+const { authByToken } = require('../util/auth');
+const { findById, findUserAndUpdateImage } = require('../handlers/find');
 
 // Retrieves a list of users
 exports.getUserList = (req, res, next) => {
@@ -76,4 +79,33 @@ exports.loginUser = async (req, res, next) => {
       console.error(err);
       return res.status(500).json({ error: err.code });
     });
+};
+
+/**Converts the uploaded image to base64 and uploades it
+ * as a property in the User doc
+ */
+exports.imageUpload = async (req, res) => {
+  let success;
+  authByToken(req).then(_id => {
+    findById(_id)
+      .then(doc => {
+        if (!doc.user) {
+          let base64 = dataUri(req).content;
+          success = findUserAndUpdateImage(doc, base64);
+        } else {
+          return res.status(500).json({ message: 'Something went wrong' });
+        }
+      })
+      .then(() => {
+        if (success) {
+          return res
+            .status(200)
+            .json({ message: 'Image successfully uploaded' });
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        return res.status(500).json({ error: err.code });
+      });
+  });
 };

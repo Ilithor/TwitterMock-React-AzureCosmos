@@ -5,7 +5,7 @@ const { findById } = require('../handlers/find');
 
 // Checks if valid token is used
 exports.authUser = (req, res, next) => {
-  auth(req)
+  this.authByToken(req)
     .then(data => {
       // Checks to see if authUser returned
       // a token. Otherwise, an error occurred
@@ -22,7 +22,6 @@ exports.authUser = (req, res, next) => {
       if (typeof doc.user === 'string') {
         return res.status(401).json({ error: doc });
       } else if (typeof doc.handle === 'string') {
-        req.body.userHandle = doc.handle;
         return next();
       }
     })
@@ -33,7 +32,7 @@ exports.authUser = (req, res, next) => {
 };
 
 // Decodes token and returns _id
-auth = async req => {
+exports.authByToken = async req => {
   let error = {};
   let idToken, decoded;
 
