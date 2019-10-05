@@ -29,10 +29,20 @@ exports.findById = async _id => {
 };
 
 /**Finds the exising user doc and updates the image property */
-exports.findUserAndUpdateImage = async (doc, base64) => {
+exports.findUserAndUpdateImage = async (_id, base64) => {
   await User.findOneAndUpdate(
-    { _id: doc._id },
+    { _id: _id },
     { $set: { image: base64 } },
-    { useFindAndModify: false, returnDocument: true }
+    { useFindAndModify: false }
+  );
+};
+
+exports.findUserAndUpdateProfile = async (userParam, _id) => {
+  const { bio, website, location } = userParam;
+
+  await User.findByIdAndUpdate(
+    { _id: _id },
+    { bio: bio, website: website, location: location },
+    { useFindAndModify: false }
   );
 };

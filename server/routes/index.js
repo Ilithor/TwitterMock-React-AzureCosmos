@@ -8,7 +8,8 @@ const {
   getUserList,
   registerUser,
   loginUser,
-  imageUpload
+  imageUpload,
+  addUserDetails
 } = require('../handlers/users');
 const { multerUploads } = require('../util/multer');
 
@@ -21,5 +22,6 @@ router.get('/users', getUserList);
 router.post('/register', registerUser);
 router.post('/login', loginUser);
 router.post('/user/image', authUser, multerUploads, imageUpload);
+router.post('/user', authUser, addUserDetails);
 
 module.exports = router;

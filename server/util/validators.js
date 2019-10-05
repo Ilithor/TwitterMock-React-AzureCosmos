@@ -3,7 +3,7 @@ const User = require('../models/user.model');
 require('../util/mongo').connect();
 
 exports.validateLogin = (email, password) => {
-  error = {};
+  let error = {};
 
   if (isEmpty(email)) {
     error.email = 'Must not be empty';
@@ -19,7 +19,7 @@ exports.validateLogin = (email, password) => {
 };
 
 exports.validateRegister = async userParam => {
-  error = {};
+  let error = {};
 
   if (isEmpty(userParam.email)) {
     error.email = 'Must not be empty';

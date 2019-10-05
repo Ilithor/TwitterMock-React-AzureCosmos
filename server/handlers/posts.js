@@ -1,9 +1,8 @@
-const postService = require('../services/post.service');
+const { getList, create } = require('../services/post.service');
 
 // Retrieves a list of posts
 exports.getPostList = (req, res, next) => {
-  postService
-    .getList()
+  getList()
     // Retrieves a list of posts, and
     // populates them in an array
     .then(data => {
@@ -27,8 +26,7 @@ exports.getPostList = (req, res, next) => {
 // Makes one post
 exports.createPost = (req, res, next) => {
   let id;
-  postService
-    .create(req.body)
+  create(req.body)
     .then(data => {
       // If no id, function returned with
       // validation errors
