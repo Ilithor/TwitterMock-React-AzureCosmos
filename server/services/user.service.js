@@ -32,7 +32,7 @@ exports.register = async userParam => {
   newUser.createdAt = new Date().toISOString();
 
   // Save user
-  //await newUser.save();
+  await newUser.save();
 
   return newUser;
 };
