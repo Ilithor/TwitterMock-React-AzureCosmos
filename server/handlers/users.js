@@ -85,23 +85,26 @@ exports.loginUser = async (req, res, next) => {
  * as a property in the User doc
  */
 exports.imageUpload = async (req, res) => {
-  let success;
+  let base64;
   authByToken(req).then(_id => {
     findById(_id)
       .then(doc => {
         if (!doc.user) {
-          let base64 = dataUri(req).content;
+          base64 = dataUri(req).content;
           success = findUserAndUpdateImage(doc, base64);
+          return doc._id;
         } else {
           return res.status(500).json({ message: 'Something went wrong' });
         }
       })
-      .then(() => {
-        if (success) {
-          return res
-            .status(200)
-            .json({ message: 'Image successfully uploaded' });
-        }
+      .then(_id => {
+        findById(_id).then(doc => {
+          if (doc.image === base64) {
+            return res
+              .status(200)
+              .json({ message: 'Image successfully uploaded' });
+          }
+        });
       })
       .catch(err => {
         console.log(err);
