@@ -1,20 +1,26 @@
-const Post = require('../models/post.model');
-const ReadPreference = require('mongodb').ReadPreference;
-const ObjectID = require('mongodb').ObjectID;
+import Post from '../models/post.model';
+import mongo from 'mongodb';
 
-require('../util/mongo').connect();
+import mongoConnection from '../util/mongo';
+mongoConnection();
 
-// Retrieves all posts in desc order
-exports.getList = async () => {
+/** Retrieves all posts in desc order
+ * 
+ */
+export const getList = async () => {
   return await Post.find({})
     .sort({ createdAt: -1 })
-    .read(ReadPreference.NEAREST);
+    .read(mongo.ReadPreference.NEAREST);
 };
 
-// Creates and saves new post
-exports.create = async postParam => {
+/** Creates and saves new post
+ * @param {string} postParam 
+ * @param {string} handle 
+ */
+export const create = async (postParam, handle) => {
   // Validation
   let error = {};
+  postParam.userHandle = handle;
   if (postParam.body.trim() === '') {
     error.body = 'Body must not be empty';
     return error;
@@ -25,5 +31,6 @@ exports.create = async postParam => {
 
   // Save post
   await newPost.save();
+  console.log(newPost);
   return newPost;
 };

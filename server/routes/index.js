@@ -1,25 +1,12 @@
-const express = require('express');
+import express from 'express';
+import userController from './user';
+import postController from './post';
 const router = express.Router();
-const userService = require('../services/user.service');
-const postService = require('../services/post.service');
-const { authUser } = require('../util/auth');
-const { getPostList, createPost } = require('../handlers/posts');
-const {
-  getUserList,
-  registerUser,
-  loginUser,
-  imageUpload
-} = require('../handlers/users');
-const { multerUploads } = require('../util/multer');
 
 // Post routes
-router.get('/posts', getPostList);
-router.post('/createPost', authUser, createPost);
+router.use('/post', postController);
 
 // User routes
-router.get('/users', getUserList);
-router.post('/register', registerUser);
-router.post('/login', loginUser);
-router.post('/user/image', authUser, multerUploads, imageUpload);
+router.use('/user', userController);
 
-module.exports = router;
+export default router;

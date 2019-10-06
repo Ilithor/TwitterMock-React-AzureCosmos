@@ -1,9 +1,15 @@
-const User = require('../models/user.model');
+import User from '../models/user.model';
 
-require('../util/mongo').connect();
+import mongoConnection from '../util/mongo';
+mongoConnection();
 
-exports.validateLogin = (email, password) => {
-  error = {};
+/**
+ * Checks if the email and password are valid
+ * @param {string} email
+ * @param {string} password
+ */
+export const validateLogin = (email, password) => {
+  let error = {};
 
   if (isEmpty(email)) {
     error.email = 'Must not be empty';
@@ -18,8 +24,11 @@ exports.validateLogin = (email, password) => {
   return error;
 };
 
-exports.validateRegister = async userParam => {
-  error = {};
+/** Checks if the user inputs are valid
+ *  @param {UserRegistration} userParam
+ */
+export const validateRegister = async userParam => {
+  let error = {};
 
   if (isEmpty(userParam.email)) {
     error.email = 'Must not be empty';
@@ -44,8 +53,30 @@ exports.validateRegister = async userParam => {
   return error;
 };
 
+/** Checks if the provided bio information is valid
+ * @example look at *all* the bio
+ * @param {UserBio} userBioInfo User's bio info
+ */
+export const validateUserDetail = ({ bio, website, location }) => {
+  let userDetails = {};
+  if (!isEmpty(bio.trim())) {
+    userDetails.bio = bio;
+  }
+  if (!isEmpty(website.trim())) {
+    if (website.trim().substring(0, 4) !== 'http') {
+      userDetails.website = `http://${website.trim()}`;
+    } else {
+      userDetails.website = website;
+    }
+  }
+  if (!isEmpty(location.trim())) {
+    userDetails.location = location;
+  }
+  return userDetails;
+};
+
 // Checks if provided string is empty
-isEmpty = string => {
+export const isEmpty = string => {
   if (string.trim() === '') {
     return true;
   } else {
@@ -54,7 +85,7 @@ isEmpty = string => {
 };
 
 // Checks if provided email is valid
-isEmail = email => {
+export const isEmail = email => {
   const emailRegEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   if (email.match(emailRegEx)) {
     return true;
