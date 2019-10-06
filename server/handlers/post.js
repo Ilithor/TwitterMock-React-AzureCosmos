@@ -32,17 +32,18 @@ export const getPostList = (req, res, next) => {
  * @type {RouteHandler}
  */
 export const createPost = async (req, res, next) => {
-  let docId;
+  let returnDoc;
   await authByToken(req)
     .then(async data => {
       await findById(data).then(async doc => {
-        docId = (await create(req.body, doc.handle))._id;
-        console.log(docId);
+        returnDoc = await create(req.body, doc.handle);
       });
-      if (docId) {
+      if (returnDoc._id) {
         return res
           .status(201)
-          .json({ message: `document ${docId} created successfully` });
+          .json({ message: `document ${returnDoc._id} created successfully` });
+      } else if (returnDoc.body) {
+        throw returnDoc.body;
       } else {
         throw 'Failed creating doc';
       }

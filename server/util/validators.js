@@ -58,13 +58,17 @@ export const validateRegister = async userParam => {
  * @param {UserBio} userBioInfo User's bio info
  */
 export const validateUserDetail = ({ bio, website, location }) => {
-  let userDetails = {};
+  let userDetails = { bio: '', website: '', location: '' };
   if (!isEmpty(bio.trim())) {
     userDetails.bio = bio;
   }
   if (!isEmpty(website.trim())) {
     if (website.trim().substring(0, 4) !== 'http') {
-      userDetails.website = `http://${website.trim()}`;
+      if (website.trim().substring(0, 3) !== 'www') {
+        userDetails.website = `http://www.${website.trim()}`;
+      } else {
+        userDetails.website = `http://${website.trim()}`;
+      }
     } else {
       userDetails.website = website;
     }

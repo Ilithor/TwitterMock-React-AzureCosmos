@@ -63,7 +63,7 @@ export const registerUser = async (req, res, next) => {
 };
 
 /** Logins the user
- * @type {RouteHandler} 
+ * @type {RouteHandler}
  */
 export const loginUser = async (req, res, next) => {
   let token;
@@ -94,16 +94,21 @@ export const loginUser = async (req, res, next) => {
  */
 export const addUserDetail = async (req, res, next) => {
   let { bio, website, location } = req.body;
-  let userDetail = await validateUserDetail({bio, website, location});
+  let userId;
+  if (!bio && !website && !location) {
+    return res
+      .status(400)
+      .json({ message: 'Provide at least one valid input' });
+  }
+  let userDetail = await validateUserDetail({ bio, website, location });
   website = userDetail.website;
-  let _id;
   await authByToken(req)
     .then(async data => {
-      _id = data;
-      await findUserAndUpdateProfile(userDetail, _id);
+      userId = data;
+      await findUserAndUpdateProfile(userDetail, userId);
     })
     .then(async () => {
-      await findById(_id).then(doc => {
+      await findById(userId).then(doc => {
         if (
           doc.bio === bio &&
           doc.website === website &&
@@ -126,6 +131,9 @@ export const addUserDetail = async (req, res, next) => {
  */
 export const imageUpload = async (req, res, next) => {
   let base64, _id;
+  if (!req.file) {
+    return res.status(400).json({ message: 'No image provided' });
+  }
   await authByToken(req)
     .then(async data => {
       _id = data;
