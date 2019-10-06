@@ -1,15 +1,18 @@
-const { getList, register, login } = require('../services/user.service');
-const { generateUserToken } = require('../handlers/token');
-const { dataUri } = require('../util/multer');
-const { authByToken } = require('../util/auth');
-const {
+import { getList, register, login } from '../services/user.service';
+import { generateUserToken } from './token';
+import { dataUri } from '../util/multer';
+import { authByToken } from '../util/auth';
+import {
   findById,
   findUserAndUpdateImage,
   findUserAndUpdateProfile
-} = require('../handlers/find');
+} from './find';
+import { validateUserDetail } from '../util/validators';
 
-/**Retrieves the list of users */
-exports.getUserList = (req, res, next) => {
+/** Retrieves the list of users
+ * @type {RouteHandler}
+ */
+export const getUserList = (req, res, next) => {
   getList()
     // Retrieves a list of users, and
     // populates them in an array
@@ -31,18 +34,20 @@ exports.getUserList = (req, res, next) => {
     });
 };
 
-/**Registers the user */
-exports.registerUser = async (req, res, next) => {
+/** Registers the user
+ * @type {RouteHandler}
+ */
+export const registerUser = async (req, res, next) => {
   let token;
-  register(req.body)
-    .then(data => {
+  await register(req.body)
+    .then(async data => {
       // If function returns object, user
       // failed validation checks
       if (!data.id) {
         return res.status(400).json({ error: data });
       } else {
         // If pass validation, generate user token
-        token = generateUserToken(data);
+        token = await generateUserToken(data);
       }
     })
     .then(() => {
@@ -57,10 +62,12 @@ exports.registerUser = async (req, res, next) => {
     });
 };
 
-/**Logins the user */
-exports.loginUser = async (req, res, next) => {
+/** Logins the user
+ * @type {RouteHandler} 
+ */
+export const loginUser = async (req, res, next) => {
   let token;
-  login(req.body)
+  await login(req.body)
     .then(data => {
       // If function does not return a string,
       // user failed validation checks
@@ -82,19 +89,21 @@ exports.loginUser = async (req, res, next) => {
     });
 };
 
-/**Edits the current user's profile with the
- * params provided by said user
+/** Edits the current user's profile with the params provided by said user
+ * @type {RouteHandler}
  */
-exports.addUserDetails = (req, res) => {
-  const { bio, website, location } = req.body;
+export const addUserDetail = async (req, res, next) => {
+  let { bio, website, location } = req.body;
+  let userDetail = await validateUserDetail({bio, website, location});
+  website = userDetail.website;
   let _id;
-  authByToken(req)
-    .then(data => {
+  await authByToken(req)
+    .then(async data => {
       _id = data;
-      findUserAndUpdateProfile(req.body, _id);
+      await findUserAndUpdateProfile(userDetail, _id);
     })
-    .then(() => {
-      findById(_id).then(doc => {
+    .then(async () => {
+      await findById(_id).then(doc => {
         if (
           doc.bio === bio &&
           doc.website === website &&
@@ -112,19 +121,19 @@ exports.addUserDetails = (req, res) => {
     });
 };
 
-/**Converts the uploaded image to base64 and uploads it
- * as a property in the User doc
+/** Converts the uploaded image to base64 and uploads it as a property in the User doc
+ * @type {RouteHandler}
  */
-exports.imageUpload = async (req, res) => {
+export const imageUpload = async (req, res, next) => {
   let base64, _id;
-  authByToken(req)
-    .then(data => {
+  await authByToken(req)
+    .then(async data => {
       _id = data;
-      base64 = dataUri(req).content;
-      success = findUserAndUpdateImage(_id, base64);
+      base64 = (await dataUri(req)).content;
+      await findUserAndUpdateImage(_id, base64);
     })
-    .then(() => {
-      findById(_id).then(doc => {
+    .then(async () => {
+      await findById(_id).then(doc => {
         if (doc.image === base64) {
           return res
             .status(200)

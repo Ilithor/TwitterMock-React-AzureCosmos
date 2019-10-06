@@ -1,23 +1,28 @@
-const User = require('../models/user.model');
-const ReadPreference = require('mongodb').ReadPreference;
-const jwt = require('jsonwebtoken');
-const env = require('../environment/environment');
-const { isEmpty, isEmail } = require('../util/validators');
-const { findByCredential, findUser } = require('../handlers/find');
-const { generateUserToken } = require('../handlers/token');
-const { validateLogin, validateRegister } = require('../util/validators');
+import User from '../models/user.model';
+import mongo from 'mongodb';
+import jwt from 'jsonwebtoken';
+import env from '../environment/environment';
+import { isEmpty, isEmail } from '../util/validators';
+import { findByCredential, findById } from '../handlers/find';
+import { generateUserToken } from '../handlers/token';
+import { validateLogin, validateRegister } from '../util/validators';
 
-require('../util/mongo').connect();
+import mongoConnect from '../util/mongo';
+mongoConnect();
 
-// Returns a list of users
-exports.getList = async () => {
+/** Returns a list of users
+ * 
+ */
+export const getList = async () => {
   return await User.find({})
     .sort({ createdAt: -1 })
-    .read(ReadPreference.NEAREST);
+    .read(mongo.ReadPreference.NEAREST);
 };
 
-// Register route
-exports.register = async userParam => {
+/** Validates then creates new User
+ * @param {UserRegistration} userParam 
+ */
+export const register = async userParam => {
   // Validation
   let error = {};
 
@@ -37,16 +42,17 @@ exports.register = async userParam => {
   return newUser;
 };
 
-// Checks if user exists, and then
-// generates a new token
-exports.login = async userParam => {
+/** Checks if user exists, and then generates a new token
+ * @param {UserLogin} userParam 
+ */
+export const login = async userParam => {
   const { email, password } = userParam;
 
   // Validation
   let error = {};
   let user;
 
-  error = validateLogin(email, password);
+  error = await validateLogin(email, password);
 
   if (Object.keys(error).length > 0) {
     // Returns error if any, otherwise continue
@@ -59,6 +65,6 @@ exports.login = async userParam => {
     return error;
   }
 
-  const token = generateUserToken(user);
+  const token = await generateUserToken(user);
   return token;
 };
