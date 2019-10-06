@@ -11,7 +11,7 @@ import mongoConnect from '../util/mongo';
 mongoConnect();
 
 /** Returns a list of users
- * 
+ *
  */
 export const getList = async () => {
   return await User.find({})
@@ -20,7 +20,7 @@ export const getList = async () => {
 };
 
 /** Validates then creates new User
- * @param {UserRegistration} userParam 
+ * @param {UserRegistration} userParam
  */
 export const register = async userParam => {
   // Validation
@@ -35,6 +35,9 @@ export const register = async userParam => {
   // Create user
   const newUser = new User(userParam);
   newUser.createdAt = new Date().toISOString();
+  newUser.bio = '';
+  newUser.website = '';
+  newUser.location = '';
 
   // Save user
   await newUser.save();
@@ -43,7 +46,7 @@ export const register = async userParam => {
 };
 
 /** Checks if user exists, and then generates a new token
- * @param {UserLogin} userParam 
+ * @param {UserLogin} userParam
  */
 export const login = async userParam => {
   const { email, password } = userParam;
