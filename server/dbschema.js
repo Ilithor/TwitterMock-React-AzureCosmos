@@ -1,6 +1,6 @@
 let db = {
-  users: [
-    {
+  users: {
+    credentials: {
       userId: 'asdkfjie4ye0932',
       email: 'whoa@whoa.com',
       handle: 'user',
@@ -9,8 +9,19 @@ let db = {
       bio: 'Derp',
       website: 'https://derp.com',
       location: 'Los Angeles, CA'
-    }
-  ],
+    },
+    likes: [
+      {
+        userHandle: 'user',
+        postId: 'ajhafihw4w3wfasd'
+      },
+      {
+        userHandle: 'user',
+        postId: '4259ufoiw4r09qr32'
+      }
+    ]
+  },
+  
   posts: [
     {
       userHandle: 'user',

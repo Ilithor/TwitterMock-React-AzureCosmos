@@ -4,25 +4,27 @@ import mongoConnection from '../util/mongo';
 mongoConnection();
 
 /**Returns a user that has a matching email and password
- * @param {string} email
- * @param {string} password
- * @param {UserError} error
+ * @type {UserRegistration}
  */
-export const findByCredential = async (email, password, error) => {
-  const user = await User.findOne({ email });
-  if (!user) {
+export const findByCredential = async user => {
+  let error = {};
+
+  const foundUser = await User.findOne({
+    'credential.email': user.credential.email
+  });
+  if (!foundUser) {
     error.email = 'Invalid email';
     return error;
   }
-  if (password !== user.password) {
+  if (user.credential.password !== foundUser.credential.password) {
     error.password = 'Invalid password';
     return error;
   }
-  return user;
+  return foundUser;
 };
 
 /** Returns a user that matches _id
- * @param {string} _id 
+ * @param {string} _id
  */
 export const findById = async _id => {
   let error = {};
@@ -35,45 +37,41 @@ export const findById = async _id => {
 };
 
 /** Finds the exising user doc and updates the image property
- * @param {string} _id 
- * @param {string} base64 
+ * @param {string} _id
+ * @param {string} base64
  */
 export const findUserAndUpdateImage = async (_id, base64) => {
   await User.findOneAndUpdate(
     { _id: _id },
-    { $set: { image: base64 } },
+    { $set: { 'bio.image': base64 } },
     { useFindAndModify: false }
   );
 };
 
 /** Finds and updates the user's profile photo
- * @param {UserBio} userDetails 
- * @param {string} _id 
+ * @param {UserBioUpdate} userDetails
+ * @param {string} _id
  */
 export const findUserAndUpdateProfile = async (userDetails, _id) => {
-  const { bio, website, location } = userDetails;
+  let { bio, website, location } = userDetails.bio;
 
   if (!bio) {
     if (!website) {
-      if (!location) {
-        return;
-      } else {
-        await User.findByIdAndUpdate(
-          { _id: _id },
-          { location: location },
-          { useFindAndModify: false }
-        );
-      }
+      await User.findByIdAndUpdate(
+        { _id: _id },
+        { $set: { 'bio.location': location } },
+        { useFindAndModify: false }
+      );
     } else if (!location) {
       await User.findByIdAndUpdate(
         { _id: _id },
-        { website: website },
+        { $set: { 'bio.website': website } },
         { useFindAndModify: false }
       );
     } else {
       await User.findByIdAndUpdate(
         { _id: _id },
-        { website: website, location: location },
+        { $set: { 'bio.website': website, 'bio.location': location } },
         { useFindAndModify: false }
       );
     }
@@ -81,26 +79,32 @@ export const findUserAndUpdateProfile = async (userDetails, _id) => {
     if (!location) {
       await User.findByIdAndUpdate(
         { _id: _id },
-        { bio: bio },
+        { $set: { 'bio.bio': bio } },
         { useFindAndModify: false }
       );
     } else {
       await User.findByIdAndUpdate(
         { _id: _id },
-        { bio: bio, location: location },
+        { $set: { 'bio.bio': bio, 'bio.location': location } },
         { useFindAndModify: false }
       );
     }
   } else if (!location) {
     await User.findByIdAndUpdate(
       { _id: _id },
-      { bio: bio, website: website },
+      { $set: { 'bio.bio': bio, 'bio.website': website } },
       { useFindAndModify: false }
     );
   } else {
     await User.findByIdAndUpdate(
       { _id: _id },
-      { bio: bio, website: website, location: location },
+      {
+        $set: {
+          'bio.bio': bio,
+          'bio.website': website,
+          'bio.location': location
+        }
+      },
       { useFindAndModify: false }
     );
   }
