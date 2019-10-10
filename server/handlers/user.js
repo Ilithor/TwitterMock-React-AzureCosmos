@@ -93,15 +93,21 @@ export const loginUser = async (req, res, next) => {
  * @type {RouteHandler}
  */
 export const addUserDetail = async (req, res, next) => {
-  let { bio, website, location } = req.body;
+  let userParam = req.body;
   let userId;
-  if (!bio && !website && !location) {
+  let userBio = userParam.bio,
+    userWebsite = userParam.website,
+    userLocation = userParam.location;
+  let bio = {};
+  let userDetail = { bio };
+
+  if (!userParam.bio && !userParam.website && !userParam.location) {
     return res
       .status(400)
       .json({ message: 'Provide at least one valid input' });
   }
-  let userDetail = await validateUserDetail({ bio, website, location });
-  website = userDetail.website;
+  userDetail.bio = await validateUserDetail(userParam);
+  userWebsite = userDetail.bio.website;
   await authByToken(req)
     .then(async data => {
       userId = data;
@@ -110,9 +116,9 @@ export const addUserDetail = async (req, res, next) => {
     .then(async () => {
       await findById(userId).then(doc => {
         if (
-          doc.bio === bio &&
-          doc.website === website &&
-          doc.location === location
+          doc.bio.bio === userBio &&
+          doc.bio.website === userWebsite &&
+          doc.bio.location === userLocation
         ) {
           return res
             .status(200)
@@ -142,7 +148,7 @@ export const imageUpload = async (req, res, next) => {
     })
     .then(async () => {
       await findById(_id).then(doc => {
-        if (doc.image === base64) {
+        if (doc.bio.image === base64) {
           return res
             .status(200)
             .json({ message: 'Image successfully uploaded' });

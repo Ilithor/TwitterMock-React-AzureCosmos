@@ -1,19 +1,19 @@
 import mongoose from 'mongoose';
-import jwt from 'jsonwebtoken';
-import env from '../environment/environment';
+
+const Schema = mongoose.Schema;
 
 /**Creates new schema that dictates what properties
  * will occupy the User document
  */
-export const UserSchema = mongoose.Schema({
+const UserSchema = Schema({
   createdAt: Date,
-  email: { type: String, unique: true, required: true },
-  password: { type: String, required: true },
   handle: { type: String, unique: true, required: true },
-  bio: String,
-  website: String,
-  location: String,
-  image: String
+  credential: {
+    email: { type: String, unique: true, required: true },
+    password: { type: String, required: true }
+  },
+  bio: { image: String, bio: String, website: String, location: String },
+  like: [{ userHandle: String, docId: String }]
 });
 
 const User = mongoose.model('User', UserSchema);

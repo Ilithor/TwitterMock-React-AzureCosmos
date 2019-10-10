@@ -5,7 +5,7 @@ import {
   loginUser,
   imageUpload,
   addUserDetail,
-  getUserList
+  // getAuthenticatedUser
 } from '../handlers/user';
 import { authUser } from '../util/auth';
 import { multerUploads } from '../util/multer';
@@ -14,6 +14,6 @@ router.post('/register', registerUser);
 router.post('/login', loginUser);
 router.post('/image', authUser, multerUploads, imageUpload);
 router.post('/', authUser, addUserDetail);
-router.get('/', getUserList);
+// router.get('/', authUser, getAuthenticatedUser);
 
 export default router;

@@ -3,17 +3,26 @@
  */
 
 /**
- * @typedef User
- * @implements {UserBio}
- * @property {string} _id
+ * @typedef UserCredential
  * @property {string} email
  * @property {string} password
- * @property {string} handle
- * @property {Date} createdAt
+ */
+
+/**
+ * @typedef UserBio
  * @property {string} bio
  * @property {string} website
  * @property {string} location
- * @property {string} image
+ * @property {string} Image
+ */
+
+/**
+ * @typedef User
+ * @property {Date} createdAt
+ * @property {string} handle
+ * @property {UserCredential} credential
+ * @property {UserBio} bio
+ * @property {LikeList} like
  */
 
 /**
@@ -22,6 +31,13 @@
  * @property {string} handle
  * @property {string} password
  * @property {string} confirmPassword
+ */
+
+/**
+ * @typedef UserBioUpdate
+ * @property {string} bio
+ * @property {string} website
+ * @property {string} location
  */
 
  /**
@@ -34,20 +50,18 @@
   */
 
 /**
- * @typedef UserLogin
- * @property {string} email
- * @property {string} password
- */
-
-/**
- * @typedef UserBio
- * @property {string} bio
- * @property {string} website
- * @property {string} location
- */
-
-/**
  * @typedef Post
+ */
+
+/**
+ * @typedef LikeList
+ * @property {Like} like
+ */
+
+/**
+ * @typedef Like
+ * @property {string} userHandle
+ * @property {string} postId
  */
 
  /**

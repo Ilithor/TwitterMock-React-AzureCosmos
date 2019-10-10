@@ -5,19 +5,18 @@ mongoConnection();
 
 /**
  * Checks if the email and password are valid
- * @param {string} email
- * @param {string} password
+ * @param {UserCredential} user
  */
-export const validateLogin = (email, password) => {
+export const validateLogin = user => {
   let error = {};
-
-  if (isEmpty(email)) {
+  console.log(user);
+  if (isEmpty(user.email)) {
     error.email = 'Must not be empty';
-  } else if (!isEmail(email)) {
+  } else if (!isEmail(user.email)) {
     error.email = 'Must be a valid email address';
   }
 
-  if (isEmpty(password)) {
+  if (isEmpty(user.password)) {
     error.password = 'Must not be empty';
   }
 
@@ -55,10 +54,11 @@ export const validateRegister = async userParam => {
 
 /** Checks if the provided bio information is valid
  * @example look at *all* the bio
- * @param {UserBio} userBioInfo User's bio info
+ * @param {UserBioUpdate} userParam User's bio info
  */
-export const validateUserDetail = ({ bio, website, location }) => {
+export const validateUserDetail = userParam => {
   let userDetails = { bio: '', website: '', location: '' };
+  let { bio, website, location } = userParam;
   if (!isEmpty(bio.trim())) {
     userDetails.bio = bio;
   }

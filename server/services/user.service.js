@@ -25,7 +25,9 @@ export const getList = async () => {
 export const register = async userParam => {
   // Validation
   let error = {};
-
+  let credential = {};
+  let bio = {};
+  let user = { credential, bio };
   error = await validateRegister(userParam);
 
   if (Object.keys(error).length > 0) {
@@ -33,12 +35,15 @@ export const register = async userParam => {
   }
 
   // Create user
-  const newUser = new User(userParam);
+  user.handle = userParam.handle;
+  user.credential.email = userParam.email;
+  user.credential.password = userParam.password;
+  user.bio.bio = '';
+  user.bio.website = '';
+  user.bio.location = '';
+  const newUser = new User(user);
   newUser.createdAt = new Date().toISOString();
-  newUser.bio = '';
-  newUser.website = '';
-  newUser.location = '';
-
+  
   // Save user
   await newUser.save();
 
@@ -46,28 +51,30 @@ export const register = async userParam => {
 };
 
 /** Checks if user exists, and then generates a new token
- * @param {UserLogin} userParam
+ * @param {UserCredential} userParam
  */
 export const login = async userParam => {
   const { email, password } = userParam;
 
   // Validation
   let error = {};
-  let user;
+  let user = {};
+  let userLoggedIn;
 
-  error = await validateLogin(email, password);
+  error = await validateLogin(userParam);
 
   if (Object.keys(error).length > 0) {
     // Returns error if any, otherwise continue
     return error;
   } else {
-    user = await findByCredential(email, password, error);
+    user.credential = { email, password };
+    userLoggedIn = await findByCredential(user);
   }
 
-  if (Object.keys(error).length > 0) {
-    return error;
+  if (userLoggedIn.email || userLoggedIn.password) {
+    return userLoggedIn;
+  } else {
+    const token = await generateUserToken(userLoggedIn);
+    return token;
   }
-
-  const token = await generateUserToken(user);
-  return token;
 };
