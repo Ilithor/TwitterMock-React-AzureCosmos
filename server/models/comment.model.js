@@ -15,6 +15,10 @@ const CommentSchema = Schema({
   postId: {
     type: String,
     required: true
+  },
+  userImage: {
+    type: String,
+    required: true
   }
 });
 

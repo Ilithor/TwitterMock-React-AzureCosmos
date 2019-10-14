@@ -5,6 +5,6 @@ import { create } from '../services/comment.service';
  */
 export const commentOnPost = async (req, res) => {
   await create(req).then(comment => {
-    return res.json({ comment });
+    return res.status(201).json({ comment });
   });
 };

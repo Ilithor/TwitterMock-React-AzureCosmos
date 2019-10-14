@@ -8,7 +8,7 @@ import Post from '../models/post.model';
 mongoConnection();
 
 /**Returns a user that has a matching email and password
- * @type {UserRegistration}
+ * @param {UserRegistration} user
  */
 export const findByCredential = async user => {
   let error = {};
@@ -57,6 +57,9 @@ export const findPostById = async _id => {
   return post;
 };
 
+/** Fetches all comments attached to PostId
+ * @param {string} _id
+ */
 export const findCommentByPostId = async _id => {
   let comment = [];
   let error = {};
@@ -74,7 +77,7 @@ export const findCommentByPostId = async _id => {
 };
 
 /** Finds all likes that match the provided user handle
- * @param {string} handle 
+ * @param {string} handle
  */
 export const findLikeByHandle = async handle => {
   let like = [];
@@ -111,7 +114,7 @@ export const findUserAndUpdateImage = async (_id, base64) => {
   );
 };
 
-/** Finds and updates the user's profile photo
+/** Finds and updates the user's profile bio
  * @param {UserBioUpdate} userDetails
  * @param {string} _id
  */

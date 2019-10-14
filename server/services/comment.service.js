@@ -3,17 +3,28 @@ import Comment from '../models/comment.model';
 import mongoConnection from '../util/mongo';
 mongoConnection();
 
+/** Creates a new comment
+ * @param {Request} commentParam 
+ */
 export const create = async commentParam => {
+  let dataForComment = {};
   let error = {};
+
+  // Validation
   if (commentParam.body.body.trim() === '') {
     error.body = 'Must not be empty';
     return error;
   }
-  commentParam.userHandle = commentParam.user.handle;
-  commentParam.postId = commentParam.params.postId;
-  const newComment = new Comment(commentParam);
+
+  // Construct needed properties for the comment
+  dataForComment.userHandle = commentParam.user.handle;
+  dataForComment.postId = commentParam.params.postId;
+  dataForComment.userImage = commentParam.user.bio.image;
+  dataForComment.body = commentParam.body.body;
+  let newComment = new Comment(dataForComment);
   newComment.createdAt = new Date().toISOString();
 
-  // await newComment.save();
+  // Save the comment
+  await newComment.save();
   return newComment;
 };

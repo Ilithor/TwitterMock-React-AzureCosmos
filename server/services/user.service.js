@@ -19,7 +19,7 @@ import mongoConnect from '../util/mongo';
 mongoConnect();
 
 /** Returns a list of users
- *
+ * @returns {Promise<user[User], error>}
  */
 export const getList = async () => {
   let user = [];
@@ -96,7 +96,9 @@ export const login = async userParam => {
   }
 };
 
-/**
+/** Updates the current user's bio properties
+ * @param {Object} userParam
+ * @param {string} userId
  * @returns {Promise<boolean>}
  */
 export const updateBio = async (userParam, userId) => {

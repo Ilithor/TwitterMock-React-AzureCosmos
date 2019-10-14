@@ -44,6 +44,9 @@ export const getPost = async (req, res) => {
     postData.comment = [];
     findCommentByPostId(returnPost._id)
       .then(post => {
+        if (post.comment) {
+          return res.status(500).json({ error: post.comment });
+        }
         post.forEach(doc => {
           postData.comment.push(doc);
         });

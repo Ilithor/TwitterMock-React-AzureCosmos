@@ -5,12 +5,21 @@ import mongoConnection from '../util/mongo';
 mongoConnection();
 
 /** Retrieves all posts in desc order
- *
+ * @returns {Promise<post[Post], error>}
  */
 export const getList = async () => {
-  return await Post.find({})
+  let post = [];
+  let error = {};
+  post = return await Post.find({})
     .sort({ createdAt: -1 })
     .read(mongo.ReadPreference.NEAREST);
+
+    if (post.length === 0) {
+      error.post = 'No posts found';
+      return error;
+    } else {
+      return post;
+    }
 };
 
 /** Creates and saves new post
