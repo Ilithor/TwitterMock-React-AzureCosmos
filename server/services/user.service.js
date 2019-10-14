@@ -3,9 +3,17 @@ import mongo from 'mongodb';
 import jwt from 'jsonwebtoken';
 import env from '../environment/environment';
 import { isEmpty, isEmail } from '../util/validators';
-import { findByCredential, findById } from '../handlers/find';
+import {
+  findByCredential,
+  findById,
+  findUserAndUpdateProfile
+} from '../handlers/find';
 import { generateUserToken } from '../handlers/token';
-import { validateLogin, validateRegister } from '../util/validators';
+import {
+  validateLogin,
+  validateRegister,
+  validateUserDetail
+} from '../util/validators';
 
 import mongoConnect from '../util/mongo';
 mongoConnect();
@@ -14,9 +22,18 @@ mongoConnect();
  *
  */
 export const getList = async () => {
-  return await User.find({})
+  let user = [];
+  let error = {};
+  user = await User.find({})
     .sort({ createdAt: -1 })
     .read(mongo.ReadPreference.NEAREST);
+
+  if (user.length === 0) {
+    error.user = 'No users found';
+    return error;
+  } else {
+    return user;
+  }
 };
 
 /** Validates then creates new User
@@ -43,7 +60,7 @@ export const register = async userParam => {
   user.bio.location = '';
   const newUser = new User(user);
   newUser.createdAt = new Date().toISOString();
-  
+
   // Save user
   await newUser.save();
 
@@ -77,4 +94,28 @@ export const login = async userParam => {
     const token = await generateUserToken(userLoggedIn);
     return token;
   }
+};
+
+/**
+ * @returns {Promise<boolean>}
+ */
+export const updateBio = async (userParam, userId) => {
+  let userDetail = {};
+  let success = false;
+
+  userDetail.bio = await validateUserDetail(userParam);
+  userParam.website = userDetail.bio.website;
+  await findUserAndUpdateProfile(userDetail, userId).then(async () => {
+    await findById(userId).then(async doc => {
+      if (
+        doc.bio.bio === userParam.bio &&
+        doc.bio.website === userParam.website &&
+        doc.bio.location === userParam.location
+      ) {
+        success = true;
+        return success;
+      }
+    });
+  });
+  return success;
 };

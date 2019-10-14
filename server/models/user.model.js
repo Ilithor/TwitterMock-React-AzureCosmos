@@ -7,13 +7,34 @@ const Schema = mongoose.Schema;
  */
 const UserSchema = Schema({
   createdAt: Date,
-  handle: { type: String, unique: true, required: true },
-  credential: {
-    email: { type: String, unique: true, required: true },
-    password: { type: String, required: true }
+  handle: {
+    type: String,
+    unique: true,
+    required: true
   },
-  bio: { image: String, bio: String, website: String, location: String },
-  like: [{ userHandle: String, docId: String }]
+  credential: {
+    email: {
+      type: String,
+      unique: true,
+      required: true
+    },
+    password: {
+      type: String,
+      required: true
+    }
+  },
+  bio: {
+    image: String,
+    bio: String,
+    website: String,
+    location: String
+  },
+  like: [
+    {
+      userHandle: String,
+      docId: String
+    }
+  ]
 });
 
 const User = mongoose.model('User', UserSchema);

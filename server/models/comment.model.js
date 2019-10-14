@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
-const PostSchema = Schema({
+const CommentSchema = Schema({
   createdAt: Date,
   body: {
     type: String,
@@ -11,9 +11,13 @@ const PostSchema = Schema({
   userHandle: {
     type: String,
     required: true
+  },
+  postId: {
+    type: String,
+    required: true
   }
 });
 
-const Post = mongoose.model('Post', PostSchema);
+const Comment = mongoose.model('Comment', CommentSchema);
 
-export default Post;
+export default Comment;

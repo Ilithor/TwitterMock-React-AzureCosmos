@@ -31,6 +31,5 @@ export const create = async (postParam, handle) => {
 
   // Save post
   await newPost.save();
-  console.log(newPost);
   return newPost;
 };

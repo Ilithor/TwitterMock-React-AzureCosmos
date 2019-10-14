@@ -24,6 +24,7 @@ export const authUser = async (req, res, next) => {
       if (typeof doc.user === 'string') {
         return res.status(401).json({ error: doc });
       } else if (typeof doc.handle === 'string') {
+        req.user = doc;
         return next();
       }
     })
