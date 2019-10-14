@@ -1,6 +1,6 @@
 import User from '../models/user.model';
 import { getList, create } from '../services/post.service';
-import { findById } from './find';
+import { findById, findPostById, findCommentByPostId } from './find';
 import { authByToken } from '../util/auth';
 
 /** Retrieves a list of posts
@@ -11,9 +11,9 @@ export const getPostList = (req, res, next) => {
     // Retrieves a list of posts, and
     // populates them in an array
     .then(data => {
-      let posts = [];
+      let postList = [];
       data.forEach(doc => {
-        posts.push({
+        postList.push({
           postId: doc.id,
           body: doc.body,
           userHandle: doc.userHandle,
@@ -23,27 +23,54 @@ export const getPostList = (req, res, next) => {
         });
       });
       // Returns list of posts in array
-      return res.json(posts);
+      return res.json(postList);
     })
-    .catch(err => console.error(err));
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: err.code });
+    });
 };
 
-/** Creates a single post
+/** Retrieves one post
+ * @type {RouteHandler}
+ */
+export const getPost = async (req, res) => {
+  let postData = {};
+  await findPostById(req.params.postId).then(returnPost => {
+    if (returnPost.post) {
+      return res.status(404).json({ error: returnPost.post });
+    }
+    postData.post = returnPost;
+    postData.comment = [];
+    findCommentByPostId(returnPost._id)
+      .then(post => {
+        if (post.comment) {
+          return res.status(500).json({ error: post.comment });
+        }
+        post.forEach(doc => {
+          postData.comment.push(doc);
+        });
+        return res.json(postData);
+      })
+      .catch(err => {
+        console.error(err);
+        return res.status(500).json({ error: err.code });
+      });
+  });
+};
+
+/** Create s a single post
  * @type {RouteHandler}
  */
 export const createPost = async (req, res, next) => {
-  let returnDoc;
-  await authByToken(req)
-    .then(async data => {
-      await findById(data).then(async doc => {
-        returnDoc = await create(req.body, doc.handle);
-      });
-      if (returnDoc._id) {
+  await create(req.body, req.user.handle)
+    .then(doc => {
+      if (doc._id) {
         return res
           .status(201)
-          .json({ message: `document ${returnDoc._id} created successfully` });
-      } else if (returnDoc.body) {
-        throw returnDoc.body;
+          .json({ message: `document ${doc._id} created successfully` });
+      } else if (doc.body) {
+        throw doc.body;
       } else {
         throw 'Failed creating doc';
       }

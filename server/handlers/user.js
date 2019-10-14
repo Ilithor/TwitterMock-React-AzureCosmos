@@ -1,11 +1,12 @@
-import { getList, register, login } from '../services/user.service';
+import { getList, register, login, updateBio } from '../services/user.service';
 import { generateUserToken } from './token';
 import { dataUri } from '../util/multer';
 import { authByToken } from '../util/auth';
 import {
   findById,
   findUserAndUpdateImage,
-  findUserAndUpdateProfile
+  findUserAndUpdateProfile,
+  findLikeByHandle
 } from './find';
 import { validateUserDetail } from '../util/validators';
 
@@ -17,9 +18,13 @@ export const getUserList = (req, res, next) => {
     // Retrieves a list of users, and
     // populates them in an array
     .then(data => {
-      let users = [];
+      if (data.user) {
+        return res.status(404).json({ error: data.user });
+      }
+
+      let user = [];
       data.forEach(user => {
-        users.push({
+        user.push({
           userId: user.id,
           email: user.email,
           password: user.password,
@@ -27,7 +32,7 @@ export const getUserList = (req, res, next) => {
         });
       });
       // Returns list of users in array
-      return res.json(users);
+      return res.json(user);
     })
     .catch(err => {
       console.error(err);
@@ -44,7 +49,9 @@ export const registerUser = async (req, res, next) => {
       // If function returns object, user
       // failed validation checks
       if (!data.id) {
-        return res.status(400).json({ error: data });
+        return res.status(400).json({
+          error: data
+        });
       } else {
         // If pass validation, generate user token
         token = await generateUserToken(data);
@@ -53,12 +60,16 @@ export const registerUser = async (req, res, next) => {
     .then(() => {
       if (token) {
         // Returns user token
-        return res.status(201).json({ token });
+        return res.status(201).json({
+          token
+        });
       }
     })
     .catch(err => {
       console.error(err);
-      return res.status(500).json({ error: err.code });
+      return res.status(500).json({
+        error: err.code
+      });
     });
 };
 
@@ -72,7 +83,9 @@ export const loginUser = async (req, res, next) => {
       // If function does not return a string,
       // user failed validation checks
       if (typeof data !== 'string') {
-        return res.status(403).json({ error: data });
+        return res.status(403).json({
+          error: data
+        });
       } else {
         token = data;
       }
@@ -80,8 +93,32 @@ export const loginUser = async (req, res, next) => {
     .then(() => {
       // Returns user token
       if (token) {
-        return res.json({ token });
+        return res.json({
+          token
+        });
       }
+    })
+    .catch(err => {
+      console.error(err);
+      return res.status(500).json({
+        error: err.code
+      });
+    });
+};
+
+/** Get own user details
+ * @type {RouteHandler}
+ */
+export const getAuthenticatedUser = async (req, res) => {
+  let userData = {};
+  userData.user = req.user;
+  return await findLikeByHandle(userData._id)
+    .then(arr => {
+      if (arr.like) {
+        return res.status(404).json({ error: arr.like });
+      }
+      userData.like = arr;
+      return res.json(userData);
     })
     .catch(err => {
       console.error(err);
@@ -94,41 +131,30 @@ export const loginUser = async (req, res, next) => {
  */
 export const addUserDetail = async (req, res, next) => {
   let userParam = req.body;
-  let userId;
-  let userBio = userParam.bio,
-    userWebsite = userParam.website,
-    userLocation = userParam.location;
-  let bio = {};
-  let userDetail = { bio };
+  let userId = req.user._id;
 
   if (!userParam.bio && !userParam.website && !userParam.location) {
     return res
       .status(400)
-      .json({ message: 'Provide at least one valid input' });
+      .json({ message: 'At least one valid input is needed' });
   }
-  userDetail.bio = await validateUserDetail(userParam);
-  userWebsite = userDetail.bio.website;
-  await authByToken(req)
-    .then(async data => {
-      userId = data;
-      await findUserAndUpdateProfile(userDetail, userId);
-    })
-    .then(async () => {
-      await findById(userId).then(doc => {
-        if (
-          doc.bio.bio === userBio &&
-          doc.bio.website === userWebsite &&
-          doc.bio.location === userLocation
-        ) {
-          return res
-            .status(200)
-            .json({ message: 'Profile updated successfully' });
-        }
-      });
+
+  await updateBio(userParam, userId)
+    .then(async success => {
+      console.log(success);
+      if (success === true) {
+        return res.status(200).json({
+          message: 'Profile updated successfully'
+        });
+      } else {
+        return res.status(500).json({ message: 'Something went wrong' });
+      }
     })
     .catch(err => {
       console.error(err);
-      return res.status(500).json({ error: err.code });
+      return res.status(500).json({
+        error: err.code
+      });
     });
 };
 
@@ -138,25 +164,26 @@ export const addUserDetail = async (req, res, next) => {
 export const imageUpload = async (req, res, next) => {
   let base64, _id;
   if (!req.file) {
-    return res.status(400).json({ message: 'No image provided' });
+    return res.status(400).json({
+      message: 'No image provided'
+    });
   }
-  await authByToken(req)
-    .then(async data => {
-      _id = data;
-      base64 = (await dataUri(req)).content;
-      await findUserAndUpdateImage(_id, base64);
-    })
+  _id = req.user._id;
+  base64 = (await dataUri(req)).content;
+  await findUserAndUpdateImage(_id, base64)
     .then(async () => {
       await findById(_id).then(doc => {
         if (doc.bio.image === base64) {
-          return res
-            .status(200)
-            .json({ message: 'Image successfully uploaded' });
+          return res.status(200).json({
+            message: 'Image successfully uploaded'
+          });
         }
       });
     })
     .catch(err => {
       console.log(err);
-      return res.status(500).json({ error: err.code });
+      return res.status(500).json({
+        error: err.code
+      });
     });
 };

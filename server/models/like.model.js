@@ -2,18 +2,17 @@ import mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
-const PostSchema = Schema({
-  createdAt: Date,
-  body: {
+const LikeSchema = Schema({
+  userHandle: {
     type: String,
     required: true
   },
-  userHandle: {
+  postId: {
     type: String,
     required: true
   }
 });
 
-const Post = mongoose.model('Post', PostSchema);
+const Like = mongoose.model('Like', LikeSchema);
 
-export default Post;
+export default Like;
