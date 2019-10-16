@@ -91,6 +91,15 @@ export const findLikeByHandle = async handle => {
   }
 };
 
+export const findCommentByHandleAndPostId = async (handle, postId) => {
+  let comment = {};
+  comment = await Comment.find({
+    userHandle: handle,
+    postId: postId
+  }).read(mongo.ReadPreference.NEAREST);
+  return comment;
+}
+
 /** Finds all likes that match the provided user handle
  * @param {string} handle
  * @param {string} postId
@@ -104,7 +113,7 @@ export const findLikeByHandleAndPostId = async (handle, postId) => {
   return like;
 };
 
-export const findPostAndUpdateCounts = async (_id, likeCount, commentCount) => {
+export const findPostAndUpdateCount = async (_id, likeCount, commentCount) => {
   await Post.findOneAndUpdate(
     {
       _id: _id
