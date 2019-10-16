@@ -1,7 +1,39 @@
 import Notification from '../models/notification.model';
 
 import mongoConnection from '../util/mongo';
+import { findNotificationByRecipient } from './find';
 mongoConnection();
+
+/** Retrieves all notifications
+ * @type {RouteHandler}
+ */
+export const getNotification = async (req, res) => {
+  const userAttemptAccess = String(req.user._id);
+  if (userAttemptAccess !== req.params.userId) {
+    return res.status(401).json({ message: 'Unauthorized Access' });
+  }
+  await findNotificationByRecipient(req.user.handle)
+    .then(data => {
+      if (data.notification) {
+        return res.status(404).json({ error: data.notification });
+      }
+
+      let notification = [];
+      data.forEach(doc => {
+        notification.push({
+          createdAt: doc.createdAt,
+          postId: doc.typeId,
+          sender: doc.sender,
+          type: doc.type
+        });
+      });
+      return res.json(notification);
+    })
+    .catch(err => {
+      console.error(err);
+      return res.status(500).json({ error: err.code });
+    });
+};
 
 /** Creates notification upon successful creation
  *  of a like or comment

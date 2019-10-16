@@ -1,5 +1,6 @@
 import User from '../models/user.model';
 import Like from '../models/like.model';
+import Notification from '../models/notification.model';
 import Comment from '../models/comment.model';
 import mongo from 'mongodb';
 
@@ -57,6 +58,21 @@ export const findPostById = async _id => {
   return post;
 };
 
+export const findNotificationByRecipient = async recipient => {
+  let notification = [];
+  notification = Notification.find({
+    recipient: recipient
+  })
+    .sort({ createdAt: -1 })
+    .read(mongo.ReadPreference.NEAREST);
+  if (notification.length === 0) {
+    error.notification = 'No notifications found';
+    return error;
+  } else {
+    return notification;
+  }
+};
+
 /** Fetches all comments attached to PostId
  * @param {string} _id
  */
@@ -98,7 +114,7 @@ export const findCommentByHandleAndPostId = async (handle, postId) => {
     postId: postId
   }).read(mongo.ReadPreference.NEAREST);
   return comment;
-}
+};
 
 /** Finds all likes that match the provided user handle
  * @param {string} handle

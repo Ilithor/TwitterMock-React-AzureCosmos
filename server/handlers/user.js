@@ -26,8 +26,8 @@ export const getUserList = (req, res, next) => {
       data.forEach(user => {
         user.push({
           userId: user.id,
-          email: user.email,
-          password: user.password,
+          email: user.credential.email,
+          password: user.credential.password,
           handle: user.handle
         });
       });
@@ -36,6 +36,7 @@ export const getUserList = (req, res, next) => {
     })
     .catch(err => {
       console.error(err);
+      return res.status(500).json({ error: err.code });
     });
 };
 
