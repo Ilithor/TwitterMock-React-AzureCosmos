@@ -9,7 +9,6 @@ mongoConnection();
  */
 export const validateLogin = user => {
   let error = {};
-  console.log(user);
   if (isEmpty(user.email)) {
     error.email = 'Must not be empty';
   } else if (!isEmail(user.email)) {

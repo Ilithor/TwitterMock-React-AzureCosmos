@@ -12,7 +12,7 @@ export const create = async commentParam => {
 
   // Validation
   if (commentParam.body.body.trim() === '') {
-    error.body = 'Must not be empty';
+    error.error = 'Must not be empty';
     return error;
   }
 
