@@ -76,9 +76,6 @@ export const findCommentByPostId = async _id => {
   }
 };
 
-/** Finds all likes that match the provided user handle
- * @param {string} handle
- */
 export const findLikeByHandle = async handle => {
   let like = [];
   let error = {};
@@ -91,6 +88,76 @@ export const findLikeByHandle = async handle => {
     return error;
   } else {
     return like;
+  }
+};
+
+/** Finds all likes that match the provided user handle
+ * @param {string} handle
+ * @param {string} postId
+ */
+export const findLikeByHandleAndPostId = async (handle, postId) => {
+  let like = {};
+  like = await Like.find({
+    userHandle: handle,
+    postId: postId
+  }).read(mongo.ReadPreference.NEAREST);
+  return like;
+};
+
+export const findPostAndUpdateCounts = async (_id, likeCount, commentCount) => {
+  await Post.findOneAndUpdate(
+    {
+      _id: _id
+    },
+    {
+      $set: {
+        likeCount: likeCount,
+        commentCount: commentCount
+      }
+    },
+    {
+      useFindAndModify: false
+    }
+  );
+};
+
+/** Finds and removes all likes and comments linked to a particular post
+ * @param {string} postId
+ * @returns {boolean}
+ */
+export const findAndDeleteLikeAndComment = async postId => {
+  let success = false;
+  let like, comment;
+
+  // Deletes all associated likes
+  await Like.deleteMany({
+    postId: postId
+  });
+
+  // Deletes all associated comments
+  await Comment.deleteMany({
+    postId: postId
+  });
+
+  // Checks for any leftover likes
+  like = await Like.find({
+    postId: postId
+  }).read(mongo.ReadPreference.NEAREST);
+
+  // Checks for any leftover comments
+  comment = await Comment.find({
+    postId: postId
+  }).read(mongo.ReadPreference.NEAREST);
+
+  /**
+   * If both like.length and comment.length are 0
+   * all likes and comments are deleted successfully
+   */
+  if (like.length === 0 && comment.length === 0) {
+    success = true;
+    return success;
+  } else {
+    return success;
   }
 };
 

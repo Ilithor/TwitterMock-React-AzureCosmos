@@ -11,6 +11,18 @@ const PostSchema = Schema({
   userHandle: {
     type: String,
     required: true
+  },
+  userImage: {
+    type: String,
+    required: true
+  },
+  likeCount: {
+    type: Number,
+    required: true
+  },
+  commentCount: {
+    type: Number,
+    required: true
   }
 });
 
