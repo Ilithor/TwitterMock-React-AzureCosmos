@@ -23,7 +23,7 @@ export const getList = async () => {
 };
 
 /** Creates and saves new post
- * @param {string} postParam
+ * @param {Object} postParam
  * @param {User} user
  */
 export const create = async (postParam, user) => {

@@ -4,7 +4,7 @@ import mongoConnection from '../util/mongo';
 mongoConnection();
 
 /** Creates a new comment
- * @param {Request} commentParam 
+ * @param {Request} commentParam
  */
 export const create = async commentParam => {
   let dataForComment = {};
@@ -27,4 +27,16 @@ export const create = async commentParam => {
   // Save the comment
   await newComment.save();
   return newComment;
+};
+
+/** Deletes Comment document
+ * @param {Request} commentParam
+ */
+export const remove = async commentParam => {
+  let comment = {};
+  comment = await Comment.findOneAndDelete({
+    postId: commentParam.params.postId,
+    userHandle: commentParam.user.handle
+  });
+  return comment;
 };

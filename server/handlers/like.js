@@ -2,20 +2,22 @@ import { create, remove } from '../services/like.service';
 import {
   findPostById,
   findLikeByHandleAndPostId,
-  findPostAndUpdateCounts
+  findPostAndUpdateCount
 } from './find';
 
 /** Like a post
  * @type {RouteHandler}
  */
-export const likePost = async (req, res) => {
+export const likePost = async (req, res, next) => {
   let postToUpdate = {};
+  req.notification = {};
   await findPostById(req.params.postId)
     .then(async post => {
       if (post.post) {
         return res.status(404).json({ error: post.post });
       } else {
         postToUpdate = post;
+        req.notification.recipient = postToUpdate.userHandle;
         await findLikeByHandleAndPostId(
           req.user.handle,
           req.params.postId
@@ -24,13 +26,16 @@ export const likePost = async (req, res) => {
             return res.status(400).json({ message: 'Like already exists' });
           } else {
             await create(req).then(async like => {
+              req.notification.typeId = like._id;
               postToUpdate.likeCount++;
-              await findPostAndUpdateCounts(
+              await findPostAndUpdateCount(
                 req.params.postId,
                 postToUpdate.likeCount,
                 postToUpdate.commentCount
               );
-              return res.status(201).json({ like });
+              req.notification.type = 'like';
+              req.notification.typeItem = like;
+              next();
             });
           }
         });
@@ -45,8 +50,9 @@ export const likePost = async (req, res) => {
 /** Unlike a post
  * @type {RouteHandler}
  */
-export const unlikePost = async (req, res) => {
+export const unlikePost = async (req, res, next) => {
   let postToUpdate = {};
+  req.notification = {};
   await findPostById(req.params.postId)
     .then(async post => {
       if (post.post) {
@@ -58,18 +64,19 @@ export const unlikePost = async (req, res) => {
           req.params.postId
         ).then(async like => {
           if (!like[0]) {
-            return res.status(400).json({ message: "Like doesn't exists" });
+            return res.status(400).json({ message: "Like doesn't exist" });
           } else {
+            req.notification.typeId = like[0]._id;
             await remove(req).then(async doc => {
               if (doc.postId === req.params.postId) {
                 postToUpdate.likeCount--;
-                await findPostAndUpdateLikeCount(
+                await findPostAndUpdateCount(
                   req.params.postId,
-                  postToUpdate.likeCount
+                  postToUpdate.likeCount,
+                  postToUpdate.commentCount
                 );
-                return res
-                  .status(200)
-                  .json({ message: 'Like successfully removed' });
+                req.notification.type = 'like';
+                next();
               } else {
                 return res
                   .status(500)
