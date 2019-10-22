@@ -6,7 +6,9 @@ import {
   findById,
   findUserAndUpdateImage,
   findUserAndUpdateProfile,
-  findLikeByHandle
+  findLikeByHandle,
+  findByHandle,
+  findPostByHandle
 } from './find';
 import { validateUserDetail } from '../util/validators';
 
@@ -26,8 +28,8 @@ export const getUserList = (req, res, next) => {
       data.forEach(user => {
         user.push({
           userId: user.id,
-          email: user.email,
-          password: user.password,
+          email: user.credential.email,
+          password: user.credential.password,
           handle: user.handle
         });
       });
@@ -36,6 +38,7 @@ export const getUserList = (req, res, next) => {
     })
     .catch(err => {
       console.error(err);
+      return res.status(500).json({ error: err.code });
     });
 };
 
@@ -68,7 +71,7 @@ export const registerUser = async (req, res, next) => {
     .catch(err => {
       console.error(err);
       return res.status(500).json({
-        error: err.code
+        general: 'Something went wrong, please try again'
       });
     });
 };
@@ -100,8 +103,8 @@ export const loginUser = async (req, res, next) => {
     })
     .catch(err => {
       console.error(err);
-      return res.status(500).json({
-        error: err.code
+      return res.status(403).json({
+        general: 'Wrong credentials, please try again'
       });
     });
 };
@@ -124,6 +127,44 @@ export const getAuthenticatedUser = async (req, res) => {
       console.error(err);
       return res.status(500).json({ error: err.code });
     });
+};
+
+/** Retrieves any user details
+ * @type {RouteHandler}
+ */
+export const getUserDetail = async (req, res) => {
+  let userData = {};
+  await findByHandle(req.params.handle).then(async user => {
+    if (user.user) {
+      return res.status(500).json({ error: user.user });
+    } else {
+      userData.user = user;
+      await findPostByHandle(req.params.handle)
+        .then(post => {
+          if (post.post) {
+            return res.status(500).json({ error: post.post });
+          } else {
+            userData.post = [];
+            post.forEach(doc => {
+              userData.post.push({
+                body: doc.body,
+                createdAt: doc.createdAt,
+                userHandle: doc.userHandle,
+                userImage: doc.userImage,
+                likeCount: doc.likeCount,
+                commentCount: doc.commentCount,
+                postId: doc._id
+              });
+            });
+            return res.json(userData);
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          return res.status(500).json({ error: err.code });
+        });
+    }
+  });
 };
 
 /** Edits the current user's profile with the params provided by said user

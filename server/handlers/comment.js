@@ -14,28 +14,29 @@ export const commentOnPost = async (req, res, next) => {
   let postToUpdate = {};
   let newComment = {};
   req.notification = {};
-  await create(req)
-    .then(comment => {
-      if (comment.error) {
-        return res.status(400).json({ error: comment.error });
+  await findPostById(req.params.postId)
+    .then(async post => {
+      if (post.post) {
+        return res.status(404).json({ error: post.post });
       } else {
-        req.notification.typeId = comment._id;
-        newComment = comment;
-        findPostById(req.params.postId).then(post => {
-          if (post.post) {
-            return res.status(404).json({ error: post.post });
+        postToUpdate = post;
+        req.notification.recipient = postToUpdate.userHandle;
+        postToUpdate.commentCount++;
+        await create(req).then(async comment => {
+          if (comment.error) {
+            return res.status(400).json({ comment: comment.error });
           } else {
-            postToUpdate = post;
-            req.notification.recipient = postToUpdate.userHandle;
-            postToUpdate.commentCount++;
-            findPostAndUpdateCount(
+            req.notification.typeId = comment._id;
+            newComment = comment;
+            await findPostAndUpdateCount(
               req.params.postId,
               postToUpdate.likeCount,
               postToUpdate.commentCount
-            );
-            req.notification.type = 'comment';
-            req.notification.typeItem = newComment;
-            next();
+            ).then(() => {
+              req.notification.type = 'comment';
+              req.notification.typeItem = newComment;
+              next();
+            });
           }
         });
       }
@@ -46,6 +47,9 @@ export const commentOnPost = async (req, res, next) => {
     });
 };
 
+/** Deletes a comment on a post
+ * @type {RouteHandler}
+ */
 export const deleteComment = async (req, res, next) => {
   let postToUpdate = {};
   req.notification = {};
