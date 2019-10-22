@@ -28,13 +28,7 @@ const UserSchema = Schema({
     bio: String,
     website: String,
     location: String
-  },
-  like: [
-    {
-      userHandle: String,
-      docId: String
-    }
-  ]
+  }
 });
 
 const User = mongoose.model('User', UserSchema);

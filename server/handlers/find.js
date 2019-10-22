@@ -43,6 +43,18 @@ export const findById = async _id => {
   return user;
 };
 
+export const findByHandle = async handle => {
+  let error = {};
+  let user = await User.findOne({
+    handle: handle
+  });
+  if (!user) {
+    error.user = 'User not found';
+    return error;
+  }
+  return user;
+};
+
 /** Returns post that matches _id
  * @param {string} _id
  */
@@ -58,6 +70,26 @@ export const findPostById = async _id => {
   return post;
 };
 
+/** Returns post that matches user handle
+ * @param {string} handle
+ */
+export const findPostByHandle = async handle => {
+  let error = {};
+  let post = await Post.find({
+    userHandle: handle
+  })
+    .sort({ createdAt: -1 })
+    .read(mongo.ReadPreference.NEAREST);
+  if (!post) {
+    error.post = 'Post not found';
+    return error;
+  }
+  return post;
+};
+
+/** Find all notifications by recipient
+ * @param {string} recipient
+ */
 export const findNotificationByRecipient = async recipient => {
   let notification = [];
   notification = Notification.find({
@@ -92,6 +124,9 @@ export const findCommentByPostId = async _id => {
   }
 };
 
+/** Find all likes by userHandle
+ * @param {string} handle
+ */
 export const findLikeByHandle = async handle => {
   let like = [];
   let error = {};
@@ -107,6 +142,10 @@ export const findLikeByHandle = async handle => {
   }
 };
 
+/** Finds all commenets by userHandle and PostId
+ * @param {string} handle
+ * @param {string} postId
+ */
 export const findCommentByHandleAndPostId = async (handle, postId) => {
   let comment = {};
   comment = await Comment.find({
@@ -129,6 +168,11 @@ export const findLikeByHandleAndPostId = async (handle, postId) => {
   return like;
 };
 
+/** Finds post and updates like/comment count
+ * @param {string} _id
+ * @param {Number} likeCount
+ * @param {Number} commentCount
+ */
 export const findPostAndUpdateCount = async (_id, likeCount, commentCount) => {
   await Post.findOneAndUpdate(
     {
@@ -186,6 +230,22 @@ export const findAndDeleteLikeAndComment = async postId => {
   }
 };
 
+export const findNotificationAndUpdateRead = async notificationId => {
+  await Notification.findByIdAndUpdate(
+    {
+      _id: notificationId
+    },
+    {
+      $set: {
+        read: true
+      }
+    },
+    {
+      useFindAndModify: false
+    }
+  );
+};
+
 /** Finds the exising user doc and updates the image property
  * @param {string} _id
  * @param {string} base64
@@ -193,7 +253,7 @@ export const findAndDeleteLikeAndComment = async postId => {
 export const findUserAndUpdateImage = async (_id, base64) => {
   await User.findOneAndUpdate(
     {
-      _id: _id
+      _id
     },
     {
       $set: {

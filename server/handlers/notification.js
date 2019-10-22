@@ -1,15 +1,15 @@
 import Notification from '../models/notification.model';
 
 import mongoConnection from '../util/mongo';
-import { findNotificationByRecipient } from './find';
+import { findNotificationByRecipient, findNotificationAndUpdateRead } from './find';
 mongoConnection();
 
 /** Retrieves all notifications
  * @type {RouteHandler}
  */
 export const getNotification = async (req, res) => {
-  const userAttemptAccess = String(req.user._id);
-  if (userAttemptAccess !== req.params.userId) {
+  const userAttemptAccess = String(req.user.handle);
+  if (userAttemptAccess !== req.params.handle) {
     return res.status(401).json({ message: 'Unauthorized Access' });
   }
   await findNotificationByRecipient(req.user.handle)
@@ -27,7 +27,11 @@ export const getNotification = async (req, res) => {
           type: doc.type
         });
       });
-      return res.json(notification);
+      if (notification.length === 0) {
+        return res.json({ message: 'No notifications found' });
+      } else {
+        return res.json(notification);
+      }
     })
     .catch(err => {
       console.error(err);
@@ -61,6 +65,16 @@ export const createNotification = async (req, res) => {
     return res.status(201).json({ comment });
   }
 };
+
+/** Marks notification as read by user
+ * @type {RouteHandler}
+ */
+export const markNotificationRead = (req, res) => {
+  req.body.forEach(async notificationId => {
+    await findNotificationAndUpdateRead(notificationId);
+  })
+    return res.json({ message: 'Notifications marked read' });
+}
 
 /** Deletes notification upon successful deletion
  *  of a like or comment
