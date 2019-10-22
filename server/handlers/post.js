@@ -1,4 +1,3 @@
-import User from '../models/user.model';
 import { getList, create, findAndDeletePost } from '../services/post.service';
 import {
   findById,
@@ -106,7 +105,7 @@ export const deletePost = async (req, res) => {
         if ((post._id = req.params.postId)) {
           await findAndDeleteLikeAndComment(post._id).then(success => {
             if (success) {
-              res.json({ message: 'Post successfully deleted' });
+              next();
             } else {
               res.status(500).json({ error: 'Something went wrong' });
             }

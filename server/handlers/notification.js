@@ -48,9 +48,20 @@ export const getNotification = async (req, res) => {
  * @type {RouteHandler}
  */
 export const createNotification = async (req, res) => {
-  await create(req).then(doc => {
-    res.status(201).json({ message: `${doc.type} successfully added` });
-  });
+  if (req.notification.recipient === req.user.handle) {
+    res
+      .status(201)
+      .json({ message: `${req.notification.type} successfully added` });
+  } else {
+    await create(req)
+      .then(doc => {
+        res.status(201).json({ message: `${doc.type} successfully added` });
+      })
+      .catch(err => {
+        console.error(err);
+        res.status(500).json({ error: err.code });
+      });
+  }
 };
 
 /** Marks notification as read by user
@@ -75,4 +86,11 @@ export const deleteNotification = async (req, res) => {
   return res
     .status(200)
     .json({ message: `${req.notification.type} successfully removed` });
+};
+
+export const deleteAllNotifications = async (req, res) => {
+  await Notification.findByIdAndDelete({
+    postId: req.params.postId
+  });
+  return res.status(200).json({ message: 'Post successfully deleted' });
 };
