@@ -24,7 +24,8 @@ export const getPostList = (req, res, next) => {
           userHandle: doc.userHandle,
           createdAt: doc.createdAt,
           commentCount: doc.commentCount,
-          likeCount: doc.likeCount
+          likeCount: doc.likeCount,
+          userImage: doc.userImage
         });
       });
       // Returns list of posts in array

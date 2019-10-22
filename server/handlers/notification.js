@@ -1,7 +1,11 @@
 import Notification from '../models/notification.model';
+import { create } from '../services/notification.service';
 
 import mongoConnection from '../util/mongo';
-import { findNotificationByRecipient, findNotificationAndUpdateRead } from './find';
+import {
+  findNotificationByRecipient,
+  findNotificationAndUpdateRead
+} from './find';
 mongoConnection();
 
 /** Retrieves all notifications
@@ -44,26 +48,9 @@ export const getNotification = async (req, res) => {
  * @type {RouteHandler}
  */
 export const createNotification = async (req, res) => {
-  let notificationToCreate = {};
-
-  notificationToCreate.read = false;
-  notificationToCreate.recipient = req.notification.recipient;
-  notificationToCreate.postId = req.params.postId;
-  notificationToCreate.sender = req.user.handle;
-  notificationToCreate.type = req.notification.type;
-  notificationToCreate.typeId = req.notification.typeId;
-
-  const newNotification = new Notification(notificationToCreate);
-  newNotification.createdAt = new Date().toISOString();
-
-  await newNotification.save();
-  if (newNotification.type === 'like') {
-    let like = req.notification.typeItem;
-    return res.status(201).json({ like });
-  } else {
-    let comment = req.notification.typeItem;
-    return res.status(201).json({ comment });
-  }
+  await create(req).then(doc => {
+    res.status(201).json({ message: `${doc.type} successfully added` });
+  });
 };
 
 /** Marks notification as read by user
@@ -72,9 +59,9 @@ export const createNotification = async (req, res) => {
 export const markNotificationRead = (req, res) => {
   req.body.forEach(async notificationId => {
     await findNotificationAndUpdateRead(notificationId);
-  })
-    return res.json({ message: 'Notifications marked read' });
-}
+  });
+  return res.json({ message: 'Notifications marked read' });
+};
 
 /** Deletes notification upon successful deletion
  *  of a like or comment
@@ -85,9 +72,7 @@ export const deleteNotification = async (req, res) => {
     type: req.notification.type,
     typeId: req.notification.typeId
   });
-  if (req.notification.type === 'like') {
-    return res.status(200).json({ message: 'Like successfully removed' });
-  } else {
-    return res.status(200).json({ message: 'Comment successfully removed' });
-  }
+  return res
+    .status(200)
+    .json({ message: `${req.notification.type} successfully removed` });
 };

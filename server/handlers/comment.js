@@ -24,7 +24,7 @@ export const commentOnPost = async (req, res, next) => {
         postToUpdate.commentCount++;
         await create(req).then(async comment => {
           if (comment.error) {
-            return res.status(400).json({ error: comment.error });
+            return res.status(400).json({ comment: comment.error });
           } else {
             req.notification.typeId = comment._id;
             newComment = comment;
