@@ -11,6 +11,7 @@ import {
   findPostByHandle
 } from './find';
 import { validateUserDetail } from '../util/validators';
+import Post from '../models/post.model';
 
 /** Retrieves the list of users
  * @type {RouteHandler}
@@ -213,11 +214,9 @@ export const imageUpload = async (req, res, next) => {
   base64 = (await dataUri(req)).content;
   await findUserAndUpdateImage(_id, base64)
     .then(async () => {
-      await findById(_id).then(doc => {
+      await findById(_id).then(async doc => {
         if (doc.bio.image === base64) {
-          return res.status(200).json({
-            message: 'Image successfully uploaded'
-          });
+          await findAndUpdatePostImage(base64);
         }
       });
     })

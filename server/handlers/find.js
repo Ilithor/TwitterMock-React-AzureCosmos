@@ -168,6 +168,25 @@ export const findLikeByHandleAndPostId = async (handle, postId) => {
   return like;
 };
 
+/** Updates all user posts with new image
+ * @param {string} base64
+ */
+export const findAndUpdatePostImage = async base64 => {
+  await Post.find(
+    {
+      userHandle: req.user.handle
+    },
+    {
+      $set: {
+        userImage: base64
+      }
+    },
+    {
+      useFindAndModify: false
+    }
+  );
+};
+
 /** Finds post and updates like/comment count
  * @param {string} _id
  * @param {Number} likeCount
