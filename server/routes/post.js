@@ -11,13 +11,14 @@ import { likePost, unlikePost } from '../handlers/like';
 import { authUser } from '../util/auth';
 import {
   createNotification,
-  deleteNotification
+  deleteNotification,
+  deleteAllNotification
 } from '../handlers/notification';
 
 router.get('/', getPostList);
 router.post('/', authUser, createPost);
 router.get('/:postId', getPost);
-router.delete('/:postId', authUser, deletePost, deleteNotification);
+router.delete('/:postId', authUser, deletePost, deleteAllNotification);
 router.get('/:postId/like', authUser, likePost, createNotification);
 router.get('/:postId/unlike', authUser, unlikePost, deleteNotification);
 router.post('/:postId/comment', authUser, commentOnPost, createNotification);

@@ -96,7 +96,7 @@ export const createPost = async (req, res, next) => {
 /** Deletes post
  * @type {RouteHandler}
  */
-export const deletePost = async (req, res) => {
+export const deletePost = async (req, res, next) => {
   await findAndDeletePost(req)
     .then(async post => {
       if (!post) {
