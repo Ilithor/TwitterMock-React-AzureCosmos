@@ -88,8 +88,8 @@ export const deleteNotification = async (req, res) => {
     .json({ message: `${req.notification.type} successfully removed` });
 };
 
-export const deleteAllNotifications = async (req, res) => {
-  await Notification.findByIdAndDelete({
+export const deleteAllNotification = async (req, res) => {
+  await Notification.deleteMany({
     postId: req.params.postId
   });
   return res.status(200).json({ message: 'Post successfully deleted' });
