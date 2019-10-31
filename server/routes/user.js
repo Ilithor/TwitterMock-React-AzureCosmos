@@ -6,12 +6,12 @@ import {
   imageUpload,
   addUserDetail,
   getAuthenticatedUser,
-  getUserDetail
+  getUserDetail,
 } from '../handlers/user';
 import { authUser } from '../util/auth';
 import {
   getNotification,
-  markNotificationRead
+  markNotificationRead,
 } from '../handlers/notification';
 import { multerUploads } from '../util/multer';
 
