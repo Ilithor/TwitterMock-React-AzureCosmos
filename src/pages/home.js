@@ -6,7 +6,7 @@ import { fetchPostList } from "../util/fetch";
 
 export class home extends Component {
   state = {
-    postList: null
+    postList: null,
   };
 
   componentDidMount() {
