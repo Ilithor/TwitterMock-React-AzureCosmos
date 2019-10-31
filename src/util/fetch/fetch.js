@@ -1,5 +1,10 @@
 import axios from 'axios';
 
+/** Called when a request fails
+ * @param {Error} error
+ */
+const onRequestFail = error => console.log(error);
+
 /** Fetch an arbitrary endpoint
  * @param {Endpoint} endpoint
  */
@@ -9,6 +14,7 @@ export const get = endpoint =>
       .get(endpoint)
       .then(resolve)
       .catch(error => {
+        onRequestFail(error);
         reject(error);
       });
   });
@@ -23,7 +29,7 @@ export const post = (endpoint, data) =>
       .post(endpoint, data)
       .then(resolve)
       .catch(error => {
-        console.log(error);
+        onRequestFail(error);
         reject(error);
       });
   });

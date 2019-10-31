@@ -1,21 +1,21 @@
 import { get, post } from './fetch';
 
 export const endpoints = {
-         /** @type {Endpoint} */
-         post: 'api/post',
-         /** @type {Endpoint} */
-         login: 'api/user/login',
-         /** @type {Endpoint} */
-         register: 'api/user/register',
-         /** @type {Endpoint} */
-         userData: 'api/user',
-       };
+  /** @type {Endpoint} */
+  login: 'api/user/login',
+  /** @type {Endpoint} */
+  register: 'api/user/register',
+  /** @type {Endpoint} */
+  userData: 'api/user',
+};
 
-/** Fetch the current list of top posts
+/** Attempts to log the user in
  * @returns {Promise<import("axios").AxiosResponse>}
  */
-export const fetchPostList = () => get(endpoints.post);
 export const loginUser = userData => post(endpoints.login, userData);
+/** Attempts to register the user
+ * @returns {Promise<import("axios").AxiosResponse>}
+ */
 export const registerUser = userData => post(endpoints.register, userData);
 
 /** Retrieves user data using handle
@@ -26,5 +26,5 @@ export const getUserData = handle => {
 };
 
 /**
- * @typedef Endpoint
+ * @typedef {import('./fetch').Endpoint} Endpoint
  */
