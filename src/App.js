@@ -16,8 +16,8 @@ import deepPurple from '@material-ui/core/colors/deepPurple';
 const theme = createMuiTheme({
   palette: {
     primary: deepPurple,
-    secondary: deepPurple
-  }
+    secondary: deepPurple,
+  },
 });
 
 class App extends Component {

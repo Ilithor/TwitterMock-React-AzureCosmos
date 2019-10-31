@@ -11,15 +11,15 @@ import Typography from '@material-ui/core/Typography';
 const style = {
   card: {
     display: 'flex',
-    marginBottom: 20
+    marginBottom: 20,
   },
   image: {
-    minWidth: 200
+    minWidth: 200,
   },
   content: {
     padding: 25,
-    objectFit: 'cover'
-  }
+    objectFit: 'cover',
+  },
 };
 
 class Post extends Component {
@@ -33,8 +33,8 @@ class Post extends Component {
         userHandle,
         likeCount,
         commentCount,
-        postId
-      }
+        postId,
+      },
     } = this.props;
     return (
       <Card className={classes.card}>

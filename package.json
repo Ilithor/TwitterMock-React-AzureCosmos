@@ -20,7 +20,9 @@
   },
   "devDependencies": {
     "concurrently": "^3.6.1",
+    "lint-staged": "^9.4.2",
     "nodemon": "^1.19.4",
+    "prettier": "^1.18.2",
     "react-scripts": "1.0.10"
   },
   "scripts": {
@@ -29,7 +31,16 @@
     "build": "react-scripts build && mv build server",
     "postinstall": "cd server&&npm install",
     "test": "react-scripts test --env=jsdom",
+    "format": "prettier --write \"src/**/*.{js,css}\"",
     "eject": "react-scripts eject"
+  },
+  "lint-staged": {
+    "linters": {
+      "*.{js,json,css,md,scss,sass,jsx}": [
+        "prettier --write",
+        "git add"
+      ]
+    }
   },
   "proxy": "http://localhost:3001"
 }
