@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import axios from 'axios';
-import Grid from '@material-ui/core/Grid';
+import React, { Component } from "react";
+import Grid from "@material-ui/core/Grid";
 
-import Post from '../components/Post';
+import Post from "../components/Post";
+import { fetchPostList } from "../util/fetch";
 
 export class home extends Component {
   state = {
@@ -10,15 +10,11 @@ export class home extends Component {
   };
 
   componentDidMount() {
-    axios
-      .get('/api/post')
-      .then(res => {
-        console.log(res.data);
-        this.setState({
-          postList: res.data
-        });
-      })
-      .catch(err => console.log(err));
+    fetchPostList().then(res => {
+      this.setState({
+        postList: res.data
+      });
+    });
   }
   render() {
     let recentPostMarkup = this.state.postList ? (
