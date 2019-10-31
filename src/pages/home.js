@@ -6,7 +6,7 @@ import Post from '../components/Post';
 
 export class home extends Component {
   state = {
-    postList: null
+    postList: null,
   };
 
   componentDidMount() {
@@ -15,7 +15,7 @@ export class home extends Component {
       .then(res => {
         console.log(res.data);
         this.setState({
-          postList: res.data
+          postList: res.data,
         });
       })
       .catch(err => console.log(err));
