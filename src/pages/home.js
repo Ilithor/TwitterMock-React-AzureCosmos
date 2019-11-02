@@ -18,12 +18,12 @@ export class home extends Component {
   }
   render() {
     let recentPostMarkup = this.state.postList ? (
-      this.state.postList.map(post => <Post post={post} />)
+      this.state.postList.map(post => <Post key={post.postId} post={post} />)
     ) : (
       <p>Loading...</p>
     );
     return (
-      <Grid container spacing={16}>
+      <Grid container spacing={10}>
         <Grid item sm={8} xs={12}>
           {recentPostMarkup}
         </Grid>
