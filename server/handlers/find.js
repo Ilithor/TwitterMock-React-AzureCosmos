@@ -18,7 +18,7 @@ export const findByCredential = async user => {
     'credential.email': user.credential.email
   });
   if (!foundUser) {
-    error.email = 'Invalid email';
+    error.email = 'Email does not exist';
     return error;
   }
   if (user.credential.password !== foundUser.credential.password) {
