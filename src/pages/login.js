@@ -37,6 +37,7 @@ class login extends Component {
     loginUser(userData)
       .then(res => {
         console.log(res.data);
+        localStorage.setItem('Token', `Bearer ${res.data.token}`);
         this.setState({
           isLoading: false,
         });

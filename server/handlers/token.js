@@ -5,7 +5,7 @@ import env from '../environment/environment';
  * @param {UserNew} user 
  */
 export const generateUserToken = async user => {
-  const token = await jwt.sign({ _id: user._id }, env.jwt);
+  const token = await jwt.sign({ _id: user._id }, env.jwt, {expiresIn: '12h' });
   token.concat({ token });
   return token;
 };

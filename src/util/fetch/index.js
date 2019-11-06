@@ -5,3 +5,4 @@ import { get, post, endpoints } from "./fetch";
  */
 export const fetchPostList = () => get(endpoints.post);
 export const loginUser = userData => post(endpoints.login, userData);
+export const registerUser = userData => post(endpoints.register, userData);

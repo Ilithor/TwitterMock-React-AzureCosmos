@@ -4,6 +4,7 @@ export const endpoints = {
   /** @type {Endpoint} */
   post: 'api/post',
   login: 'api/user/login',
+  register: 'api/user/register',
 };
 
 /** Fetch an arbitrary endpoint
