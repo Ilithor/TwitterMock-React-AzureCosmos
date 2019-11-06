@@ -1,12 +1,5 @@
 import axios from 'axios';
 
-export const endpoints = {
-  /** @type {Endpoint} */
-  post: 'api/post',
-  login: 'api/user/login',
-  register: 'api/user/register',
-};
-
 /** Fetch an arbitrary endpoint
  * @param {Endpoint} endpoint
  */
@@ -21,10 +14,10 @@ export const get = endpoint =>
       });
   });
 
-  /** Fetch endpoint and post given data
-   * @param {Endpoint} endpoint 
-   * @param {Object} data 
-   */
+/** Fetch endpoint and post given data
+ * @param {Endpoint} endpoint
+ * @param {Object} data
+ */
 export const post = (endpoint, data) =>
   new Promise((resolve, reject) => {
     axios
@@ -37,5 +30,6 @@ export const post = (endpoint, data) =>
   });
 
 /**
- * @typedef {string} Endpoint
+ * @typedef Endpoint
+ * @extends {string}
  */

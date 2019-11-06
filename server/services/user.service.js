@@ -6,13 +6,13 @@ import { isEmpty, isEmail } from '../util/validators';
 import {
   findByCredential,
   findById,
-  findUserAndUpdateProfile
+  findUserAndUpdateProfile,
 } from '../handlers/find';
 import { generateUserToken } from '../handlers/token';
 import {
   validateLogin,
   validateRegister,
-  validateUserDetail
+  validateUserDetail,
 } from '../util/validators';
 
 import mongoConnect from '../util/mongo';
@@ -77,6 +77,7 @@ export const login = async userParam => {
   let error = {};
   let user = {};
   let userLoggedIn;
+  let dataToReturn = {};
 
   error = await validateLogin(userParam);
 
@@ -92,7 +93,9 @@ export const login = async userParam => {
     return userLoggedIn;
   } else {
     const token = await generateUserToken(userLoggedIn);
-    return token;
+    dataToReturn.token = token;
+    dataToReturn.handle = userLoggedIn.handle;
+    return dataToReturn;
   }
 };
 
