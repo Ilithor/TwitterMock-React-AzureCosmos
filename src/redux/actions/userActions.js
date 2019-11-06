@@ -14,7 +14,7 @@ export const loginUserAction = (userData, history) => dispatch => {
       const handle = res.data.handle;
       localStorage.setItem('Token', Token);
       axios.defaults.headers.common['Authorization'] = Token;
-      dispatch(getUserData(handle));
+      dispatch(getUserDataAction(handle));
       dispatch({ type: CLEAR_ERRORS });
       history.push('/');
     })
@@ -30,7 +30,7 @@ export const loginUserAction = (userData, history) => dispatch => {
  * @param {string} handle 
  */
 export const getUserDataAction = handle => dispatch => {
-  fetchUserData(handle)
+  getUserData(handle)
     .then(res => {
       dispatch({
         type: SET_USER,

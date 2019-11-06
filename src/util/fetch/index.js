@@ -22,7 +22,7 @@ export const registerUser = userData => post(endpoints.register, userData);
  * @param {string} handle
  */
 export const getUserData = handle => {
-  return get(endpoint.userData + `/${handle}`);
+  return get(endpoints.userData + `/${handle}`);
 };
 
 /**
