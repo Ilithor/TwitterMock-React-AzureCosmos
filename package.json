@@ -31,7 +31,8 @@
     "react-scripts": "1.0.10"
   },
   "scripts": {
-    "start": "concurrently \"react-scripts start\" \"nodemon -r esm server/server.js\"",
+    "start": "concurrently \"react-scripts start\" \"npm run start:server\"",
+    "start:server": "nodemon --watch server -r esm server/server.js",
     "dev": "set debug=true && npm start",
     "build": "react-scripts build && mv build server",
     "postinstall": "cd server&&npm install",
