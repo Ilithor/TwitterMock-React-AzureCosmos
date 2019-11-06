@@ -45,7 +45,7 @@ export const validateRegister = async userParam => {
   if (isEmpty(userParam.password)) {
     error.password = 'Must not be empty';
   } else if (userParam.password !== userParam.confirmPassword) {
-    error.password = 'Password confirmation must match';
+    error.confirmPassword = 'Password confirmation must match';
   }
 
   return error;
