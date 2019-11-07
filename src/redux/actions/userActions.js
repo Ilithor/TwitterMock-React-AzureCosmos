@@ -1,6 +1,6 @@
-import { SET_USER, SET_ERRORS, CLEAR_ERRORS, LOADING_UI } from '../types';
+import { SET_USER, SET_ERRORS, CLEAR_ERRORS, LOADING_UI, SET_UNAUTHENTICATED } from '../types';
 import axios from 'axios';
-import { loginUser, getUserData } from '../../util/fetch';
+import { loginUser, registerUser, getUserData } from '../../util/fetch';
 
 /** Attempts to login user
  * @param {*} userData 
@@ -10,10 +10,8 @@ export const loginUserAction = (userData, history) => dispatch => {
   dispatch({ type: LOADING_UI });
   loginUser(userData)
     .then(res => {
-      const Token = `Bearer ${res.data.token}`;
+      setAuthorizationHeader(res.data.token);
       const handle = res.data.handle;
-      localStorage.setItem('Token', Token);
-      axios.defaults.headers.common['Authorization'] = Token;
       dispatch(getUserDataAction(handle));
       dispatch({ type: CLEAR_ERRORS });
       history.push('/');
@@ -39,3 +37,33 @@ export const getUserDataAction = handle => dispatch => {
     })
     .catch(console.log);
 };
+
+export const registerUserAction = (newUserData, history) => dispatch => {
+  dispatch({ type: LOADING_UI });
+  registerUser(newUserData)
+    .then(res => {
+      setAuthorizationHeader(res.data.token);
+      const handle = res.data.handle;
+      dispatch(getUserDataAction(handle));
+      dispatch({ type: CLEAR_ERRORS });
+      history.push('/');
+    })
+    .catch(err => {
+      dispatch({
+        type: SET_ERRORS,
+        payload: err.response.data.error,
+      });
+    });
+};
+
+export const logoutUserAction = () => dispatch => {
+  localStorage.removeItem('Token');
+  delete axios.defaults.headers.common['Authorization'];
+  dispatch({ type: SET_UNAUTHENTICATED });
+}
+
+const setAuthorizationHeader = token => {
+  const Token = `Bearer ${token}`;
+  localStorage.setItem('Token', Token);
+  axios.defaults.headers.common['Authorization'] = Token;
+}

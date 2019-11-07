@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
 import PropTypes from 'prop-types';
 import AppIcon from '../images/icon.png';
-import axios from 'axios';
 
 import LoginForm from '../components/LoginForm';
 import style from '../style/style';
@@ -10,9 +9,6 @@ import style from '../style/style';
 // MUI
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import { loginUser } from '../util/fetch';
 
 // Redux
 import { connect } from 'react-redux';
@@ -69,7 +65,7 @@ class login extends Component {
             password={this.state.password}
             handleSubmit={this.handleSubmit}
             handleChange={this.handleChange}
-            isLoading={this.state.isLoading}
+            isLoading={isLoading}
           />
         </Grid>
         <Grid item sm />
