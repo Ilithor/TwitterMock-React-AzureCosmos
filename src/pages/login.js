@@ -28,6 +28,12 @@ class login extends Component {
     };
   }
 
+  componentWillReceiveProps = nextProps => {
+    if (nextProps.UI.error) {
+      this.setState({ error: nextProps.UI.error });
+    }
+  };
+
   handleSubmit = event => {
     event.preventDefault();
     const userData = {

@@ -9,7 +9,6 @@ export const get = endpoint =>
       .get(endpoint)
       .then(resolve)
       .catch(error => {
-        console.log(error);
         reject(error);
       });
   });

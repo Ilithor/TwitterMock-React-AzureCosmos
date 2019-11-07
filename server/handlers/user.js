@@ -98,10 +98,9 @@ export const loginUser = async (req, res, next) => {
     .then(() => {
       // Returns user token
       if (token) {
-        console.log(token);
         return res.json({
           token,
-          handle
+          handle,
         });
       }
     })
