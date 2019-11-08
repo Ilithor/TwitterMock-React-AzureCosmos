@@ -7,7 +7,12 @@ import {
   LOADING_USER,
 } from '../types';
 import axios from 'axios';
-import { loginUser, registerUser, getUserData } from '../../util/fetch/user';
+import {
+  loginUser,
+  registerUser,
+  getUserData,
+  uploadImage,
+} from '../../util/fetch/user';
 
 /** Attempts to login user
  * @param {*} userData
@@ -74,4 +79,13 @@ const setAuthorizationHeader = token => {
   const Token = `Bearer ${token}`;
   localStorage.setItem('Token', Token);
   axios.defaults.headers.common['Authorization'] = Token;
+};
+
+export const uploadImageAction = formData => dispatch => {
+  dispatch({ type: LOADING_USER });
+  uploadImage(formData)
+    .then(() => {
+      dispatch(getUserDataAction());
+    })
+    .catch(console.log);
 };
