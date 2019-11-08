@@ -3,7 +3,7 @@ import {
   findById,
   findPostById,
   findCommentByPostId,
-  findAndDeleteLikeAndComment
+  findAndDeleteLikeAndComment,
 } from './find';
 import { authByToken } from '../util/auth';
 
@@ -24,7 +24,7 @@ export const getPostList = (req, res, next) => {
           createdAt: doc.createdAt,
           commentCount: doc.commentCount,
           likeCount: doc.likeCount,
-          userImage: doc.userImage
+          userImage: doc.userImage,
         });
       });
       // Returns list of posts in array
@@ -74,21 +74,19 @@ export const createPost = async (req, res, next) => {
         return res
           .status(201)
           .json({ message: `document ${doc._id} created successfully` });
-      } else if (doc.body) {
-        throw doc.body;
       } else {
-        throw 'Failed creating doc';
+        return res.status(400).json({ error: doc.body });
       }
     })
     .catch(err => {
       console.error(err);
       if (process.env.debug) {
-        res.status(500).json({
+        return res.status(500).json({
           message: err.message,
-          error: 'Something went wrong'
+          error: 'Something went wrong',
         });
       } else {
-        res.status(500).json({ error: 'Something went wrong' });
+        return res.status(500).json({ error: 'Something went wrong' });
       }
     });
 };

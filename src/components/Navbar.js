@@ -33,10 +33,30 @@ const ButtonLogInOut = ({ isLoggedIn, logout }) => {
     </Button>
   );
 };
+
 ButtonLogInOut.propTypes = {
   isLoggedIn: PropTypes.bool,
   logout: PropTypes.func,
 };
+
+/** Displays either signup button or empty div
+ * @param {*} param0 
+ */
+const ButtonRegister = ({ isLoggedIn }) => {
+  if (isLoggedIn) {
+    return <div></div>;
+  }
+  return (
+    <Button color='inherit' component={Link} to='/signup'>
+      Signup
+    </Button>
+  );
+};
+
+ButtonRegister.propTypes = {
+  isLoggedIn: PropTypes.bool,
+};
+
 
 /** View component for navbar
  * @param {{isLoggedIn:bool, logoutUserAction:()=>void}} props
@@ -48,9 +68,8 @@ const Navbar = ({ isLoggedIn = false, logoutUserAction }) => (
         Home
       </Button>
       <ButtonLogInOut isLoggedIn={isLoggedIn} logout={logoutUserAction} />
-      <Button color='inherit' component={Link} to='/signup'>
-        Signup
-      </Button>
+      <ButtonRegister isLoggedIn={isLoggedIn} />
+
     </Toolbar>
   </AppBar>
 );
