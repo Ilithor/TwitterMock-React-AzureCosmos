@@ -55,7 +55,7 @@ export const register = async userParam => {
   user.handle = userParam.handle;
   user.credential.email = userParam.email;
   user.credential.password = userParam.password;
-  user.bio.bio = '';
+  user.bio.aboutMe = '';
   user.bio.website = '';
   user.bio.location = '';
   const newUser = new User(user);
@@ -113,7 +113,7 @@ export const updateBio = async (userParam, userId) => {
   await findUserAndUpdateProfile(userDetail, userId).then(async () => {
     await findById(userId).then(async doc => {
       if (
-        doc.bio.bio === userParam.bio &&
+        doc.bio.aboutMe === userParam.aboutMe &&
         doc.bio.website === userParam.website &&
         doc.bio.location === userParam.location
       ) {

@@ -345,7 +345,7 @@ export const findUserAndUpdateProfile = async (userDetails, _id) => {
         },
         {
           $set: {
-            'bio.bio': bio
+            'bio.aboutMe': bio
           }
         },
         {
@@ -359,7 +359,7 @@ export const findUserAndUpdateProfile = async (userDetails, _id) => {
         },
         {
           $set: {
-            'bio.bio': bio,
+            'bio.aboutMe': bio,
             'bio.location': location
           }
         },
@@ -375,7 +375,7 @@ export const findUserAndUpdateProfile = async (userDetails, _id) => {
       },
       {
         $set: {
-          'bio.bio': bio,
+          'bio.aboutMe': bio,
           'bio.website': website
         }
       },
@@ -390,7 +390,7 @@ export const findUserAndUpdateProfile = async (userDetails, _id) => {
       },
       {
         $set: {
-          'bio.bio': bio,
+          'bio.aboutMe': bio,
           'bio.website': website,
           'bio.location': location
         }

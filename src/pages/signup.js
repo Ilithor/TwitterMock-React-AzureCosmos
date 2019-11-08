@@ -2,17 +2,18 @@ import React, { Component } from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
 import PropTypes from 'prop-types';
 import AppIcon from '../images/icon.png';
-import axios from 'axios';
-
-import RegisterForm from '../components/RegisterForm';
 import style from '../style/style';
+
+// Component
+import RegisterForm from '../components/RegisterForm';
 
 // MUI
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import { registerUser } from '../util/fetch';
+
+// Redux
+import { connect } from 'react-redux';
+import { registerUserAction } from '../redux/actions/userActions';
 
 class signup extends Component {
   constructor() {
@@ -22,38 +23,28 @@ class signup extends Component {
       password: '',
       confirmPassword: '',
       handle: '',
-      isLoading: false,
       error: {},
     };
   }
+
+  componentDidUpdate = prevProps => {
+    if (prevProps.UI.error !== this.props.UI.error) {
+      this.setState({ error: this.props.UI.error });
+    }
+  };
 
   handleSubmit = event => {
     event.preventDefault();
     this.setState({
       isLoading: true,
     });
-    const userData = {
+    const newUserData = {
       email: this.state.email,
       password: this.state.password,
       confirmPassword: this.state.confirmPassword,
       handle: this.state.handle,
     };
-    registerUser(userData)
-      .then(res => {
-        console.log(res.data);
-        localStorage.setItem('Token', `Bearer ${res.data.token}`);
-        this.setState({
-          isLoading: false,
-        });
-        this.props.history.push('/');
-      })
-      .catch(err => {
-        this.setState({
-          error: err.response.data.error,
-          isLoading: false,
-        });
-        console.log(this.state.error);
-      });
+    this.props.registerUserAction(newUserData, this.props.history);
   };
 
   handleChange = event => {
@@ -62,8 +53,11 @@ class signup extends Component {
     });
   };
   render() {
-    const { classes } = this.props;
-    const { error, isLoading } = this.state;
+    const {
+      classes,
+      UI: { isLoading },
+    } = this.props;
+    const { error } = this.state;
     return (
       <Grid container className={classes.form}>
         <Grid item sm />
@@ -81,7 +75,7 @@ class signup extends Component {
             confirmPassword={this.state.confirmPassword}
             handleSubmit={this.handleSubmit}
             handleChange={this.handleChange}
-            isLoading={this.state.isLoading}
+            isLoading={isLoading}
           />
         </Grid>
         <Grid item sm />
@@ -92,6 +86,17 @@ class signup extends Component {
 
 signup.propTypes = {
   classes: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
+  UI: PropTypes.object.isRequired,
+  registerUserAction: PropTypes.func.isRequired,
 };
 
-export default withStyles(style)(signup);
+const mapStateToProps = state => ({
+  user: state.user,
+  UI: state.UI,
+});
+
+export default connect(
+  mapStateToProps,
+  { registerUserAction }
+)(withStyles(style)(signup));
