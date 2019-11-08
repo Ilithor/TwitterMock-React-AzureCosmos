@@ -9,6 +9,7 @@ import {
   findLikeByHandle,
   findByHandle,
   findPostByHandle,
+  findAndUpdatePostImage,
 } from './find';
 import { validateUserDetail } from '../util/validators';
 import Post from '../models/post.model';
