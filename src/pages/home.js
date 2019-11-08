@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import Grid from "@material-ui/core/Grid";
+import React, { Component } from 'react';
+import Grid from '@material-ui/core/Grid';
 
-import Post from "../components/Post";
+import Post from '../components/Post';
 import Profile from '../components/Profile';
-import { fetchPostList } from "../util/fetch";
+import { fetchPostList } from '../util/fetch';
 
 export class home extends Component {
   state = {
@@ -13,7 +13,7 @@ export class home extends Component {
   componentDidMount() {
     fetchPostList().then(res => {
       this.setState({
-        postList: res.data
+        postList: res.data,
       });
     });
   }
