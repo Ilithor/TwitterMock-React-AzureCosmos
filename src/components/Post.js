@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
@@ -24,45 +24,65 @@ const style = {
   },
 };
 
-class Post extends Component {
-  render() {
-    dayjs.extend(relativeTime);
-    const {
-      classes,
-      post: {
-        body,
-        createdAt,
-        userImage,
-        userHandle,
-        likeCount,
-        commentCount,
-        postId,
-      },
-    } = this.props;
-    return (
-      <Card className={classes.card}>
-        <CardMedia
-          image={userImage}
-          title='Profile image'
-          className={classes.image}
-        />
-        <CardContent className={classes.content}>
-          <Typography
-            variant='h5'
-            component={Link}
-            to={`/user/${userHandle}`}
-            color='primary'
-          >
-            {userHandle}
-          </Typography>
-          <Typography variant='body2' color='textSecondary'>
-            {dayjs(createdAt).fromNow()}
-          </Typography>
-          <Typography variant='body1'>{body}</Typography>
-        </CardContent>
-      </Card>
-    );
-  }
-}
+/** View component for displaying an individual post on the site
+ * @param {IPostComponentProps} props
+ */
+const Post = ({
+  classes,
+  post: {
+    body,
+    createdAt,
+    userImage,
+    userHandle,
+    likeCount,
+    commentCount,
+    postId,
+  },
+}) => {
+  dayjs.extend(relativeTime);
+  return (
+    <Card className={classes.card}>
+      <CardMedia
+        image={userImage}
+        title='Profile image'
+        className={classes.image}
+      />
+      <CardContent className={classes.content}>
+        <Typography
+          variant='h5'
+          component={Link}
+          to={`/user/${userHandle}`}
+          color='primary'
+        >
+          {userHandle}
+        </Typography>
+        <Typography variant='body2' color='textSecondary'>
+          {dayjs(createdAt).fromNow()}
+        </Typography>
+        <Typography variant='body1'>{body}</Typography>
+      </CardContent>
+    </Card>
+  );
+};
 
+/** Component representing an individual post on the page.
+ * @param {{post:IPost}} props
+ */
 export default withStyles(style)(Post);
+
+/** Props passed to the Post view component
+ * @typedef IPostComponentProps
+ * @property {IPost} post
+ * @property {object} classes
+ */
+
+/** Props that represent a post being rendered.
+ * @typedef IPost
+ * @property {any} body
+ * @property {string|Date} createdAt
+ * @property {string} userImage
+ * @property {string} userHandle
+ * @property {number} likeCount
+ * @property {number} commentCount
+ * @property {string} postId
+ */
