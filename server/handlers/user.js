@@ -187,7 +187,7 @@ export const addUserDetail = async (req, res, next) => {
   let userParam = req.body;
   let userId = req.user._id;
 
-  if (!userParam.bio && !userParam.website && !userParam.location) {
+  if (!userParam.aboutMe && !userParam.website && !userParam.location) {
     return res
       .status(400)
       .json({ message: 'At least one valid input is needed' });

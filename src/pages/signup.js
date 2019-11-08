@@ -27,9 +27,9 @@ class signup extends Component {
     };
   }
 
-  componentWillReceiveProps = nextProps => {
-    if (nextProps.UI.error) {
-      this.setState({ error: nextProps.UI.error });
+  componentDidUpdate = prevProps => {
+    if (prevProps.UI.error !== this.props.UI.error) {
+      this.setState({ error: this.props.UI.error });
     }
   };
 

@@ -1,10 +1,17 @@
-import { SET_USER, SET_ERRORS, CLEAR_ERRORS, LOADING_UI, SET_UNAUTHENTICATED } from '../types';
+import {
+  SET_USER,
+  SET_ERRORS,
+  CLEAR_ERRORS,
+  LOADING_UI,
+  SET_UNAUTHENTICATED,
+  LOADING_USER,
+} from '../types';
 import axios from 'axios';
 import { loginUser, registerUser, getUserData } from '../../util/fetch';
 
 /** Attempts to login user
- * @param {*} userData 
- * @param {History} history 
+ * @param {*} userData
+ * @param {History} history
  */
 export const loginUserAction = (userData, history) => dispatch => {
   dispatch({ type: LOADING_UI });
@@ -25,9 +32,10 @@ export const loginUserAction = (userData, history) => dispatch => {
 };
 
 /** Fetches user data and saves to redux store
- * @param {string} handle 
+ * @param {string} handle
  */
 export const getUserDataAction = handle => dispatch => {
+  dispatch({ type: LOADING_USER });
   getUserData(handle)
     .then(res => {
       dispatch({
@@ -60,10 +68,10 @@ export const logoutUserAction = () => dispatch => {
   localStorage.removeItem('Token');
   delete axios.defaults.headers.common['Authorization'];
   dispatch({ type: SET_UNAUTHENTICATED });
-}
+};
 
 const setAuthorizationHeader = token => {
   const Token = `Bearer ${token}`;
   localStorage.setItem('Token', Token);
   axios.defaults.headers.common['Authorization'] = Token;
-}
+};

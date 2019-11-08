@@ -25,7 +25,7 @@ const UserSchema = Schema({
   },
   bio: {
     image: String,
-    bio: String,
+    aboutMe: String,
     website: String,
     location: String
   }
