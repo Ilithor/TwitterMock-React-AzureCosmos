@@ -57,6 +57,7 @@ ButtonRegister.propTypes = {
   isLoggedIn: PropTypes.bool,
 };
 
+
 /** View component for navbar
  * @param {{isLoggedIn:bool, logoutUserAction:()=>void}} props
  */
@@ -68,6 +69,7 @@ const Navbar = ({ isLoggedIn = false, logoutUserAction }) => (
       </Button>
       <ButtonLogInOut isLoggedIn={isLoggedIn} logout={logoutUserAction} />
       <ButtonRegister isLoggedIn={isLoggedIn} />
+
     </Toolbar>
   </AppBar>
 );
