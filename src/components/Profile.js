@@ -10,7 +10,9 @@ import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
 import MuiLink from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
+import IconButton from '@material-ui/core/IconButton';
+import EditIcon from '@material-ui/icons/Edit';
+import Tooltip from '@material-ui/core/Tooltip';
 
 // Icons
 import LocationOn from '@material-ui/icons/LocationOn';
@@ -19,18 +21,28 @@ import CalendarToday from '@material-ui/icons/CalendarToday';
 
 // Redux
 import { connect } from 'react-redux';
+import {
+  logoutUserAction,
+  uploadImageAction,
+} from '../redux/actions/userActions';
 
 class Profile extends Component {
+  handleImageChange = event => {
+    const image = event.target.files[0];
+    const formData = new FormData();
+    formData.append('image', image, image.name);
+    this.props.uploadImageAction(formData);
+  };
+
+  handleEditPhoto = () => {
+    const fileInput = document.getElementById('imageUpload');
+    fileInput.click();
+  };
+
   render() {
     const {
       classes,
-      user: {
-        handle,
-        createdAt,
-        bio,
-        isLoading,
-        authenticated,
-      },
+      user: { handle, createdAt, bio, isLoading, authenticated },
     } = this.props;
 
     let profileMarkup = !isLoading ? (
@@ -43,6 +55,17 @@ class Profile extends Component {
               ) : (
                 <div>Derp</div>
               )}
+              <input
+                type='file'
+                id='imageUpload'
+                hidden='hidden'
+                onChange={this.handleImageChange}
+              />
+              <Tooltip title='Edit profile picture' placement='top'>
+                <IconButton onClick={this.handleEditPhoto} className='button'>
+                  <EditIcon color='primary' />
+                </IconButton>
+              </Tooltip>
             </div>
             <hr />
             <div className='profile-details'>
@@ -55,7 +78,9 @@ class Profile extends Component {
                 @{handle}
               </MuiLink>
               <hr />
-              {bio.aboutMe && <Typography variant='body2'>{bio.aboutMe}</Typography>}
+              {bio.aboutMe && (
+                <Typography variant='body2'>{bio.aboutMe}</Typography>
+              )}
               <hr />
               {bio.location && (
                 <Fragment>
@@ -66,7 +91,11 @@ class Profile extends Component {
               {bio.website && (
                 <Fragment>
                   <LinkIcon color='primary' />
-                  <a href={bio.website} target='_blank' rel='noopener noreferrer'>
+                  <a
+                    href={bio.website}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                  >
                     {' '}
                     {bio.website}
                   </a>
@@ -117,9 +146,16 @@ const mapStateToProps = state => {
   };
 };
 
+const mapActionsToProps = { logoutUserAction, uploadImageAction };
+
 Profile.propTypes = {
+  logoutUserAction: PropTypes.func.isRequired,
+  uploadImageAction: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
 };
 
-export default connect(mapStateToProps)(withStyles(style)(Profile));
+export default connect(
+  mapStateToProps,
+  mapActionsToProps
+)(withStyles(style)(Profile));

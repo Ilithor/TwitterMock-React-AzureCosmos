@@ -92,6 +92,7 @@ export const findPostByHandle = async handle => {
  */
 export const findNotificationByRecipient = async recipient => {
   let notification = [];
+  let error = {};
   notification = Notification.find({
     recipient: recipient
   })
@@ -171,10 +172,10 @@ export const findLikeByHandleAndPostId = async (handle, postId) => {
 /** Updates all user posts with new image
  * @param {string} base64
  */
-export const findAndUpdatePostImage = async base64 => {
-  await Post.find(
+export const findAndUpdatePostImage = async (handle, base64) => {
+  await Post.updateMany(
     {
-      userHandle: req.user.handle
+      userHandle: handle
     },
     {
       $set: {
@@ -193,7 +194,7 @@ export const findAndUpdatePostImage = async base64 => {
  * @param {Number} commentCount
  */
 export const findPostAndUpdateCount = async (_id, likeCount, commentCount) => {
-  await Post.findOneAndUpdate(
+  await Post.updateOne(
     {
       _id: _id
     },
@@ -250,7 +251,7 @@ export const findAndDeleteLikeAndComment = async postId => {
 };
 
 export const findNotificationAndUpdateRead = async notificationId => {
-  await Notification.findByIdAndUpdate(
+  await Notification.updateOne(
     {
       _id: notificationId
     },
@@ -270,9 +271,9 @@ export const findNotificationAndUpdateRead = async notificationId => {
  * @param {string} base64
  */
 export const findUserAndUpdateImage = async (_id, base64) => {
-  await User.findOneAndUpdate(
+  await User.updateOne(
     {
-      _id
+      _id: _id
     },
     {
       $set: {
@@ -294,7 +295,7 @@ export const findUserAndUpdateProfile = async (userDetails, _id) => {
 
   if (!bio) {
     if (!website) {
-      await User.findByIdAndUpdate(
+      await User.updateOne(
         {
           _id: _id
         },
@@ -308,7 +309,7 @@ export const findUserAndUpdateProfile = async (userDetails, _id) => {
         }
       );
     } else if (!location) {
-      await User.findByIdAndUpdate(
+      await User.updateOne(
         {
           _id: _id
         },
@@ -322,7 +323,7 @@ export const findUserAndUpdateProfile = async (userDetails, _id) => {
         }
       );
     } else {
-      await User.findByIdAndUpdate(
+      await User.updateOne(
         {
           _id: _id
         },
@@ -339,7 +340,7 @@ export const findUserAndUpdateProfile = async (userDetails, _id) => {
     }
   } else if (!website) {
     if (!location) {
-      await User.findByIdAndUpdate(
+      await User.updateOne(
         {
           _id: _id
         },
@@ -353,7 +354,7 @@ export const findUserAndUpdateProfile = async (userDetails, _id) => {
         }
       );
     } else {
-      await User.findByIdAndUpdate(
+      await User.updateOne(
         {
           _id: _id
         },
@@ -369,7 +370,7 @@ export const findUserAndUpdateProfile = async (userDetails, _id) => {
       );
     }
   } else if (!location) {
-    await User.findByIdAndUpdate(
+    await User.updateOne(
       {
         _id: _id
       },
@@ -384,7 +385,7 @@ export const findUserAndUpdateProfile = async (userDetails, _id) => {
       }
     );
   } else {
-    await User.findByIdAndUpdate(
+    await User.updateOne(
       {
         _id: _id
       },

@@ -7,6 +7,8 @@ export const endpoints = {
   register: 'api/user/register',
   /** @type {Endpoint} */
   userData: 'api/user',
+  /** @type {Endpoint} */
+  uploadImage: 'api/user/image',
 };
 
 /** Attempts to log the user in
@@ -24,6 +26,8 @@ export const registerUser = userData => post(endpoints.register, userData);
 export const getUserData = handle => {
   return get(endpoints.userData + `/${handle}`);
 };
+
+export const uploadImage = formData => post(endpoints.uploadImage, formData);
 
 /**
  * @typedef {import('./fetch').Endpoint} Endpoint

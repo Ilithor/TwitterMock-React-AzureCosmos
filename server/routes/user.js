@@ -1,5 +1,4 @@
 import express from 'express';
-const router = express.Router();
 import {
   registerUser,
   loginUser,
@@ -14,6 +13,8 @@ import {
   markNotificationRead,
 } from '../handlers/notification';
 import { multerUploads } from '../util/multer';
+
+const router = express.Router();
 
 router.post('/register', registerUser);
 router.post('/login', loginUser);

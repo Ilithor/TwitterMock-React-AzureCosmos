@@ -193,10 +193,8 @@ export const addUserDetail = async (req, res, next) => {
       .status(400)
       .json({ message: 'At least one valid input is needed' });
   }
-
   await updateBio(userParam, userId)
     .then(async success => {
-      console.log(success);
       if (success === true) {
         return res.status(200).json({
           message: 'Profile updated successfully',
@@ -217,7 +215,7 @@ export const addUserDetail = async (req, res, next) => {
  * @type {RouteHandler}
  */
 export const imageUpload = async (req, res, next) => {
-  let base64, _id;
+  let base64, _id, handle;
   if (!req.file) {
     return res.status(400).json({
       message: 'No image provided',
@@ -229,7 +227,11 @@ export const imageUpload = async (req, res, next) => {
     .then(async () => {
       await findById(_id).then(async doc => {
         if (doc.bio.image === base64) {
-          await findAndUpdatePostImage(base64);
+          handle = req.user.handle;
+          await findAndUpdatePostImage(handle, base64)
+            .then(async () => {
+              await findPostByHandle(handle)
+            })
         }
       });
     })
