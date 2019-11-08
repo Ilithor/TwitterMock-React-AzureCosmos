@@ -1,11 +1,4 @@
 import axios from 'axios';
-import { getUserBearerToken } from '../../auth';
-
-const defaultHeaders = {
-  authorization: `Bearer ${getUserBearerToken()}`,
-};
-/** @type {import('axios').AxiosRequestConfig} */
-const defaultConfig = { headers: defaultHeaders };
 
 /** Called when a request fails
  * @param {Error} error
@@ -18,7 +11,7 @@ const onRequestFail = error => console.log(error);
 export const get = endpoint =>
   new Promise((resolve, reject) => {
     axios
-      .get(endpoint, defaultConfig)
+      .get(endpoint)
       .then(resolve)
       .catch(error => {
         onRequestFail(error);
@@ -33,7 +26,7 @@ export const get = endpoint =>
 export const post = (endpoint, data) =>
   new Promise((resolve, reject) => {
     axios
-      .post(endpoint, data, defaultConfig)
+      .post(endpoint, data)
       .then(resolve)
       .catch(error => {
         onRequestFail(error);
