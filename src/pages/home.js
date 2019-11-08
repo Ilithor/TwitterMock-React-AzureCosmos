@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import Grid from '@material-ui/core/Grid';
 
 import Post from '../components/Post';
+import { fetchPostList } from '../util/fetch/post';
 import Profile from '../components/Profile';
-import { fetchPostList } from '../util/fetch';
 
 export class home extends Component {
   state = {

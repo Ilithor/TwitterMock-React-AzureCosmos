@@ -1,4 +1,16 @@
 import axios from 'axios';
+import { getUserBearerToken } from '../../auth';
+
+const defaultHeaders = {
+  authorization: `Bearer ${getUserBearerToken()}`,
+};
+/** @type {import('axios').AxiosRequestConfig} */
+const defaultConfig = { headers: defaultHeaders };
+
+/** Called when a request fails
+ * @param {Error} error
+ */
+const onRequestFail = error => console.log(error);
 
 /** Fetch an arbitrary endpoint
  * @param {Endpoint} endpoint
@@ -6,9 +18,10 @@ import axios from 'axios';
 export const get = endpoint =>
   new Promise((resolve, reject) => {
     axios
-      .get(endpoint)
+      .get(endpoint, defaultConfig)
       .then(resolve)
       .catch(error => {
+        onRequestFail(error);
         reject(error);
       });
   });
@@ -20,10 +33,10 @@ export const get = endpoint =>
 export const post = (endpoint, data) =>
   new Promise((resolve, reject) => {
     axios
-      .post(endpoint, data)
+      .post(endpoint, data, defaultConfig)
       .then(resolve)
       .catch(error => {
-        console.log(error);
+        onRequestFail(error);
         reject(error);
       });
   });

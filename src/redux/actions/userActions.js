@@ -7,7 +7,7 @@ import {
   LOADING_USER,
 } from '../types';
 import axios from 'axios';
-import { loginUser, registerUser, getUserData } from '../../util/fetch';
+import { loginUser, registerUser, getUserData } from '../../util/fetch/user';
 
 /** Attempts to login user
  * @param {*} userData
