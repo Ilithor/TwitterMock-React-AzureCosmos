@@ -24,6 +24,7 @@ class LoginForm extends Component {
           error={this.props.error.email ? true : false}
           value={this.props.email}
           onChange={this.props.handleChange}
+          autoComplete="username"
           fullWidth
         />
         <TextField
@@ -36,6 +37,7 @@ class LoginForm extends Component {
           error={this.props.error.password ? true : false}
           value={this.props.password}
           onChange={this.props.handleChange}
+          autoComplete="current-password"
           fullWidth
         />
         {this.props.error.general && (
