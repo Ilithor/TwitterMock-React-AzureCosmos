@@ -36,6 +36,7 @@ class RegisterForm extends Component {
           error={this.props.error.email ? true : false}
           value={this.props.email}
           onChange={this.props.handleChange}
+          autoComplete="off"
           fullWidth
         />
         <TextField
@@ -48,6 +49,7 @@ class RegisterForm extends Component {
           error={this.props.error.password ? true : false}
           value={this.props.password}
           onChange={this.props.handleChange}
+          autoComplete="new-password"
           fullWidth
         />
         <TextField
@@ -60,6 +62,7 @@ class RegisterForm extends Component {
           error={this.props.error.confirmPassword ? true : false}
           value={this.props.confirmPassword}
           onChange={this.props.handleChange}
+          autoComplete="off"
           fullWidth
         />
         {this.props.error.general && (

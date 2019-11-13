@@ -21,12 +21,15 @@ export const loginUser = userData => post(endpoints.login, userData);
 export const registerUser = userData => post(endpoints.register, userData);
 
 /** Retrieves user data using handle
- * @param {string} handle
+ * @returns {Promise<import("axios").AxiosResponse>}
  */
 export const getUserData = handle => {
   return get(endpoints.userData + `/${handle}`);
 };
 
+/** Attempts to upload user image
+ * @returns {Promise<import("axios").AxiosResponse>}
+ */
 export const uploadImage = formData => post(endpoints.uploadImage, formData);
 
 /**
