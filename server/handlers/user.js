@@ -228,10 +228,17 @@ export const imageUpload = async (req, res, next) => {
       await findById(_id).then(async doc => {
         if (doc.bio.image === base64) {
           handle = req.user.handle;
-          await findAndUpdatePostImage(handle, base64)
-            .then(async () => {
-              await findPostByHandle(handle)
-            })
+          await findAndUpdatePostImage(handle, base64).then(async () => {
+            await findPostByHandle(handle).then(post => {
+              if (post[0].userImage === base64) {
+                return res
+                  .status(200)
+                  .json({ message: 'Image uploaded successfully' });
+              } else {
+                return res.status(500).json({ error: 'Something went wrong' });
+              }
+            });
+          });
         }
       });
     })
