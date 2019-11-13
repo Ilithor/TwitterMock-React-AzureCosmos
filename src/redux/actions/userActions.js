@@ -81,11 +81,11 @@ const setAuthorizationHeader = token => {
   axios.defaults.headers.common['Authorization'] = Token;
 };
 
-export const uploadImageAction = formData => dispatch => {
+export const uploadImageAction = (formData, handle) => dispatch => {
   dispatch({ type: LOADING_USER });
   uploadImage(formData)
     .then(() => {
-      dispatch(getUserDataAction());
+      dispatch(getUserDataAction(handle));
     })
     .catch(console.log);
 };
