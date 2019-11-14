@@ -1,8 +1,5 @@
 import User from '../models/user.model';
 import mongo from 'mongodb';
-import jwt from 'jsonwebtoken';
-import env from '../environment/environment';
-import { isEmpty, isEmail } from '../util/validators';
 import {
   findByCredential,
   findById,
@@ -38,13 +35,15 @@ export const getList = async () => {
 
 /** Validates then creates new User
  * @param {UserRegistration} userParam
+ * @returns {Promise<newUser[User], error>}
  */
 export const register = async userParam => {
-  // Validation
   let error = {};
   let credential = {};
   let bio = {};
   let user = { credential, bio };
+
+  // Validation
   error = await validateRegister(userParam);
 
   if (Object.keys(error).length > 0) {
@@ -69,6 +68,7 @@ export const register = async userParam => {
 
 /** Checks if user exists, and then generates a new token
  * @param {UserCredential} userParam
+ * @returns {Promise<userLoggedIn, dataToReturn, error>}
  */
 export const login = async userParam => {
   const { email, password } = userParam;
