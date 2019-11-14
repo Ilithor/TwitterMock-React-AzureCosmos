@@ -15,7 +15,7 @@ export const findByCredential = async user => {
   let error = {};
 
   const foundUser = await User.findOne({
-    'credential.email': user.credential.email
+    'credential.email': user.credential.email,
   });
   if (!foundUser) {
     error.email = 'Email does not exist';
@@ -34,7 +34,7 @@ export const findByCredential = async user => {
 export const findById = async _id => {
   let error = {};
   let user = await User.findOne({
-    _id
+    _id,
   });
   if (!user) {
     error.user = 'User not found';
@@ -46,7 +46,7 @@ export const findById = async _id => {
 export const findByHandle = async handle => {
   let error = {};
   let user = await User.findOne({
-    handle: handle
+    handle: handle,
   });
   if (!user) {
     error.user = 'User not found';
@@ -61,7 +61,7 @@ export const findByHandle = async handle => {
 export const findPostById = async _id => {
   let error = {};
   let post = await Post.findOne({
-    _id
+    _id,
   });
   if (!post) {
     error.post = 'Post not found';
@@ -76,7 +76,7 @@ export const findPostById = async _id => {
 export const findPostByHandle = async handle => {
   let error = {};
   let post = await Post.find({
-    userHandle: handle
+    userHandle: handle,
   })
     .sort({ createdAt: -1 })
     .read(mongo.ReadPreference.NEAREST);
@@ -94,7 +94,7 @@ export const findNotificationByRecipient = async recipient => {
   let notification = [];
   let error = {};
   notification = Notification.find({
-    recipient: recipient
+    recipient: recipient,
   })
     .sort({ createdAt: -1 })
     .read(mongo.ReadPreference.NEAREST);
@@ -113,7 +113,7 @@ export const findCommentByPostId = async _id => {
   let comment = [];
   let error = {};
   comment = await Comment.find({
-    postId: _id
+    postId: _id,
   })
     .sort({ createdAt: -1 })
     .read(mongo.ReadPreference.NEAREST);
@@ -132,7 +132,7 @@ export const findLikeByHandle = async handle => {
   let like = [];
   let error = {};
   like = await Like.find({
-    userHandle: handle
+    userHandle: handle,
   }).read(mongo.ReadPreference.NEAREST);
 
   if (like.length === 0) {
@@ -151,7 +151,7 @@ export const findCommentByHandleAndPostId = async (handle, postId) => {
   let comment = {};
   comment = await Comment.find({
     userHandle: handle,
-    postId: postId
+    postId: postId,
   }).read(mongo.ReadPreference.NEAREST);
   return comment;
 };
@@ -164,7 +164,7 @@ export const findLikeByHandleAndPostId = async (handle, postId) => {
   let like = {};
   like = await Like.find({
     userHandle: handle,
-    postId: postId
+    postId: postId,
   }).read(mongo.ReadPreference.NEAREST);
   return like;
 };
@@ -175,15 +175,15 @@ export const findLikeByHandleAndPostId = async (handle, postId) => {
 export const findAndUpdatePostImage = async (handle, base64) => {
   await Post.updateMany(
     {
-      userHandle: handle
+      userHandle: handle,
     },
     {
       $set: {
-        userImage: base64
-      }
+        userImage: base64,
+      },
     },
     {
-      useFindAndModify: false
+      useFindAndModify: false,
     }
   );
 };
@@ -196,16 +196,16 @@ export const findAndUpdatePostImage = async (handle, base64) => {
 export const findPostAndUpdateCount = async (_id, likeCount, commentCount) => {
   await Post.updateOne(
     {
-      _id: _id
+      _id: _id,
     },
     {
       $set: {
         likeCount: likeCount,
-        commentCount: commentCount
-      }
+        commentCount: commentCount,
+      },
     },
     {
-      useFindAndModify: false
+      useFindAndModify: false,
     }
   );
 };
@@ -220,22 +220,22 @@ export const findAndDeleteLikeAndComment = async postId => {
 
   // Deletes all associated likes
   await Like.deleteMany({
-    postId: postId
+    postId: postId,
   });
 
   // Deletes all associated comments
   await Comment.deleteMany({
-    postId: postId
+    postId: postId,
   });
 
   // Checks for any leftover likes
   like = await Like.find({
-    postId: postId
+    postId: postId,
   }).read(mongo.ReadPreference.NEAREST);
 
   // Checks for any leftover comments
   comment = await Comment.find({
-    postId: postId
+    postId: postId,
   }).read(mongo.ReadPreference.NEAREST);
 
   /**
@@ -253,15 +253,15 @@ export const findAndDeleteLikeAndComment = async postId => {
 export const findNotificationAndUpdateRead = async notificationId => {
   await Notification.updateOne(
     {
-      _id: notificationId
+      _id: notificationId,
     },
     {
       $set: {
-        read: true
-      }
+        read: true,
+      },
     },
     {
-      useFindAndModify: false
+      useFindAndModify: false,
     }
   );
 };
@@ -273,15 +273,15 @@ export const findNotificationAndUpdateRead = async notificationId => {
 export const findUserAndUpdateImage = async (_id, base64) => {
   await User.updateOne(
     {
-      _id: _id
+      _id: _id,
     },
     {
       $set: {
-        'bio.image': base64
-      }
+        'bio.image': base64,
+      },
     },
     {
-      useFindAndModify: false
+      useFindAndModify: false,
     }
   );
 };
@@ -291,50 +291,50 @@ export const findUserAndUpdateImage = async (_id, base64) => {
  * @param {string} _id
  */
 export const findUserAndUpdateProfile = async (userDetails, _id) => {
-  let { bio, website, location } = userDetails.bio;
+  let { aboutMe, website, location } = userDetails.bio;
 
-  if (!bio) {
+  if (!aboutMe) {
     if (!website) {
       await User.updateOne(
         {
-          _id: _id
+          _id: _id,
         },
         {
           $set: {
-            'bio.location': location
-          }
+            'bio.location': location,
+          },
         },
         {
-          useFindAndModify: false
+          useFindAndModify: false,
         }
       );
     } else if (!location) {
       await User.updateOne(
         {
-          _id: _id
+          _id: _id,
         },
         {
           $set: {
-            'bio.website': website
-          }
+            'bio.website': website,
+          },
         },
         {
-          useFindAndModify: false
+          useFindAndModify: false,
         }
       );
     } else {
       await User.updateOne(
         {
-          _id: _id
+          _id: _id,
         },
         {
           $set: {
             'bio.website': website,
-            'bio.location': location
-          }
+            'bio.location': location,
+          },
         },
         {
-          useFindAndModify: false
+          useFindAndModify: false,
         }
       );
     }
@@ -342,62 +342,62 @@ export const findUserAndUpdateProfile = async (userDetails, _id) => {
     if (!location) {
       await User.updateOne(
         {
-          _id: _id
+          _id: _id,
         },
         {
           $set: {
-            'bio.aboutMe': bio
-          }
+            'bio.aboutMe': aboutMe,
+          },
         },
         {
-          useFindAndModify: false
+          useFindAndModify: false,
         }
       );
     } else {
       await User.updateOne(
         {
-          _id: _id
+          _id: _id,
         },
         {
           $set: {
-            'bio.aboutMe': bio,
-            'bio.location': location
-          }
+            'bio.aboutMe': aboutMe,
+            'bio.location': location,
+          },
         },
         {
-          useFindAndModify: false
+          useFindAndModify: false,
         }
       );
     }
   } else if (!location) {
     await User.updateOne(
       {
-        _id: _id
+        _id: _id,
       },
       {
         $set: {
-          'bio.aboutMe': bio,
-          'bio.website': website
-        }
+          'bio.aboutMe': aboutMe,
+          'bio.website': website,
+        },
       },
       {
-        useFindAndModify: false
+        useFindAndModify: false,
       }
     );
   } else {
     await User.updateOne(
       {
-        _id: _id
+        _id: _id,
       },
       {
         $set: {
-          'bio.aboutMe': bio,
+          'bio.aboutMe': aboutMe,
           'bio.website': website,
-          'bio.location': location
-        }
+          'bio.location': location,
+        },
       },
       {
-        useFindAndModify: false
+        useFindAndModify: false,
       }
     );
   }
