@@ -12,6 +12,7 @@ import {
   registerUser,
   getUserData,
   uploadImage,
+  editUserDetail,
 } from '../../util/fetch/user';
 
 /** Attempts to login user
@@ -84,6 +85,15 @@ const setAuthorizationHeader = token => {
 export const uploadImageAction = (formData, handle) => dispatch => {
   dispatch({ type: LOADING_USER });
   uploadImage(formData)
+    .then(() => {
+      dispatch(getUserDataAction(handle));
+    })
+    .catch(console.log);
+};
+
+export const editUserDetailAction = (userDetail, handle) => dispatch => {
+  dispatch({ type: LOADING_USER });
+  editUserDetail(userDetail)
     .then(() => {
       dispatch(getUserDataAction(handle));
     })

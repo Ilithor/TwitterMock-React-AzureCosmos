@@ -9,6 +9,8 @@ export const endpoints = {
   userData: 'api/user',
   /** @type {Endpoint} */
   uploadImage: 'api/user/image',
+  /** @type {Endpoint} */
+  editUserDetail: 'api/user',
 };
 
 /** Attempts to log the user in
@@ -31,6 +33,12 @@ export const getUserData = handle => {
  * @returns {Promise<import("axios").AxiosResponse>}
  */
 export const uploadImage = formData => post(endpoints.uploadImage, formData);
+
+/** Attempts to update user details
+ * @returns {Promise<import("axios").AxiosResponse>}
+ */
+export const editUserDetail = userDetail =>
+  post(endpoints.editUserDetail, userDetail);
 
 /**
  * @typedef {import('./fetch').Endpoint} Endpoint

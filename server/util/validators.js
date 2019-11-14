@@ -56,10 +56,10 @@ export const validateRegister = async userParam => {
  * @param {UserBioUpdate} userParam User's bio info
  */
 export const validateUserDetail = userParam => {
-  let userDetails = { bio: '', website: '', location: '' };
-  let { bio, website, location } = userParam;
-  if (!isEmpty(bio.trim())) {
-    userDetails.bio = bio;
+  let userDetails = { aboutMe: '', website: '', location: '' };
+  let { aboutMe, website, location } = userParam;
+  if (!isEmpty(aboutMe.trim())) {
+    userDetails.aboutMe = aboutMe;
   }
   if (!isEmpty(website.trim())) {
     if (website.trim().substring(0, 4) !== 'http') {

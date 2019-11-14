@@ -70,6 +70,9 @@ const style = theme => ({
       margin: '20px 10px',
     },
   },
+  buttonEdit: {
+    float: 'right',
+  },
 });
 
 export default style;
