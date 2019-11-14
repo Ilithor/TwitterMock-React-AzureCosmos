@@ -1,18 +1,14 @@
 import { getList, register, login, updateBio } from '../services/user.service';
 import { generateUserToken } from './token';
 import { dataUri } from '../util/multer';
-import { authByToken } from '../util/auth';
 import {
   findById,
   findUserAndUpdateImage,
-  findUserAndUpdateProfile,
   findLikeByHandle,
   findByHandle,
   findPostByHandle,
   findAndUpdatePostImage,
 } from './find';
-import { validateUserDetail } from '../util/validators';
-import Post from '../models/post.model';
 
 /** Retrieves the list of users
  * @type {RouteHandler}
@@ -230,7 +226,7 @@ export const imageUpload = async (req, res, next) => {
           handle = req.user.handle;
           await findAndUpdatePostImage(handle, base64).then(async () => {
             await findPostByHandle(handle).then(post => {
-              if (post[0].userImage === base64) {
+              if (post.length === 0 || post[0].userImage === base64) {
                 return res
                   .status(200)
                   .json({ message: 'Image uploaded successfully' });
