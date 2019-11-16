@@ -3,11 +3,19 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { logoutUserAction } from '../redux/actions/userActions';
 import PropTypes from 'prop-types';
+import CustomButton from '../util/CustomButton';
 
 // MUI
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Button from '@material-ui/core/Button';
+
+// Icons
+import AddIcon from '@material-ui/icons/Add';
+import HomeIcon from '@material-ui/icons/Home';
+import Notifications from '@material-ui/icons/Notifications';
+import KeyboardReturn from '@material-ui/icons/KeyboardReturn';
+import LockOpenIcon from '@material-ui/icons/LockOpen';
+import AssignmentIcon from '@material-ui/icons/Assignment';
 
 /** Shows the log in or log out button
  * @param {{isLoggedIn:boolean, logout:()=>void}} props
@@ -15,22 +23,17 @@ import Button from '@material-ui/core/Button';
 const ButtonLogInOut = ({ isLoggedIn, logout }) => {
   if (isLoggedIn) {
     return (
-      <Button
-        color='inherit'
-        component={Link}
-        to='/'
-        onClick={() => {
-          logout();
-        }}
-      >
-        Logout
-      </Button>
+      <CustomButton tip='Logout' onClick={logout}>
+        <KeyboardReturn />
+      </CustomButton>
     );
   }
   return (
-    <Button color='inherit' component={Link} to='/login'>
-      Login
-    </Button>
+    <Link to='/login'>
+      <CustomButton tip='Login'>
+        <LockOpenIcon />
+      </CustomButton>
+    </Link>
   );
 };
 
@@ -40,16 +43,18 @@ ButtonLogInOut.propTypes = {
 };
 
 /** Displays either signup button or empty div
- * @param {*} param0 
+ * @param {{isLoggedIn:boolean}} props
  */
 const ButtonRegister = ({ isLoggedIn }) => {
   if (isLoggedIn) {
     return <div></div>;
   }
   return (
-    <Button color='inherit' component={Link} to='/signup'>
-      Signup
-    </Button>
+    <Link to='/signup'>
+      <CustomButton tip='Register'>
+        <AssignmentIcon />
+      </CustomButton>
+    </Link>
   );
 };
 
@@ -57,6 +62,41 @@ ButtonRegister.propTypes = {
   isLoggedIn: PropTypes.bool,
 };
 
+/** Displays either create new post button or empty div
+ * @param {{isLoggedIn:boolean}} props
+ */
+const ButtonPost = ({ isLoggedIn }) => {
+  if (isLoggedIn) {
+    return (
+      <CustomButton tip='New Post'>
+        <AddIcon />
+      </CustomButton>
+    );
+  }
+  return <div></div>;
+};
+
+ButtonPost.propTypes = {
+  isLoggedIn: PropTypes.bool,
+};
+
+/** Displays either notification button or empty div
+ * @param {{isLoggedIn:boolean}} props
+ */
+const ButtonNotification = ({ isLoggedIn }) => {
+  if (isLoggedIn) {
+    return (
+      <CustomButton tip='Notifications'>
+        <Notifications />
+      </CustomButton>
+    );
+  }
+  return <div></div>;
+};
+
+ButtonNotification.propTypes = {
+  isLoggedIn: PropTypes.bool,
+};
 
 /** View component for navbar
  * @param {{isLoggedIn:bool, logoutUserAction:()=>void}} props
@@ -64,12 +104,15 @@ ButtonRegister.propTypes = {
 const Navbar = ({ isLoggedIn = false, logoutUserAction }) => (
   <AppBar>
     <Toolbar className='nav-container'>
-      <Button color='inherit' component={Link} to='/'>
-        Home
-      </Button>
+      <Link to='/'>
+        <CustomButton tip='Home'>
+          <HomeIcon />
+        </CustomButton>
+      </Link>
+      <ButtonPost isLoggedIn={isLoggedIn} />
+      <ButtonNotification isLoggedIn={isLoggedIn} />
       <ButtonLogInOut isLoggedIn={isLoggedIn} logout={logoutUserAction} />
       <ButtonRegister isLoggedIn={isLoggedIn} />
-
     </Toolbar>
   </AppBar>
 );
