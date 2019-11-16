@@ -5,11 +5,10 @@ import dayjs from 'dayjs';
 import EditDetails from './EditDetails';
 import withStyles from '@material-ui/core/styles/withStyles';
 import style from '../style/style';
+import CustomButton from '../util/CustomButton';
 
 // MUI
 import Paper from '@material-ui/core/Paper';
-import Tooltip from '@material-ui/core/Tooltip';
-import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import MuiLink from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
@@ -64,11 +63,13 @@ class UserProfileDisplay extends Component {
               hidden='hidden'
               onChange={this.handleImageChange}
             />
-            <Tooltip title='Edit profile picture' placement='top'>
-              <IconButton onClick={this.handleEditPhoto} className='button'>
-                <EditIcon color='primary' />
-              </IconButton>
-            </Tooltip>
+            <CustomButton
+              tip='Edit Profile Picture'
+              onClick={this.handleEditPhoto}
+              btnClassName='button'
+            >
+              <EditIcon color='primary' />
+            </CustomButton>
           </div>
           <hr />
           <div className='profile-details'>
@@ -104,11 +105,9 @@ class UserProfileDisplay extends Component {
             <CalendarToday color='primary' />{' '}
             <span>Joined {dayjs(createdAt).format('MMM YYYY')}</span>
           </div>
-          <Tooltip title='Logout' placement='top'>
-            <IconButton onClick={this.handleLogout}>
-              <KeyboardReturn color='primary' />
-            </IconButton>
-          </Tooltip>
+          <CustomButton tip='Logout' onClick={this.handleLogout}>
+            <KeyboardReturn color='primary' />
+          </CustomButton>
           <EditDetails />
         </div>
       </Paper>
@@ -127,7 +126,7 @@ const mapActionsToProps = { uploadImageAction, logoutUserAction };
 UserProfileDisplay.propTypes = {
   user: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired,
-}
+};
 
 export default connect(
   mapStateToProps,
