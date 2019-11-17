@@ -2,7 +2,7 @@ import { create, remove } from '../services/like.service';
 import {
   findPostById,
   findLikeByHandleAndPostId,
-  findPostAndUpdateCount,
+  findPostAndUpdateCount
 } from './find';
 
 /** Like a post
@@ -22,7 +22,7 @@ export const likePost = async (req, res, next) => {
           req.user.handle,
           req.params.postId
         ).then(async like => {
-          if (like.length !== 0) {
+          if (like[0]) {
             return res.status(400).json({ message: 'Like already exists' });
           } else {
             await create(req).then(async like => {
