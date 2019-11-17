@@ -141,14 +141,12 @@ export const getUserDetail = async (req, res) => {
       return res.status(500).json({ error: user.user });
     } else {
       userData.user = user;
-      await findPostByHandle(handle)
-        .then(async post => {
-          if (post.post) {
-            return res.status(500).json({ error: post.post });
-          } else {
-            userData.post = [];
-            return res.json(await pushPostIntoArray(post, userData));
-          }
+      findLikeByHandle(handle)
+        .then(async data => {
+          userData.like = data;
+          findPostByHandle(handle).then(async data => {
+            res.json(await pushPostIntoArray(data, userData));
+          });
         })
         .catch(err => {
           console.error(err);
@@ -160,9 +158,9 @@ export const getUserDetail = async (req, res) => {
 
 /** Pushes post docs into post array
  * @param {Document[]} post
- * @param {Object} userData
  */
 const pushPostIntoArray = (post, userData) => {
+  userData.post = [];
   post.forEach(doc => {
     userData.post.push({
       body: doc.body,
