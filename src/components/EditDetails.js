@@ -139,8 +139,8 @@ EditDetails.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  bio: state.user.userInfo.bio,
-  handle: state.user.userInfo.handle,
+  bio: state.user.bio,
+  handle: state.user.handle,
 });
 
 export default connect(
