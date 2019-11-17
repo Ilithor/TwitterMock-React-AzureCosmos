@@ -46,7 +46,7 @@ export const getUserDataAction = handle => dispatch => {
     .then(res => {
       dispatch({
         type: SET_USER,
-        payload: res.data.user,
+        payload: res.data,
       });
     })
     .catch(console.log);
