@@ -46,7 +46,7 @@ class UserProfileDisplay extends Component {
   render() {
     const {
       classes,
-      user: { userInfo: { bio, handle, createdAt } },
+      user: { userInfo: { handle, createdAt, bio } },
     } = this.props;
     return (
       <Paper className={classes.paper}>
