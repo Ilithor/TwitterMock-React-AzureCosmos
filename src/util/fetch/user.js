@@ -29,6 +29,13 @@ export const getUserData = handle => {
   return get(endpoints.userData + `/${handle}`);
 };
 
+/** Retrieves likes made by user
+ * @returns {Promise<import("axios").AxiosResponse}
+ */
+export const getLikeList = handle => {
+  return get(endpoints.userData + `/${handle}/like`);
+};
+
 /** Attempts to upload user image
  * @returns {Promise<import("axios").AxiosResponse>}
  */
