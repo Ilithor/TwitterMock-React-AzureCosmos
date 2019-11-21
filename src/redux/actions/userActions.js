@@ -25,6 +25,7 @@ export const loginUserAction = (userData, history) => dispatch => {
     .then(res => {
       setAuthorizationHeader(res.data.token);
       const handle = res.data.handle;
+      setUserHandleHeader(handle);
       dispatch(getUserDataAction(handle));
       dispatch({ type: CLEAR_ERRORS });
       history.push('/');
@@ -58,6 +59,7 @@ export const registerUserAction = (newUserData, history) => dispatch => {
     .then(res => {
       setAuthorizationHeader(res.data.token);
       const handle = res.data.handle;
+      setUserHandleHeader(handle);
       dispatch(getUserDataAction(handle));
       dispatch({ type: CLEAR_ERRORS });
       history.push('/');
@@ -72,6 +74,7 @@ export const registerUserAction = (newUserData, history) => dispatch => {
 
 export const logoutUserAction = () => dispatch => {
   localStorage.removeItem('Token');
+  localStorage.removeItem('Handle');
   delete axios.defaults.headers.common['Authorization'];
   dispatch({ type: SET_UNAUTHENTICATED });
 };
@@ -80,6 +83,10 @@ const setAuthorizationHeader = token => {
   const Token = `Bearer ${token}`;
   localStorage.setItem('Token', Token);
   axios.defaults.headers.common['Authorization'] = Token;
+};
+
+const setUserHandleHeader = handle => {
+  localStorage.setItem('Handle', handle);
 };
 
 export const uploadImageAction = (formData, handle) => dispatch => {
