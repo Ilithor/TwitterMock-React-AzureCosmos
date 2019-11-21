@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
 import PropTypes from 'prop-types';
-import AppIcon from '../images/icon.png';
-
 import LoginForm from '../components/LoginForm';
 import style from '../style/style';
 
 // MUI
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+
+// Icons
+import AppIcon from '../images/icon.png';
 
 // Redux
 import { connect } from 'react-redux';

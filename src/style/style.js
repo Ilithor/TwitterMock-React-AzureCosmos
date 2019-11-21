@@ -73,6 +73,17 @@ const style = theme => ({
   buttonEdit: {
     float: 'right',
   },
+  card: {
+    display: 'flex',
+    marginBottom: 20,
+  },
+  imageUser: {
+    minWidth: 200,
+  },
+  content: {
+    padding: 25,
+    objectFit: 'cover',
+  },
 });
 
 export default style;
