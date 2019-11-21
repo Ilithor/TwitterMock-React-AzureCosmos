@@ -21,7 +21,7 @@ router.post('/login', loginUser);
 router.post('/image', authUser, multerUploads, imageUpload);
 router.post('/', authUser, addUserDetail);
 router.get('/', authUser, getAuthenticatedUser);
-router.get('/:handle', getUserDetail);
+router.get('/:handle', authUser, getUserDetail);
 router.post('/notification', authUser, markNotificationRead);
 router.get('/:handle/notification', authUser, getNotification);
 
