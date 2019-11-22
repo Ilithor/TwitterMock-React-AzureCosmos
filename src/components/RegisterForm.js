@@ -116,7 +116,7 @@ RegisterForm.propTypes = {
   handle: PropTypes.string,
   handleChange: PropTypes.func,
   handleSubmit: PropTypes.func,
-  error: PropTypes.string,
+  error: PropTypes.object,
   email: PropTypes.string,
   password: PropTypes.string,
   confirmPassword: PropTypes.string,
