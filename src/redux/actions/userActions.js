@@ -53,6 +53,10 @@ export const getUserDataAction = handle => dispatch => {
     .catch(console.log);
 };
 
+/** Attempts to create a new user
+ * @param {*} newUserData
+ * @param {HIstory} history
+ */
 export const registerUserAction = (newUserData, history) => dispatch => {
   dispatch({ type: LOADING_UI });
   registerUser(newUserData)
@@ -72,6 +76,8 @@ export const registerUserAction = (newUserData, history) => dispatch => {
     });
 };
 
+/** Attempts to logout the user
+ */
 export const logoutUserAction = () => dispatch => {
   localStorage.removeItem('Token');
   localStorage.removeItem('Handle');
@@ -79,16 +85,26 @@ export const logoutUserAction = () => dispatch => {
   dispatch({ type: SET_UNAUTHENTICATED });
 };
 
+/** Storing user token in storage
+ * @param {string} token
+ */
 const setAuthorizationHeader = token => {
   const Token = `Bearer ${token}`;
   localStorage.setItem('Token', Token);
   axios.defaults.headers.common['Authorization'] = Token;
 };
 
+/** Storing userHandle into storage
+ * @param {string} handle
+ */
 const setUserHandleHeader = handle => {
   localStorage.setItem('Handle', handle);
 };
 
+/** Attempts to upload image as new user image
+ * @param {*} formData
+ * @param {string} handle
+ */
 export const uploadImageAction = (formData, handle) => dispatch => {
   dispatch({ type: LOADING_USER });
   uploadImage(formData)
@@ -98,6 +114,10 @@ export const uploadImageAction = (formData, handle) => dispatch => {
     .catch(console.log);
 };
 
+/** Attempts to edit user details
+ * @param {*} userDetail
+ * @param {string} handle
+ */
 export const editUserDetailAction = (userDetail, handle) => dispatch => {
   dispatch({ type: LOADING_USER });
   editUserDetail(userDetail)
