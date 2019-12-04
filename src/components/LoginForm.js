@@ -12,19 +12,28 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 class LoginForm extends Component {
   render() {
+    const {
+      classes,
+      handleSubmit,
+      error,
+      email,
+      handleChange,
+      password,
+      isLoading,
+    } = this.props;
     return (
-      <form noValidate onSubmit={this.props.handleSubmit}>
+      <form noValidate onSubmit={handleSubmit}>
         <TextField
           id='email'
           name='email'
           type='email'
           label='Email'
-          className={this.props.classes.textField}
-          helperText={this.props.error.email}
-          error={this.props.error.email ? true : false}
-          value={this.props.email}
-          onChange={this.props.handleChange}
-          autoComplete="username"
+          className={classes.textField}
+          helperText={error.email}
+          error={error.email ? true : false}
+          value={email}
+          onChange={handleChange}
+          autoComplete='username'
           fullWidth
         />
         <TextField
@@ -32,35 +41,29 @@ class LoginForm extends Component {
           name='password'
           type='password'
           label='Password'
-          className={this.props.classes.textField}
-          helperText={this.props.error.password}
-          error={this.props.error.password ? true : false}
-          value={this.props.password}
-          onChange={this.props.handleChange}
-          autoComplete="current-password"
+          className={classes.textField}
+          helperText={error.password}
+          error={error.password ? true : false}
+          value={password}
+          onChange={handleChange}
+          autoComplete='current-password'
           fullWidth
         />
-        {this.props.error.general && (
-          <Typography
-            variant='body2'
-            className={this.props.classes.customError}
-          >
-            {this.props.error.general}
+        {error.general && (
+          <Typography variant='body2' className={classes.customError}>
+            {error.general}
           </Typography>
         )}
         <Button
           type='submit'
           variant='contained'
           color='primary'
-          className={this.props.classes.button}
-          disabled={this.props.isLoading}
+          className={classes.button}
+          disabled={isLoading}
         >
           Login
-          {this.props.isLoading && (
-            <CircularProgress
-              size={30}
-              className={this.props.classes.progress}
-            />
+          {isLoading && (
+            <CircularProgress size={30} className={classes.progress} />
           )}
         </Button>
         <br />
@@ -77,3 +80,28 @@ LoginForm.propTypes = {
 };
 
 export default withStyles(style)(LoginForm);
+
+/** Props passed to the LoginForm view component
+ * @typedef ILoginFormComponentProps
+ * @property {object} classes
+ * @property {}
+ * 
+ * 
+ * 
+ * 
+ * 
+ */
+
+ /** Props that represent a login form being rendered.
+ * @typedef ILoginForm
+ * @property {string} email
+ * @property {string} password
+ * @property {string} confirmPassword
+ */
+
+  handleSubmit,
+  error,
+      email,
+      handleChange,
+      password,
+      isLoading,

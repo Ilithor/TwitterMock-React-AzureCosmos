@@ -10,20 +10,34 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
+/** View component for displaying an individual post on the site
+ * @param {IRegisterFormComponentProps} props
+ */
 class RegisterForm extends Component {
   render() {
+    const {
+      classes,
+      handleSubmit,
+      error,
+      handle,
+      handleChange,
+      email,
+      password,
+      confirmPassword,
+      isLoading,
+    } = this.props;
     return (
-      <form noValidate onSubmit={this.props.handleSubmit}>
+      <form noValidate onSubmit={handleSubmit}>
         <TextField
           id='handle'
           name='handle'
           type='text'
           label='Handle'
-          className={this.props.classes.textField}
-          helperText={this.props.error.handle}
-          error={this.props.error.handle ? true : false}
-          value={this.props.handle}
-          onChange={this.props.handleChange}
+          className={classes.textField}
+          helperText={error.handle}
+          error={error.handle ? true : false}
+          value={handle}
+          onChange={handleChange}
           fullWidth
         />
         <TextField
@@ -31,12 +45,12 @@ class RegisterForm extends Component {
           name='email'
           type='email'
           label='Email'
-          className={this.props.classes.textField}
-          helperText={this.props.error.email}
-          error={this.props.error.email ? true : false}
-          value={this.props.email}
-          onChange={this.props.handleChange}
-          autoComplete="off"
+          className={classes.textField}
+          helperText={error.email}
+          error={error.email ? true : false}
+          value={email}
+          onChange={handleChange}
+          autoComplete='off'
           fullWidth
         />
         <TextField
@@ -44,12 +58,12 @@ class RegisterForm extends Component {
           name='password'
           type='password'
           label='Password'
-          className={this.props.classes.textField}
-          helperText={this.props.error.password}
-          error={this.props.error.password ? true : false}
-          value={this.props.password}
-          onChange={this.props.handleChange}
-          autoComplete="new-password"
+          className={classes.textField}
+          helperText={error.password}
+          error={error.password ? true : false}
+          value={password}
+          onChange={handleChange}
+          autoComplete='new-password'
           fullWidth
         />
         <TextField
@@ -57,35 +71,29 @@ class RegisterForm extends Component {
           name='confirmPassword'
           type='password'
           label='Confirm Password'
-          className={this.props.classes.textField}
-          helperText={this.props.error.confirmPassword}
-          error={this.props.error.confirmPassword ? true : false}
-          value={this.props.confirmPassword}
-          onChange={this.props.handleChange}
-          autoComplete="off"
+          className={classes.textField}
+          helperText={error.confirmPassword}
+          error={error.confirmPassword ? true : false}
+          value={confirmPassword}
+          onChange={handleChange}
+          autoComplete='off'
           fullWidth
         />
-        {this.props.error.general && (
-          <Typography
-            variant='body2'
-            className={this.props.classes.customError}
-          >
-            {this.props.error.general}
+        {error.general && (
+          <Typography variant='body2' className={classes.customError}>
+            {error.general}
           </Typography>
         )}
         <Button
           type='submit'
           variant='contained'
           color='primary'
-          className={this.props.classes.button}
-          disabled={this.props.isLoading}
+          className={classes.button}
+          disabled={isLoading}
         >
           Register
-          {this.props.isLoading && (
-            <CircularProgress
-              size={30}
-              className={this.props.classes.progress}
-            />
+          {isLoading && (
+            <CircularProgress size={30} className={classes.progress} />
           )}
         </Button>
         <br />
@@ -101,4 +109,27 @@ RegisterForm.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
+/** Component representing an individual post on the page.
+ * @param {{registerForm:IRegisterForm}} props
+ */
 export default withStyles(style)(RegisterForm);
+
+/** Props passed to the RegisterForm view component
+ * @typedef IRegisterFormComponentProps
+ * @property {object} classes
+ * @property {function} handleSubmit
+ * @property {object} error
+ * @property {string} handle
+ * @property {function} handleChange
+ * @property {string} email
+ * @property {string} password
+ * @property {string} confirmPassword
+ * @property {boolean} isLoading
+ */
+
+ /** Props that represent a register form being rendered.
+ * @typedef IRegisterForm
+ * @property {string} email
+ * @property {string} password
+ * @property {string} confirmPassword
+ */

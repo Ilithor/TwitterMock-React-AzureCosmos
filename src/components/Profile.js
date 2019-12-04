@@ -11,14 +11,15 @@ import { connect } from 'react-redux';
 class Profile extends Component {
   render() {
     const {
-      user: { isLoading, authenticated },
+      user,
+      classes,
     } = this.props;
-
+    const { isLoading, authenticated } = user;
     let profileMarkup = !isLoading ? (
       authenticated ? (
-        <UserProfileDisplay />
+        <UserProfileDisplay classes={classes} user={user} />
       ) : (
-        <DefaultProfileDisplay />
+        <DefaultProfileDisplay classes={classes} />
       )
     ) : (
       <p>loading...</p>
