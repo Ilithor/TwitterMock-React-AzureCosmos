@@ -27,8 +27,11 @@ const style = {
  * @param {IPostComponentProps} props
  */
 const Post = ({ classes, post }) => {
-  const { userImage } = post;
   dayjs.extend(relativeTime);
+  if (!post) {
+    return;
+  }
+  const { userImage } = post;
   return (
     <Card className={classes.card}>
       <CardMedia
