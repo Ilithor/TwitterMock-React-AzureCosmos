@@ -130,14 +130,12 @@ export const findCommentByPostId = async _id => {
  */
 export const findLikeByHandle = async handle => {
   let like = [];
-  let error = {};
   like = await Like.find({
     userHandle: handle,
   }).read(mongo.ReadPreference.NEAREST);
 
   if (like.length === 0) {
-    error.like = 'No likes found';
-    return error;
+    return [];
   } else {
     return like;
   }
