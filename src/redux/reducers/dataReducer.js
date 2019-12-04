@@ -21,10 +21,10 @@ export default function(state = initialState, action) {
       };
     case LIKE_POST:
     case UNLIKE_POST:
-    //   let index = state.postList.findIndex(
-    //     post => post.postId === action.payload.postId
-    //   );
-    //   state.postList[index] = action.payload;
+      let index = state.postList.findIndex(
+        post => post.postId === action.payload.postId
+      );
+      state.postList[index] = action.payload;
       return {
         ...state,
       };
