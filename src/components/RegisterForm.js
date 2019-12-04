@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-/** View component for displaying an individual post on the site
+/** View component for displaying a register form on the site
  * @param {IRegisterFormComponentProps} props
  */
 class RegisterForm extends Component {
@@ -109,7 +109,7 @@ RegisterForm.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-/** Component representing an individual post on the page.
+/** Component representing a register form on the page.
  * @param {{registerForm:IRegisterForm}} props
  */
 export default withStyles(style)(RegisterForm);

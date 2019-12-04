@@ -10,6 +10,9 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
+/** View component for displaying a login form on the site
+ * @param {ILoginFormComponentProps} props
+ */
 class LoginForm extends Component {
   render() {
     const {
@@ -79,17 +82,20 @@ LoginForm.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
+/** Component representing a login form on the page.
+ * @param {{loginForm:ILoginForm}} props
+ */
 export default withStyles(style)(LoginForm);
 
 /** Props passed to the LoginForm view component
  * @typedef ILoginFormComponentProps
  * @property {object} classes
- * @property {}
- * 
- * 
- * 
- * 
- * 
+ * @property {function} handleSubmit
+ * @property {string} error
+ * @property {string} email
+ * @property {function} handleChange
+ * @property {string} password
+ * @property {boolean} isLoading
  */
 
  /** Props that represent a login form being rendered.
@@ -98,10 +104,3 @@ export default withStyles(style)(LoginForm);
  * @property {string} password
  * @property {string} confirmPassword
  */
-
-  handleSubmit,
-  error,
-      email,
-      handleChange,
-      password,
-      isLoading,
