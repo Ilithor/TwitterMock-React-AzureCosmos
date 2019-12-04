@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true,
+    "allowSyntheticDefaultImports": true,
+    "allowUnusedLabels": true,
+    "jsx": "react",
+    "moduleResolution": "node",
+    "target": "ESNEXT",
+    "module": "esnext",
+    "noImplicitAny": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noImplicitReturns": false,
+    "resolveJsonModule": true,
+    "lib": ["dom", "es2015"],
+    "importHelpers": true,
+    "types": ["enzyme", "jest", "react-scripts", "react-dom", "node_modules"]
+  },
+  "include": ["."],
+  "exclude": ["node_modules", "environment"]
+}

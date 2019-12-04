@@ -10,7 +10,8 @@ export const multerUploads = multer({ storage }).single('image');
 const dUri = new Datauri();
 
 /** Converts provided image into base64
- * @param {Request} req 
+ * @param {Request} req
+ * @returns {Datauri}
  */
 export const dataUri = async req => {
   const file = await dUri.format(

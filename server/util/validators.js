@@ -3,8 +3,10 @@ import User from '../models/user.model';
 import mongoConnection from '../util/mongo';
 mongoConnection();
 
-/**
- * Checks if the email and password are valid
+/** Checks if the email and password are valid
+ *
+ * @constant
+ * @type {Function}
  * @param {UserCredential} user
  */
 export const validateLogin = user => {
@@ -23,6 +25,9 @@ export const validateLogin = user => {
 };
 
 /** Checks if the user inputs are valid
+ *
+ * @constant
+ * @type {Function}
  *  @param {UserRegistration} userParam
  */
 export const validateRegister = async userParam => {
@@ -52,6 +57,9 @@ export const validateRegister = async userParam => {
 };
 
 /** Checks if the provided bio information is valid
+ *
+ * @constant
+ * @type {Function}
  * @example look at *all* the bio
  * @param {UserBioUpdate} userParam User's bio info
  */
@@ -78,7 +86,13 @@ export const validateUserDetail = userParam => {
   return userDetails;
 };
 
-// Checks if provided string is empty
+/** Checks if provided string is empty
+ *
+ * @constant
+ * @type {Function}
+ * @param {string} string
+ * @returns {boolean}
+ */
 export const isEmpty = string => {
   if (string.trim() === '') {
     return true;
@@ -87,7 +101,13 @@ export const isEmpty = string => {
   }
 };
 
-// Checks if provided email is valid
+/** Checks if provided email is valid
+ *
+ * @constant
+ * @type {Function}
+ * @param {string} email
+ * @returns {boolean}
+ */
 export const isEmail = email => {
   const emailRegEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   if (email.match(emailRegEx)) {
