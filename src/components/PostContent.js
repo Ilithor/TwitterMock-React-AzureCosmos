@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
+import PropTypes from 'prop-types';
 import Like from './like';
 import CustomButton from '../util/CustomButton';
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -16,7 +17,7 @@ import ChatIcon from '@material-ui/icons/Chat';
 /** View component for displaying an individual post's content'
  * @param {IPostComponentProps} props
  */
-const PostContent = ({ post, classes }) => {
+const PostContent = ({ classes, post }) => {
   const { userHandle, createdAt, body, postId, likeCount, commentCount } = post;
   return (
     <CardContent className={classes.content}>
@@ -40,6 +41,11 @@ const PostContent = ({ post, classes }) => {
       <span>{commentCount} Comments</span>
     </CardContent>
   );
+};
+
+PostContent.propTypes = {
+  classes: PropTypes.object,
+  post: PropTypes.object,
 };
 
 /** Component representing an individual post's content on the page.
