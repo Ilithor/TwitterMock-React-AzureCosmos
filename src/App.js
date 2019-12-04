@@ -35,7 +35,8 @@ const theme = createMuiTheme({
 });
 
 const token = localStorage.Token;
-if (token) {
+const handle = localStorage.Handle;
+if (token && handle) {
   const decodedToken = jwtDecode(token);
   if (decodedToken.exp * 1000 < Date.now()) {
     store.dispatch(logoutUserAction());
@@ -43,7 +44,7 @@ if (token) {
   } else {
     store.dispatch({ type: SET_AUTHENTICATED });
     axios.defaults.headers.common['Authorization'] = token;
-    store.dispatch(getUserDataAction());
+    store.dispatch(getUserDataAction(handle));
   }
 }
 
