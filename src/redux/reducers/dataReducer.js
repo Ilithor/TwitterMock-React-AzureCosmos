@@ -24,7 +24,13 @@ export default function(state = initialState, action) {
       let index = state.postList.findIndex(
         post => post.postId === action.payload.postId
       );
-      state.postList[index] = action.payload;
+      if (index < 0) {
+        return state;
+      }
+      state.postList[index] = {
+        ...state.postList[index],
+        ...action.payload,
+      };
       return {
         ...state,
       };
