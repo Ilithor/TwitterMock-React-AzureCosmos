@@ -16,7 +16,7 @@
     "resolveJsonModule": true,
     "lib": ["dom", "es2015"],
     "importHelpers": true,
-    "types": ["enzyme", "jest", "react-scripts", "react-dom"]
+    "types": ["enzyme", "jest", "react-scripts", "react-dom", "node_modules"]
   },
   "include": ["."],
   "exclude": ["node_modules", "environment"]
