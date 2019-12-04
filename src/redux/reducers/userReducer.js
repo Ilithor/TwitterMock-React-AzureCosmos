@@ -29,7 +29,7 @@ export default function(state = initialState, action) {
         authenticated: true,
         isLoading: false,
         userInfo: { ...action.payload.user },
-        likes: { ...action.payload.like },
+        likes: [ ...action.payload.like ],
       };
     case LOADING_USER:
       return {
