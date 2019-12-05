@@ -14,11 +14,14 @@ export class home extends Component {
   }
   render() {
     const { postList, isLoading } = this.props.data;
-    let recentPostMarkup = !isLoading ? (
-      postList.map(post => <Post key={post.postId} post={post} />)
-    ) : (
-      <p>Loading...</p>
-    );
+    let recentPostMarkup;
+    if (!isLoading) {
+      recentPostMarkup = postList.map(post => (
+        <Post key={post.postId} post={post} />
+      ));
+    } else {
+      recentPostMarkup = <p>Loading...</p>;
+    }
     return (
       <Grid container spacing={10}>
         <Grid item sm={8} xs={12}>
