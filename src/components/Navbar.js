@@ -122,7 +122,7 @@ Navbar.propTypes = {
 };
 
 const mapStateToProps = ({ user }) => {
-  const isLoggedIn = !!user && !!user.userInfo.handle;
+  const isLoggedIn = !!user && !!user.userInfo && !!user.userInfo.handle;
   return {
     isLoggedIn,
   };
