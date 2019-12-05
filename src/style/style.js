@@ -84,6 +84,11 @@ const style = theme => ({
     padding: 25,
     objectFit: 'cover',
   },
+  deleteButton: {
+    position: 'absolute',
+    left: '90%',
+    top: '10%',
+  },
 });
 
 export default style;
