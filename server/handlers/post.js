@@ -1,11 +1,9 @@
 import { getList, create, findAndDeletePost } from '../services/post.service';
 import {
-  findById,
   findPostById,
   findCommentByPostId,
   findAndDeleteLikeAndComment,
 } from './find';
-import { authByToken } from '../util/auth';
 
 /** Retrieves a list of posts
  * @type {RouteHandler}
