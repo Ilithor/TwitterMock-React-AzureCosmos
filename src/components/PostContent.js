@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
 import Like from './like';
+import DeletePost from './DeletePost';
 import CustomButton from '../util/CustomButton';
 import withStyles from '@material-ui/core/styles/withStyles';
 
@@ -29,6 +30,7 @@ const PostContent = ({ classes, post }) => {
       >
         {userHandle}
       </Typography>
+      <DeletePost classes={classes} userHandle={userHandle} />
       <Typography variant='body2' color='textSecondary'>
         {dayjs(createdAt).fromNow()}
       </Typography>
