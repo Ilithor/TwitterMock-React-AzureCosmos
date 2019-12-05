@@ -14,7 +14,7 @@ import style from '../style/style';
 // Icons
 import ChatIcon from '@material-ui/icons/Chat';
 
-/** View component for displaying an individual post's content'
+/** View component for displaying an individual post's content
  * @param {IPostComponentProps} props
  */
 const PostContent = ({ classes, post }) => {
