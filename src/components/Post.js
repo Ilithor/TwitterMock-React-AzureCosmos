@@ -11,6 +11,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 
 const style = {
   card: {
+    position: 'relative',
     display: 'flex',
     marginBottom: 20,
   },
