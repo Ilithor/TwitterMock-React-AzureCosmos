@@ -1,6 +1,7 @@
 import React from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
 import dayjs from 'dayjs';
+import PropTypes from 'prop-types';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import PostContent from './PostContent';
 
@@ -26,8 +27,11 @@ const style = {
  * @param {IPostComponentProps} props
  */
 const Post = ({ classes, post }) => {
-  const { userImage } = post;
   dayjs.extend(relativeTime);
+  if (!post) {
+    return;
+  }
+  const { userImage } = post;
   return (
     <Card className={classes.card}>
       <CardMedia
@@ -35,9 +39,14 @@ const Post = ({ classes, post }) => {
         title='Profile image'
         className={classes.image}
       />
-      <PostContent post={post} classes={classes} />
+      <PostContent classes={classes} post={post} />
     </Card>
   );
+};
+
+Post.propTypes = {
+  classes: PropTypes.object,
+  post: PropTypes.object,
 };
 
 /** Component representing an individual post on the page.

@@ -46,7 +46,9 @@ class UserProfileDisplay extends Component {
   render() {
     const {
       classes,
-      user: { userInfo: { handle, createdAt, bio } },
+      user: {
+        userInfo: { handle, createdAt, bio },
+      },
     } = this.props;
     return (
       <Paper className={classes.paper}>
@@ -115,17 +117,18 @@ class UserProfileDisplay extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    user: state.user,
-  };
+const mapStateToProps = state => ({
+  user: state.user,
+});
+
+const mapActionsToProps = {
+  uploadImageAction,
+  logoutUserAction,
 };
 
-const mapActionsToProps = { uploadImageAction, logoutUserAction };
-
 UserProfileDisplay.propTypes = {
-  user: PropTypes.object.isRequired,
-  classes: PropTypes.object.isRequired,
+  user: PropTypes.object,
+  classes: PropTypes.object,
 };
 
 export default connect(

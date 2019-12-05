@@ -121,7 +121,12 @@ Navbar.propTypes = {
   logoutUserAction: PropTypes.func,
 };
 
-const mapStateToProps = ({ user }) => ({ isLoggedIn: !!user && !!user.handle });
+const mapStateToProps = ({ user }) => {
+  const isLoggedIn = !!user && !!user.userInfo && !!user.userInfo.handle;
+  return {
+    isLoggedIn,
+  };
+};
 
 const mapActionsToProps = {
   logoutUserAction,

@@ -29,7 +29,7 @@ export default function(state = initialState, action) {
         authenticated: true,
         isLoading: false,
         userInfo: { ...action.payload.user },
-        likes: [ ...action.payload.like ],
+        likes: [...(action.payload.like || [])],
       };
     case LOADING_USER:
       return {
@@ -42,7 +42,7 @@ export default function(state = initialState, action) {
         likes: [
           ...state.likes,
           {
-            userHandle: state.userHandle,
+            userHandle: state.userInfo.handle,
             postId: action.payload.postId,
           },
         ],
@@ -51,7 +51,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         likes: state.likes.filter(
-          like => like.postId === action.payload.postId
+          like => like.postId !== action.payload.postId
         ),
       };
     default:
