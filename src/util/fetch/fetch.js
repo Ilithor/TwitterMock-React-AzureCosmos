@@ -21,7 +21,7 @@ export const get = endpoint =>
 
 /** Fetch endpoint and post given data
  * @param {Endpoint} endpoint
- * @param {Object} data
+ * @param {object} data
  */
 export const post = (endpoint, data) =>
   new Promise((resolve, reject) => {
@@ -33,6 +33,18 @@ export const post = (endpoint, data) =>
         reject(error);
       });
   });
+
+export const remove = endpoint => {
+  new Promise((resolve, reject) => {
+    axios
+      .delete(endpoint)
+      .then(resolve)
+      .catch(error => {
+        onRequestFail(error);
+        reject(error);
+      });
+  });
+};
 
 /**
  * @typedef Endpoint
