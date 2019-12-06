@@ -1,15 +1,12 @@
 import React, { Component } from 'react';
-import withStyles from '@material-ui/core/styles/withStyles';
 import PropTypes from 'prop-types';
-import AppIcon from '../images/icon.png';
-import style from '../style/style';
 
 // Component
-import RegisterForm from '../components/RegisterForm';
+import Register from '../components/register';
 
 // MUI
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
+import withStyles from '@material-ui/core/styles/withStyles';
+import style from '../style/style';
 
 // Redux
 import { connect } from 'react-redux';
@@ -59,27 +56,17 @@ class signup extends Component {
     } = this.props;
     const { error } = this.state;
     return (
-      <Grid container className={classes.form}>
-        <Grid item sm />
-        <Grid item sm>
-          <img src={AppIcon} alt='eye' className={classes.image} />
-          <Typography variant='h2' className={classes.pageTitle}>
-            Register
-          </Typography>
-          <RegisterForm
-            classes={classes}
-            error={error}
-            handle={this.state.handle}
-            email={this.state.email}
-            password={this.state.password}
-            confirmPassword={this.state.confirmPassword}
-            handleSubmit={this.handleSubmit}
-            handleChange={this.handleChange}
-            isLoading={isLoading}
-          />
-        </Grid>
-        <Grid item sm />
-      </Grid>
+      <Register
+        classes={classes}
+        error={error}
+        handle={this.state.handle}
+        email={this.state.email}
+        password={this.state.password}
+        confirmPassword={this.state.confirmPassword}
+        handleSubmit={this.handleSubmit}
+        handleChange={this.handleChange}
+        isLoading={isLoading}
+      />
     );
   }
 }
