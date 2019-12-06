@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import withStyles from '@material-ui/core/styles/withStyles';
-import style from '../style/style';
+
+// Components
+import DefaultProfileButtons from './DefaultProfileButtons';
 
 // MUI
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
+import withStyles from '@material-ui/core/styles/withStyles';
+import style from '../../../style/style';
 
+/** View component for displaying the default profile view
+ * @param {IDefaultProfileDisplayComponentProps} props
+ */
 class DefaultProfileDisplay extends Component {
   render() {
     const { classes } = this.props;
@@ -17,24 +21,7 @@ class DefaultProfileDisplay extends Component {
         <Typography varian='body2' align='center'>
           No profile found, please login again
         </Typography>
-        <div className={classes.buttons}>
-          <Button
-            variant='contained'
-            color='primary'
-            component={Link}
-            to='/login'
-          >
-            Login
-          </Button>
-          <Button
-            variant='contained'
-            color='secondary'
-            component={Link}
-            to='/signup'
-          >
-            Register
-          </Button>
-        </div>
+        <DefaultProfileButtons classes={classes} />
       </Paper>
     );
   }
@@ -45,3 +32,8 @@ DefaultProfileDisplay.propTypes = {
 };
 
 export default withStyles(style)(DefaultProfileDisplay);
+
+/** Props passed to the DefaultProfileDisplay view component
+ * @typedef IDefaultProfileDisplayComponentProps
+ * @property {object} classes
+ */
