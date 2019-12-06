@@ -4,7 +4,6 @@ import mongoConnection from '../util/mongo';
 mongoConnection();
 
 /** Checks if the email and password are valid
- *
  * @constant
  * @type {Function}
  * @param {UserCredential} user
@@ -25,7 +24,6 @@ export const validateLogin = user => {
 };
 
 /** Checks if the user inputs are valid
- *
  * @constant
  * @type {Function}
  *  @param {UserRegistration} userParam
@@ -57,7 +55,6 @@ export const validateRegister = async userParam => {
 };
 
 /** Checks if the provided bio information is valid
- *
  * @constant
  * @type {Function}
  * @example look at *all* the bio
@@ -87,7 +84,6 @@ export const validateUserDetail = userParam => {
 };
 
 /** Checks if provided string is empty
- *
  * @constant
  * @type {Function}
  * @param {string} string
@@ -102,7 +98,6 @@ export const isEmpty = string => {
 };
 
 /** Checks if provided email is valid
- *
  * @constant
  * @type {Function}
  * @param {string} email

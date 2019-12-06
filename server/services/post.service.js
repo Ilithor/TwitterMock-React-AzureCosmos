@@ -52,7 +52,7 @@ export const create = async (postParam, user) => {
 export const findAndDeletePost = async postParam => {
   let post = {};
   post = await Post.findOneAndDelete({
-    _id: postParam.params.postId
+    _id: postParam.params.postId,
   });
   return post;
 };

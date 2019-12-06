@@ -22,7 +22,7 @@ export const create = async likeParam => {
 export const remove = async likeParam => {
   let like = {};
   like = await Like.findOneAndDelete({
-    postId: likeParam.params.postId
+    postId: likeParam.params.postId,
   });
   return like;
 };

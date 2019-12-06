@@ -36,7 +36,7 @@ export const remove = async commentParam => {
   let comment = {};
   comment = await Comment.findOneAndDelete({
     postId: commentParam.params.postId,
-    userHandle: commentParam.user.handle
+    userHandle: commentParam.user.handle,
   });
   return comment;
 };

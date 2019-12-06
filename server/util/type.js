@@ -40,14 +40,14 @@
  * @property {string} location
  */
 
- /**
-  * @typedef UserNew
-  * @property {string} _id
-  * @property {string} email
-  * @property {string} handle
-  * @property {string} password
-  * @property {Date} createdAt
-  */
+/**
+ * @typedef UserNew
+ * @property {string} _id
+ * @property {string} email
+ * @property {string} handle
+ * @property {string} password
+ * @property {Date} createdAt
+ */
 
 /**
  * @typedef Post
@@ -64,9 +64,9 @@
  * @property {string} postId
  */
 
- /**
-  * @typedef UserError
-  * @property {string} email
-  * @property {string} password
-  * @property {string} handle
-  */
+/**
+ * @typedef UserError
+ * @property {string} email
+ * @property {string} password
+ * @property {string} handle
+ */
