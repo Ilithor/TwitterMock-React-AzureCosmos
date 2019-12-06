@@ -43,6 +43,9 @@ export const findById = async _id => {
   return user;
 };
 
+/** Returns a user that matches handle
+ * @param {string} handle
+ */
 export const findByHandle = async handle => {
   let error = {};
   let user = await User.findOne({
@@ -248,6 +251,9 @@ export const findAndDeleteLikeAndComment = async postId => {
   }
 };
 
+/** Finds notification and marks read as true
+ * @param {string} notificationId
+ */
 export const findNotificationAndUpdateRead = async notificationId => {
   await Notification.updateOne(
     {
