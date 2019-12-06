@@ -2,15 +2,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 import PropTypes from 'prop-types';
-import Like from '../like';
+import Like from '../../like';
 import DeletePost from './DeletePost';
-import CustomButton from '../../util/CustomButton';
+import CustomButton from '../../../util/CustomButton';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 // MUI
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import style from '../../style/style';
+import style from '../../../style/style';
 
 // Icons
 import ChatIcon from '@material-ui/icons/Chat';

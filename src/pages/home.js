@@ -3,7 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import PropTypes from 'prop-types';
 
 // Components
-import Post from '../components/post';
+import Post from '../components/post/postList';
 import Profile from '../components/profile';
 
 // Redux
