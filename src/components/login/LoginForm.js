@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import withStyles from '@material-ui/core/styles/withStyles';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import style from '../style/style';
+import style from '../../style/style';
 
 // MUI
 import TextField from '@material-ui/core/TextField';
@@ -24,7 +24,7 @@ class LoginForm extends Component {
           error={this.props.error.email ? true : false}
           value={this.props.email}
           onChange={this.props.handleChange}
-          autoComplete="username"
+          autoComplete='username'
           fullWidth
         />
         <TextField
@@ -37,7 +37,7 @@ class LoginForm extends Component {
           error={this.props.error.password ? true : false}
           value={this.props.password}
           onChange={this.props.handleChange}
-          autoComplete="current-password"
+          autoComplete='current-password'
           fullWidth
         />
         {this.props.error.general && (
