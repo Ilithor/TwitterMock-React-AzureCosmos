@@ -38,7 +38,7 @@ export default connect(
   { getLikePost }
 )(withStyles(style)(LikeButton));
 
-/** Props passed to the Post view component
+/** Props passed to the LikeButton view component
  * @typedef ILikeButtonComponentProps
  * @property {string} postId
  * @property {function} getLikePost

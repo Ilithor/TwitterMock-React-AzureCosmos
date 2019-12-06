@@ -39,7 +39,7 @@ export default connect(
   { getUnlikePost }
 )(withStyles(style)(UnlikeButton));
 
-/** Props passed to the Post view component
+/** Props passed to the UnlikeButton view component
  * @typedef IUnlikeButtonComponentProps
  * @property {string} postId
  * @property {function} getUnlikePost

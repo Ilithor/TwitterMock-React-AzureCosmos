@@ -1,6 +1,9 @@
 import React from 'react';
 
+// MUI
 import Tooltip from '@material-ui/core/Tooltip';
+
+// Icons
 import IconButton from '@material-ui/core/IconButton';
 
 export default ({ children, onClick, tip, btnClassName, tipClassName }) => (
