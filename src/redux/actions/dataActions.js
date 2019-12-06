@@ -1,5 +1,10 @@
-import { SET_POSTS, LIKE_POST, UNLIKE_POST } from '../types';
-import { fetchPostList, likePost, unlikePost } from '../../util/fetch/post';
+import { SET_POSTS, LIKE_POST, UNLIKE_POST, DELETE_POST } from '../types';
+import {
+  fetchPostList,
+  likePost,
+  unlikePost,
+  deletePost,
+} from '../../util/fetch/post';
 
 /** Displays all user posts
  * @returns {Promise<array[Document]>}
@@ -34,6 +39,14 @@ export const getUnlikePost = postId => dispatch => {
     .then(res => {
       dispatch({ type: UNLIKE_POST, payload: { ...res.data, postId } });
       dispatch(getPostList());
+    })
+    .catch(console.log);
+};
+
+export const deleteUserPost = postId => dispatch => {
+  deletePost(postId)
+    .then(() => {
+      dispatch({ type: DELETE_POST, payload: postId });
     })
     .catch(console.log);
 };

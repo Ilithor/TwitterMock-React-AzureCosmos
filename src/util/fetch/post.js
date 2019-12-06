@@ -1,4 +1,4 @@
-import { get, post } from './fetch';
+import { get, post, remove } from './fetch';
 
 export const endpoints = {
   /** @type {Endpoint} */
@@ -16,11 +16,16 @@ export const fetchPostList = () => get(endpoints.post);
 export const createPost = () => post(endpoints.post);
 
 /** Likes a post
- * @returns {Promise<import("axios").AxiosResponse>} 
+ * @returns {Promise<import("axios").AxiosResponse>}
  */
 export const likePost = postId => get(endpoints.post + postId + '/like');
 
 /** Unlikes a post
- * @returns {Promise<import("axios").AxiosResponse>} 
+ * @returns {Promise<import("axios").AxiosResponse>}
  */
 export const unlikePost = postId => get(endpoints.post + postId + '/unlike');
+
+/** Deletes a post
+ * @param {Promise<import("axios").AxiosResponse>}
+ */
+export const deletePost = postId => remove(endpoints.post + postId);
