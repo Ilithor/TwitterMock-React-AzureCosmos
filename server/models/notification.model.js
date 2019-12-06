@@ -9,7 +9,7 @@ const NotificationSchema = Schema({
   postId: { type: String, required: true },
   sender: { type: String, required: true },
   type: { type: String, required: true },
-  typeId: { type: String, required: true }
+  typeId: { type: String, required: true },
 });
 
 const Notification = mongoose.model('Notification', NotificationSchema);
