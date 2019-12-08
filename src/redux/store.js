@@ -16,13 +16,36 @@ const reducers = combineReducers({
   UI: uiReducer,
 });
 
-const store = createStore(
-  reducers,
-  initialState,
-  compose(
-    applyMiddleware(...middleware),
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-  )
-);
+//handler for react's hot reloading
+const composeEnhancers =
+  typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({})
+    : compose;
 
+/**make the store a singleton
+ * @type {import('redux').Store & {dispatch}}
+ */
+let store;
+/** Initialize the redux store
+ *
+ * @type {Function}
+ */
+const configureStore = () => {
+  store = createStore(
+    reducers,
+    initialState,
+    compose(
+      applyMiddleware(...middleware),
+      composeEnhancers()
+    )
+  );
+};
+
+//singleton pattern
+if (!store) {
+  configureStore();
+}
+
+/** Initialize instance of the redux store.
+ */
 export default store;
