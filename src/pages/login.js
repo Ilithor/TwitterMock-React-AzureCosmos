@@ -86,12 +86,12 @@ const LoginPage = ({ classes, UI, history }) => {
   );
 };
 
-LoginPage.propTypes = {
-  classes: PropTypes.object.isRequired,
-  loginUserAction: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired,
-  UI: PropTypes.object.isRequired,
-};
+// LoginPage.propTypes = {
+//   classes: PropTypes.object.isRequired,
+//   loginUserAction: PropTypes.func.isRequired,
+//   user: PropTypes.object.isRequired,
+//   UI: PropTypes.object.isRequired,
+// };
 
 const mapStateToProps = state => ({
   user: state.user,
@@ -105,4 +105,4 @@ const mapActionsToProps = {
 export default connect(
   mapStateToProps,
   mapActionsToProps
-)(withStyles(style)(Login));
+)(withStyles(style)(LoginPage));
