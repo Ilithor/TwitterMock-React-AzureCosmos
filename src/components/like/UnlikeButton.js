@@ -16,7 +16,7 @@ import { getUnlikePost } from '../../redux/actions/dataActions';
 /** View component for displaying an icon to unlike a post
  * @param {IUnlikeButtonComponentProps} props
  */
-const UnlikeButton = props => {
+export const UnlikeButton = props => {
   const { postId, getUnlikePost } = props;
   const unlikePost = () => {
     getUnlikePost(postId);
