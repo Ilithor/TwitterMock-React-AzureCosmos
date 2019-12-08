@@ -16,7 +16,7 @@ import { getLikePost } from '../../redux/actions/dataActions';
 /** View component for displaying an icon to like a post
  * @param {ILikeButtonComponentProps} props
  */
-const LikeButton = props => {
+export const LikeButton = props => {
   const { postId, getLikePost } = props;
   const likePost = () => {
     getLikePost(postId);
