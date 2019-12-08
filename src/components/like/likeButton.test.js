@@ -1,17 +1,21 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import ConnectedLikeButton, { LikeButton } from './LikeButton';
+import ConnectedLikeButton, {
+  LikeButton,
+  // eslint-disable-next-line no-unused-vars
+  ILikeButtonComponentProps,
+} from './LikeButton';
 import TestWithReduxStore from '../../fixtures/component/TestWithReduxStore';
-// import { getLikePost } from '../../redux/actions/dataActions';
+
 jest.mock('axios');
 
 describe('like.likeButton should', () => {
-  /**  @type {import('./LikeButton').ILikeButtonComponentProps} */
+  /**  @type {ILikeButtonComponentProps} */
   const defaultProps = {};
   /** Create an enzyme+jest wrapper for the default version of the component.
    * (typically the redux connected version)
    *
-   * @param {import('./LikeButton').ILikeButtonComponentProps} [props]
+   * @param {ILikeButtonComponentProps} [props]
    */
   const renderDefaultWrapper = (props = defaultProps) => {
     const wrapper = mount(
@@ -23,7 +27,7 @@ describe('like.likeButton should', () => {
   };
   /** Create an enzyme+jest wrapper for the UX version of the component.
    *
-   * @param {import('./LikeButton').ILikeButtonComponentProps} [props]
+   * @param {ILikeButtonComponentProps} [props]
    */
   const renderViewWrapper = (props = defaultProps) => {
     const wrapper = mount(<LikeButton {...props} />);
@@ -38,7 +42,7 @@ describe('like.likeButton should', () => {
   });
   it('render with valid props', () => {
     // Arrange
-    /** @type {import('./LikeButton').ILikeButtonComponentProps} */
+    /** @type {ILikeButtonComponentProps} */
     const props = {
       postId: '1',
       getLikePost: () => {},
@@ -51,7 +55,7 @@ describe('like.likeButton should', () => {
 
   it('renders with a clickable button', () => {
     // Arrange
-    /** @type {import('./LikeButton').ILikeButtonComponentProps} */
+    /** @type {ILikeButtonComponentProps} */
     const props = {
       postId: '131290129043',
       getLikePost: () => {},
@@ -67,7 +71,7 @@ describe('like.likeButton should', () => {
   it('pass the correct post id to the like fn (view component)', () => {
     // Arrange
     let actual;
-    /** @type {import('./LikeButton').ILikeButtonComponentProps} */
+    /** @type {ILikeButtonComponentProps} */
     const props = {
       postId: '131290129043',
       getLikePost: response => {
