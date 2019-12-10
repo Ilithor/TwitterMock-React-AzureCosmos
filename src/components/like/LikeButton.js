@@ -14,10 +14,12 @@ import { connect } from 'react-redux';
 import { getLikePost } from '../../redux/actions/dataActions';
 
 /** View component for displaying an icon to like a post
- * @param {ILikeButtonComponentProps} props
+ * @type {React.FunctionComponent}
+ * @param {object} props
+ * @param {string} props.postId
+ * @param {any} props.getLikePost
  */
-const LikeButton = props => {
-  const { postId, getLikePost } = props;
+const LikeButton = ({ postId, getLikePost }) => {
   const likePost = () => {
     getLikePost(postId);
   };
@@ -37,9 +39,3 @@ export default connect(
   null,
   { getLikePost }
 )(withStyles(style)(LikeButton));
-
-/** Props passed to the LikeButton view component
- * @typedef ILikeButtonComponentProps
- * @property {string} postId
- * @property {function} getLikePost
- */

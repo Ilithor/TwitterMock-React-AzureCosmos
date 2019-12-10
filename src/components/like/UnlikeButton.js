@@ -14,10 +14,12 @@ import { connect } from 'react-redux';
 import { getUnlikePost } from '../../redux/actions/dataActions';
 
 /** View component for displaying an icon to unlike a post
- * @param {IUnlikeButtonComponentProps} props
+ * @type {React.FunctionComponent}
+ * @param {object} props
+ * @param {string} props.postId
+ * @param {any} props.getUnlikePost
  */
-const UnlikeButton = props => {
-  const { postId, getUnlikePost } = props;
+const UnlikeButton = ({ postId, getUnlikePost }) => {
   const unlikePost = () => {
     getUnlikePost(postId);
   };
@@ -38,9 +40,3 @@ export default connect(
   null,
   { getUnlikePost }
 )(withStyles(style)(UnlikeButton));
-
-/** Props passed to the UnlikeButton view component
- * @typedef IUnlikeButtonComponentProps
- * @property {string} postId
- * @property {function} getUnlikePost
- */
