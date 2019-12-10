@@ -8,18 +8,30 @@ import RegisterForm from './RegisterForm';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
-const Register = props => {
-  const {
-    classes,
-    error,
-    handle,
-    email,
-    password,
-    confirmPassword,
-    handleSubmit,
-    handleChange,
-    isLoading,
-  } = props;
+/** Control that allows the user to register
+ * @type {React.FunctionComponent}
+ * @param {object} props
+ * @param {object} props.classes
+ * @param {object} props.error
+ * @param {string} props.handle
+ * @param {string} props.email
+ * @param {string} props.password
+ * @param {string} props.confirmPassword
+ * @param {boolean} props.isLoading
+ * @param {React.ChangeEventHandler} props.handleSubmit
+ * @param {React.ChangeEventHandler} props.handleChange
+ */
+const Register = ({
+  classes,
+  error,
+  handle,
+  email,
+  password,
+  confirmPassword,
+  handleSubmit,
+  handleChange,
+  isLoading,
+}) => {
   return (
     <Grid container className={classes.form}>
       <Grid item sm />

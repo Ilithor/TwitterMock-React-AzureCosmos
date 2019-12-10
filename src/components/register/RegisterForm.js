@@ -1,27 +1,38 @@
 import React from 'react';
-import withStyles from '@material-ui/core/styles/withStyles';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import style from '../../style/style';
 
 // MUI
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import withStyles from '@material-ui/core/styles/withStyles';
+import style from '../../style/style';
 
-const RegisterForm = props => {
-  const {
-    handleSubmit,
-    classes,
-    error,
-    handle,
-    handleChange,
-    email,
-    password,
-    confirmPassword,
-    isLoading,
-  } = props;
+/** Displays the register form to the user
+ * @type {React.FunctionComponent}
+ * @param {object} props
+ * @param {object} props.classes
+ * @param {object} props.error
+ * @param {string} props.handle
+ * @param {string} props.email
+ * @param {string} props.password
+ * @param {string} props.confirmPassword
+ * @param {boolean} props.isLoading
+ * @param {React.ChangeEventHandler} props.handleSubmit
+ * @param {React.ChangeEventHandler} props.handleChange
+ */
+const RegisterForm = ({
+  classes,
+  error,
+  handle,
+  email,
+  password,
+  confirmPassword,
+  isLoading,
+  handleSubmit,
+  handleChange,
+}) => {
   return (
     <form noValidate onSubmit={handleSubmit}>
       <TextField
@@ -98,10 +109,6 @@ const RegisterForm = props => {
       </small>
     </form>
   );
-};
-
-RegisterForm.propTypes = {
-  classes: PropTypes.object.isRequired,
 };
 
 export default withStyles(style)(RegisterForm);
