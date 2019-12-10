@@ -13,7 +13,6 @@ import style from '../../style/style';
 import AppIcon from '../../images/icon.png';
 
 /** Control that allows the user to log in
- *
  * @type {React.FunctionComponent}
  * @param {object} props
  * @param {any} props.error

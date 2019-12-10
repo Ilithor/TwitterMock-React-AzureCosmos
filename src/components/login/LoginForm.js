@@ -1,79 +1,86 @@
-import React, { Component } from 'react';
-import withStyles from '@material-ui/core/styles/withStyles';
-import PropTypes from 'prop-types';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import style from '../../style/style';
 
 // MUI
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import withStyles from '@material-ui/core/styles/withStyles';
+import style from '../../style/style';
 
-class LoginForm extends Component {
-  render() {
-    return (
-      <form noValidate onSubmit={this.props.handleSubmit}>
-        <TextField
-          id='email'
-          name='email'
-          type='email'
-          label='Email'
-          className={this.props.classes.textField}
-          helperText={this.props.error.email}
-          error={this.props.error.email ? true : false}
-          value={this.props.email}
-          onChange={this.props.handleChange}
-          autoComplete='username'
-          fullWidth
-        />
-        <TextField
-          id='password'
-          name='password'
-          type='password'
-          label='Password'
-          className={this.props.classes.textField}
-          helperText={this.props.error.password}
-          error={this.props.error.password ? true : false}
-          value={this.props.password}
-          onChange={this.props.handleChange}
-          autoComplete='current-password'
-          fullWidth
-        />
-        {this.props.error.general && (
-          <Typography
-            variant='body2'
-            className={this.props.classes.customError}
-          >
-            {this.props.error.general}
-          </Typography>
+/** Various props that control how the user interacts with
+ *  the login form
+ * @type {React.FunctionComponent}
+ * @param {object} props
+ * @param {any} props.error
+ * @param {object} props.classes
+ * @param {string} props.email
+ * @param {string} props.password
+ * @param {React.ChangeEventHandler} props.handleSubmit
+ * @param {React.ChangeEventHandler} props.handleChange
+ * @param {boolean} props.isLoading
+ */
+const LoginForm = ({
+  handleSubmit,
+  classes,
+  error,
+  email,
+  handleChange,
+  password,
+  isLoading,
+}) => {
+  return (
+    <form noValidate onSubmit={handleSubmit}>
+      <TextField
+        id='email'
+        name='email'
+        type='email'
+        label='Email'
+        className={classes.textField}
+        helperText={error.email}
+        error={error.email ? true : false}
+        value={email}
+        onChange={handleChange}
+        autoComplete='username'
+        fullWidth
+      />
+      <TextField
+        id='password'
+        name='password'
+        type='password'
+        label='Password'
+        className={classes.textField}
+        helperText={error.password}
+        error={error.password ? true : false}
+        value={password}
+        onChange={handleChange}
+        autoComplete='current-password'
+        fullWidth
+      />
+      {error.general && (
+        <Typography variant='body2' className={classes.customError}>
+          {error.general}
+        </Typography>
+      )}
+      <Button
+        type='submit'
+        variant='contained'
+        color='primary'
+        className={classes.button}
+        disabled={isLoading}
+      >
+        Login
+        {isLoading && (
+          <CircularProgress size={30} className={classes.progress} />
         )}
-        <Button
-          type='submit'
-          variant='contained'
-          color='primary'
-          className={this.props.classes.button}
-          disabled={this.props.isLoading}
-        >
-          Login
-          {this.props.isLoading && (
-            <CircularProgress
-              size={30}
-              className={this.props.classes.progress}
-            />
-          )}
-        </Button>
-        <br />
-        <small>
-          Don't have an account? Sign up <Link to='/signup'>here</Link>
-        </small>
-      </form>
-    );
-  }
-}
-
-LoginForm.propTypes = {
-  classes: PropTypes.object.isRequired,
+      </Button>
+      <br />
+      <small>
+        Don't have an account? Sign up <Link to='/signup'>here</Link>
+      </small>
+    </form>
+  );
 };
 
 export default withStyles(style)(LoginForm);

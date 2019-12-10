@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useEffect } from 'react';
 
 // Components
 import Login from '../components/login';
@@ -12,73 +11,62 @@ import style from '../style/style';
 import { connect } from 'react-redux';
 import { loginUserAction } from '../redux/actions/userActions';
 
-class login extends Component {
-  constructor() {
-    super();
-    this.state = {
-      email: '',
-      password: '',
-      error: {},
-    };
-  }
+/**
+ * @type {React.FunctionComponent}
+ * @param {object} props
+ * @param {object} props.classes
+ * @param {any} props.UI
+ * @param {Reac} props.history
+ */
+const LoginPage = ({ classes, UI, history, loginUserAction }) => {
+  const [error, setError] = useState({});
+  const [editorState, setEditorState] = useState({
+    email: '',
+    password: '',
+  });
+  const { email, password } = editorState;
+  
+  useEffect(() => setError(UI.error), [UI.error]);
 
-  componentDidUpdate = prevProps => {
-    if (prevProps.UI.error !== this.props.UI.error) {
-      this.setState({ error: this.props.UI.error });
-    }
-  };
-
-  handleSubmit = event => {
+  const handleSubmit = event => {
     event.preventDefault();
     const userData = {
-      email: this.state.email,
-      password: this.state.password,
+      email,
+      password,
     };
-    this.props.loginUserAction(userData, this.props.history);
+    loginUserAction(userData, history);
   };
 
-  handleChange = event => {
-    this.setState({
-      [event.target.name]: event.target.value,
+  const handleChange = event => {
+    const { name, value } = event.target;
+    setEditorState({
+      ...editorState,
+      [name]: value,
     });
   };
-  render() {
-    const {
-      classes,
-      UI: { isLoading },
-    } = this.props;
-    const { error } = this.state;
-    return (
-      <Login
-        classes={classes}
-        error={error}
-        email={this.state.email}
-        password={this.state.password}
-        handleSubmit={this.handleSubmit}
-        handleChange={this.handleChange}
-        isLoading={isLoading}
-      />
-    );
-  }
-}
-
-login.propTypes = {
-  classes: PropTypes.object.isRequired,
-  loginUserAction: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired,
-  UI: PropTypes.object.isRequired,
+  return (
+    <Login
+      classes={classes}
+      error={error}
+      email={email}
+      password={password}
+      handleSubmit={handleSubmit}
+      handleChange={handleChange}
+      isLoading={UI.isLoading}
+    />
+  );
 };
 
-const mapStateToProps = state => ({
-  user: state.user,
-  UI: state.UI,
-});
-
-const mapActionsToProps = {
-  loginUserAction,
+const mapStateToProps = state => {
+  const user = state.user;
+  const UI = state.UI;
+  return {
+    user,
+    UI,
+  };
 };
 
 export default connect(
   mapStateToProps,
-  mapActionsToProps
-)(withStyles(style)(login));
+  { loginUserAction }
+)(withStyles(style)(LoginPage));
