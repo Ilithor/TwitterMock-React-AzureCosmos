@@ -1,8 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { logoutUserAction } from '../redux/actions/userActions';
-import PropTypes from 'prop-types';
+
+// Components
 import CustomButton from '../util/CustomButton';
 
 // MUI
@@ -17,8 +16,14 @@ import KeyboardReturn from '@material-ui/icons/KeyboardReturn';
 import LockOpenIcon from '@material-ui/icons/LockOpen';
 import AssignmentIcon from '@material-ui/icons/Assignment';
 
+// Redux
+import { connect } from 'react-redux';
+import { logoutUserAction } from '../redux/actions/userActions';
+
 /** Shows the log in or log out button
- * @param {{isLoggedIn:boolean, logout:()=>void}} props
+ * @param {object} props
+ * @param {boolean} props.isLoggedIn
+ * @param {any} props.logout
  */
 const ButtonLogInOut = ({ isLoggedIn, logout }) => {
   if (isLoggedIn) {
@@ -37,13 +42,9 @@ const ButtonLogInOut = ({ isLoggedIn, logout }) => {
   );
 };
 
-ButtonLogInOut.propTypes = {
-  isLoggedIn: PropTypes.bool,
-  logout: PropTypes.func,
-};
-
 /** Displays either signup button or empty div
- * @param {{isLoggedIn:boolean}} props
+ * @param {object} props
+ * @param {boolean} props.isLoggedIn
  */
 const ButtonRegister = ({ isLoggedIn }) => {
   if (isLoggedIn) {
@@ -58,12 +59,9 @@ const ButtonRegister = ({ isLoggedIn }) => {
   );
 };
 
-ButtonRegister.propTypes = {
-  isLoggedIn: PropTypes.bool,
-};
-
 /** Displays either create new post button or empty div
- * @param {{isLoggedIn:boolean}} props
+ * @param {object} props
+ * @param {boolean} props.isLoggedIn
  */
 const ButtonPost = ({ isLoggedIn }) => {
   if (isLoggedIn) {
@@ -76,12 +74,9 @@ const ButtonPost = ({ isLoggedIn }) => {
   return <div></div>;
 };
 
-ButtonPost.propTypes = {
-  isLoggedIn: PropTypes.bool,
-};
-
 /** Displays either notification button or empty div
- * @param {{isLoggedIn:boolean}} props
+ * @param {object} props
+ * @param {boolean} props.isLoggedIn
  */
 const ButtonNotification = ({ isLoggedIn }) => {
   if (isLoggedIn) {
@@ -94,12 +89,10 @@ const ButtonNotification = ({ isLoggedIn }) => {
   return <div></div>;
 };
 
-ButtonNotification.propTypes = {
-  isLoggedIn: PropTypes.bool,
-};
-
 /** View component for navbar
- * @param {{isLoggedIn:bool, logoutUserAction:()=>void}} props
+ * @param {object} props
+ * @param {boolean} props.isLoggedIn
+ * @param {any} props.logoutUserAction
  */
 const Navbar = ({ isLoggedIn = false, logoutUserAction }) => (
   <AppBar>
@@ -116,10 +109,6 @@ const Navbar = ({ isLoggedIn = false, logoutUserAction }) => (
     </Toolbar>
   </AppBar>
 );
-Navbar.propTypes = {
-  isLoggedIn: PropTypes.bool,
-  logoutUserAction: PropTypes.func,
-};
 
 const mapStateToProps = ({ user }) => {
   const isLoggedIn = !!user && !!user.userInfo && !!user.userInfo.handle;
