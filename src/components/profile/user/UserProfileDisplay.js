@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 
 // Components
 import CustomButton from '../../../util/CustomButton';
@@ -23,73 +22,66 @@ import {
 } from '../../../redux/actions/userActions';
 
 /** View component for displaying the user's profile
- * @param {IUserProfileDisplayComponentProps} props
+ * @type {React.FunctionComponent}
+ * @param {object} props
+ * @param {object} props.classes
+ * @param {string} props.handle
+ * @param {object} props.bio
+ * @param {string} props.createdAt
  */
-class UserProfileDisplay extends Component {
-  handleEditPhoto = () => {
+const UserProfileDisplay = ({ classes, handle, bio, createdAt }) => {
+  const handleEditPhoto = () => {
     const fileInput = document.getElementById('imageUpload');
     fileInput.click();
   };
 
-  handleImageChange = event => {
+  const handleImageChange = event => {
     const image = event.target.files[0];
     const formData = new FormData();
     formData.append('image', image, image.name);
-    this.props.uploadImageAction(formData, this.props.user.handle);
+    uploadImageAction(formData, handle);
   };
 
-  handleLogout = () => {
-    this.props.logoutUserAction();
+  const handleLogout = () => {
+    logoutUserAction();
   };
 
-  render() {
-    const {
-      classes,
-      user: {
-        userInfo: { handle, createdAt, bio },
-      },
-    } = this.props;
-    return (
-      <Paper className={classes.paper}>
-        <div className={classes.profile}>
-          <ImageWrapper
-            bio={bio}
-            handleImageChange={this.handleImageChange}
-            handleEditPhoto={this.handleEditPhoto}
-          />
-          <hr />
-          <ProfileDetails handle={handle} bio={bio} createdAt={createdAt} />
-          <CustomButton tip='Logout' onClick={this.handleLogout}>
-            <KeyboardReturn color='primary' />
-          </CustomButton>
-          <EditDetails />
-        </div>
-      </Paper>
-    );
-  }
-}
+  return (
+    <Paper className={classes.paper}>
+      <div className={classes.profile}>
+        <ImageWrapper
+          bio={bio}
+          handleImageChange={handleImageChange}
+          handleEditPhoto={handleEditPhoto}
+        />
+        <hr />
+        <ProfileDetails handle={handle} bio={bio} createdAt={createdAt} />
+        <CustomButton tip='Logout' onClick={handleLogout}>
+          <KeyboardReturn color='primary' />
+        </CustomButton>
+        <EditDetails />
+      </div>
+    </Paper>
+  );
+};
 
-const mapStateToProps = state => ({
-  user: state.user,
-});
+const mapStateToProps = ({ user }) => {
+  const handle = user.userInfo.handle;
+  const bio = user.userInfo.bio;
+  const createdAt = user.userInfo.createdAt;
+  return {
+    handle,
+    bio,
+    createdAt,
+  };
+};
 
 const mapActionsToProps = {
   uploadImageAction,
   logoutUserAction,
 };
 
-UserProfileDisplay.propTypes = {
-  user: PropTypes.object,
-  classes: PropTypes.object,
-};
-
 export default connect(
   mapStateToProps,
   mapActionsToProps
 )(withStyles(style)(UserProfileDisplay));
-
-/** Props passed to the UserProfileDisplay view component
- * @typedef IUserProfileDisplayComponentProps
- * @property {object} user
- * @property {object} classes
- */

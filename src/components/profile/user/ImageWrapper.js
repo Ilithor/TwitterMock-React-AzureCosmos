@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 // Components
 import CustomButton from '../../../util/CustomButton';
@@ -12,14 +11,17 @@ import style from '../../../style/style';
 import EditIcon from '@material-ui/icons/Edit';
 
 /** View component for displaying the user image
- * @param {IImageWrapperComponentProps} props
+ * @type {React.FunctionComponent}
+ * @param {object} props
+ * @param {string} props.bioImage
+ * @param {React.ChangeEventHandler} props.handleEditPhoto
+ * @param {React.ChangeEventHandler} props.handleImageChange
  */
-const ImageWrapper = props => {
-  const { bio, handleEditPhoto, handleImageChange } = props;
+const ImageWrapper = ({ bioImage, handleEditPhoto, handleImageChange }) => {
   return (
     <div className='image-wrapper'>
-      {bio.image ? (
-        <img className='profile-image' src={bio.image} alt='profile' />
+      {bioImage ? (
+        <img className='profile-image' src={bioImage} alt='profile' />
       ) : (
         <div>Derp</div>
       )}
@@ -40,17 +42,4 @@ const ImageWrapper = props => {
   );
 };
 
-ImageWrapper.propTypes = {
-  bio: PropTypes.object,
-  handleEditPhoto: PropTypes.func,
-  handleImageChange: PropTypes.func,
-};
-
 export default withStyles(style)(ImageWrapper);
-
-/** Props passed to the ImageWrapper view component
- * @typedef IImageWrapperComponentProps
- * @property {object} bio
- * @property {function} handleEditPhoto
- * @property {function} handleImageChange
- */

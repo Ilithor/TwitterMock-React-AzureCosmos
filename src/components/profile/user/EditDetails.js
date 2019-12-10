@@ -1,147 +1,102 @@
-import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
+import React, { Fragment, useState } from 'react';
+
+// Components
+import CustomButton from '../../../util/CustomButton';
+import EditDetailsDisplay from './EditDetailsDisplay';
+
+// MUI
 import withStyles from '@material-ui/core/styles/withStyles';
 import style from '../../../style/style';
-import CustomButton from '../../../util/CustomButton';
+
+// Icons
+import EditIcon from '@material-ui/icons/Edit';
 
 // Redux
 import { connect } from 'react-redux';
 import { editUserDetailAction } from '../../../redux/actions/userActions';
 
-// MUI
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-
-// Icons
-import EditIcon from '@material-ui/icons/Edit';
-
-class EditDetails extends Component {
-  state = {
+/** Control how the user edits their bio information
+ * @type {React.FunctionComponent}
+ * @param {object} props
+ * @param {object} props.classes
+ * @param {object} props.bio
+ * @param {string} props.handle
+ * @param {any} props.editUserDetailAction
+ */
+const EditDetails = ({ classes, bio, handle, editUserDetailAction }) => {
+  const [editorState, setEditorState] = useState({
     aboutMe: '',
     website: '',
     location: '',
+  });
+  const [openState, setOpenState] = useState({
     open: false,
-  };
+  });
+  const { aboutMe, website, location } = editorState;
+  const { open } = openState;
 
-  mapUserDetailToState = bio => {
-    this.setState({
-      aboutMe: bio.aboutMe ? bio.aboutMe : '',
-      website: bio.website ? bio.website : '',
-      location: bio.location ? bio.location : '',
+  const handleOpen = () => {
+    setOpenState({ ...openState, open: true });
+    setEditorState({
+      aboutMe: bio.aboutMe,
+      website: bio.website,
+      location: bio.location,
     });
   };
 
-  componentDidMount = () => {
-    const { bio } = this.props;
-    this.mapUserDetailToState(bio);
+  const handleClose = () => {
+    setOpenState({ ...openState, open: false });
   };
 
-  handleOpen = () => {
-    this.setState({ open: true });
-    this.mapUserDetailToState(this.props.bio);
-  };
-
-  handleClose = () => {
-    this.setState({ open: false });
-  };
-
-  handleChange = event => {
-    this.setState({
-      [event.target.name]: event.target.value,
+  const handleChange = event => {
+    const { name, value } = event.target;
+    setEditorState({
+      ...editorState,
+      [name]: value,
     });
   };
 
-  handleSubmit = () => {
+  const handleSubmit = () => {
     const userDetail = {
-      aboutMe: this.state.aboutMe,
-      website: this.state.website,
-      location: this.state.location,
+      aboutMe,
+      website,
+      location,
     };
-    this.props.editUserDetailAction(userDetail, this.props.handle);
-    this.handleClose();
+    editUserDetailAction(userDetail, handle);
+    handleClose();
   };
 
-  render() {
-    const { classes } = this.props;
-    return (
-      <Fragment>
-        <CustomButton
-          tip='Edit Details'
-          onClick={this.handleOpen}
-          btnClassName={classes.buttonEdit}
-        >
-          <EditIcon color='primary' />
-        </CustomButton>
-        <Dialog
-          open={this.state.open}
-          onClose={this.handleClose}
-          fullWidth
-          maxWidth='sm'
-        >
-          <DialogTitle>Edit your details</DialogTitle>
-          <DialogContent>
-            <form>
-              <TextField
-                name='aboutMe'
-                type='text'
-                label='AboutMe'
-                multiline
-                rows='3'
-                placeholder='A short bio about yourself'
-                className={classes.textField}
-                value={this.state.aboutMe}
-                onChange={this.handleChange}
-                fullWidth
-              />
-              <TextField
-                name='website'
-                type='text'
-                label='Website'
-                placeholder='Your personal website'
-                className={classes.textField}
-                value={this.state.website}
-                onChange={this.handleChange}
-                fullWidth
-              />
-              <TextField
-                name='location'
-                type='text'
-                label='Location'
-                placeholder='Where you live'
-                className={classes.textField}
-                value={this.state.location}
-                onChange={this.handleChange}
-                fullWidth
-              />
-            </form>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.handleClose} color='primary'>
-              Cancel
-            </Button>
-            <Button onClick={this.handleSubmit} color='primary'>
-              Save
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </Fragment>
-    );
-  }
-}
-
-EditDetails.propTypes = {
-  editUserDetailAction: PropTypes.func.isRequired,
-  classes: PropTypes.object.isRequired,
+  return (
+    <Fragment>
+      <CustomButton
+        tip='Edit Details'
+        onClick={handleOpen}
+        btnClassName={classes.buttonEdit}
+      >
+        <EditIcon color='primary' />
+      </CustomButton>
+      <EditDetailsDisplay
+        classes={classes}
+        open={open}
+        handleClose={handleClose}
+        aboutMe={aboutMe}
+        handleChange={handleChange}
+        website={website}
+        location={location}
+        handleSubmit={handleSubmit}
+      />
+    </Fragment>
+  );
 };
 
-const mapStateToProps = state => ({
-  bio: state.user.userInfo.bio,
-  handle: state.user.userInfo.handle,
-});
+const mapStateToProps = state => {
+  const bio = state.user.userInfo.bio;
+  const handle = state.user.userInfo.handle;
+  return {
+    bio,
+    handle,
+  };
+};
 
 export default connect(
   mapStateToProps,

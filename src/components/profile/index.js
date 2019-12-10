@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 
 // Components
 import UserProfileDisplay from './user';
@@ -13,49 +12,31 @@ import style from '../../style/style';
 import { connect } from 'react-redux';
 
 /** View component for displaying either the default or user profile
- * @param {IProfileComponentProps} props
+ * @type {React.FunctionComponent}
+ * @param {object} props
+ * @param {object} props.classes
+ * @param {boolean} props.user.isLoading
+ * @param {boolean} props.user.authenticated
  */
-class Profile extends Component {
-  render() {
-    const {
-      user: { isLoading, authenticated },
-    } = this.props;
-
-    let profileMarkup = !isLoading ? (
-      authenticated ? (
-        <UserProfileDisplay />
-      ) : (
-        <DefaultProfileDisplay />
-      )
-    ) : (
-      <p>loading...</p>
-    );
-
-    return profileMarkup;
+const Profile = ({ classes, user: { isLoading, authenticated } }) => {
+  let profileMarkup;
+  if (!isLoading) {
+    if (authenticated) {
+      profileMarkup = <UserProfileDisplay classes={classes} />;
+    } else {
+      profileMarkup = <DefaultProfileDisplay classes={classes} />;
+    }
+  } else {
+    profileMarkup = <p>loading...</p>;
   }
-}
+  return profileMarkup;
+};
 
 const mapStateToProps = state => {
+  const user = state.user;
   return {
-    user: state.user,
+    user,
   };
 };
 
-Profile.propTypes = {
-  user: PropTypes.object.isRequired,
-};
-
-/** Component representing either default or user profile
- * @param {{profile:IProfile}} props
- */
 export default connect(mapStateToProps)(withStyles(style)(Profile));
-
-/** Props passed to the Profile view component
- * @typedef IProfileComponentProps
- * @property {object} user
- */
-
-/** Props that represent a profile being rendered.
- * @typedef IProfile
- * @property {boolean} authenticated
- */

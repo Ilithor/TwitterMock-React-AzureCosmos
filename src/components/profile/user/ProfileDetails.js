@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react';
-import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 
@@ -15,10 +14,13 @@ import LinkIcon from '@material-ui/icons/Link';
 import CalendarToday from '@material-ui/icons/CalendarToday';
 
 /** View component for displaying the user's profile details
- * @param {IProfileDetailsComponentProps} props
+ * @type {React.FunctionComponent}
+ * @param {object} props
+ * @param {string} props.handle
+ * @param {object} props.bio
+ * @param {string} props.createdAt
  */
-const ProfileDetails = props => {
-  const { handle, bio, createdAt } = props;
+const ProfileDetails = ({ handle, bio, createdAt }) => {
   return (
     <div className='profile-details'>
       <MuiLink
@@ -54,17 +56,4 @@ const ProfileDetails = props => {
   );
 };
 
-ProfileDetails.propTypes = {
-  handle: PropTypes.string,
-  bio: PropTypes.object,
-  createdAt: PropTypes.string,
-};
-
 export default withStyles(style)(ProfileDetails);
-
-/** Props passed to the ProfileDetails view component
- * @typedef IProfileDetailsComponentProps
- * @property {string} handle
- * @property {object} bio
- * @property {string} createdAt
- */
