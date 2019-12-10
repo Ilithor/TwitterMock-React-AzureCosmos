@@ -1,5 +1,6 @@
-import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
+import React, { Fragment, useState } from 'react';
+
+// Components
 import CustomButton from '../../../util/CustomButton';
 
 // MUI
@@ -9,71 +10,61 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
+
+// Icons
 import DeleteOutline from '@material-ui/icons/DeleteOutline';
 
 // Redux
 import { connect } from 'react-redux';
 import { deleteUserPost } from '../../../redux/actions/dataActions';
 
-class DeletePost extends Component {
-  state = {
+const DeletePost = ({
+  classes,
+  postId,
+  userHandle,
+  isAuthenticated,
+  handle,
+}) => {
+  const [openState, setOpenState] = useState({
     open: false,
+  });
+  const { open } = openState;
+  const handleOpen = () => {
+    setOpenState({ ...openState, open: true });
   };
-  handleOpen = () => {
-    this.setState({ open: true });
+  const handleClose = () => {
+    setOpenState({ ...openState, open: false });
   };
-  handleClose = () => {
-    this.setState({ open: false });
+  const deletePost = () => {
+    deleteUserPost(postId);
+    setOpenState({ ...openState, open: false });
   };
-  deletePost = () => {
-    this.props.deleteUserPost(this.props.postId);
-    this.setState({ open: false });
-  };
-  render() {
-    const { isAuthenticated, classes, userHandle, handle } = this.props;
-    if (isAuthenticated && userHandle === handle) {
-      return (
-        <Fragment>
-          <CustomButton
-            tip='Delete Post'
-            onClick={this.handleOpen}
-            btnClassName={classes.deleteButton}
-          >
-            <DeleteOutline color='secondary' />
-          </CustomButton>
-          <Dialog
-            open={this.state.open}
-            onClose={this.handleClose}
-            fullWidth
-            maxWidth='sm'
-          >
-            <DialogTitle>
-              Are you sure you want to delete this post?
-            </DialogTitle>
-            <DialogActions>
-              <Button onClick={this.handleClose} color='primary'>
-                Cancel
-              </Button>
-              <Button onClick={this.deletePost} color='secondary'>
-                Delete
-              </Button>
-            </DialogActions>
-          </Dialog>
-        </Fragment>
-      );
-    } else {
-      return <div />;
-    }
+  if (isAuthenticated && userHandle === handle) {
+    return (
+      <Fragment>
+        <CustomButton
+          tip='Delete Post'
+          onClick={handleOpen}
+          btnClassName={classes.deleteButton}
+        >
+          <DeleteOutline color='secondary' />
+        </CustomButton>
+        <Dialog open={open} onClose={handleClose} fullWidth maxWidth='sm'>
+          <DialogTitle>Are you sure you want to delete this post?</DialogTitle>
+          <DialogActions>
+            <Button onClick={handleClose} color='primary'>
+              Cancel
+            </Button>
+            <Button onClick={deletePost} color='secondary'>
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Fragment>
+    );
+  } else {
+    return <div />;
   }
-}
-
-DeletePost.propTypes = {
-  deleteUserPost: PropTypes.func,
-  classes: PropTypes.object,
-  postId: PropTypes.string,
-  userHandle: PropTypes.string,
-  handle: PropTypes.string,
-  isAuthenticated: PropTypes.bool,
 };
 
 const mapStateToProps = ({ user }) => {
