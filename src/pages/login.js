@@ -25,9 +25,13 @@ const LoginPage = ({ classes, UI, history, loginUserAction }) => {
     password: '',
   });
   const { email, password } = editorState;
-  
+
   useEffect(() => setError(UI.error), [UI.error]);
 
+  /** Try to log the user in with the current data
+   *
+   * @param {React.ChangeEvent} event
+   */
   const handleSubmit = event => {
     event.preventDefault();
     const userData = {
@@ -37,6 +41,10 @@ const LoginPage = ({ classes, UI, history, loginUserAction }) => {
     loginUserAction(userData, history);
   };
 
+  /** Saves editor change to local state
+   *
+   * @param {React.ChangeEvent} event
+   */
   const handleChange = event => {
     const { name, value } = event.target;
     setEditorState({
