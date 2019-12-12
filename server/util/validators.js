@@ -4,9 +4,8 @@ import mongoConnection from '../util/mongo';
 mongoConnection();
 
 /** Checks if the email and password are valid
- * @constant
- * @type {Function}
  * @param {UserCredential} user
+ * @return {UserCredentialError}
  */
 export const validateLogin = user => {
   let error = {};
@@ -24,9 +23,8 @@ export const validateLogin = user => {
 };
 
 /** Checks if the user inputs are valid
- * @constant
- * @type {Function}
- *  @param {UserRegistration} userParam
+ * @param {UserRegistration} userParam
+ * @return {UserError}
  */
 export const validateRegister = async userParam => {
   let error = {};
@@ -55,39 +53,35 @@ export const validateRegister = async userParam => {
 };
 
 /** Checks if the provided bio information is valid
- * @constant
- * @type {Function}
- * @example look at *all* the bio
  * @param {UserBioUpdate} userParam User's bio info
+ * @return {UserBioUpdate}
  */
 export const validateUserDetail = userParam => {
-  let userDetails = { aboutMe: '', website: '', location: '' };
+  let userDetail = { aboutMe: '', website: '', location: '' };
   let { aboutMe, website, location } = userParam;
   if (!isEmpty(aboutMe.trim())) {
-    userDetails.aboutMe = aboutMe;
+    userDetail.aboutMe = aboutMe;
   }
   if (!isEmpty(website.trim())) {
     if (website.trim().substring(0, 4) !== 'http') {
       if (website.trim().substring(0, 3) !== 'www') {
-        userDetails.website = `http://www.${website.trim()}`;
+        userDetail.website = `http://www.${website.trim()}`;
       } else {
-        userDetails.website = `http://${website.trim()}`;
+        userDetail.website = `http://${website.trim()}`;
       }
     } else {
-      userDetails.website = website;
+      userDetail.website = website;
     }
   }
   if (!isEmpty(location.trim())) {
-    userDetails.location = location;
+    userDetail.location = location;
   }
-  return userDetails;
+  return userDetail;
 };
 
 /** Checks if provided string is empty
- * @constant
- * @type {Function}
  * @param {string} string
- * @returns {boolean}
+ * @return {boolean}
  */
 export const isEmpty = string => {
   if (string.trim() === '') {
@@ -98,10 +92,8 @@ export const isEmpty = string => {
 };
 
 /** Checks if provided email is valid
- * @constant
- * @type {Function}
  * @param {string} email
- * @returns {boolean}
+ * @return {boolean}
  */
 export const isEmail = email => {
   const emailRegEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;

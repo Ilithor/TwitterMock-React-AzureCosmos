@@ -16,7 +16,7 @@ import mongoConnect from '../util/mongo';
 mongoConnect();
 
 /** Returns a list of users
- * @returns {Promise<user[User], error>}
+ * @return {Promise<user[User]> | UserNotFound}
  */
 export const getList = async () => {
   let user = [];
@@ -35,7 +35,7 @@ export const getList = async () => {
 
 /** Validates then creates new User
  * @param {UserRegistration} userParam
- * @returns {Promise<newUser[User], error>}
+ * @return {Promise<newUser[User]> | UserError}
  */
 export const register = async userParam => {
   let error = {};
@@ -68,7 +68,7 @@ export const register = async userParam => {
 
 /** Checks if user exists, and then generates a new token
  * @param {UserCredential} userParam
- * @returns {Promise<userLoggedIn, dataToReturn, error>}
+ * @return {Promise<userLoggedIn, dataToReturn> | UserCredentialError}
  */
 export const login = async userParam => {
   const { email, password } = userParam;
@@ -102,7 +102,7 @@ export const login = async userParam => {
 /** Updates the current user's bio properties
  * @param {Object} userParam
  * @param {string} userId
- * @returns {Promise<boolean>}
+ * @return {Promise<boolean>}
  */
 export const updateBio = async (userParam, userId) => {
   let userDetail = {};

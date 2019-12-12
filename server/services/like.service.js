@@ -2,6 +2,7 @@ import Like from '../models/like.model';
 
 /** Create Like document
  * @param {Request} likeParam
+ * @return {Like}
  */
 export const create = async likeParam => {
   let dataForLike = {};
@@ -18,6 +19,7 @@ export const create = async likeParam => {
 
 /** Deletes Like document
  * @param {Request} likeParam
+ * @return {Promise<Like>}
  */
 export const remove = async likeParam => {
   let like = {};

@@ -5,7 +5,7 @@ import mongoConnection from '../util/mongo';
 mongoConnection();
 
 /** Retrieves all posts in desc order
- * @returns {Promise<post[Post], error>}
+ * @return {Promise<post[Post]> | PostNotFound}
  */
 export const getList = async () => {
   let post = [];
@@ -25,6 +25,7 @@ export const getList = async () => {
 /** Creates and saves new post
  * @param {Object} postParam
  * @param {User} user
+ * @return {Post | PostError}
  */
 export const create = async (postParam, user) => {
   // Validation
@@ -48,6 +49,7 @@ export const create = async (postParam, user) => {
 
 /** Deletes post
  * @param {Request} postParam
+ * @return {Promise<Post>}
  */
 export const findAndDeletePost = async postParam => {
   let post = {};
