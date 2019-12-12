@@ -25,7 +25,7 @@ export const getList = async () => {
 /** Creates and saves new post
  * @param {Object} postParam
  * @param {User} user
- * @return {Post | PostError}
+ * @return {Promise<Post, Error>}
  */
 export const create = async (postParam, user) => {
   // Validation

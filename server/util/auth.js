@@ -36,6 +36,7 @@ export const authUser = async (req, res, next) => {
 
 /** Decodes token and returns _id
  * @param {Request|string} req request passed in OR req.headers.authorization (both supported)
+ * @return {Promise<string, error>}
  */
 export const authByToken = async req => {
   let error = {};

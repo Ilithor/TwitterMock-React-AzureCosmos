@@ -24,7 +24,7 @@ export const validateLogin = user => {
 
 /** Checks if the user inputs are valid
  * @param {UserRegistration} userParam
- * @return {UserError}
+ * @return {Promise<UserError>}
  */
 export const validateRegister = async userParam => {
   let error = {};

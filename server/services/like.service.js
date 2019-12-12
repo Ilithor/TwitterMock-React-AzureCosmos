@@ -2,7 +2,7 @@ import Like from '../models/like.model';
 
 /** Create Like document
  * @param {Request} likeParam
- * @return {Like}
+ * @return {Promise<Like>}
  */
 export const create = async likeParam => {
   let dataForLike = {};

@@ -5,7 +5,7 @@ mongoConnection();
 
 /** Creates a new comment
  * @param {Request} commentParam
- * @return {NewUserComment | UserCommentError}
+ * @return {Promise<NewUserComment> | UserCommentError}
  */
 export const create = async commentParam => {
   let dataForComment = {};
