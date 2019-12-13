@@ -31,7 +31,7 @@ const style = {
  * @param {object} props.classes
  * @param {object} props.post
  */
-const Post = ({ classes, post }) => {
+const Post = ({ classes = {}, post }) => {
   dayjs.extend(relativeTime);
   if (!post) {
     return;

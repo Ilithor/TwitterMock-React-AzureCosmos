@@ -18,7 +18,7 @@ import { connect } from 'react-redux';
  * @param {boolean} props.user.isLoading
  * @param {boolean} props.user.authenticated
  */
-const Profile = ({ classes, user: { isLoading, authenticated } }) => {
+const Profile = ({ classes = {}, user: { isLoading, authenticated } }) => {
   if (!isLoading) {
     if (authenticated) {
       return <UserProfileDisplay classes={classes} />;

@@ -20,7 +20,7 @@ import CalendarToday from '@material-ui/icons/CalendarToday';
  * @param {object} props.bio
  * @param {string} props.createdAt
  */
-const ProfileDetails = ({ handle, bio, createdAt }) => {
+const ProfileDetails = ({ handle, bio = {}, createdAt }) => {
   return (
     <div className='profile-details'>
       <MuiLink

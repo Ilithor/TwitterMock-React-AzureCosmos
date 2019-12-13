@@ -18,7 +18,7 @@ import { loginUserAction } from '../redux/actions/userActions';
  * @param {any} props.UI
  * @param {Reac} props.history
  */
-const LoginPage = ({ classes, UI, history, loginUserAction }) => {
+const LoginPage = ({ classes = {}, UI = {}, history, loginUserAction }) => {
   const [error, setError] = useState({});
   const [editorState, setEditorState] = useState({
     email: '',

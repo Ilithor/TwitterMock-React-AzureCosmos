@@ -29,7 +29,7 @@ import {
  * @param {object} props.bio
  * @param {string} props.createdAt
  */
-const UserProfileDisplay = ({ classes, handle, bio, createdAt }) => {
+const UserProfileDisplay = ({ classes = {}, handle, bio = {}, createdAt }) => {
   const handleEditPhoto = () => {
     const fileInput = document.getElementById('imageUpload');
     fileInput.click();

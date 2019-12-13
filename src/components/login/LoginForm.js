@@ -23,8 +23,8 @@ import style from '../../style/style';
  */
 const LoginForm = ({
   handleSubmit,
-  classes,
-  error,
+  classes = {},
+  error = {},
   email,
   handleChange,
   password,

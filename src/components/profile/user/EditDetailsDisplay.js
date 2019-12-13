@@ -21,7 +21,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
  * @param {React.ChangeEventHandler} props.handleClose
  */
 const EditDetailsDisplay = ({
-  classes,
+  classes = {},
   open,
   handleClose,
   aboutMe,

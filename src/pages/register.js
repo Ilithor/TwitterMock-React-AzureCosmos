@@ -18,7 +18,12 @@ import { registerUserAction } from '../redux/actions/userActions';
  * @param {any} props.UI
  * @param {Reac} props.history
  */
-const RegisterPage = ({ classes, UI, history, registerUserAction }) => {
+const RegisterPage = ({
+  classes = {},
+  UI = {},
+  history,
+  registerUserAction,
+}) => {
   const [error, setError] = useState({});
   const [editorState, setEditorState] = useState({
     email: '',

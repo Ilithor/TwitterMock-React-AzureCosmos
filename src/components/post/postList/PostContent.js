@@ -22,7 +22,7 @@ import ChatIcon from '@material-ui/icons/Chat';
  * @param {object} props.classes
  * @param {object} props.post
  */
-const PostContent = ({ classes, post }) => {
+const PostContent = ({ classes = {}, post }) => {
   const { userHandle, createdAt, body, postId, likeCount, commentCount } = post;
   return (
     <CardContent className={classes.content}>

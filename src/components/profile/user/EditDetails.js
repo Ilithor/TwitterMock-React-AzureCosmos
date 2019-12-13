@@ -23,7 +23,12 @@ import { editUserDetailAction } from '../../../redux/actions/userActions';
  * @param {string} props.handle
  * @param {any} props.editUserDetailAction
  */
-const EditDetails = ({ classes, bio, handle, editUserDetailAction }) => {
+const EditDetails = ({
+  classes = {},
+  bio = {},
+  handle,
+  editUserDetailAction,
+}) => {
   const [editorState, setEditorState] = useState({
     aboutMe: '',
     website: '',

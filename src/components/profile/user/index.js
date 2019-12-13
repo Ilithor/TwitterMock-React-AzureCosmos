@@ -34,7 +34,7 @@ import {
 const UserProfileDisplay = ({
   classes,
   user: {
-    userInfo: { handle, createdAt, bio },
+    userInfo: { handle, createdAt, bio = {} },
   },
   logoutUserAction,
   uploadImageAction,

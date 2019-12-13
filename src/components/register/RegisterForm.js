@@ -23,8 +23,8 @@ import style from '../../style/style';
  * @param {React.ChangeEventHandler} props.handleChange
  */
 const RegisterForm = ({
-  classes,
-  error,
+  classes = {},
+  error = {},
   handle,
   email,
   password,

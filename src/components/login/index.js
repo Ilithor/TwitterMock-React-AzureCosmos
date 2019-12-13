@@ -24,8 +24,8 @@ import AppIcon from '../../images/icon.png';
  * @param {boolean} props.isLoading
  */
 const Login = ({
-  classes,
-  error,
+  classes = {},
+  error = {},
   email,
   password,
   handleSubmit,

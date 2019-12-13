@@ -22,8 +22,8 @@ import Typography from '@material-ui/core/Typography';
  * @param {React.ChangeEventHandler} props.handleChange
  */
 const Register = ({
-  classes,
-  error,
+  classes = {},
+  error = {},
   handle,
   email,
   password,

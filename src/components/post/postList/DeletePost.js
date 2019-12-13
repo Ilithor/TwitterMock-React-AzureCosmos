@@ -19,7 +19,7 @@ import { connect } from 'react-redux';
 import { deleteUserPost } from '../../../redux/actions/dataActions';
 
 const DeletePost = ({
-  classes,
+  classes = {},
   postId,
   userHandle,
   isAuthenticated,

@@ -14,7 +14,7 @@ import style from '../../../style/style';
  * @param {object} props
  * @param {object} props.classes
  */
-const DefaultProfileDisplay = ({ classes }) => {
+const DefaultProfileDisplay = ({ classes = {} }) => {
   return (
     <Paper className={classes.paper}>
       <Typography varian='body2' align='center'>
