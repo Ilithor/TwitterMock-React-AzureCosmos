@@ -12,7 +12,8 @@ import { connect } from 'react-redux';
 import { getPostList } from '../redux/actions/dataActions';
 
 export const Home = ({ postList, isLoading, getPostList }) => {
-  useEffect(() => getPostList());
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => getPostList(), []);
   let recentPostMarkup;
   if (!isLoading) {
     recentPostMarkup = postList.map(post => (
