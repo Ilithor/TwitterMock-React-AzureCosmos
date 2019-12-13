@@ -29,56 +29,54 @@ const EditDetailsDisplay = ({
   website,
   location,
   handleSubmit,
-}) => {
-  return (
-    <Dialog open={open} onClose={handleClose} fullWidth maxWidth='sm'>
-      <DialogTitle>Edit your details</DialogTitle>
-      <DialogContent>
-        <form>
-          <TextField
-            name='aboutMe'
-            type='text'
-            label='AboutMe'
-            multiline
-            rows='3'
-            placeholder='A short bio about yourself'
-            className={classes.textField}
-            value={aboutMe}
-            onChange={handleChange}
-            fullWidth
-          />
-          <TextField
-            name='website'
-            type='text'
-            label='Website'
-            placeholder='Your personal website'
-            className={classes.textField}
-            value={website}
-            onChange={handleChange}
-            fullWidth
-          />
-          <TextField
-            name='location'
-            type='text'
-            label='Location'
-            placeholder='Where you live'
-            className={classes.textField}
-            value={location}
-            onChange={handleChange}
-            fullWidth
-          />
-        </form>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose} color='primary'>
-          Cancel
-        </Button>
-        <Button onClick={handleSubmit} color='primary'>
-          Save
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
-};
+}) => (
+  <Dialog open={open} onClose={handleClose} fullWidth maxWidth='sm'>
+    <DialogTitle>Edit your details</DialogTitle>
+    <DialogContent>
+      <form>
+        <TextField
+          name='aboutMe'
+          type='text'
+          label='AboutMe'
+          multiline
+          rows='3'
+          placeholder='A short bio about yourself'
+          className={classes.textField}
+          value={aboutMe}
+          onChange={handleChange}
+          fullWidth
+        />
+        <TextField
+          name='website'
+          type='text'
+          label='Website'
+          placeholder='Your personal website'
+          className={classes.textField}
+          value={website}
+          onChange={handleChange}
+          fullWidth
+        />
+        <TextField
+          name='location'
+          type='text'
+          label='Location'
+          placeholder='Where you live'
+          className={classes.textField}
+          value={location}
+          onChange={handleChange}
+          fullWidth
+        />
+      </form>
+    </DialogContent>
+    <DialogActions>
+      <Button onClick={handleClose} color='primary'>
+        Cancel
+      </Button>
+      <Button onClick={handleSubmit} color='primary'>
+        Save
+      </Button>
+    </DialogActions>
+  </Dialog>
+);
 
 export default EditDetailsDisplay;

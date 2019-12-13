@@ -31,30 +31,28 @@ const Register = ({
   handleSubmit,
   handleChange,
   isLoading,
-}) => {
-  return (
-    <Grid container className={classes.form}>
-      <Grid item sm />
-      <Grid item sm>
-        <img src={AppIcon} alt='eye' className={classes.image} />
-        <Typography variant='h2' className={classes.pageTitle}>
-          Register
-        </Typography>
-        <RegisterForm
-          classes={classes}
-          error={error}
-          handle={handle}
-          email={email}
-          password={password}
-          confirmPassword={confirmPassword}
-          handleSubmit={handleSubmit}
-          handleChange={handleChange}
-          isLoading={isLoading}
-        />
-      </Grid>
-      <Grid item sm />
+}) => (
+  <Grid container className={classes.form}>
+    <Grid item sm />
+    <Grid item sm>
+      <img src={AppIcon} alt='eye' className={classes.image} />
+      <Typography variant='h2' className={classes.pageTitle}>
+        Register
+      </Typography>
+      <RegisterForm
+        classes={classes}
+        error={error}
+        handle={handle}
+        email={email}
+        password={password}
+        confirmPassword={confirmPassword}
+        handleSubmit={handleSubmit}
+        handleChange={handleChange}
+        isLoading={isLoading}
+      />
     </Grid>
-  );
-};
+    <Grid item sm />
+  </Grid>
+);
 
 export default Register;

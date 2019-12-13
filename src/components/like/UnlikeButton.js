@@ -21,9 +21,7 @@ import { getUnlikePost } from '../../redux/actions/dataActions';
  * @param {any} props.getUnlikePost
  */
 export const UnlikeButton = ({ postId, getUnlikePost }) => {
-  const unlikePost = () => {
-    getUnlikePost(postId);
-  };
+  const unlikePost = () => getUnlikePost(postId);
 
   return (
     <CustomButton tip='Undo like' onClick={unlikePost}>

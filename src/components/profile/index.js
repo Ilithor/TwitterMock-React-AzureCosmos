@@ -19,17 +19,15 @@ import { connect } from 'react-redux';
  * @param {boolean} props.user.authenticated
  */
 const Profile = ({ classes, user: { isLoading, authenticated } }) => {
-  let profileMarkup;
   if (!isLoading) {
     if (authenticated) {
-      profileMarkup = <UserProfileDisplay classes={classes} />;
+      return <UserProfileDisplay classes={classes} />;
     } else {
-      profileMarkup = <DefaultProfileDisplay classes={classes} />;
+      return <DefaultProfileDisplay classes={classes} />;
     }
   } else {
-    profileMarkup = <p>loading...</p>;
+    return <p>loading...</p>;
   }
-  return profileMarkup;
 };
 
 const mapStateToProps = state => {

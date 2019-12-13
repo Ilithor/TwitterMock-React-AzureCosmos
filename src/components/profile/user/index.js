@@ -51,9 +51,7 @@ const UserProfileDisplay = ({
     uploadImageAction(formData, handle);
   };
 
-  const handleLogout = () => {
-    logoutUserAction();
-  };
+  const handleLogout = () => logoutUserAction();
 
   return (
     <Paper className={classes.paper}>

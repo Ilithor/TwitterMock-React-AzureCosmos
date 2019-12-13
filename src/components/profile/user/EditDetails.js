@@ -29,14 +29,11 @@ const EditDetails = ({ classes, bio, handle, editUserDetailAction }) => {
     website: '',
     location: '',
   });
-  const [openState, setOpenState] = useState({
-    open: false,
-  });
+  const [open, setOpen] = useState(false);
   const { aboutMe, website, location } = editorState;
-  const { open } = openState;
 
   const handleOpen = () => {
-    setOpenState({ ...openState, open: true });
+    setOpen({ ...open, open: true });
     setEditorState({
       aboutMe: bio.aboutMe,
       website: bio.website,
@@ -44,7 +41,7 @@ const EditDetails = ({ classes, bio, handle, editUserDetailAction }) => {
     });
   };
 
-  const handleClose = () => setOpenState({ ...openState, open: false });
+  const handleClose = () => setOpen({ ...open, open: false });
 
   const handleChange = event => {
     const { name, value } = event.target;
