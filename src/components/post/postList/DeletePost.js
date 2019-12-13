@@ -29,12 +29,8 @@ const DeletePost = ({
     open: false,
   });
   const { open } = openState;
-  const handleOpen = () => {
-    setOpenState({ ...openState, open: true });
-  };
-  const handleClose = () => {
-    setOpenState({ ...openState, open: false });
-  };
+  const handleOpen = () => setOpenState({ ...openState, open: true });
+  const handleClose = () => setOpenState({ ...openState, open: false });
   const deletePost = () => {
     deleteUserPost(postId);
     setOpenState({ ...openState, open: false });

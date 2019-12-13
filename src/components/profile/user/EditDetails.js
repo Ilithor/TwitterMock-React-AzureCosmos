@@ -44,9 +44,7 @@ const EditDetails = ({ classes, bio, handle, editUserDetailAction }) => {
     });
   };
 
-  const handleClose = () => {
-    setOpenState({ ...openState, open: false });
-  };
+  const handleClose = () => setOpenState({ ...openState, open: false });
 
   const handleChange = event => {
     const { name, value } = event.target;

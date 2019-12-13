@@ -21,9 +21,7 @@ import { getLikePost } from '../../redux/actions/dataActions';
  * @param {any} props.getLikePost
  */
 export const LikeButton = ({ postId, getLikePost }) => {
-  const likePost = () => {
-    getLikePost(postId);
-  };
+  const likePost = () => getLikePost(postId);
   return (
     <CustomButton tip='Like' onClick={likePost}>
       <FavoriteBorder color='primary' />
@@ -36,7 +34,7 @@ export default connect(
   { getLikePost }
 )(withStyles(style)(LikeButton));
 
-/** 
+/**
  * @typedef ILikeButtonComponentProps
  * @param {string} postId
  * @param {any} getLikePost

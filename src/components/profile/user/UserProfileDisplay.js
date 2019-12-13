@@ -42,9 +42,7 @@ const UserProfileDisplay = ({ classes, handle, bio, createdAt }) => {
     uploadImageAction(formData, handle);
   };
 
-  const handleLogout = () => {
-    logoutUserAction();
-  };
+  const handleLogout = () => logoutUserAction();
 
   return (
     <Paper className={classes.paper}>
