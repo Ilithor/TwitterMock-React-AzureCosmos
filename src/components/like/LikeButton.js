@@ -1,10 +1,11 @@
 import React from 'react';
+
+// Components
 import CustomButton from '../../util/CustomButton';
-import style from '../../style/style';
-import PropTypes from 'prop-types';
 
 // MUI
 import withStyles from '@material-ui/core/styles/withStyles';
+import style from '../../style/style';
 
 // Icons
 import { FavoriteBorder } from '@material-ui/icons';
@@ -19,7 +20,7 @@ import { getLikePost } from '../../redux/actions/dataActions';
  * @param {string} props.postId
  * @param {any} props.getLikePost
  */
-const LikeButton = ({ postId, getLikePost }) => {
+export const LikeButton = ({ postId, getLikePost }) => {
   const likePost = () => {
     getLikePost(postId);
   };
@@ -30,12 +31,13 @@ const LikeButton = ({ postId, getLikePost }) => {
   );
 };
 
-LikeButton.propTypes = {
-  postId: PropTypes.string,
-  getLikePost: PropTypes.func,
-};
-
 export default connect(
   null,
   { getLikePost }
 )(withStyles(style)(LikeButton));
+
+/** 
+ * @typedef ILikeButtonComponentProps
+ * @param {string} postId
+ * @param {any} getLikePost
+ */

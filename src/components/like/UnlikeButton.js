@@ -1,10 +1,11 @@
 import React from 'react';
+
+// Components
 import CustomButton from '../../util/CustomButton';
-import style from '../../style/style';
-import PropTypes from 'prop-types';
 
 // MUI
 import withStyles from '@material-ui/core/styles/withStyles';
+import style from '../../style/style';
 
 // Icons
 import FavoriteIcon from '@material-ui/icons/Favorite';
@@ -19,7 +20,7 @@ import { getUnlikePost } from '../../redux/actions/dataActions';
  * @param {string} props.postId
  * @param {any} props.getUnlikePost
  */
-const UnlikeButton = ({ postId, getUnlikePost }) => {
+export const UnlikeButton = ({ postId, getUnlikePost }) => {
   const unlikePost = () => {
     getUnlikePost(postId);
   };
@@ -31,12 +32,13 @@ const UnlikeButton = ({ postId, getUnlikePost }) => {
   );
 };
 
-UnlikeButton.propTypes = {
-  postId: PropTypes.string,
-  getUnlikePost: PropTypes.func,
-};
-
 export default connect(
   null,
   { getUnlikePost }
 )(withStyles(style)(UnlikeButton));
+
+/**
+ * @typedef IUnlikeButtonComponentProps
+ * @param {string} postId
+ * @param {any} getUnlikePost
+ */
