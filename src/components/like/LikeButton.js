@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 // Components
 import CustomButton from '../../util/CustomButton';
@@ -20,27 +20,24 @@ import { getLikePost } from '../../redux/actions/dataActions';
  * @param {string} props.postId
  * @param {any} props.getLikePost
  */
-export const LikeButton = ({ postId, getLikePost }) => {
-  const [disabled, setDisabled] = useState(false);
-  const handleDisabled = () => setDisabled(true);
-  const handleEnabled = () => setDisabled(false);
+export const LikeButton = ({ postId, getLikePost, UI = {} }) => {
   const likePost = () => {
     getLikePost(postId);
-    handleEnabled();
   };
   return (
-    <CustomButton
-      tip='Like'
-      onClick={(handleDisabled, likePost)}
-      disabled={disabled}
-    >
+    <CustomButton tip='Like' onClick={likePost} disabled={UI.isLoading}>
       <FavoriteBorder color='primary' />
     </CustomButton>
   );
 };
 
+const mapStateToProps = state => {
+  const UI = state.UI;
+  return { UI };
+};
+
 export default connect(
-  null,
+  mapStateToProps,
   { getLikePost }
 )(withStyles(style)(LikeButton));
 

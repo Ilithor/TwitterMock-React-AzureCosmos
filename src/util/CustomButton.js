@@ -15,8 +15,14 @@ export default ({
   disabled,
 }) => (
   <Tooltip title={tip} className={tipClassName} placement='top'>
-    <IconButton onClick={onClick} className={btnClassName} disabled={disabled}>
-      {children}
-    </IconButton>
+    <span>
+      <IconButton
+        onClick={onClick}
+        className={btnClassName}
+        disabled={disabled}
+      >
+        {children}
+      </IconButton>
+    </span>
   </Tooltip>
 );

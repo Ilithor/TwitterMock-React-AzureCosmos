@@ -1,4 +1,11 @@
-import { SET_POSTS, LIKE_POST, UNLIKE_POST, DELETE_POST } from '../types';
+import {
+  LOADING_UI,
+  CLEAR_ERRORS,
+  SET_POSTS,
+  LIKE_POST,
+  UNLIKE_POST,
+  DELETE_POST,
+} from '../types';
 import {
   fetchPostList,
   likePost,
@@ -23,10 +30,12 @@ export const getPostList = () => dispatch => {
  * @param {string} postId
  */
 export const getLikePost = postId => dispatch => {
+  dispatch({ type: LOADING_UI });
   likePost(postId)
     .then(res => {
       dispatch({ type: LIKE_POST, payload: { ...res.data, postId } });
       dispatch(getPostList());
+      dispatch({ type: CLEAR_ERRORS });
     })
     .catch(console.log);
 };
@@ -35,10 +44,12 @@ export const getLikePost = postId => dispatch => {
  * @param {string} postId
  */
 export const getUnlikePost = postId => dispatch => {
+  dispatch({ type: LOADING_UI });
   unlikePost(postId)
     .then(res => {
       dispatch({ type: UNLIKE_POST, payload: { ...res.data, postId } });
       dispatch(getPostList());
+      dispatch({ type: CLEAR_ERRORS });
     })
     .catch(console.log);
 };
