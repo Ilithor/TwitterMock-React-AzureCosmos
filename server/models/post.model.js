@@ -6,24 +6,24 @@ const PostSchema = Schema({
   createdAt: Date,
   body: {
     type: String,
-    required: true
+    required: true,
   },
   userHandle: {
     type: String,
-    required: true
+    required: true,
   },
   userImage: {
     type: String,
-    required: true
+    required: true,
   },
   likeCount: {
     type: Number,
-    required: true
+    required: true,
   },
   commentCount: {
     type: Number,
-    required: true
-  }
+    required: true,
+  },
 });
 
 const Post = mongoose.model('Post', PostSchema);

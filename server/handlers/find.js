@@ -10,6 +10,7 @@ mongoConnection();
 
 /**Returns a user that has a matching email and password
  * @param {UserRegistration} user
+ * @return {Promise<User> | UserCredentialError}
  */
 export const findByCredential = async user => {
   let error = {};
@@ -30,6 +31,7 @@ export const findByCredential = async user => {
 
 /** Returns a user that matches _id
  * @param {string} _id
+ * @return {Promise<User> | UserNotFound}
  */
 export const findById = async _id => {
   let error = {};
@@ -43,6 +45,10 @@ export const findById = async _id => {
   return user;
 };
 
+/** Returns a user that matches handle
+ * @param {string} handle
+ * @return {Promise<User> | UserNotFound}
+ */
 export const findByHandle = async handle => {
   let error = {};
   let user = await User.findOne({
@@ -57,6 +63,7 @@ export const findByHandle = async handle => {
 
 /** Returns post that matches _id
  * @param {string} _id
+ * @return {Promise<Post> | PostNotFound}
  */
 export const findPostById = async _id => {
   let error = {};
@@ -72,6 +79,7 @@ export const findPostById = async _id => {
 
 /** Returns post that matches user handle
  * @param {string} handle
+ * @return {Promise<Post> | PostNotFound}
  */
 export const findPostByHandle = async handle => {
   let error = {};
@@ -89,6 +97,7 @@ export const findPostByHandle = async handle => {
 
 /** Find all notifications by recipient
  * @param {string} recipient
+ * @return {Promise<UserNotification> | NotificationNotFound}
  */
 export const findNotificationByRecipient = async recipient => {
   let notification = [];
@@ -108,6 +117,7 @@ export const findNotificationByRecipient = async recipient => {
 
 /** Fetches all comments attached to PostId
  * @param {string} _id
+ * @return {Promise<UserComment> | NotificationNotFound}
  */
 export const findCommentByPostId = async _id => {
   let comment = [];
@@ -127,6 +137,7 @@ export const findCommentByPostId = async _id => {
 
 /** Find all likes by userHandle
  * @param {string} handle
+ * @return {Promise<Like> | []}
  */
 export const findLikeByHandle = async handle => {
   let like = [];
@@ -144,6 +155,7 @@ export const findLikeByHandle = async handle => {
 /** Finds all commenets by userHandle and PostId
  * @param {string} handle
  * @param {string} postId
+ * @return {Promise<UserComment>}
  */
 export const findCommentByHandleAndPostId = async (handle, postId) => {
   let comment = {};
@@ -157,6 +169,7 @@ export const findCommentByHandleAndPostId = async (handle, postId) => {
 /** Finds all likes that match the provided user handle
  * @param {string} handle
  * @param {string} postId
+ * @return {Promise<Like>}
  */
 export const findLikeByHandleAndPostId = async (handle, postId) => {
   let like = {};
@@ -210,7 +223,7 @@ export const findPostAndUpdateCount = async (_id, likeCount, commentCount) => {
 
 /** Finds and removes all likes and comments linked to a particular post
  * @param {string} postId
- * @returns {boolean}
+ * @return {boolean}
  */
 export const findAndDeleteLikeAndComment = async postId => {
   let success = false;
@@ -248,6 +261,9 @@ export const findAndDeleteLikeAndComment = async postId => {
   }
 };
 
+/** Finds notification and marks read as true
+ * @param {string} notificationId
+ */
 export const findNotificationAndUpdateRead = async notificationId => {
   await Notification.updateOne(
     {

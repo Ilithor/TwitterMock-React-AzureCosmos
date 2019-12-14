@@ -1,13 +1,14 @@
 import React from 'react';
-import withStyles from '@material-ui/core/styles/withStyles';
 import dayjs from 'dayjs';
-import PropTypes from 'prop-types';
 import relativeTime from 'dayjs/plugin/relativeTime';
+
+// Components
 import PostContent from './PostContent';
 
 // MUI
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
+import withStyles from '@material-ui/core/styles/withStyles';
 
 const style = {
   card: {
@@ -25,9 +26,12 @@ const style = {
 };
 
 /** View component for displaying an individual post on the site
- * @param {IPostComponentProps} props
+ * @type {React.FunctionComponent}
+ * @param {object} props
+ * @param {object} props.classes
+ * @param {object} props.post
  */
-const Post = ({ classes, post }) => {
+const Post = ({ classes = {}, post }) => {
   dayjs.extend(relativeTime);
   if (!post) {
     return;
@@ -45,29 +49,4 @@ const Post = ({ classes, post }) => {
   );
 };
 
-Post.propTypes = {
-  classes: PropTypes.object,
-  post: PropTypes.object,
-};
-
-/** Component representing an individual post on the page.
- * @param {{post:IPost}} props
- */
 export default withStyles(style)(Post);
-
-/** Props passed to the Post view component
- * @typedef IPostComponentProps
- * @property {IPost} post
- * @property {object} classes
- */
-
-/** Props that represent a post being rendered.
- * @typedef IPost
- * @property {any} body
- * @property {string|Date} createdAt
- * @property {string} userImage
- * @property {string} userHandle
- * @property {number} likeCount
- * @property {number} commentCount
- * @property {string} postId
- */

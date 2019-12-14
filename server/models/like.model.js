@@ -5,12 +5,12 @@ const Schema = mongoose.Schema;
 const LikeSchema = Schema({
   userHandle: {
     type: String,
-    required: true
+    required: true,
   },
   postId: {
     type: String,
-    required: true
-  }
+    required: true,
+  },
 });
 
 const Like = mongoose.model('Like', LikeSchema);

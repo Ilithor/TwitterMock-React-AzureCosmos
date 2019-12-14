@@ -158,6 +158,8 @@ export const getUserDetail = async (req, res) => {
 
 /** Pushes post docs into post array
  * @param {Document[]} post
+ * @param {object} userData
+ * @returns {userData[object]}
  */
 const pushPostIntoArray = (post, userData) => {
   userData.post = [];

@@ -1,7 +1,8 @@
 import Notification from '../models/notification.model';
 
 /** Creates new notification
- * @param {Request} notificationParam 
+ * @param {Request} notificationParam
+ * @return {Promise<UserNotification>}
  */
 export const create = async notificationParam => {
   let dataForNotification = {};

@@ -1,50 +1,49 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
+
+// Components
+import Post from '../components/post/postList';
+import Profile from '../components/profile';
+
+// MUI
 import Grid from '@material-ui/core/Grid';
-import PropTypes from 'prop-types';
-import Post from '../components/Post';
-import Profile from '../components/Profile';
 
 // Redux
 import { connect } from 'react-redux';
 import { getPostList } from '../redux/actions/dataActions';
 
-export class home extends Component {
-  componentDidMount() {
-    this.props.getPostList();
+export const Home = ({ postList, isLoading, getPostList }) => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => getPostList(), []);
+  let recentPostMarkup;
+  if (!isLoading) {
+    recentPostMarkup = postList.map(post => (
+      <Post key={post.postId} post={post} />
+    ));
+  } else {
+    recentPostMarkup = <p>Loading...</p>;
   }
-  render() {
-    const { postList, isLoading } = this.props.data;
-    let recentPostMarkup;
-    if (!isLoading) {
-      recentPostMarkup = postList.map(post => (
-        <Post key={post.postId} post={post} />
-      ));
-    } else {
-      recentPostMarkup = <p>Loading...</p>;
-    }
-    return (
-      <Grid container spacing={10}>
-        <Grid item sm={8} xs={12}>
-          {recentPostMarkup}
-        </Grid>
-        <Grid item sm={4} xs={12}>
-          <Profile />
-        </Grid>
+  return (
+    <Grid container spacing={10}>
+      <Grid item sm={8} xs={12}>
+        {recentPostMarkup}
       </Grid>
-    );
-  }
-}
-
-home.propTypes = {
-  getPostList: PropTypes.func,
-  data: PropTypes.object,
+      <Grid item sm={4} xs={12}>
+        <Profile />
+      </Grid>
+    </Grid>
+  );
 };
 
-const mapStateToProps = state => ({
-  data: state.data,
-});
+const mapStateToProps = state => {
+  const postList = state.data.postList;
+  const isLoading = state.data.isLoading;
+  return {
+    postList,
+    isLoading,
+  };
+};
 
 export default connect(
   mapStateToProps,
   { getPostList }
-)(home);
+)(Home);

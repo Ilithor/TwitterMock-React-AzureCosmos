@@ -4,7 +4,7 @@ import { create } from '../services/notification.service';
 import mongoConnection from '../util/mongo';
 import {
   findNotificationByRecipient,
-  findNotificationAndUpdateRead
+  findNotificationAndUpdateRead,
 } from './find';
 mongoConnection();
 
@@ -28,7 +28,7 @@ export const getNotification = async (req, res) => {
           createdAt: doc.createdAt,
           postId: doc.typeId,
           sender: doc.sender,
-          type: doc.type
+          type: doc.type,
         });
       });
       if (notification.length === 0) {
@@ -81,16 +81,19 @@ export const markNotificationRead = (req, res) => {
 export const deleteNotification = async (req, res) => {
   await Notification.findOneAndDelete({
     type: req.notification.type,
-    typeId: req.notification.typeId
+    typeId: req.notification.typeId,
   });
   return res
     .status(200)
     .json({ message: `${req.notification.type} successfully removed` });
 };
 
+/** Deletes all notifications that matches given postId
+ * @type {RouterHandler}
+ */
 export const deleteAllNotification = async (req, res) => {
   await Notification.deleteMany({
-    postId: req.params.postId
+    postId: req.params.postId,
   });
   return res.status(200).json({ message: 'Post successfully deleted' });
 };

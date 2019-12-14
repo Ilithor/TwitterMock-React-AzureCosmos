@@ -5,6 +5,7 @@ mongoConnection();
 
 /** Creates a new comment
  * @param {Request} commentParam
+ * @return {Promise<NewUserComment> | UserCommentError}
  */
 export const create = async commentParam => {
   let dataForComment = {};
@@ -31,12 +32,13 @@ export const create = async commentParam => {
 
 /** Deletes Comment document
  * @param {Request} commentParam
+ * @return {Promise<UserComment>}
  */
 export const remove = async commentParam => {
   let comment = {};
   comment = await Comment.findOneAndDelete({
     postId: commentParam.params.postId,
-    userHandle: commentParam.user.handle
+    userHandle: commentParam.user.handle,
   });
   return comment;
 };

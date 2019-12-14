@@ -2,9 +2,8 @@ import { create } from '../services/comment.service';
 import {
   findPostById,
   findPostAndUpdateCount,
-  findCommentByHandleAndPostId
+  findCommentByHandleAndPostId,
 } from './find';
-import { runInNewContext } from 'vm';
 import { remove } from '../services/comment.service';
 
 /** Create a comment on a post

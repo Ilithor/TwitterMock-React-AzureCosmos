@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
-// Components
-import Login from '../components/login';
+// Component
+import Register from '../components/register';
 
 // MUI
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -9,7 +9,7 @@ import style from '../style/style';
 
 // Redux
 import { connect } from 'react-redux';
-import { loginUserAction } from '../redux/actions/userActions';
+import { registerUserAction } from '../redux/actions/userActions';
 
 /**
  * @type {React.FunctionComponent}
@@ -18,33 +18,34 @@ import { loginUserAction } from '../redux/actions/userActions';
  * @param {any} props.UI
  * @param {Reac} props.history
  */
-const LoginPage = ({ classes = {}, UI = {}, history, loginUserAction }) => {
+const RegisterPage = ({
+  classes = {},
+  UI = {},
+  history,
+  registerUserAction,
+}) => {
   const [error, setError] = useState({});
   const [editorState, setEditorState] = useState({
     email: '',
     password: '',
+    confirmPassword: '',
+    handle: '',
   });
-  const { email, password } = editorState;
+  const { email, password, confirmPassword, handle } = editorState;
 
   useEffect(() => setError(UI.error), [UI.error]);
 
-  /** Try to log the user in with the current data
-   *
-   * @param {React.ChangeEvent} event
-   */
   const handleSubmit = event => {
     event.preventDefault();
-    const userData = {
+    const newUserData = {
       email,
       password,
+      confirmPassword,
+      handle,
     };
-    loginUserAction(userData, history);
+    registerUserAction(newUserData, history);
   };
 
-  /** Saves editor change to local state
-   *
-   * @param {React.ChangeEvent} event
-   */
   const handleChange = event => {
     const { name, value } = event.target;
     setEditorState({
@@ -53,11 +54,13 @@ const LoginPage = ({ classes = {}, UI = {}, history, loginUserAction }) => {
     });
   };
   return (
-    <Login
+    <Register
       classes={classes}
       error={error}
+      handle={handle}
       email={email}
       password={password}
+      confirmPassword={confirmPassword}
       handleSubmit={handleSubmit}
       handleChange={handleChange}
       isLoading={UI.isLoading}
@@ -76,5 +79,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { loginUserAction }
-)(withStyles(style)(LoginPage));
+  { registerUserAction }
+)(withStyles(style)(RegisterPage));

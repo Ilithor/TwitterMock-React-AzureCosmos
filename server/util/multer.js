@@ -11,7 +11,7 @@ const dUri = new Datauri();
 
 /** Converts provided image into base64
  * @param {Request} req
- * @returns {Datauri}
+ * @return {Datauri}
  */
 export const dataUri = async req => {
   const file = await dUri.format(

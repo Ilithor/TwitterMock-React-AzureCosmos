@@ -1,24 +1,28 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
-import PropTypes from 'prop-types';
-import Like from './like';
+
+// Components
+import Like from '../../like';
 import DeletePost from './DeletePost';
-import CustomButton from '../util/CustomButton';
-import withStyles from '@material-ui/core/styles/withStyles';
+import CustomButton from '../../../util/CustomButton';
 
 // MUI
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import style from '../style/style';
+import withStyles from '@material-ui/core/styles/withStyles';
+import style from '../../../style/style';
 
 // Icons
 import ChatIcon from '@material-ui/icons/Chat';
 
 /** View component for displaying an individual post's content
- * @param {IPostComponentProps} props
+ * @type {React.FunctionComponent}
+ * @param {object} props
+ * @param {object} props.classes
+ * @param {object} props.post
  */
-const PostContent = ({ classes, post }) => {
+const PostContent = ({ classes = {}, post }) => {
   const { userHandle, createdAt, body, postId, likeCount, commentCount } = post;
   return (
     <CardContent className={classes.content}>
@@ -45,29 +49,4 @@ const PostContent = ({ classes, post }) => {
   );
 };
 
-PostContent.propTypes = {
-  classes: PropTypes.object,
-  post: PropTypes.object,
-};
-
-/** Component representing an individual post's content on the page.
- * @param {{post:IPost}} props
- */
 export default withStyles(style)(PostContent);
-
-/** Props passed to the Post view component
- * @typedef IPostComponentProps
- * @property {IPost} post
- * @property {object} classes
- */
-
-/** Props that represent a post being rendered.
- * @typedef IPost
- * @property {any} body
- * @property {string|Date} createdAt
- * @property {string} userImage
- * @property {string} userHandle
- * @property {number} likeCount
- * @property {number} commentCount
- * @property {string} postId
- */

@@ -10,25 +10,25 @@ const UserSchema = Schema({
   handle: {
     type: String,
     unique: true,
-    required: true
+    required: true,
   },
   credential: {
     email: {
       type: String,
       unique: true,
-      required: true
+      required: true,
     },
     password: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   bio: {
     image: String,
     aboutMe: String,
     website: String,
-    location: String
-  }
+    location: String,
+  },
 });
 
 const User = mongoose.model('User', UserSchema);
