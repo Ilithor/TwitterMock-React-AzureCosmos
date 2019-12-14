@@ -22,8 +22,8 @@ import { getUnlikePost } from '../../redux/actions/dataActions';
  */
 export const UnlikeButton = ({ postId, getUnlikePost }) => {
   const [disabled, setDisabled] = useState(false);
-  const handleDisabled = () => setDisabled({ ...disabled, disabled: true });
-  const handleEnabled = () => setDisabled({ ...disabled, disabled: false });
+  const handleDisabled = () => setDisabled(true);
+  const handleEnabled = () => setDisabled(false);
   const unlikePost = () => {
     getUnlikePost(postId);
     handleEnabled();

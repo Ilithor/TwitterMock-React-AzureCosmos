@@ -22,8 +22,8 @@ import { getLikePost } from '../../redux/actions/dataActions';
  */
 export const LikeButton = ({ postId, getLikePost }) => {
   const [disabled, setDisabled] = useState(false);
-  const handleDisabled = () => setDisabled({ ...disabled, disabled: true });
-  const handleEnabled = () => setDisabled({ ...disabled, disabled: false });
+  const handleDisabled = () => setDisabled(true);
+  const handleEnabled = () => setDisabled(false);
   const likePost = () => {
     getLikePost(postId);
     handleEnabled();
