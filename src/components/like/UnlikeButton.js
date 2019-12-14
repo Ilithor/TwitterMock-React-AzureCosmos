@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 // Components
 import CustomButton from '../../util/CustomButton';
@@ -21,10 +21,20 @@ import { getUnlikePost } from '../../redux/actions/dataActions';
  * @param {any} props.getUnlikePost
  */
 export const UnlikeButton = ({ postId, getUnlikePost }) => {
-  const unlikePost = () => getUnlikePost(postId);
+  const [disabled, setDisabled] = useState(false);
+  const handleDisabled = () => setDisabled({ ...disabled, disabled: true });
+  const handleEnabled = () => setDisabled({ ...disabled, disabled: false });
+  const unlikePost = () => {
+    getUnlikePost(postId);
+    handleEnabled();
+  };
 
   return (
-    <CustomButton tip='Undo like' onClick={unlikePost}>
+    <CustomButton
+      tip='Undo like'
+      onClick={(handleDisabled, unlikePost)}
+      disabled={disabled}
+    >
       <FavoriteIcon color='primary' />
     </CustomButton>
   );
