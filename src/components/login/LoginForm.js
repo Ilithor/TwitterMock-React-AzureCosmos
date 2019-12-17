@@ -21,7 +21,7 @@ import style from '../../style/style';
  * @param {React.ChangeEventHandler} props.handleChange
  * @param {boolean} props.isLoading
  */
-const LoginForm = ({
+export const LoginForm = ({
   handleSubmit,
   classes = {},
   error = {},
@@ -80,3 +80,15 @@ const LoginForm = ({
 );
 
 export default withStyles(style)(LoginForm);
+
+/** Various props that control how the user interacts with
+ *  the login form
+ * @typedef ILoginFormComponentProps
+ * @param {object} error
+ * @param {object} classes
+ * @param {string} email
+ * @param {string} password
+ * @param {React.ChangeEventHandler} handleSubmit
+ * @param {React.ChangeEventHandler} handleChange
+ * @param {boolean} isLoading
+ */
