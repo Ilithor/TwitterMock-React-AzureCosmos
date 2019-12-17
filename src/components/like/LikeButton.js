@@ -20,17 +20,24 @@ import { getLikePost } from '../../redux/actions/dataActions';
  * @param {string} props.postId
  * @param {any} props.getLikePost
  */
-export const LikeButton = ({ postId, getLikePost }) => {
-  const likePost = () => getLikePost(postId);
+export const LikeButton = ({ postId, getLikePost, UI = {} }) => {
+  const likePost = () => {
+    getLikePost(postId);
+  };
   return (
-    <CustomButton tip='Like' onClick={likePost}>
+    <CustomButton tip='Like' onClick={likePost} disabled={UI.isLoading}>
       <FavoriteBorder color='primary' />
     </CustomButton>
   );
 };
 
+const mapStateToProps = state => {
+  const UI = state.UI;
+  return { UI };
+};
+
 export default connect(
-  null,
+  mapStateToProps,
   { getLikePost }
 )(withStyles(style)(LikeButton));
 

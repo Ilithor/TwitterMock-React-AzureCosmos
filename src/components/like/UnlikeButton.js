@@ -20,18 +20,25 @@ import { getUnlikePost } from '../../redux/actions/dataActions';
  * @param {string} props.postId
  * @param {any} props.getUnlikePost
  */
-export const UnlikeButton = ({ postId, getUnlikePost }) => {
-  const unlikePost = () => getUnlikePost(postId);
+export const UnlikeButton = ({ postId, getUnlikePost, UI = {} }) => {
+  const unlikePost = () => {
+    getUnlikePost(postId);
+  };
 
   return (
-    <CustomButton tip='Undo like' onClick={unlikePost}>
+    <CustomButton tip='Undo like' onClick={unlikePost} disabled={UI.isLoading}>
       <FavoriteIcon color='primary' />
     </CustomButton>
   );
 };
 
+const mapStateToProps = state => {
+  const UI = state.UI;
+  return { UI };
+};
+
 export default connect(
-  null,
+  mapStateToProps,
   { getUnlikePost }
 )(withStyles(style)(UnlikeButton));
 
