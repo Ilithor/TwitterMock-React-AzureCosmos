@@ -83,3 +83,11 @@ export default connect(
   mapStateToProps,
   mapActionsToProps
 )(withStyles(style)(UserProfileDisplay));
+
+/** View component for displaying the user's profile
+ * @typedef {IUserProfileDisplayComponentProps}
+ * @param {object} classes
+ * @param {string} handle
+ * @param {object} bio
+ * @param {string} createdAt
+ */
