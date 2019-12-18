@@ -23,7 +23,7 @@ import {
 
 /** View component for displaying the user's profile
  * @type {React.FunctionComponent}
- * @param {object} props
+ * @param {IUserProfileDisplayComponentProps} props
  * @param {object} props.classes
  * @param {string} props.handle
  * @param {object} props.bio

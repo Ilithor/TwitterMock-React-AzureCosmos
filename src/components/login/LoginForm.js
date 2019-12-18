@@ -12,7 +12,7 @@ import style from '../../style/style';
 /** Various props that control how the user interacts with
  *  the login form
  * @type {React.FunctionComponent}
- * @param {object} props
+ * @param {ILoginFormComponentProps} props
  * @param {any} props.error
  * @param {object} props.classes
  * @param {string} props.email
