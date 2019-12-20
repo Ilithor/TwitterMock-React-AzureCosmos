@@ -31,12 +31,20 @@ const style = {
  * @param {object} props.classes
  * @param {object} props.post
  */
-const Post = ({ classes = {}, post }) => {
+const Post = ({ classes = {}, post = {} }) => {
   dayjs.extend(relativeTime);
   if (!post) {
     return;
   }
-  const { userImage } = post;
+  const {
+    userImage,
+    userHandle,
+    createdAt,
+    body,
+    postId,
+    likeCount,
+    commentCount,
+  } = post;
   return (
     <Card className={classes.card}>
       <CardMedia
@@ -44,7 +52,15 @@ const Post = ({ classes = {}, post }) => {
         title='Profile image'
         className={classes.image}
       />
-      <PostContent classes={classes} post={post} />
+      <PostContent
+        classes={classes}
+        userHandle={userHandle}
+        createdAt={createdAt}
+        body={body}
+        postId={postId}
+        likeCount={likeCount}
+        commentCount={commentCount}
+      />
     </Card>
   );
 };

@@ -7,6 +7,8 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import withStyles from '@material-ui/core/styles/withStyles';
+import style from '../../../style/style';
 
 /** Displays the dialog box to edit the user's details
  * @type {React.FunctionComponent}
@@ -79,4 +81,4 @@ const EditDetailsDisplay = ({
   </Dialog>
 );
 
-export default EditDetailsDisplay;
+export default withStyles(style)(EditDetailsDisplay);
