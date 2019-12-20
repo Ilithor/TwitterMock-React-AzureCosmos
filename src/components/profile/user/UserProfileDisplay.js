@@ -21,14 +21,6 @@ import {
   logoutUserAction,
 } from '../../../redux/actions/userActions';
 
-/** View component for displaying the user's profile
- * @type {React.FunctionComponent}
- * @param {IUserProfileDisplayComponentProps} props
- * @param {object} props.classes
- * @param {string} props.handle
- * @param {object} props.bio
- * @param {string} props.createdAt
- */
 const UserProfileDisplay = ({ classes = {}, handle, bio = {}, createdAt }) => {
   const handleEditPhoto = () => {
     const fileInput = document.getElementById('imageUpload');
