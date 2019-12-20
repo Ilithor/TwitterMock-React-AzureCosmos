@@ -9,6 +9,9 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import withStyles from '@material-ui/core/styles/withStyles';
 import style from '../../style/style';
 
+/** View component for displaying the login form to the user
+ * @type {ILoginFormComponentProps}
+ */
 export const LoginForm = ({
   handleSubmit,
   classes = {},
