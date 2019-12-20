@@ -9,18 +9,6 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import withStyles from '@material-ui/core/styles/withStyles';
 import style from '../../style/style';
 
-/** Various props that control how the user interacts with
- *  the login form
- * @type {React.FunctionComponent}
- * @param {ILoginFormComponentProps} props
- * @param {any} props.error
- * @param {object} props.classes
- * @param {string} props.email
- * @param {string} props.password
- * @param {React.ChangeEventHandler} props.handleSubmit
- * @param {React.ChangeEventHandler} props.handleChange
- * @param {boolean} props.isLoading
- */
 export const LoginForm = ({
   handleSubmit,
   classes = {},
