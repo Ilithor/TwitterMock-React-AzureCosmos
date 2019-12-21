@@ -9,19 +9,10 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import withStyles from '@material-ui/core/styles/withStyles';
 import style from '../../style/style';
 
-/** Various props that control how the user interacts with
- *  the login form
- * @type {React.FunctionComponent}
- * @param {object} props
- * @param {any} props.error
- * @param {object} props.classes
- * @param {string} props.email
- * @param {string} props.password
- * @param {React.ChangeEventHandler} props.handleSubmit
- * @param {React.ChangeEventHandler} props.handleChange
- * @param {boolean} props.isLoading
+/** View component for displaying the login form to the user
+ * @type {ILoginFormComponentProps}
  */
-const LoginForm = ({
+export const LoginForm = ({
   handleSubmit,
   classes = {},
   error = {},
@@ -80,3 +71,15 @@ const LoginForm = ({
 );
 
 export default withStyles(style)(LoginForm);
+
+/** Various props that control how the user interacts with
+ *  the login form
+ * @typedef ILoginFormComponentProps
+ * @param {object} error
+ * @param {object} classes
+ * @param {string} email
+ * @param {string} password
+ * @param {React.ChangeEventHandler} handleSubmit
+ * @param {React.ChangeEventHandler} handleChange
+ * @param {boolean} isLoading
+ */

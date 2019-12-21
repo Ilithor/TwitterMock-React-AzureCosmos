@@ -22,12 +22,7 @@ import {
 } from '../../../redux/actions/userActions';
 
 /** View component for displaying the user's profile
- * @type {React.FunctionComponent}
- * @param {object} props
- * @param {object} props.classes
- * @param {string} props.handle
- * @param {object} props.bio
- * @param {string} props.createdAt
+ * @type {IUserProfileDisplayComponentProps}
  */
 const UserProfileDisplay = ({ classes = {}, handle, bio = {}, createdAt }) => {
   const handleEditPhoto = () => {
@@ -83,3 +78,11 @@ export default connect(
   mapStateToProps,
   mapActionsToProps
 )(withStyles(style)(UserProfileDisplay));
+
+/** View component for displaying the user's profile
+ * @typedef {IUserProfileDisplayComponentProps}
+ * @param {object} classes
+ * @param {string} handle
+ * @param {object} bio
+ * @param {string} createdAt
+ */
