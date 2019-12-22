@@ -89,6 +89,22 @@ const style = theme => ({
     left: '90%',
     top: '10%',
   },
+  submitButton: {
+    position: 'relative',
+  },
+  progressSpinner: {
+    position: 'absolute',
+  },
+  closeButton: {
+    position: 'absolute',
+    left: '90%',
+    top: '10%',
+  },
+  createButton: {
+    position: 'relative',
+    left: '35%',
+    marginBottom: 20,
+  },
 });
 
 export default style;
