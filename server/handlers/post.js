@@ -73,7 +73,7 @@ export const createPost = async (req, res, next) => {
           .status(201)
           .json({ message: `document ${doc._id} created successfully` });
       } else {
-        return res.status(400).json({ error: doc.body });
+        return res.status(400).json({ error: doc });
       }
     })
     .catch(err => {
@@ -103,11 +103,11 @@ export const deletePost = async (req, res, next) => {
             if (success) {
               next();
             } else {
-              res.status(500).json({ error: 'Something went wrong' });
+              return res.status(500).json({ error: 'Something went wrong' });
             }
           });
         } else {
-          res.status(500).json({ error: 'Post not found' });
+          return res.status(500).json({ error: 'Post not found' });
         }
       }
     })
