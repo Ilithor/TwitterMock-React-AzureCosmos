@@ -1,5 +1,6 @@
 import {
   SET_POSTS,
+  NEW_POST,
   LIKE_POST,
   UNLIKE_POST,
   LOADING_DATA,
@@ -25,24 +26,34 @@ export default function(state = initialState, action) {
         postList: action.payload,
         isLoading: false,
       };
+    case NEW_POST:
+      return {
+        ...state,
+        postList: [action.payload, ...state.postList],
+      };
     case LIKE_POST:
     case UNLIKE_POST:
-      let index = state.postList.findIndex(
+      let likeIndex = state.postList.findIndex(
         post => post.postId === action.payload.postId
       );
-      if (index < 0) {
+      if (likeIndex < 0) {
         return state;
       }
-      state.postList[index] = {
-        ...state.postList[index],
+      state.postList[likeIndex] = {
+        ...state.postList[likeIndex],
         ...action.payload,
       };
       return {
         ...state,
       };
     case DELETE_POST:
-      index = state.postList.findIndex(post => post.postId === action.payload);
-      state.postList.splice(index, 1);
+      let deleteIndex = state.postList.findIndex(
+        post => post.postId === action.payload
+      );
+      if (deleteIndex < 0) {
+        return state;
+      }
+      state.postList.splice(deleteIndex, 1);
       return {
         ...state,
       };
