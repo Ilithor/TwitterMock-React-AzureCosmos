@@ -38,7 +38,7 @@ const EditDetails = ({
   const { aboutMe, website, location } = editorState;
 
   const handleOpen = () => {
-    setOpen({ ...open, open: true });
+    setOpen(true);
     setEditorState({
       aboutMe: bio.aboutMe,
       website: bio.website,
@@ -46,7 +46,7 @@ const EditDetails = ({
     });
   };
 
-  const handleClose = () => setOpen({ ...open, open: false });
+  const handleClose = () => setOpen(false);
 
   const handleChange = event => {
     const { name, value } = event.target;
