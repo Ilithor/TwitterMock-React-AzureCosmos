@@ -9,7 +9,6 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 
 // Icons
-import AddIcon from '@material-ui/icons/Add';
 import HomeIcon from '@material-ui/icons/Home';
 import Notifications from '@material-ui/icons/Notifications';
 import KeyboardReturn from '@material-ui/icons/KeyboardReturn';
@@ -59,21 +58,6 @@ const ButtonRegister = ({ isLoggedIn }) => {
   );
 };
 
-/** Displays either create new post button or empty div
- * @param {object} props
- * @param {boolean} props.isLoggedIn
- */
-const ButtonPost = ({ isLoggedIn }) => {
-  if (isLoggedIn) {
-    return (
-      <CustomButton tip='New Post'>
-        <AddIcon />
-      </CustomButton>
-    );
-  }
-  return <div></div>;
-};
-
 /** Displays either notification button or empty div
  * @param {object} props
  * @param {boolean} props.isLoggedIn
@@ -102,7 +86,6 @@ const Navbar = ({ isLoggedIn = false, logoutUserAction }) => (
           <HomeIcon />
         </CustomButton>
       </Link>
-      <ButtonPost isLoggedIn={isLoggedIn} />
       <ButtonNotification isLoggedIn={isLoggedIn} />
       <ButtonLogInOut isLoggedIn={isLoggedIn} logout={logoutUserAction} />
       <ButtonRegister isLoggedIn={isLoggedIn} />
