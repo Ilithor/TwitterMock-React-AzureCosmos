@@ -1,30 +1,62 @@
 import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 // Components
 import Post from '../components/post/postList';
 import Profile from '../components/profile';
+import NewPost from '../components/post/newPost';
 
 // MUI
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
+import withStyles from '@material-ui/core/styles/withStyles';
+import style from '../style/style';
+
+// Icons
+import AddIcon from '@material-ui/icons/Add';
 
 // Redux
 import { connect } from 'react-redux';
 import { getPostList } from '../redux/actions/dataActions';
 
-export const Home = ({ postList, isLoading, getPostList }) => {
+export const Home = ({
+  classes,
+  postList,
+  isLoading,
+  getPostList,
+  isAuthenticated,
+}) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => getPostList(), []);
   let recentPostMarkup;
   if (!isLoading) {
     recentPostMarkup = postList.map(post => (
-      <Post key={post.postId} post={post} />
+      <Post key={`post-${post.postId}`} post={post} />
     ));
   } else {
     recentPostMarkup = <p>Loading...</p>;
   }
+  let createPostMarkup;
+  if (!isAuthenticated) {
+    createPostMarkup = (
+      <Link to='/login'>
+        <Button
+          variant='contained'
+          className={classes.createButton}
+          color='primary'
+        >
+          <AddIcon className={classes.extendedIcon} />
+          Create Post
+        </Button>
+      </Link>
+    );
+  } else {
+    createPostMarkup = <NewPost />;
+  }
   return (
     <Grid container spacing={10}>
       <Grid item sm={8} xs={12}>
+        {createPostMarkup}
         {recentPostMarkup}
       </Grid>
       <Grid item sm={4} xs={12}>
@@ -37,13 +69,15 @@ export const Home = ({ postList, isLoading, getPostList }) => {
 const mapStateToProps = state => {
   const postList = state.data.postList;
   const isLoading = state.data.isLoading;
+  const isAuthenticated = !!state.user.authenticated;
   return {
     postList,
     isLoading,
+    isAuthenticated,
   };
 };
 
 export default connect(
   mapStateToProps,
   { getPostList }
-)(Home);
+)(withStyles(style)(Home));
