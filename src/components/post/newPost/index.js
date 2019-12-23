@@ -17,31 +17,25 @@ import { newUserPost } from '../../../redux/actions/dataActions';
 
 const NewPost = ({ classes = {}, UI = {}, newUserPost }) => {
   const [open, setOpen] = useState(false);
-  const [error, setError] = useState({});
-  const [postState, setPostState] = useState({
-    body: '',
-  });
+  const [postBody, setPostBody] = useState('');
 
-  const { body } = postState;
+  const body = postBody;
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const handleChange = event => {
-    const { name, value } = event.target;
-    setPostState({
-      [name]: value,
-    });
+    const { value } = event.target;
+    setPostBody(value);
   };
   const handleSubmit = event => {
     event.preventDefault();
     const userPost = { body };
     newUserPost(userPost);
   };
-  useEffect(() => setError(UI.error), [UI.error]);
   useEffect(() => {
     if (!UI.error.body && !UI.isLoading) {
-      setPostState({ body: '' });
+      setPostBody('');
       handleClose();
     }
   }, [UI.error, UI.isLoading]);
@@ -61,7 +55,7 @@ const NewPost = ({ classes = {}, UI = {}, newUserPost }) => {
         handleClose={handleClose}
         classes={classes}
         handleSubmit={handleSubmit}
-        error={error}
+        error={UI.error}
         handleChange={handleChange}
         isLoading={UI.isLoading}
       />
@@ -69,8 +63,7 @@ const NewPost = ({ classes = {}, UI = {}, newUserPost }) => {
   );
 };
 
-const mapStateToProps = state => {
-  const UI = state.UI;
+const mapStateToProps = ({ UI }) => {
   return { UI };
 };
 
