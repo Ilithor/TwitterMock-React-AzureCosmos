@@ -36,27 +36,28 @@ export const Home = ({
   } else {
     recentPostMarkup = <p>Loading...</p>;
   }
-  let createPostMarkup;
-  if (!isAuthenticated) {
-    createPostMarkup = (
-      <Link to='/login'>
-        <Button
-          variant='contained'
-          className={classes.createButton}
-          color='primary'
-        >
-          <AddIcon className={classes.extendedIcon} />
-          Create Post
-        </Button>
-      </Link>
-    );
-  } else {
-    createPostMarkup = <NewPost />;
-  }
+  const makeCreatePostEditor = () => {
+    if (isAuthenticated) {
+      return <NewPost />;
+    } else {
+      return (
+        <Link to='/login'>
+          <Button
+            variant='contained'
+            className={classes.createButton}
+            color='primary'
+          >
+            <AddIcon className={classes.extendedIcon} />
+            Create Post
+          </Button>
+        </Link>
+      );
+    }
+  };
   return (
     <Grid container spacing={10}>
       <Grid item sm={8} xs={12}>
-        {createPostMarkup}
+        {makeCreatePostEditor()}
         {recentPostMarkup}
       </Grid>
       <Grid item sm={4} xs={12}>
