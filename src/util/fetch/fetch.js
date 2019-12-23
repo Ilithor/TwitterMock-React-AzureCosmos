@@ -34,10 +34,10 @@ export const post = (endpoint, data) =>
       });
   });
 
-  /** Fetch endpoint and delete post
-   * @param {Endpoint} endpoint 
-   */
-export const remove = endpoint => {
+/** Fetch endpoint and delete post
+ * @param {Endpoint} endpoint
+ */
+export const remove = endpoint =>
   new Promise((resolve, reject) => {
     axios
       .delete(endpoint)
@@ -47,7 +47,6 @@ export const remove = endpoint => {
         reject(error);
       });
   });
-};
 
 /**
  * @typedef Endpoint
