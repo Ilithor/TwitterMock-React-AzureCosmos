@@ -24,13 +24,14 @@ const DeletePost = ({
   userHandle,
   isAuthenticated,
   handle,
+  deleteUserPost,
 }) => {
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen({ ...open, open: true });
-  const handleClose = () => setOpen({ ...open, open: false });
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   const deletePost = () => {
     deleteUserPost(postId);
-    setOpen({ ...open, open: false });
+    setOpen(false);
   };
   if (isAuthenticated && userHandle === handle) {
     return (
