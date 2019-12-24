@@ -39,20 +39,19 @@ export const Home = ({
   const makeCreatePostEditor = () => {
     if (isAuthenticated) {
       return <NewPost />;
-    } else {
-      return (
-        <Link to='/login'>
-          <Button
-            variant='contained'
-            className={classes.createButton}
-            color='primary'
-          >
-            <AddIcon className={classes.extendedIcon} />
-            Create Post
-          </Button>
-        </Link>
-      );
     }
+    return (
+      <Link to='/login'>
+        <Button
+          variant='contained'
+          className={classes.createButton}
+          color='primary'
+        >
+          <AddIcon className={classes.extendedIcon} />
+          Create Post
+        </Button>
+      </Link>
+    );
   };
   return (
     <Grid container spacing={10}>
