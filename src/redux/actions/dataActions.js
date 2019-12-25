@@ -2,12 +2,16 @@ import {
   LOADING_UI,
   CLEAR_ERRORS,
   SET_POSTS,
+  NEW_POST,
   LIKE_POST,
   UNLIKE_POST,
   DELETE_POST,
+  SET_ERRORS,
+  LOADING_DATA,
 } from '../types';
 import {
   fetchPostList,
+  createPost,
   likePost,
   unlikePost,
   deletePost,
@@ -23,6 +27,29 @@ export const getPostList = () => dispatch => {
     })
     .catch(err => {
       dispatch({ type: SET_POSTS, payload: [] });
+    });
+};
+
+/** Creates a new post
+ * @param {object} newPost
+ */
+export const newUserPost = newPost => dispatch => {
+  dispatch({ type: LOADING_UI });
+  createPost(newPost)
+    .then(res => {
+      dispatch({ type: LOADING_DATA });
+      dispatch({
+        type: NEW_POST,
+        payload: res.data,
+      });
+      dispatch(getPostList());
+      dispatch({ type: CLEAR_ERRORS });
+    })
+    .catch(err => {
+      dispatch({
+        type: SET_ERRORS,
+        payload: err.response.data.error,
+      });
     });
 };
 
@@ -55,9 +82,13 @@ export const getUnlikePost = postId => dispatch => {
 };
 
 export const deleteUserPost = postId => dispatch => {
+  dispatch({ type: LOADING_UI });
   deletePost(postId)
     .then(() => {
+      dispatch({ type: LOADING_DATA });
       dispatch({ type: DELETE_POST, payload: postId });
+      dispatch(getPostList());
+      dispatch({ type: CLEAR_ERRORS });
     })
     .catch(console.log);
 };

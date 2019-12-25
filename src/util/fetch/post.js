@@ -13,7 +13,7 @@ export const fetchPostList = () => get(endpoints.post);
 /** Creates a new post
  * @returns {Promise<import("axios").AxiosResponse>}
  */
-export const createPost = () => post(endpoints.post);
+export const createPost = newPost => post(endpoints.post, newPost);
 
 /** Likes a post
  * @returns {Promise<import("axios").AxiosResponse>}
