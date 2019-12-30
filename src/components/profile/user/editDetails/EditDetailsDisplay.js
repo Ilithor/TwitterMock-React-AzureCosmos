@@ -1,14 +1,16 @@
 import React from 'react';
 
+// Components
+import EditDetailsForm from './EditDetailsForm';
+
 // MUI
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import withStyles from '@material-ui/core/styles/withStyles';
-import style from '../../../style/style';
+import style from '../../../../style/style';
 
 /** Displays the dialog box to edit the user's details
  * @type {React.FunctionComponent}
@@ -35,40 +37,13 @@ const EditDetailsDisplay = ({
   <Dialog open={open} onClose={handleClose} fullWidth maxWidth='sm'>
     <DialogTitle>Edit your details</DialogTitle>
     <DialogContent>
-      <form>
-        <TextField
-          name='aboutMe'
-          type='text'
-          label='AboutMe'
-          multiline
-          rows='3'
-          placeholder='A short bio about yourself'
-          className={classes.textField}
-          value={aboutMe}
-          onChange={handleChange}
-          fullWidth
-        />
-        <TextField
-          name='website'
-          type='text'
-          label='Website'
-          placeholder='Your personal website'
-          className={classes.textField}
-          value={website}
-          onChange={handleChange}
-          fullWidth
-        />
-        <TextField
-          name='location'
-          type='text'
-          label='Location'
-          placeholder='Where you live'
-          className={classes.textField}
-          value={location}
-          onChange={handleChange}
-          fullWidth
-        />
-      </form>
+      <EditDetailsForm
+        classes={classes}
+        aboutMe={aboutMe}
+        handleChange={handleChange}
+        website={website}
+        location={location}
+      />
     </DialogContent>
     <DialogActions>
       <Button onClick={handleClose} color='primary'>

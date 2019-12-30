@@ -1,15 +1,15 @@
 import React from 'react';
 
 // Components
-import CustomButton from '../../../util/CustomButton';
+import CustomButton from '../../../../util/CustomButton';
 import ImageWrapper from './ImageWrapper';
 import ProfileDetails from './ProfileDetails';
-import EditDetails from './EditDetails';
+import EditDetails from '../editDetails';
 
 // MUI
 import Paper from '@material-ui/core/Paper';
 import withStyles from '@material-ui/core/styles/withStyles';
-import style from '../../../style/style';
+import style from '../../../../style/style';
 
 // Icons
 import KeyboardReturn from '@material-ui/icons/KeyboardReturn';
@@ -19,7 +19,7 @@ import { connect } from 'react-redux';
 import {
   uploadImageAction,
   logoutUserAction,
-} from '../../../redux/actions/userActions';
+} from '../../../../redux/actions/userActions';
 
 /** View component for displaying the user's profile
  * @type {IUserProfileDisplayComponentProps}
