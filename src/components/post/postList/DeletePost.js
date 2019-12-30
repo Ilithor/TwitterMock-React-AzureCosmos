@@ -2,14 +2,11 @@ import React, { Fragment, useState } from 'react';
 
 // Components
 import CustomButton from '../../../util/CustomButton';
+import DeletePostDialog from './DeletePostDialog';
 
 // MUI
 import withStyles from '@material-ui/core/styles/withStyles';
 import style from '../../../style/style';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogActions from '@material-ui/core/DialogActions';
 
 // Icons
 import DeleteOutline from '@material-ui/icons/DeleteOutline';
@@ -43,17 +40,11 @@ const DeletePost = ({
         >
           <DeleteOutline color='secondary' />
         </CustomButton>
-        <Dialog open={open} onClose={handleClose} fullWidth maxWidth='sm'>
-          <DialogTitle>Are you sure you want to delete this post?</DialogTitle>
-          <DialogActions>
-            <Button onClick={handleClose} color='primary'>
-              Cancel
-            </Button>
-            <Button onClick={deletePost} color='secondary'>
-              Delete
-            </Button>
-          </DialogActions>
-        </Dialog>
+        <DeletePostDialog
+          open={open}
+          handleClose={handleClose}
+          deletePost={deletePost}
+        />
       </Fragment>
     );
   } else {
