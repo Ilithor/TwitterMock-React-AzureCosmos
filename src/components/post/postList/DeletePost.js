@@ -1,20 +1,22 @@
-import React, { Fragment, useState } from 'react';
+import React from 'react';
 
 // Components
-import CustomButton from '../../../util/CustomButton';
 import DeletePostDialog from './DeletePostDialog';
 
 // MUI
 import withStyles from '@material-ui/core/styles/withStyles';
 import style from '../../../style/style';
 
-// Icons
-import DeleteOutline from '@material-ui/icons/DeleteOutline';
-
 // Redux
 import { connect } from 'react-redux';
-import { deleteUserPost } from '../../../redux/actions/dataActions';
 
+/** Displays the delete post button when authenticated
+ * @type {React.FunctionComponent}
+ * @param {object} props
+ * @param {object} props.classes
+ * @param {string} props.postId
+ * @param {any} props.deleteUserPost
+ */
 const DeletePost = ({
   classes = {},
   postId,
@@ -23,30 +25,8 @@ const DeletePost = ({
   handle,
   deleteUserPost,
 }) => {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-  const deletePost = () => {
-    deleteUserPost(postId);
-    setOpen(false);
-  };
   if (isAuthenticated && userHandle === handle) {
-    return (
-      <Fragment>
-        <CustomButton
-          tip='Delete Post'
-          onClick={handleOpen}
-          btnClassName={classes.deleteButton}
-        >
-          <DeleteOutline color='secondary' />
-        </CustomButton>
-        <DeletePostDialog
-          open={open}
-          handleClose={handleClose}
-          deletePost={deletePost}
-        />
-      </Fragment>
-    );
+    return <DeletePostDialog classes={classes} postId={postId} />;
   } else {
     return <div />;
   }
@@ -61,7 +41,4 @@ const mapStateToProps = ({ user }) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  { deleteUserPost }
-)(withStyles(style)(DeletePost));
+export default connect(mapStateToProps)(withStyles(style)(DeletePost));
