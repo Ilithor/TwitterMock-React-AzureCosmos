@@ -2,9 +2,9 @@ import React from 'react';
 
 // Components
 import CustomButton from '../../../util/CustomButton';
-import ImageWrapper from './ImageWrapper';
-import ProfileDetails from './ProfileDetails';
-import EditDetails from './EditDetails';
+import ImageWrapper from './profile/ImageWrapper';
+import ProfileDetails from './profile/ProfileDetails';
+import EditDetails from './editDetails';
 
 // MUI
 import Paper from '@material-ui/core/Paper';

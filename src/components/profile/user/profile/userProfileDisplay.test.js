@@ -4,8 +4,8 @@ import { mount } from 'enzyme';
 import ConnectedUserProfileDisplay, {
   // eslint-disable-next-line no-unused-vars
   IUserProfileDisplayComponentProps,
-} from './UserProfileDisplay';
-import TestWithReduxStore from '../../../fixtures/component/TestWithReduxStore';
+} from '.';
+import TestWithReduxStore from '../../../../fixtures/component/TestWithReduxStore';
 
 jest.mock('axios');
 
