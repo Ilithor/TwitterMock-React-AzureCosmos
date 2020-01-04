@@ -57,6 +57,7 @@ const Post = ({ classes = {}, post = {} }) => {
         userHandle={userHandle}
         createdAt={createdAt}
         body={body}
+        userImage={userImage}
         postId={postId}
         likeCount={likeCount}
         commentCount={commentCount}
