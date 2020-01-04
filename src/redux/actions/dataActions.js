@@ -1,7 +1,9 @@
 import {
   LOADING_UI,
+  STOP_LOADING_UI,
   CLEAR_ERRORS,
   SET_POSTS,
+  SET_POST,
   NEW_POST,
   LIKE_POST,
   UNLIKE_POST,
@@ -11,6 +13,7 @@ import {
 } from '../types';
 import {
   fetchPostList,
+  fetchPost,
   createPost,
   likePost,
   unlikePost,
@@ -51,6 +54,22 @@ export const newUserPost = newPost => dispatch => {
         payload: err.response.data.error,
       });
     });
+};
+
+/** Retrieves one post
+ * @param {string} postId
+ */
+export const getPost = postId => dispatch => {
+  dispatch({ type: LOADING_UI });
+  fetchPost(postId)
+    .then(res => {
+      dispatch({
+        type: SET_POST,
+        payload: res.data,
+      });
+      dispatch({ type: STOP_LOADING_UI });
+    })
+    .catch(console.log);
 };
 
 /** Like a post
