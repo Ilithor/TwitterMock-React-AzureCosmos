@@ -120,19 +120,13 @@ export const findNotificationByRecipient = async recipient => {
  * @return {Promise<UserComment> | NotificationNotFound}
  */
 export const findCommentByPostId = async _id => {
-  let comment = [];
-  let error = {};
-  comment = await Comment.find({
+  let commentList = [];
+  commentList = await Comment.find({
     postId: _id,
   })
     .sort({ createdAt: -1 })
     .read(mongo.ReadPreference.NEAREST);
-  if (comment.length === 0) {
-    error.comment = 'No comments found';
-    return error;
-  } else {
-    return comment;
-  }
+  return commentList;
 };
 
 /** Find all likes by userHandle
