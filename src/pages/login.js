@@ -65,13 +65,8 @@ const LoginPage = ({ classes = {}, UI = {}, history, loginUserAction }) => {
   );
 };
 
-const mapStateToProps = state => {
-  const user = state.user;
-  const UI = state.UI;
-  return {
-    user,
-    UI,
-  };
+const mapStateToProps = ({ UI }) => {
+  return { UI };
 };
 
 export default connect(
