@@ -1,7 +1,8 @@
 import {
-  LOADING_UI,
+  IS_UI_LOADING,
   CLEAR_ERRORS,
   SET_POSTS,
+  SET_POST,
   NEW_POST,
   LIKE_POST,
   UNLIKE_POST,
@@ -11,6 +12,7 @@ import {
 } from '../types';
 import {
   fetchPostList,
+  fetchPost,
   createPost,
   likePost,
   unlikePost,
@@ -34,30 +36,37 @@ export const getPostList = () => dispatch => {
  * @param {object} newPost
  */
 export const newUserPost = newPost => dispatch => {
-  dispatch({ type: LOADING_UI });
+  dispatch({ type: IS_UI_LOADING, payload: true });
   createPost(newPost)
     .then(res => {
       dispatch({ type: LOADING_DATA });
-      dispatch({
-        type: NEW_POST,
-        payload: res.data,
-      });
+      dispatch({ type: NEW_POST, payload: res.data });
       dispatch(getPostList());
       dispatch({ type: CLEAR_ERRORS });
     })
     .catch(err => {
-      dispatch({
-        type: SET_ERRORS,
-        payload: err.response.data.error,
-      });
+      dispatch({ type: SET_ERRORS, payload: err.response.data.error });
     });
+};
+
+/** Retrieves one post
+ * @param {string} postId
+ */
+export const getPost = postId => dispatch => {
+  dispatch({ type: IS_UI_LOADING, payload: true });
+  fetchPost(postId)
+    .then(res => {
+      dispatch({ type: SET_POST, payload: res.data });
+      dispatch({ type: IS_UI_LOADING, payload: false });
+    })
+    .catch(console.log);
 };
 
 /** Like a post
  * @param {string} postId
  */
 export const getLikePost = postId => dispatch => {
-  dispatch({ type: LOADING_UI });
+  dispatch({ type: IS_UI_LOADING, payload: true });
   likePost(postId)
     .then(res => {
       dispatch({ type: LIKE_POST, payload: { ...res.data, postId } });
@@ -71,7 +80,7 @@ export const getLikePost = postId => dispatch => {
  * @param {string} postId
  */
 export const getUnlikePost = postId => dispatch => {
-  dispatch({ type: LOADING_UI });
+  dispatch({ type: IS_UI_LOADING, payload: true });
   unlikePost(postId)
     .then(res => {
       dispatch({ type: UNLIKE_POST, payload: { ...res.data, postId } });
@@ -82,7 +91,7 @@ export const getUnlikePost = postId => dispatch => {
 };
 
 export const deleteUserPost = postId => dispatch => {
-  dispatch({ type: LOADING_UI });
+  dispatch({ type: IS_UI_LOADING, payload: true });
   deletePost(postId)
     .then(() => {
       dispatch({ type: LOADING_DATA });

@@ -38,21 +38,14 @@ export const getPostList = (req, res, next) => {
  * @type {RouteHandler}
  */
 export const getPost = async (req, res) => {
-  let postData = {};
   await findPostById(req.params.postId).then(returnPost => {
     if (returnPost.post) {
       return res.status(404).json({ error: returnPost.post });
     }
-    postData.post = returnPost;
-    postData.comment = [];
+    const postData = { ...returnPost._doc };
     findCommentByPostId(returnPost._id)
-      .then(post => {
-        if (post.comment) {
-          return res.status(404).json({ error: post.comment });
-        }
-        post.forEach(doc => {
-          postData.comment.push(doc);
-        });
+      .then(data => {
+        postData.commentList = [...data];
         return res.json(postData);
       })
       .catch(err => {

@@ -6,7 +6,7 @@ export const LOADING_USER = 'LOADING_USER';
 
 // UI reducer types
 export const SET_ERRORS = 'SET_ERRORS';
-export const LOADING_UI = 'LOADING_UI';
+export const IS_UI_LOADING = 'IS_UI_LOADING';
 export const CLEAR_ERRORS = 'CLEAR_ERRORS';
 export const LOADING_DATA = 'LOADING_DATA';
 

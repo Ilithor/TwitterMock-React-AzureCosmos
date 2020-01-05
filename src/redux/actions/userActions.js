@@ -2,7 +2,7 @@ import {
   SET_USER,
   SET_ERRORS,
   CLEAR_ERRORS,
-  LOADING_UI,
+  IS_UI_LOADING,
   SET_UNAUTHENTICATED,
   LOADING_USER,
 } from '../types';
@@ -20,7 +20,7 @@ import {
  * @param {History} history
  */
 export const loginUserAction = (userData, history) => dispatch => {
-  dispatch({ type: LOADING_UI });
+  dispatch({ type: IS_UI_LOADING, payload: true });
   loginUser(userData)
     .then(res => {
       setAuthorizationHeader(res.data.token);
@@ -58,7 +58,7 @@ export const getUserDataAction = handle => dispatch => {
  * @param {HIstory} history
  */
 export const registerUserAction = (newUserData, history) => dispatch => {
-  dispatch({ type: LOADING_UI });
+  dispatch({ type: IS_UI_LOADING, payload: true });
   registerUser(newUserData)
     .then(res => {
       setAuthorizationHeader(res.data.token);

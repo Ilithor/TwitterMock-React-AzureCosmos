@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 import Like from '../../like';
 import DeletePost from './DeletePost';
 import CustomButton from '../../../util/CustomButton';
+import PostDialog from './postDialog';
 
 // MUI
 import CardContent from '@material-ui/core/CardContent';
@@ -32,6 +33,7 @@ const PostContent = ({
   userHandle,
   createdAt,
   body,
+  userImage,
   postId,
   likeCount,
   commentCount,
@@ -56,6 +58,11 @@ const PostContent = ({
       <ChatIcon color='primary' />
     </CustomButton>
     <span>{commentCount} Comments</span>
+    <PostDialog
+      classes={classes}
+      postId={postId}
+      userHandle={userHandle}
+    />
   </CardContent>
 );
 
