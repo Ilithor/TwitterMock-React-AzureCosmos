@@ -3,10 +3,6 @@ import React from 'react';
 // Components
 import CustomButton from '../../util/CustomButton';
 
-// MUI
-import withStyles from '@material-ui/core/styles/withStyles';
-import style from '../../style/style';
-
 // Icons
 import FavoriteIcon from '@material-ui/icons/Favorite';
 
@@ -36,7 +32,7 @@ const mapStateToProps = ({ UI }) => ({ UI });
 export default connect(
   mapStateToProps,
   { getUnlikePost }
-)(withStyles(style)(UnlikeButton));
+)(UnlikeButton);
 
 /**
  * @typedef IUnlikeButtonComponentProps

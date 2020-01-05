@@ -3,10 +3,6 @@ import React from 'react';
 // Components
 import CustomButton from '../../util/CustomButton';
 
-// MUI
-import withStyles from '@material-ui/core/styles/withStyles';
-import style from '../../style/style';
-
 // Icons
 import { FavoriteBorder } from '@material-ui/icons';
 
@@ -35,7 +31,7 @@ const mapStateToProps = ({ UI }) => ({ UI });
 export default connect(
   mapStateToProps,
   { getLikePost }
-)(withStyles(style)(LikeButton));
+)(LikeButton);
 
 /**
  * @typedef ILikeButtonComponentProps
