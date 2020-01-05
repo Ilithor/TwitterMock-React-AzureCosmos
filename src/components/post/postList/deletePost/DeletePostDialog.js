@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 // Components
-import CustomButton from '../../../util/CustomButton';
+import CustomButton from '../../../../util/CustomButton';
 
 // MUI
 import Dialog from '@material-ui/core/Dialog';
@@ -9,14 +9,14 @@ import Button from '@material-ui/core/Button';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
 import withStyles from '@material-ui/core/styles/withStyles';
-import style from '../../../style/style';
+import style from '../../../../style/style';
 
 // Icons
 import DeleteOutline from '@material-ui/icons/DeleteOutline';
 
 // React
 import { connect } from 'react-redux';
-import { deleteUserPost } from '../../../redux/actions/dataActions';
+import { deleteUserPost } from '../../../../redux/actions/dataActions';
 
 /** Displays the dialog box to delete the user's post
  * @type {React.FunctionComponent}

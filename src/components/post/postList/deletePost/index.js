@@ -5,7 +5,7 @@ import DeletePostDialog from './DeletePostDialog';
 
 // MUI
 import withStyles from '@material-ui/core/styles/withStyles';
-import style from '../../../style/style';
+import style from '../../../../style/style';
 
 // Redux
 import { connect } from 'react-redux';

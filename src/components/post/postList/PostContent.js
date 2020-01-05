@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 
 // Components
 import Like from '../../like';
-import DeletePost from './DeletePost';
+import DeletePost from './deletePost';
 import CustomButton from '../../../util/CustomButton';
 import PostDialog from './postDialog';
 
