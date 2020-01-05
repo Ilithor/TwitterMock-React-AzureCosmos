@@ -63,9 +63,7 @@ const NewPost = ({ classes = {}, UI = {}, newUserPost }) => {
   );
 };
 
-const mapStateToProps = ({ UI }) => {
-  return { UI };
-};
+const mapStateToProps = ({ UI }) => ({ UI });
 
 export default connect(
   mapStateToProps,

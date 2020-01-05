@@ -65,10 +65,7 @@ const LoginPage = ({ classes = {}, UI = {}, history, loginUserAction }) => {
   );
 };
 
-const mapStateToProps = ({ UI }) => {
-  return { UI };
-};
-
+const mapStateToProps = ({ UI }) => ({ UI });
 export default connect(
   mapStateToProps,
   { loginUserAction }

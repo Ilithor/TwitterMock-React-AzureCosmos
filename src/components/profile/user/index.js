@@ -72,12 +72,7 @@ const UserProfileDisplay = ({
   );
 };
 
-const mapStateToProps = state => {
-  const user = state.user;
-  return {
-    user,
-  };
-};
+const mapStateToProps = ({ user }) => ({ user });
 
 const mapActionsToProps = {
   uploadImageAction,
