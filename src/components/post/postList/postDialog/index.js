@@ -45,7 +45,11 @@ const PostDialog = ({
   const handleClose = () => setOpen(false);
   const makeDialogContentEditor = () => {
     if (UI.isLoading) {
-      return <CircularProgress size={120} />;
+      return (
+        <div className={classes.spinnerDiv}>
+          <CircularProgress size={200} thickness={2} />
+        </div>
+      );
     }
     return (
       <PostDialogContent
@@ -70,7 +74,7 @@ const PostDialog = ({
         <CustomButton
           tip='Close'
           onClick={handleClose}
-          tipClassName={classes.closeButton}
+          tipClassName={classes.closeButtonPostDialog}
         >
           <CloseIcon />
         </CustomButton>
