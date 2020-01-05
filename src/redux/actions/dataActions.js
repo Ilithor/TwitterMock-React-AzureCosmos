@@ -70,6 +70,7 @@ export const getLikePost = postId => dispatch => {
   likePost(postId)
     .then(res => {
       dispatch({ type: LIKE_POST, payload: { ...res.data, postId } });
+      dispatch(getPost(postId));
       dispatch(getPostList());
       dispatch({ type: CLEAR_ERRORS });
     })
@@ -84,6 +85,7 @@ export const getUnlikePost = postId => dispatch => {
   unlikePost(postId)
     .then(res => {
       dispatch({ type: UNLIKE_POST, payload: { ...res.data, postId } });
+      dispatch(getPost(postId));
       dispatch(getPostList());
       dispatch({ type: CLEAR_ERRORS });
     })
