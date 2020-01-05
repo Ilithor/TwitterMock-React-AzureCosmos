@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 import Like from '../../like';
 import DeletePost from './DeletePost';
 import CustomButton from '../../../util/CustomButton';
-import PostDialog from './postDialog/PostDialog';
+import PostDialog from './postDialog';
 
 // MUI
 import CardContent from '@material-ui/core/CardContent';

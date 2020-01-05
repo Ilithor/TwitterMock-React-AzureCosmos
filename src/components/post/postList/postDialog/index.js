@@ -46,17 +46,16 @@ const PostDialog = ({
   const makeDialogContentEditor = () => {
     if (UI.isLoading) {
       return <CircularProgress size={120} />;
-    } else {
-      return (
-        <PostDialogContent
-          classes={classes}
-          userHandle={userHandle}
-          userImage={post.userImage}
-          createdAt={post.createdAt}
-          body={post.body}
-        />
-      );
     }
+    return (
+      <PostDialogContent
+        classes={classes}
+        userHandle={userHandle}
+        userImage={post.userImage}
+        createdAt={post.createdAt}
+        body={post.body}
+      />
+    );
   };
   return (
     <Fragment>
