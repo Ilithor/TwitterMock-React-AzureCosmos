@@ -31,11 +31,7 @@ export const LikeButton = ({ postId, getLikePost, UI = {} }) => {
   );
 };
 
-const mapStateToProps = state => {
-  const UI = state.UI;
-  return { UI };
-};
-
+const mapStateToProps = ({ UI }) => ({ UI });
 export default connect(
   mapStateToProps,
   { getLikePost }

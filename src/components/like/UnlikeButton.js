@@ -32,11 +32,7 @@ export const UnlikeButton = ({ postId, getUnlikePost, UI = {} }) => {
   );
 };
 
-const mapStateToProps = state => {
-  const UI = state.UI;
-  return { UI };
-};
-
+const mapStateToProps = ({ UI }) => ({ UI });
 export default connect(
   mapStateToProps,
   { getUnlikePost }

@@ -68,15 +68,7 @@ const RegisterPage = ({
   );
 };
 
-const mapStateToProps = state => {
-  const user = state.user;
-  const UI = state.UI;
-  return {
-    user,
-    UI,
-  };
-};
-
+const mapStateToProps = ({ UI }) => ({ UI });
 export default connect(
   mapStateToProps,
   { registerUserAction }

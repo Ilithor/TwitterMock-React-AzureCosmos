@@ -20,7 +20,7 @@ import { connect } from 'react-redux';
 import { getPostList } from '../redux/actions/dataActions';
 
 export const Home = ({
-  classes,
+  classes = {},
   postList,
   isLoading,
   getPostList,
@@ -28,14 +28,14 @@ export const Home = ({
 }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => getPostList(), []);
-  let recentPostMarkup;
-  if (!isLoading) {
-    recentPostMarkup = postList.map(post => (
-      <Post key={`post-${post.postId}`} post={post} />
-    ));
-  } else {
-    recentPostMarkup = <p>Loading...</p>;
-  }
+  const makeRecentPostMarkup = () => {
+    if (!isLoading) {
+      return postList.map(post => (
+        <Post key={`post-${post.postId}`} post={post} />
+      ));
+    }
+    return <p>Loading...</p>;
+  };
   const makeCreatePostEditor = () => {
     if (isAuthenticated) {
       return <NewPost />;
@@ -57,7 +57,7 @@ export const Home = ({
     <Grid container spacing={10}>
       <Grid item sm={8} xs={12}>
         {makeCreatePostEditor()}
-        {recentPostMarkup}
+        {makeRecentPostMarkup()}
       </Grid>
       <Grid item sm={4} xs={12}>
         <Profile />

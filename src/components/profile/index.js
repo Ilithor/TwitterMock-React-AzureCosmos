@@ -30,11 +30,6 @@ const Profile = ({ classes = {}, user: { isLoading, authenticated } }) => {
   }
 };
 
-const mapStateToProps = state => {
-  const user = state.user;
-  return {
-    user,
-  };
-};
+const mapStateToProps = ({ user }) => ({ user });
 
 export default connect(mapStateToProps)(withStyles(style)(Profile));
