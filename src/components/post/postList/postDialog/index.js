@@ -58,6 +58,9 @@ const PostDialog = ({
         userImage={post.userImage}
         createdAt={post.createdAt}
         body={post.body}
+        postId={post._id}
+        likeCount={post.likeCount}
+        commentCount={post.commentCount}
       />
     );
   };
