@@ -61,6 +61,7 @@ const PostDialog = ({
         postId={post._id}
         likeCount={post.likeCount}
         commentCount={post.commentCount}
+        commentList={post.commentList}
       />
     );
   };
