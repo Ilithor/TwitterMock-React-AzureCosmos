@@ -123,7 +123,7 @@ export const findCommentByPostId = _id => {
   return Comment.find({
     postId: _id,
   })
-    .sort({ createdAt: -1 })
+    .sort({ createdAt: 1 })
     .read(mongo.ReadPreference.NEAREST);
 };
 
