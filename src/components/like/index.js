@@ -34,11 +34,11 @@ const Like = ({ isAuthenticated, postId, likeList }) => {
 
   if (!isAuthenticated) {
     return (
-      <CustomButton tip='Like'>
-        <Link to='/login'>
+      <Link to='/login'>
+        <CustomButton tip='Like'>
           <FavoriteBorder color='primary' />
-        </Link>
-      </CustomButton>
+        </CustomButton>
+      </Link>
     );
   }
   if (alreadyLiked()) {

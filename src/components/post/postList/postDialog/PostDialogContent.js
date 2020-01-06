@@ -2,11 +2,18 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 
+// Components
+import Like from '../../../like';
+import CustomButton from '../../../../util/CustomButton';
+
 // MUI
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import style from '../../../../style/style';
+
+// Icons
+import ChatIcon from '@material-ui/icons/Chat';
 
 /** View component for displaying the content in a post's dialog box
  * @type {React.FunctionComponent}
@@ -23,6 +30,9 @@ const PostDialogContent = ({
   userImage,
   createdAt,
   body,
+  postId,
+  likeCount,
+  commentCount,
 }) => (
   <Grid container spacing={5}>
     <Grid item sm={5}>
@@ -43,6 +53,12 @@ const PostDialogContent = ({
       </Typography>
       <hr className={classes.separator} />
       <Typography variant='body1'>{body}</Typography>
+      <Like postId={postId} />
+      <span>{likeCount} likes</span>
+      <CustomButton tip='comments'>
+        <ChatIcon color='primary' />
+      </CustomButton>
+      <span>{commentCount} comments</span>
     </Grid>
   </Grid>
 );

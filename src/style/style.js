@@ -118,6 +118,19 @@ const style = theme => ({
   dialogContent: {
     padding: 20,
   },
+  expandButton: {
+    position: 'absolute',
+    left: '90%',
+  },
+  spinnerDiv: {
+    textAlign: 'center',
+    marginTop: 50,
+    marginBottom: 50,
+  },
+  closeButtonPostDialog: {
+    position: 'absolute',
+    left: '90%',
+  },
 });
 
 export default style;
