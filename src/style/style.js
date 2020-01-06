@@ -131,6 +131,26 @@ const style = theme => ({
     position: 'absolute',
     left: '90%',
   },
+  visibleSeparator: {
+    width: '100%',
+    borderBottom: '1px solid rgba(0,0,0,0,1)',
+    marginBottom: 20,
+  },
+  invisibleSeparator: {
+    border: 'none',
+    width: '100%',
+    marginBottom: 20,
+  },
+  commentImage: {
+    maxWidth: '100%',
+    height: 100,
+    objectFit: 'cover',
+    borderRadius: '50%',
+    marginLeft: 10,
+  },
+  commentContent: {
+    marginLeft: 20,
+  },
 });
 
 export default style;
