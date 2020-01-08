@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 // Components
 import Like from '../../../like';
 import Comment from '../../../comment';
-import CommentForm from '../../../comment/CommentForm';
+import CommentForm from '../../../comment/newComment';
 import CustomButton from '../../../../util/CustomButton';
 
 // MUI
