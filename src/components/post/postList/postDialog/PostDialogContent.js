@@ -36,19 +36,12 @@ const PostDialogContent = ({
   commentCount,
   commentList = [],
 }) => {
-  const createVisibleSeparator = () => {
-    if (commentList.length !== 0) {
-      return <hr className={classes.visibleSeparator} />;
-    }
-  };
   const createRecentCommentMarkup = () => {
-    return commentList.map((comment, index) => (
+    return commentList.map(comment => (
       <Comment
         classes={classes}
         key={`comment-${comment._id}`}
         comment={comment}
-        index={index}
-        length={commentList.length}
       />
     ));
   };
@@ -79,7 +72,6 @@ const PostDialogContent = ({
         </CustomButton>
         <span>{commentCount} comments</span>
       </Grid>
-      {createVisibleSeparator()}
       {createRecentCommentMarkup()}
     </Grid>
   );
