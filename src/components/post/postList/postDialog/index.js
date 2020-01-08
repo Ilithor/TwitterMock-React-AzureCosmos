@@ -17,7 +17,7 @@ import UnfoldMore from '@material-ui/icons/UnfoldMore';
 
 // Redux
 import { connect } from 'react-redux';
-import { getPost } from '../../../../redux/actions/dataActions';
+import { getPost, clearError } from '../../../../redux/actions/dataActions';
 
 /** View component for displaying an individual post's content in a dialog box
  * @type {React.FunctionComponent}
@@ -36,13 +36,17 @@ const PostDialog = ({
   UI = {},
   post = {},
   getPost,
+  clearError,
 }) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => {
     getPost(postId);
     setOpen(true);
   };
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    clearError();
+  };
   const makeDialogContentEditor = () => {
     if (UI.isLoading) {
       return (
@@ -96,7 +100,12 @@ const mapStateToProps = state => {
   return { UI, post };
 };
 
+const mapActionsToProps = {
+  getPost,
+  clearError,
+};
+
 export default connect(
   mapStateToProps,
-  { getPost }
+  mapActionsToProps
 )(withStyles(style)(PostDialog));

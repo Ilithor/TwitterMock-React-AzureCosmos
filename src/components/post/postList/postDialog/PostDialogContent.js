@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 // Components
 import Like from '../../../like';
 import Comment from '../../../comment';
+import CommentForm from '../../../comment/CommentForm';
 import CustomButton from '../../../../util/CustomButton';
 
 // MUI
@@ -72,6 +73,7 @@ const PostDialogContent = ({
         </CustomButton>
         <span>{commentCount} comments</span>
       </Grid>
+      <CommentForm postId={postId} />
       {createRecentCommentMarkup()}
     </Grid>
   );
