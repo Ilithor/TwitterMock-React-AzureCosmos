@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 
 // Components
 import Like from '../../../like';
+import Comment from '../../../comment';
 import CustomButton from '../../../../util/CustomButton';
 
 // MUI
@@ -33,34 +34,47 @@ const PostDialogContent = ({
   postId,
   likeCount,
   commentCount,
-}) => (
-  <Grid container spacing={5}>
-    <Grid item sm={5}>
-      <img src={userImage} alt='Profile' className={classes.profileImage} />
+  commentList = [],
+}) => {
+  const createRecentCommentMarkup = () => {
+    return commentList.map(comment => (
+      <Comment
+        classes={classes}
+        key={`comment-${comment._id}`}
+        comment={comment}
+      />
+    ));
+  };
+  return (
+    <Grid container spacing={5}>
+      <Grid item sm={5}>
+        <img src={userImage} alt='Profile' className={classes.profileImage} />
+      </Grid>
+      <Grid item sm={7}>
+        <Typography
+          component={Link}
+          color='primary'
+          variant='h5'
+          to={`/users/${userHandle}`}
+        >
+          @{userHandle}
+        </Typography>
+        <hr className={classes.separator} />
+        <Typography variant='body2' color='textSecondary'>
+          {dayjs(createdAt).format('h:mm a, MMMM DD YYYY')}
+        </Typography>
+        <hr className={classes.separator} />
+        <Typography variant='body1'>{body}</Typography>
+        <Like postId={postId} />
+        <span>{likeCount} likes</span>
+        <CustomButton tip='comments'>
+          <ChatIcon color='primary' />
+        </CustomButton>
+        <span>{commentCount} comments</span>
+      </Grid>
+      {createRecentCommentMarkup()}
     </Grid>
-    <Grid item sm={7}>
-      <Typography
-        component={Link}
-        color='primary'
-        variant='h5'
-        to={`/users/${userHandle}`}
-      >
-        @{userHandle}
-      </Typography>
-      <hr className={classes.separator} />
-      <Typography variant='body2' color='textSecondary'>
-        {dayjs(createdAt).format('h:mm a, MMMM DD YYYY')}
-      </Typography>
-      <hr className={classes.separator} />
-      <Typography variant='body1'>{body}</Typography>
-      <Like postId={postId} />
-      <span>{likeCount} likes</span>
-      <CustomButton tip='comments'>
-        <ChatIcon color='primary' />
-      </CustomButton>
-      <span>{commentCount} comments</span>
-    </Grid>
-  </Grid>
-);
+  );
+};
 
 export default withStyles(style)(PostDialogContent);

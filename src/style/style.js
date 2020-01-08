@@ -131,6 +131,24 @@ const style = theme => ({
     position: 'absolute',
     left: '90%',
   },
+  commentImage: {
+    minWidth: 100,
+    height: 100,
+    objectFit: 'cover',
+    borderRadius: '50%',
+    marginLeft: 10,
+    marginTop: 25,
+  },
+  commentContent: {
+    marginLeft: 20,
+  },
+  commentCard: {
+    display: 'flex',
+    flexDirection: 'row',
+    width: 600,
+    border: '1px solid rgba(0, 0, 0, 0.5)',
+    marginBottom: 1,
+  },
 });
 
 export default style;
