@@ -5,6 +5,7 @@ import {
   SET_POST,
   NEW_POST,
   LIKE_POST,
+  COMMENT_POST,
   UNLIKE_POST,
   DELETE_POST,
   SET_ERRORS,
@@ -15,6 +16,7 @@ import {
   fetchPost,
   createPost,
   likePost,
+  commentPost,
   unlikePost,
   deletePost,
 } from '../../util/fetch/post';
@@ -42,7 +44,7 @@ export const newUserPost = newPost => dispatch => {
       dispatch({ type: LOADING_DATA });
       dispatch({ type: NEW_POST, payload: res.data });
       dispatch(getPostList());
-      dispatch({ type: CLEAR_ERRORS });
+      dispatch(clearError());
     })
     .catch(err => {
       dispatch({ type: SET_ERRORS, payload: err.response.data.error });
@@ -72,7 +74,7 @@ export const getLikePost = postId => dispatch => {
       dispatch({ type: LIKE_POST, payload: { ...res.data, postId } });
       dispatch(getPost(postId));
       dispatch(getPostList());
-      dispatch({ type: CLEAR_ERRORS });
+      dispatch(clearError());
     })
     .catch(console.log);
 };
@@ -87,9 +89,23 @@ export const getUnlikePost = postId => dispatch => {
       dispatch({ type: UNLIKE_POST, payload: { ...res.data, postId } });
       dispatch(getPost(postId));
       dispatch(getPostList());
-      dispatch({ type: CLEAR_ERRORS });
+      dispatch(clearError());
     })
     .catch(console.log);
+};
+
+export const getCommentPost = (postId, commentData) => dispatch => {
+  dispatch({ type: IS_UI_LOADING, payload: true });
+  commentPost(postId, commentData)
+    .then(res => {
+      dispatch({ type: COMMENT_POST, payload: res.data });
+      dispatch(getPost(postId));
+      dispatch(getPostList());
+      dispatch(clearError());
+    })
+    .catch(err => {
+      dispatch({ type: SET_ERRORS, payload: err.response.data.error });
+    });
 };
 
 export const deleteUserPost = postId => dispatch => {
@@ -99,7 +115,11 @@ export const deleteUserPost = postId => dispatch => {
       dispatch({ type: LOADING_DATA });
       dispatch({ type: DELETE_POST, payload: postId });
       dispatch(getPostList());
-      dispatch({ type: CLEAR_ERRORS });
+      dispatch(clearError());
     })
     .catch(console.log);
+};
+
+export const clearError = () => dispatch => {
+  dispatch({ type: CLEAR_ERRORS });
 };

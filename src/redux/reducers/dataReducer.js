@@ -6,6 +6,7 @@ import {
   UNLIKE_POST,
   LOADING_DATA,
   DELETE_POST,
+  COMMENT_POST,
 } from '../types';
 
 const initialState = {
@@ -51,6 +52,14 @@ export default function(state = initialState, action) {
       };
       return {
         ...state,
+      };
+    case COMMENT_POST:
+      return {
+        ...state,
+        post: {
+          ...state.post,
+          commentList: [...state.post.commentList, action.payload],
+        },
       };
     case DELETE_POST:
       let deleteIndex = state.postList.findIndex(

@@ -30,6 +30,12 @@ export const likePost = postId => get(endpoints.post + postId + '/like');
  */
 export const unlikePost = postId => get(endpoints.post + postId + '/unlike');
 
+/** Comment on post
+ * @returns {Promise<import("axios").AxiosResponse>}
+ */
+export const commentPost = (postId, commentData) =>
+  post(endpoints.post + postId + '/comment', commentData);
+
 /** Deletes a post
  * @returns {Promise<import("axios").AxiosResponse>}
  */
