@@ -13,8 +13,7 @@ const CommentForm = ({ classes = {}, postId, UI, getCommentPost }) => {
   const [body, setBody] = useState('');
 
   const handleChange = event => {
-    const { value } = event.target;
-    setBody(value);
+    setBody(event.target.value);
   };
 
   const handleSubmit = event => {
@@ -35,7 +34,7 @@ const CommentForm = ({ classes = {}, postId, UI, getCommentPost }) => {
           name='body'
           type='text'
           label='Comment on post'
-          error={UI.error.comment ? true : false}
+          error={!!UI.error.comment}
           helperText={UI.error.comment}
           value={body}
           onChange={handleChange}
