@@ -1,3 +1,5 @@
+import { merge } from 'lodash';
+
 import {
   SET_POST,
   SET_POSTS,
@@ -6,6 +8,7 @@ import {
   UNLIKE_POST,
   LOADING_DATA,
   DELETE_POST,
+  COMMENT_POST,
 } from '../types';
 
 const initialState = {
@@ -52,6 +55,8 @@ export default function(state = initialState, action) {
       return {
         ...state,
       };
+    case COMMENT_POST:
+      return merge({}, state, { commentList: [action.payload] });
     case DELETE_POST:
       let deleteIndex = state.postList.findIndex(
         post => post.postId === action.payload

@@ -15,7 +15,7 @@ const Comment = ({ classes = {}, comment = {} }) => (
     <CardMedia
       className={classes.commentImage}
       image={comment.userImage}
-      title='comment'
+      title='Comment'
     />
     <CardContent>
       <Typography
