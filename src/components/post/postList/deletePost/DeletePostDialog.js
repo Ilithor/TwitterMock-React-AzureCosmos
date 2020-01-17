@@ -9,7 +9,7 @@ import Button from '@material-ui/core/Button';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
 import withStyles from '@material-ui/core/styles/withStyles';
-import style from '../../../../style/style';
+import style from '../../../../style';
 
 // Icons
 import DeleteOutline from '@material-ui/icons/DeleteOutline';

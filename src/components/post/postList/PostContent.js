@@ -12,7 +12,7 @@ import PostDialog from './postDialog';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
-import style from '../../../style/style';
+import style from '../../../style';
 
 // Icons
 import ChatIcon from '@material-ui/icons/Chat';

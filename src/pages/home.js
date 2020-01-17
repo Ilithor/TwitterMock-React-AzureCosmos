@@ -10,7 +10,7 @@ import NewPost from '../components/post/newPost';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import withStyles from '@material-ui/core/styles/withStyles';
-import style from '../style/style';
+import style from '../style';
 
 // Icons
 import AddIcon from '@material-ui/icons/Add';

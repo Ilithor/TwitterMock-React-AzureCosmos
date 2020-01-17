@@ -9,7 +9,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import withStyles from '@material-ui/core/styles/withStyles';
-import style from '../../../../style/style';
+import style from '../../../../style';
 
 // Icons
 import CloseIcon from '@material-ui/icons/Close';

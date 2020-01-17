@@ -6,7 +6,7 @@ import DefaultProfileDisplay from './default';
 
 // MUI
 import withStyles from '@material-ui/core/styles/withStyles';
-import style from '../../style/style';
+import style from '../../style';
 
 // Redux
 import { connect } from 'react-redux';

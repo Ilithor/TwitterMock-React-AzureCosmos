@@ -3,7 +3,7 @@ import React from 'react';
 // MUI
 import TextField from '@material-ui/core/TextField';
 import withStyles from '@material-ui/core/styles/withStyles';
-import style from '../../../../style/style';
+import style from '../../../../style';
 
 /** Displays the edit form to edit the user's details
  * @type {React.FunctionComponent}
