@@ -144,8 +144,8 @@ export const getUserDetail = async (req, res) => {
       findLikeByHandle(handle)
         .then(async data => {
           userData.like = data;
-          findPostByHandle(handle).then(async data => {
-            res.json(await pushPostIntoArray(data, userData));
+          await findPostByHandle(handle).then(async post => {
+            res.json(await pushPostIntoArray(post, userData));
           });
         })
         .catch(err => {
