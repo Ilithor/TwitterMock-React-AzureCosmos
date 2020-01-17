@@ -11,13 +11,18 @@ import Grid from '@material-ui/core/Grid';
 import { connect } from 'react-redux';
 import { getUserPostAction } from '../redux/actions/userActions';
 import { getUserData } from '../util/fetch/user';
+import { getPostList } from '../redux/actions/dataActions';
 
-const User = ({ match, data, getUserPostAction }) => {
+const User = ({ match, data, getUserPostAction, getPostList }) => {
   const [profile, setProfile] = useState(null);
   const [postList, setPostList] = useState(null);
   const handle = match.params.handle;
   useEffect(() => {
     getProfileData(handle);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  useEffect(() => {
+    getPostList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   useEffect(() => {
@@ -63,7 +68,11 @@ const User = ({ match, data, getUserPostAction }) => {
 
 const mapStateToProps = ({ data }) => ({ data });
 
+const mapActionsToProps = {
+  getUserPostAction,
+  getPostList,
+};
 export default connect(
   mapStateToProps,
-  { getUserPostAction }
+  mapActionsToProps
 )(User);
