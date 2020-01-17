@@ -42,7 +42,7 @@ const PostContent = ({
     <Typography
       variant='h5'
       component={Link}
-      to={`/user/${userHandle}`}
+      to={`/${userHandle}`}
       color='primary'
     >
       {userHandle}

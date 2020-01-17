@@ -24,7 +24,7 @@ const ProfileDetails = ({ handle, bio = {}, createdAt }) => (
   <div className='profile-details'>
     <MuiLink
       component={Link}
-      to={`/user/${handle}`}
+      to={`/${handle}`}
       color='primary'
       variant='h5'
     >
