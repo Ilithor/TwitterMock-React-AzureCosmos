@@ -1,8 +1,23 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.css';
 import jwtDecode from 'jwt-decode';
 import axios from 'axios';
+
+// Pages
+import home from './pages/home';
+import login from './pages/login';
+import signup from './pages/register';
+import user from './pages/user';
+
+// Components
+import Navbar from './components/Navbar';
+import AuthRoute from './util/AuthRoute';
+
+// MUI
+import deepPurple from '@material-ui/core/colors/deepPurple';
+import { ThemeProvider } from '@material-ui/core/styles';
+import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
 
 // Redux
 import { Provider } from 'react-redux';
@@ -12,20 +27,6 @@ import {
   logoutUserAction,
   getUserDataAction,
 } from './redux/actions/userActions';
-
-// Components
-import Navbar from './components/Navbar';
-import AuthRoute from './util/AuthRoute';
-
-// Pages
-import home from './pages/home';
-import login from './pages/login';
-import signup from './pages/register';
-
-// MUI
-import deepPurple from '@material-ui/core/colors/deepPurple';
-import { ThemeProvider } from '@material-ui/core/styles';
-import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
 
 const theme = createMuiTheme({
   palette: {
@@ -48,25 +49,22 @@ if (token && handle) {
   }
 }
 
-class App extends Component {
-  render() {
-    return (
-      <ThemeProvider theme={theme}>
-        <Provider store={store}>
-          <Router>
-            <Navbar />
-            <div className='container'>
-              <Switch>
-                <Route exact path='/' component={home} />
-                <AuthRoute exact path='/login' component={login} />
-                <AuthRoute exact path='/signup' component={signup} />
-              </Switch>
-            </div>
-          </Router>
-        </Provider>
-      </ThemeProvider>
-    );
-  }
-}
+const App = () => (
+  <ThemeProvider theme={theme}>
+    <Provider store={store}>
+      <Router>
+        <Navbar />
+        <div className='container'>
+          <Switch>
+            <Route exact path='/' component={home} />
+            <AuthRoute exact path='/login' component={login} />
+            <AuthRoute exact path='/signup' component={signup} />
+            <Route exact path='/:handle' component={user} />
+          </Switch>
+        </div>
+      </Router>
+    </Provider>
+  </ThemeProvider>
+);
 
 export default App;
