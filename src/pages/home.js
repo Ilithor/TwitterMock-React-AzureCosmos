@@ -18,16 +18,20 @@ import AddIcon from '@material-ui/icons/Add';
 // Redux
 import { connect } from 'react-redux';
 import { getPostList } from '../redux/actions/dataActions';
+import { getUserDataAction } from '../redux/actions/userActions';
 
 export const Home = ({
   classes = {},
   postList,
   isLoading,
   getPostList,
+  getUserDataAction,
   isAuthenticated,
 }) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => getPostList(), []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => getUserDataAction(localStorage.Handle), []);
   const makeRecentPostMarkup = () => {
     if (!isLoading) {
       return postList.map(post => (
@@ -77,7 +81,12 @@ const mapStateToProps = state => {
   };
 };
 
+const mapActionsToProps = {
+  getPostList,
+  getUserDataAction,
+};
+
 export default connect(
   mapStateToProps,
-  { getPostList }
+  mapActionsToProps
 )(withStyles(style)(Home));
