@@ -25,16 +25,13 @@ export const registerUser = userData => post(endpoints.register, userData);
 /** Retrieves user data using handle
  * @returns {Promise<import("axios").AxiosResponse>}
  */
-export const getUserData = handle => {
-  return get(endpoints.userData + `/${handle}`);
-};
+export const getUserData = handle => get(endpoints.userData + `/${handle}`);
 
 /** Retrieves likes made by user
  * @returns {Promise<import("axios").AxiosResponse}
  */
-export const getLikeList = handle => {
-  return get(endpoints.userData + `/${handle}/like`);
-};
+export const getLikeList = handle =>
+  get(endpoints.userData + `/${handle}/like`);
 
 /** Attempts to upload user image
  * @returns {Promise<import("axios").AxiosResponse>}
