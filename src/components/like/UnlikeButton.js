@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 
 // Components
 import CustomButton from '../../util/CustomButton';
@@ -15,20 +15,32 @@ import { getUnlikePost } from '../../redux/actions/dataActions';
  * @param {object} props
  * @param {string} props.postId
  * @param {any} props.getUnlikePost
+ * @param {object} props.UI
  */
 export const UnlikeButton = ({ postId, getUnlikePost, UI = {} }) => {
+  const makeCall = useRef(false);
   const unlikePost = () => {
+    if (!!makeCall.current) return;
+    makeCall.current = true;
     getUnlikePost(postId);
+    setTimeout(() => {
+      makeCall.current = false;
+    }, 3000);
   };
 
   return (
-    <CustomButton tip='Undo like' onClick={unlikePost} disabled={UI.isLoading}>
+    <CustomButton
+      tip='Undo like'
+      onClick={unlikePost}
+      disabled={!!UI.isLoading || !!makeCall.current}
+    >
       <FavoriteIcon color='primary' />
     </CustomButton>
   );
 };
 
 const mapStateToProps = ({ UI }) => ({ UI });
+
 export default connect(
   mapStateToProps,
   { getUnlikePost }
@@ -38,4 +50,5 @@ export default connect(
  * @typedef IUnlikeButtonComponentProps
  * @param {string} postId
  * @param {any} getUnlikePost
+ * @param {object} UI
  */

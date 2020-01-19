@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 
 // Components
 import CustomButton from '../../util/CustomButton';
@@ -15,19 +15,32 @@ import { getLikePost } from '../../redux/actions/dataActions';
  * @param {object} props
  * @param {string} props.postId
  * @param {any} props.getLikePost
+ * @param {object} props.UI
  */
 export const LikeButton = ({ postId, getLikePost, UI = {} }) => {
+  const makeCall = useRef(false);
   const likePost = () => {
+    if (!!makeCall.current) return;
+    makeCall.current = true;
     getLikePost(postId);
+    setTimeout(() => {
+      makeCall.current = false;
+    }, 3000);
   };
+
   return (
-    <CustomButton tip='Like' onClick={likePost} disabled={UI.isLoading}>
+    <CustomButton
+      tip='Like'
+      onClick={likePost}
+      disabled={!!UI.isLoading || !!makeCall.current}
+    >
       <FavoriteBorder color='primary' />
     </CustomButton>
   );
 };
 
 const mapStateToProps = ({ UI }) => ({ UI });
+
 export default connect(
   mapStateToProps,
   { getLikePost }
@@ -37,4 +50,5 @@ export default connect(
  * @typedef ILikeButtonComponentProps
  * @param {string} postId
  * @param {any} getLikePost
+ * @param {object} UI
  */
