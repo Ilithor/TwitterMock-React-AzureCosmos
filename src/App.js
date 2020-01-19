@@ -9,6 +9,7 @@ import home from './pages/home';
 import login from './pages/login';
 import signup from './pages/register';
 import user from './pages/user';
+import { NotificationPage } from './pages/notification';
 
 // Components
 import Navbar from './components/Navbar';
@@ -57,9 +58,10 @@ const App = () => (
         <div className='container'>
           <Switch>
             <Route exact path='/' component={home} />
-            <AuthRoute path='/login' component={login} />
-            <AuthRoute path='/signup' component={signup} />
+            <Route path='/login' component={login} />
+            <Route path='/signup' component={signup} />
             <Route path='/u/:handle' component={user} />
+            <AuthRoute path='/notification' component={NotificationPage} />
           </Switch>
         </div>
       </Router>

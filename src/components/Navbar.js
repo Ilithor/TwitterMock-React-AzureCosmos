@@ -7,13 +7,7 @@ import CustomButton from '../util/CustomButton';
 // MUI
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-
-// Icons
-import HomeIcon from '@material-ui/icons/Home';
-import Notifications from '@material-ui/icons/Notifications';
-import KeyboardReturn from '@material-ui/icons/KeyboardReturn';
-import LockOpenIcon from '@material-ui/icons/LockOpen';
-import AssignmentIcon from '@material-ui/icons/Assignment';
+import * as Icon from '@material-ui/icons';
 
 // Redux
 import { connect } from 'react-redux';
@@ -28,14 +22,14 @@ const ButtonLogInOut = ({ isLoggedIn, logout }) => {
   if (isLoggedIn) {
     return (
       <CustomButton tip='Logout' onClick={logout}>
-        <KeyboardReturn />
+        <Icon.KeyboardReturn />
       </CustomButton>
     );
   }
   return (
     <Link to='/login'>
       <CustomButton tip='Login'>
-        <LockOpenIcon />
+        <Icon.LockOpen />
       </CustomButton>
     </Link>
   );
@@ -52,7 +46,7 @@ const ButtonRegister = ({ isLoggedIn }) => {
   return (
     <Link to='/signup'>
       <CustomButton tip='Register'>
-        <AssignmentIcon />
+        <Icon.Assignment />
       </CustomButton>
     </Link>
   );
@@ -65,9 +59,11 @@ const ButtonRegister = ({ isLoggedIn }) => {
 const ButtonNotification = ({ isLoggedIn }) => {
   if (isLoggedIn) {
     return (
-      <CustomButton tip='Notifications'>
-        <Notifications />
-      </CustomButton>
+      <Link to='/notification'>
+        <CustomButton tip='Notifications'>
+          <Icon.Notifications />
+        </CustomButton>
+      </Link>
     );
   }
   return <div></div>;
@@ -83,7 +79,7 @@ const Navbar = ({ isLoggedIn = false, logoutUserAction }) => (
     <Toolbar className='nav-container'>
       <Link to='/'>
         <CustomButton tip='Home'>
-          <HomeIcon />
+          <Icon.Home />
         </CustomButton>
       </Link>
       <ButtonNotification isLoggedIn={isLoggedIn} />
