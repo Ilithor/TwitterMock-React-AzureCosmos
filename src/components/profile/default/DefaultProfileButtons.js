@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 // MUI
 import Button from '@material-ui/core/Button';
 import withStyles from '@material-ui/core/styles/withStyles';
-import style from '../../../style/style';
+import style from '../../../style';
 
 /** Displays the default buttons when no user found
  * @type {React.FunctionComponent}

@@ -5,6 +5,8 @@ import {
   IS_UI_LOADING,
   SET_UNAUTHENTICATED,
   LOADING_USER,
+  LOADING_DATA,
+  SET_POSTS,
 } from '../types';
 import axios from 'axios';
 import {
@@ -51,6 +53,20 @@ export const getUserDataAction = handle => dispatch => {
       });
     })
     .catch(console.log);
+};
+
+/** Retrieves user posts and saves to redux store
+ * @param {string} handle
+ */
+export const getUserPostAction = handle => dispatch => {
+  dispatch({ type: LOADING_DATA });
+  getUserData(handle)
+    .then(res => {
+      dispatch({ type: SET_POSTS, payload: res.data.post });
+    })
+    .catch(err => {
+      dispatch({ type: SET_POSTS, payload: null });
+    });
 };
 
 /** Attempts to create a new user

@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 import MuiLink from '@material-ui/core/Link';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
-import style from '../../../../style/style';
+import style from '../../../../style';
 
 // Icons
 import LocationOn from '@material-ui/icons/LocationOn';
@@ -24,7 +24,7 @@ const ProfileDetails = ({ handle, bio = {}, createdAt }) => (
   <div className='profile-details'>
     <MuiLink
       component={Link}
-      to={`/user/${handle}`}
+      to={`/u/${handle}`}
       color='primary'
       variant='h5'
     >

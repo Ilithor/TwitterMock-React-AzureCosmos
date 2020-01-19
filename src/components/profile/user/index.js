@@ -9,7 +9,7 @@ import EditDetails from './editDetails';
 // MUI
 import Paper from '@material-ui/core/Paper';
 import withStyles from '@material-ui/core/styles/withStyles';
-import style from '../../../style/style';
+import style from '../../../style';
 
 // Icons
 import KeyboardReturn from '@material-ui/icons/KeyboardReturn';

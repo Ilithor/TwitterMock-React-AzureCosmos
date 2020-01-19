@@ -6,7 +6,7 @@ import NewPostDisplay from './NewPostDisplay';
 // MUI
 import withStyles from '@material-ui/core/styles/withStyles';
 import Button from '@material-ui/core/Button';
-import style from '../../../style/style';
+import style from '../../../style';
 
 // Icons
 import AddIcon from '@material-ui/icons/Add';

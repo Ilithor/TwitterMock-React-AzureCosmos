@@ -6,7 +6,7 @@ import EditDetailsDisplay from './EditDetailsDisplay';
 
 // MUI
 import withStyles from '@material-ui/core/styles/withStyles';
-import style from '../../../../style/style';
+import style from '../../../../style';
 
 // Icons
 import EditIcon from '@material-ui/icons/Edit';

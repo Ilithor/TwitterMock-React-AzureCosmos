@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import withStyles from '@material-ui/core/styles/withStyles';
-import style from '../../style/style';
+import style from '../../style';
 
 /** View component for displaying the login form to the user
  * @type {ILoginFormComponentProps}
