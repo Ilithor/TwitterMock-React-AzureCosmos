@@ -56,7 +56,7 @@ const PostDialogContent = ({
           component={Link}
           color='primary'
           variant='h5'
-          to={`/users/${userHandle}`}
+          to={`/u/${userHandle}`}
         >
           @{userHandle}
         </Typography>

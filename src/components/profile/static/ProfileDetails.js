@@ -15,7 +15,7 @@ import CalendarToday from '@material-ui/icons/CalendarToday';
 
 const ProfileDetails = ({ handle, bio, createdAt }) => (
   <div className='profile-details'>
-    <MuiLink component={Link} to={`/${handle}`} color='primary' variant='h5'>
+    <MuiLink component={Link} to={`/u/${handle}`} color='primary' variant='h5'>
       @{handle}
     </MuiLink>
     <hr />

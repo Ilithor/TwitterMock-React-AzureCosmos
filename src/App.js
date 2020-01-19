@@ -34,7 +34,7 @@ const theme = createMuiTheme({
     secondary: deepPurple,
   },
 });
-
+axios.defaults.baseURL = '/';
 const token = localStorage.Token;
 const handle = localStorage.Handle;
 if (token && handle) {
@@ -57,9 +57,9 @@ const App = () => (
         <div className='container'>
           <Switch>
             <Route exact path='/' component={home} />
-            <AuthRoute exact path='/login' component={login} />
-            <AuthRoute exact path='/signup' component={signup} />
-            <Route exact path='/:handle' component={user} />
+            <AuthRoute path='/login' component={login} />
+            <AuthRoute path='/signup' component={signup} />
+            <Route path='/u/:handle' component={user} />
           </Switch>
         </div>
       </Router>
