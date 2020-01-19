@@ -31,7 +31,6 @@ export const Home = ({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => getPostList(), []);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => getUserDataAction(localStorage.Handle), []);
   const makeRecentPostMarkup = () => {
     if (!isLoading) {
       return postList.map(post => (
