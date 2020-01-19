@@ -28,6 +28,7 @@ import {
   logoutUserAction,
   getUserDataAction,
 } from './redux/actions/userActions';
+import { NotificationProvider } from './components/notification/notificationContext';
 
 const theme = createMuiTheme({
   palette: {
@@ -52,20 +53,22 @@ if (token && handle) {
 
 const App = () => (
   <ThemeProvider theme={theme}>
-    <Provider store={store}>
-      <Router>
-        <Navbar />
-        <div className='container'>
-          <Switch>
-            <Route exact path='/' component={home} />
-            <Route path='/login' component={login} />
-            <Route path='/signup' component={signup} />
-            <Route path='/u/:handle' component={user} />
-            <AuthRoute path='/notification' component={NotificationPage} />
-          </Switch>
-        </div>
-      </Router>
-    </Provider>
+    <NotificationProvider>
+      <Provider store={store}>
+        <Router>
+          <Navbar />
+          <div className='container'>
+            <Switch>
+              <Route exact path='/' component={home} />
+              <Route path='/login' component={login} />
+              <Route path='/signup' component={signup} />
+              <Route path='/u/:handle' component={user} />
+              <AuthRoute path='/notification' component={NotificationPage} />
+            </Switch>
+          </div>
+        </Router>
+      </Provider>
+    </NotificationProvider>
   </ThemeProvider>
 );
 
