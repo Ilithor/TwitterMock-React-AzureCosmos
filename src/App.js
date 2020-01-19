@@ -29,6 +29,7 @@ import {
   getUserDataAction,
 } from './redux/actions/userActions';
 import { NotificationProvider } from './components/notification/notificationContext';
+import { getNotificationList } from './util/fetch/user';
 
 const theme = createMuiTheme({
   palette: {
@@ -53,7 +54,7 @@ if (token && handle) {
 
 const App = () => (
   <ThemeProvider theme={theme}>
-    <NotificationProvider>
+    <NotificationProvider getNotificationList={getNotificationList}>
       <Provider store={store}>
         <Router>
           <Navbar />

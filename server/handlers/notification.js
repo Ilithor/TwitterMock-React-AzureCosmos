@@ -12,10 +12,6 @@ mongoConnection();
  * @type {RouteHandler}
  */
 export const getNotification = async (req, res) => {
-  const userAttemptAccess = String(req.user.handle);
-  if (userAttemptAccess !== req.params.handle) {
-    return res.status(401).json({ message: 'Unauthorized Access' });
-  }
   await findNotificationByRecipient(req.user.handle)
     .then(data => {
       if (data.notification) {
@@ -25,6 +21,7 @@ export const getNotification = async (req, res) => {
       let notification = [];
       data.forEach(doc => {
         notification.push({
+          _id: doc._id,
           createdAt: doc.createdAt,
           postId: doc.typeId,
           sender: doc.sender,

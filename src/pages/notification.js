@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { Notification } from '../components/notification';
+import { NotificationPanel } from '../components/notification';
 
-export const NotificationPage = () => {
-  return <Notification />;
+export const NotificationPage = ({ classes }) => {
+  return <NotificationPanel classes={classes} />;
 };
