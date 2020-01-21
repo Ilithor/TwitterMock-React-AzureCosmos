@@ -2,6 +2,8 @@ import React from 'react';
 import { useNotificationData, Notification } from './notificationContext';
 import * as Icon from '@material-ui/icons';
 import { Card } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+import style from '../../style';
 
 /** Displays icon appropriate to notification type
  *
@@ -72,9 +74,16 @@ export const NotificationPanel = ({ classes }) => {
 
   return (
     <div>
-      <h1>Notifications! 💬</h1>
+      <h1>
+        Notifications!
+        <span role='img' aria-label=''>
+          💬
+        </span>
+      </h1>
       <hr />
       <Content />
     </div>
   );
 };
+
+export default withStyles(style)(NotificationPanel);
