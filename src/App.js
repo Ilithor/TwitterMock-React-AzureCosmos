@@ -63,7 +63,8 @@ const App = () => (
               <Route exact path='/' component={home} />
               <Route path='/login' component={login} />
               <Route path='/signup' component={signup} />
-              <Route path='/u/:handle' component={user} />
+              <Route exact path='/u/:handle' component={user} />
+              <Route exact path='/u/:handle/post/:postId' component={user} />
               <AuthRoute path='/notification' component={NotificationPage} />
             </Switch>
           </div>

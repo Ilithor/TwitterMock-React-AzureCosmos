@@ -37,6 +37,7 @@ const PostContent = ({
   postId,
   likeCount,
   commentCount,
+  openDialog,
 }) => (
   <CardContent className={classes.content}>
     <Typography
@@ -62,6 +63,7 @@ const PostContent = ({
       classes={classes}
       postId={postId}
       userHandle={userHandle}
+      openDialog={openDialog}
     />
   </CardContent>
 );

@@ -16,12 +16,14 @@ import { getPostList } from '../redux/actions/dataActions';
 const User = ({ match, data, getUserPostAction, getPostList }) => {
   const [profile, setProfile] = useState(null);
   const [postList, setPostList] = useState(null);
+  const [postIdParam, setPostIdParam] = useState(null);
   const handle = match.params.handle;
   useEffect(() => {
+    const postId = match.params.postId;
+    if (!!postId) {
+      setPostIdParam(postId);
+    }
     getProfileData(handle);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  useEffect(() => {
     getPostList();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -42,9 +44,17 @@ const User = ({ match, data, getUserPostAction, getPostList }) => {
     if (postList === null) {
       return <p>No posts from this user</p>;
     }
-    return postList?.map(post => (
-      <Post key={`post-${post.postId}`} post={post} />
-    ));
+    if (!postIdParam) {
+      return postList?.map(post => (
+        <Post key={`post-${post.postId}`} post={post} />
+      ));
+    }
+    return postList?.map(post => {
+      if (post.postId !== postIdParam) {
+        return <Post key={`post-${post.postId}`} post={post} />
+      }
+      return <Post key={`post-${post.postId}`} post={post} openDialog />;
+    })
   };
 
   const createStaticProfile = () => {

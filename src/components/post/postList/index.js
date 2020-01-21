@@ -31,7 +31,7 @@ const style = {
  * @param {object} props.classes
  * @param {object} props.post
  */
-const Post = ({ classes = {}, post = {} }) => {
+const Post = ({ classes = {}, post = {}, openDialog }) => {
   dayjs.extend(relativeTime);
   if (!post) {
     return;
@@ -61,6 +61,7 @@ const Post = ({ classes = {}, post = {} }) => {
         postId={postId}
         likeCount={likeCount}
         commentCount={commentCount}
+        openDialog={openDialog}
       />
     </Card>
   );

@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 
 // Components
 import CustomButton from '../../../../util/CustomButton';
@@ -37,13 +37,29 @@ const PostDialog = ({
   post = {},
   getPost,
   clearError,
+  openDialog,
 }) => {
   const [open, setOpen] = useState(false);
+  const [oldPath, setOldPath] = useState('');
+  useEffect(() => {
+    if (!!openDialog) {
+      handleOpen();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const handleOpen = () => {
-    getPost(postId);
+    let currentOldPath = window.location.pathname;
+    const currentNewPath = `/u/${userHandle}/post/${postId}`;
+    if ((currentOldPath = currentNewPath)) {
+      currentOldPath = `/u/${userHandle}`;
+    }
+    window.history.pushState(null, null, currentNewPath);
     setOpen(true);
+    setOldPath(currentOldPath);
+    getPost(postId);
   };
   const handleClose = () => {
+    window.history.pushState(null, null, oldPath);
     setOpen(false);
     clearError();
   };
