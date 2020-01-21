@@ -46,6 +46,7 @@ export const NotificationProvider = ({ children, getNotificationList }) => {
  * @example //getting the notification list
  * import { useNotificationData } from 'notificationContext'
  * const { notificationList } = useNotificationData();
+ * @returns {Notification[]}
  */
 export const useNotificationData = () => {
   // Destructuring value from provider
