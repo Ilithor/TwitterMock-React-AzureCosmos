@@ -28,8 +28,11 @@ import {
   logoutUserAction,
   getUserDataAction,
 } from './redux/actions/userActions';
-import { NotificationProvider } from './components/notification/notificationContext';
+import { NotificationProvider } from './components/context/notificationContext';
 import { getNotificationList } from './util/fetch/user';
+import { fetchPostList, fetchCommentList } from './util/fetch/post';
+import { PostProvider } from './components/context/postContext';
+import { CommentProvider } from './components/context/commentContext';
 
 const theme = createMuiTheme({
   palette: {
@@ -55,21 +58,32 @@ if (token && handle) {
 const App = () => (
   <ThemeProvider theme={theme}>
     <NotificationProvider getNotificationList={getNotificationList}>
-      <Provider store={store}>
-        <Router>
-          <Navbar />
-          <div className='container'>
-            <Switch>
-              <Route exact path='/' component={home} />
-              <Route path='/login' component={login} />
-              <Route path='/signup' component={signup} />
-              <Route exact path='/u/:handle' component={user} />
-              <Route exact path='/u/:handle/post/:postId' component={user} />
-              <AuthRoute path='/notification' component={NotificationPage} />
-            </Switch>
-          </div>
-        </Router>
-      </Provider>
+      <PostProvider fetchPostList={fetchPostList}>
+        <CommentProvider fetchCommentList={fetchCommentList}>
+          <Provider store={store}>
+            <Router>
+              <Navbar />
+              <div className='container'>
+                <Switch>
+                  <Route exact path='/' component={home} />
+                  <Route path='/login' component={login} />
+                  <Route path='/signup' component={signup} />
+                  <Route exact path='/u/:handle' component={user} />
+                  <Route
+                    exact
+                    path='/u/:handle/post/:postId'
+                    component={user}
+                  />
+                  <AuthRoute
+                    path='/notification'
+                    component={NotificationPage}
+                  />
+                </Switch>
+              </div>
+            </Router>
+          </Provider>
+        </CommentProvider>
+      </PostProvider>
     </NotificationProvider>
   </ThemeProvider>
 );
