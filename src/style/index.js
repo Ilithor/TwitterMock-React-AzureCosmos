@@ -149,6 +149,16 @@ const style = theme => ({
     border: '1px solid rgba(0, 0, 0, 0.5)',
     marginBottom: 1,
   },
+  cornerIcon: {
+    position: 'absolute',
+    left: '90%',
+    top: '10%',
+  },
+  notificationCard: {
+    position: 'relative',
+    display: 'flex',
+    marginBottom: 20,
+  },
 });
 
 export default style;
