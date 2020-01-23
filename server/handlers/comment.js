@@ -1,10 +1,33 @@
-import { create } from '../services/comment.service';
+import { getList, create, remove } from '../services/comment.service';
 import {
   findPostById,
   findPostAndUpdateCount,
   findCommentByHandleAndPostId,
 } from './find';
-import { remove } from '../services/comment.service';
+
+export const getCommentList = (req, res) => {
+  getList()
+    .then(data => {
+      if (!data) {
+        return res.status(404).json(data);
+      }
+      let commentList = [];
+      data.forEach(doc => {
+        commentList.push({
+          _id: doc.id,
+          userHandle: doc.userHandle,
+          postId: doc.postId,
+          body: doc.body,
+          createdAt: doc.createdAt,
+        });
+      });
+      return res.json(commentList);
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: err.code });
+    });
+};
 
 /** Create a comment on a post
  * @type {RouteHandler}

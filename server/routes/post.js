@@ -1,6 +1,10 @@
 import express from 'express';
 import { getPostList, createPost, getPost, deletePost } from '../handlers/post';
-import { commentOnPost, deleteComment } from '../handlers/comment';
+import {
+  getCommentList,
+  commentOnPost,
+  deleteComment,
+} from '../handlers/comment';
 import { likePost, unlikePost } from '../handlers/like';
 import { authUser } from '../util/auth';
 import {
@@ -13,6 +17,7 @@ const router = express.Router();
 
 router.get('/', getPostList);
 router.post('/', authUser, createPost);
+router.get('/comment', getCommentList);
 router.get('/:postId', getPost);
 router.delete('/:postId', authUser, deletePost, deleteAllNotification);
 router.get('/:postId/like', authUser, likePost, createNotification);
