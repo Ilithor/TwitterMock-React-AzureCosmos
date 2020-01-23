@@ -40,6 +40,10 @@ export const getLikeList = handle =>
  */
 export const getNotificationList = () => get(endpoints.notification);
 
+export const markNotificationRead = notificationId =>
+  (notificationId && post(endpoints.notification, { notificationId })) ||
+  Promise.reject('notificationId was not defined');
+
 /** Attempts to upload user image
  * @returns {Promise<import("axios").AxiosResponse>}
  */
