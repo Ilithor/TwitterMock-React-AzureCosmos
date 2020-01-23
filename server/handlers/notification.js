@@ -23,9 +23,12 @@ export const getNotification = async (req, res) => {
         notification.push({
           _id: doc._id,
           createdAt: doc.createdAt,
-          postId: doc.typeId,
+          postId: doc.postId,
           sender: doc.sender,
+          recipient: doc.recipient,
           type: doc.type,
+          typeId: doc.typeId,
+          read: doc.read,
         });
       });
       if (notification.length === 0) {
@@ -45,30 +48,25 @@ export const getNotification = async (req, res) => {
  * @type {RouteHandler}
  */
 export const createNotification = async (req, res) => {
-  if (req.notification.recipient === req.user.handle) {
-    res
-      .status(201)
-      .json({ message: `${req.notification.type} successfully added` });
-  } else {
-    await create(req)
-      .then(doc => {
-        res.status(201).json({ message: `${doc.type} successfully added` });
-      })
-      .catch(err => {
-        console.error(err);
-        res.status(500).json({ error: err.code });
-      });
-  }
+  await create(req)
+    .then(doc => {
+      res.status(201).json({ message: `${doc.type} successfully added` });
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: err.code });
+    });
 };
 
 /** Marks notification as read by user
  * @type {RouteHandler}
  */
-export const markNotificationRead = (req, res) => {
-  req.body.forEach(async notificationId => {
-    await findNotificationAndUpdateRead(notificationId);
-  });
-  return res.json({ message: 'Notifications marked read' });
+export const markNotificationRead = async (req, res) => {
+  await findNotificationAndUpdateRead(req.body.notificationId)
+    .then(() => {
+      return res.status(200).json({ message: 'Notifications marked read' });
+    })
+    .catch(err => console.log);
 };
 
 /** Deletes notification upon successful deletion
