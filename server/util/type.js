@@ -139,3 +139,8 @@
  * @typedef Token
  * @property {string} token
  */
+
+/**
+ * @typedef {[T?,React.Dispatch<T?>]} UseStateResult<T>
+ * @template T
+ */
