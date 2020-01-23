@@ -1,63 +1,42 @@
 import React from 'react';
-import { useNotificationData, Notification } from './notificationContext';
-import * as Icon from '@material-ui/icons';
-import { Card } from '@material-ui/core';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+// Components
+import NotificationCard from './notificationCard';
+
+// MUI
 import { withStyles } from '@material-ui/core/styles';
 import style from '../../style';
 
-/** Displays icon appropriate to notification type
- *
- * @type {React.FunctionComponent}
+// Context
+import { useNotificationData } from '../context/notificationContext';
+import { usePostData } from '../context/postContext';
+import { useCommentData } from '../context/commentContext';
+
+/**
+ * Displays an array of notifications for the user
  * @param {object} props
  * @param {object} props.classes
- * @param {Notification} props.notification
  */
-export const NotificationCard = ({ classes, notification }) => {
-  let typeDisp;
-  switch (notification.type) {
-    case 'like':
-      typeDisp = (
-        <React.Fragment>
-          <Icon.FavoriteSharp />
-          <Icon.FavoriteTwoTone />
-          <Icon.Favorite />
-        </React.Fragment>
-      );
-      break;
-    case 'comment':
-      typeDisp = (
-        <React.Fragment>
-          <Icon.Comment />
-        </React.Fragment>
-      );
-      break;
-    default:
-      typeDisp = notification.type;
-  }
-
-  return (
-    <Card className={classes?.card}>
-      {notification.postId}
-      <br />
-      {notification.sender}
-      <br />
-      {typeDisp}
-    </Card>
-  );
-};
-
-export const NotificationPanel = ({ classes }) => {
+export const NotificationPanel = ({ classes = {} }) => {
   const { notificationList, notificationError } = useNotificationData();
-
+  const { postList, postError } = usePostData();
+  const { commentList, commentError } = useCommentData();
+  dayjs.extend(relativeTime);
   const Content = () => {
     if (notificationList?.length > 0) {
-      return notificationList?.map(doc => (
-        <NotificationCard
-          key={`notification-${doc._id}`}
-          classes={classes}
-          notification={doc}
-        />
-      ));
+      return notificationList?.map(doc => {
+        return (
+          <NotificationCard
+            key={`notification-${doc?._id}`}
+            classes={classes}
+            notification={doc}
+            post={postList[(doc?.postId)]}
+            comment={commentList[(doc?.typeId)]}
+          />
+        );
+      });
     }
     return (
       <React.Fragment>
@@ -86,4 +65,4 @@ export const NotificationPanel = ({ classes }) => {
   );
 };
 
-export default withStyles(style)(NotificationPanel);
+export default NotificationPanel;
