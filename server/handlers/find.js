@@ -105,7 +105,7 @@ export const findNotificationByRecipient = async recipient => {
   notification = Notification.find({
     recipient: recipient,
   })
-    .sort({ createdAt: -1 })
+    .sort({ createdAt: 1 })
     .read(mongo.ReadPreference.NEAREST);
   if (notification.length === 0) {
     error.notification = 'No notifications found';
