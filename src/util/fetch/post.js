@@ -30,6 +30,8 @@ export const likePost = postId => get(`${endpoints.post}${postId}/like`);
  */
 export const unlikePost = postId => get(`${endpoints.post}${postId}/unlike`);
 
+export const fetchCommentList = () => get(`${endpoints.post}comment`);
+
 /** Comment on post
  * @returns {Promise<import("axios").AxiosResponse>}
  */
