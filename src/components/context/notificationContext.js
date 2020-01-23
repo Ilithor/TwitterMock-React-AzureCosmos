@@ -9,22 +9,13 @@ const notificationContext = createContext();
  * @param {object} props
  * @param {React.ReactChild} props.children
  * @param {()=>Promise<import('axios').AxiosResponse<Notification[]>>} props.getNotificationList
- * @param {()=>Promise<import('axios').AxiosResponse<void>>} props.markNotificationRead
  */
-export const NotificationProvider = ({
-  children,
-  getNotificationList,
-  markNotificationRead,
-}) => {
+export const NotificationProvider = ({ children, getNotificationList }) => {
   /** @type {Notification[]} */
   const defaultState = [];
   // setting local state
   const [notificationList, setNotificationList] = useState(defaultState);
   const [notificationError, setnotificationError] = useState();
-
-  const markRead = notificationId => {
-    markNotificationRead(notificationId);
-  };
 
   const getData = () => {
     // Fetch list of notifications
@@ -39,7 +30,6 @@ export const NotificationProvider = ({
   const value = {
     notificationList,
     getData,
-    markRead,
     notificationError,
   };
   return (
