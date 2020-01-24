@@ -9,6 +9,8 @@ import IconButton from '@material-ui/core/IconButton';
 export default ({
   children,
   onClick,
+  component,
+  to,
   tip,
   btnClassName,
   tipClassName,
@@ -18,6 +20,8 @@ export default ({
     <span>
       <IconButton
         onClick={onClick}
+        component={component}
+        to={to}
         className={btnClassName}
         disabled={disabled}
       >
