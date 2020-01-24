@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import Notification from '../models/notification.model';
 import { create } from '../services/notification.service';
 
@@ -17,21 +18,17 @@ export const getNotification = async (req, res) => {
       if (data.notification) {
         return res.status(404).json({ error: data.notification });
       }
-
-      let notification = [];
-      data.forEach(doc => {
-        notification.push({
-          _id: doc._id,
-          createdAt: doc.createdAt,
-          postId: doc.postId,
-          sender: doc.sender,
-          recipient: doc.recipient,
-          type: doc.type,
-          typeId: doc.typeId,
-          read: doc.read,
-        });
-      });
-      if (notification.length === 0) {
+      const notification = _.map(data, doc => ({
+        _id: doc._id,
+        createdAt: doc.createdAt,
+        postId: doc.postId,
+        sender: doc.sender,
+        recipient: doc.recipient,
+        type: doc.type,
+        typeId: doc.typeId,
+        read: doc.read,
+      }));
+      if (notification.length <= 0) {
         return res.json({ message: 'No notifications found' });
       } else {
         return res.json(notification);

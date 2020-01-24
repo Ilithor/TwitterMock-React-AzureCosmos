@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { getList, create, remove } from '../services/comment.service';
 import {
   findPostById,
@@ -11,17 +12,18 @@ export const getCommentList = (req, res) => {
       if (!data) {
         return res.status(404).json(data);
       }
-      let commentList = [];
-      data.forEach(doc => {
-        commentList.push({
-          _id: doc.id,
-          userHandle: doc.userHandle,
-          postId: doc.postId,
-          body: doc.body,
-          createdAt: doc.createdAt,
-        });
-      });
-      return res.json(commentList);
+      const commentList = _.map(data, doc => ({
+        _id: doc.id,
+        userHandle: doc.userHandle,
+        postId: doc.postId,
+        body: doc.body,
+        createdAt: doc.createdAt,
+      }));
+      if (commentList.length <= 0) {
+        return res.json({ message: 'No comments found' });
+      } else {
+        return res.json(commentList);
+      }
     })
     .catch(err => {
       console.error(err);
