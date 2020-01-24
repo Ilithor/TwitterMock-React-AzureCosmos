@@ -1,4 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 
 // Components
 import CustomButton from '../../../../util/CustomButton';
@@ -41,6 +42,7 @@ const PostDialogView = ({
 }) => {
   const [open, setOpen] = useState(false);
   const [oldPath, setOldPath] = useState('');
+  const history = useHistory();
   useEffect(() => {
     if (!!openDialog) {
       handleOpen();
@@ -53,13 +55,13 @@ const PostDialogView = ({
     if ((currentOldPath = currentNewPath)) {
       currentOldPath = `/u/${userHandle}`;
     }
-    window.history.pushState(null, null, currentNewPath);
+    history.push(currentNewPath);
     setOpen(true);
     setOldPath(currentOldPath);
     getPost(postId);
   };
   const handleClose = () => {
-    window.history.pushState(null, null, oldPath);
+    history.push(oldPath);
     setOpen(false);
     clearError();
   };
