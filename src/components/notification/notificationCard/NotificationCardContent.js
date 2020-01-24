@@ -21,40 +21,43 @@ const NotificationCardContentView = ({
   postBody,
   commentBody,
 }) => {
-  const makeNotificationContent = () => {
-    if (notification?.type === 'like') {
-      return <React.Fragment>{postBody}</React.Fragment>;
+  const NotificationContent = ({ type, postBody, commentBody }) => {
+    if (type === 'like') {
+      return <React.Fragment>"{postBody}"</React.Fragment>;
     }
-    return <React.Fragment>{commentBody}</React.Fragment>;
+    return <React.Fragment>"{commentBody}"</React.Fragment>;
   };
-  const markNotificationNew = () => {
-    if (notification?.read === false) {
+  const NotificationNew = ({ classes, read }) => {
+    if (read === false) {
       return (
         <React.Fragment>
           <Icon.FiberNew className={classes?.cornerIcon} />
         </React.Fragment>
       );
     }
+    return null;
   };
-  const makeFromSenderType = () => {
-    if (notification?.type === 'like') {
+  const FromSenderType = ({ type, sender }) => {
+    if (type === 'like') {
+      return <Typography color='primary'>{sender} liked your post!</Typography>;
+    }
+    if (type === 'comment') {
       return (
         <Typography color='primary'>
-          {notification?.sender} liked your post!
+          {sender} commented on your post!
         </Typography>
       );
     }
-    return (
-      <Typography color='primary'>
-        {notification?.sender} commented on your post!
-      </Typography>
-    );
   };
   return (
     <CardContent className={classes?.content}>
-      {markNotificationNew()}
-      <span>{makeFromSenderType()}</span>
-      <span>"{makeNotificationContent()}"</span>
+      <NotificationNew classes={classes} read={notification?.read} />
+      <FromSenderType type={notification?.type} sender={notification?.sender} />
+      <NotificationContent
+        type={notification?.type}
+        postBody={postBody}
+        commentBody={commentBody}
+      />
       <br />
       <Typography variant='body2' color='textSecondary'>
         {dayjs(notification?.createdAt).fromNow()}
