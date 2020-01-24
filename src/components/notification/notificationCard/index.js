@@ -1,5 +1,5 @@
 import React from 'react';
-import { withRouter } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 // Components
 import { NotificationCardContent } from './NotificationCardContent';
@@ -20,15 +20,14 @@ import { markNotificationRead } from '../../../util/fetch/user';
  * @param {UserNotification} props.notification
  * @param {Post} props.post
  * @param {UserComment} props.comment
- * @param {Reac} history
  */
 export const NotificationCardView = ({
   classes = {},
   notification = {},
   post = {},
   comment = {},
-  history,
 }) => {
+  const history = useHistory();
   const notificationRead = () => {
     if (notification?.read === false) {
       markNotificationRead(notification?._id).then(() => {
@@ -54,6 +53,4 @@ export const NotificationCardView = ({
   );
 };
 
-export const NotificationCard = withRouter(
-  withStyles(style)(NotificationCardView)
-);
+export const NotificationCard = withStyles(style)(NotificationCardView);
