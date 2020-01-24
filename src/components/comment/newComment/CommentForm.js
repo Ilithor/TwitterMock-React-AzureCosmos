@@ -9,7 +9,7 @@ import TextField from '@material-ui/core/TextField';
 import { connect } from 'react-redux';
 import { getCommentPost } from '../../../redux/actions/dataActions';
 
-const CommentForm = ({ classes = {}, postId, UI, getCommentPost }) => {
+const CommentFormView = ({ classes = {}, postId, UI, getCommentPost }) => {
   const [body, setBody] = useState('');
 
   const handleChange = event => {
@@ -56,7 +56,7 @@ const CommentForm = ({ classes = {}, postId, UI, getCommentPost }) => {
 
 const mapStateToProps = ({ UI }) => ({ UI });
 
-export default connect(
+export const CommentForm = connect(
   mapStateToProps,
   { getCommentPost }
-)(CommentForm);
+)(CommentFormView);

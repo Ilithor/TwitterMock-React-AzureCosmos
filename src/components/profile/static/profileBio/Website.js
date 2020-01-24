@@ -7,7 +7,7 @@ import style from '../../../../style';
 // Icons
 import LinkIcon from '@material-ui/icons/Link';
 
-const Website = ({ website }) => {
+const WebsiteView = ({ website }) => {
   if (!!website) {
     const link = (
       <a href={website} target='_blank' rel='noopener noreferrer'>
@@ -26,4 +26,4 @@ const Website = ({ website }) => {
   return <div />;
 };
 
-export default withStyles(style)(Website);
+export const Website = withStyles(style)(WebsiteView);

@@ -12,7 +12,7 @@ import style from '../../style';
 /** View component for displaying the login form to the user
  * @type {ILoginFormComponentProps}
  */
-export const LoginForm = ({
+export const LoginFormView = ({
   handleSubmit,
   classes = {},
   error = {},
@@ -70,7 +70,7 @@ export const LoginForm = ({
   </form>
 );
 
-export default withStyles(style)(LoginForm);
+export const LoginForm = withStyles(style)(LoginFormView);
 
 /** Various props that control how the user interacts with
  *  the login form

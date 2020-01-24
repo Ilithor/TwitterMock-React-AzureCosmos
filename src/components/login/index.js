@@ -1,7 +1,7 @@
 import React from 'react';
 
 // Components
-import LoginForm from './LoginForm';
+import { LoginForm } from './LoginForm';
 
 // MUI
 import Grid from '@material-ui/core/Grid';
@@ -23,7 +23,7 @@ import AppIcon from '../../images/icon.png';
  * @param {React.ChangeEventHandler} props.handleChange
  * @param {boolean} props.isLoading
  */
-const Login = ({
+const LoginView = ({
   classes = {},
   error = {},
   email,
@@ -53,4 +53,4 @@ const Login = ({
   </Grid>
 );
 
-export default withStyles(style)(Login);
+export const Login = withStyles(style)(LoginView);

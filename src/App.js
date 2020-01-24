@@ -5,41 +5,27 @@ import jwtDecode from 'jwt-decode';
 import axios from 'axios';
 
 // Pages
-import home from './pages/home';
-import login from './pages/login';
-import signup from './pages/register';
-import user from './pages/user';
+import { HomePage } from './pages/home';
+import { LoginPage } from './pages/login';
+import { RegisterPage } from './pages/register';
+import { UserPage } from './pages/user';
 import { NotificationPage } from './pages/notification';
 
 // Components
-import Navbar from './components/Navbar';
+import { Navbar } from './components/Navbar';
 import AuthRoute from './util/AuthRoute';
 
-// MUI
-import deepPurple from '@material-ui/core/colors/deepPurple';
-import { ThemeProvider } from '@material-ui/core/styles';
-import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
-
 // Redux
-import { Provider } from 'react-redux';
 import store from './redux/store';
 import { SET_AUTHENTICATED } from './redux/types';
 import {
   logoutUserAction,
   getUserDataAction,
 } from './redux/actions/userActions';
-import { NotificationProvider } from './components/context/notificationContext';
-import { getNotificationList } from './util/fetch/user';
-import { fetchPostList, fetchCommentList } from './util/fetch/post';
-import { PostProvider } from './components/context/postContext';
-import { CommentProvider } from './components/context/commentContext';
 
-const theme = createMuiTheme({
-  palette: {
-    primary: deepPurple,
-    secondary: deepPurple,
-  },
-});
+// Context
+import { ContextProvider } from './components/context/ContextProvider';
+
 axios.defaults.baseURL = '/';
 const token = localStorage.Token;
 const handle = localStorage.Handle;
@@ -55,37 +41,20 @@ if (token && handle) {
   }
 }
 
-const App = () => (
-  <ThemeProvider theme={theme}>
-    <NotificationProvider getNotificationList={getNotificationList}>
-      <PostProvider fetchPostList={fetchPostList}>
-        <CommentProvider fetchCommentList={fetchCommentList}>
-          <Provider store={store}>
-            <Router>
-              <Navbar />
-              <div className='container'>
-                <Switch>
-                  <Route exact path='/' component={home} />
-                  <Route path='/login' component={login} />
-                  <Route path='/signup' component={signup} />
-                  <Route exact path='/u/:handle' component={user} />
-                  <Route
-                    exact
-                    path='/u/:handle/post/:postId'
-                    component={user}
-                  />
-                  <AuthRoute
-                    path='/notification'
-                    component={NotificationPage}
-                  />
-                </Switch>
-              </div>
-            </Router>
-          </Provider>
-        </CommentProvider>
-      </PostProvider>
-    </NotificationProvider>
-  </ThemeProvider>
+export const App = () => (
+  <ContextProvider>
+    <Router>
+      <Navbar />
+      <div className='container'>
+        <Switch>
+          <Route exact path='/' component={HomePage} />
+          <Route path='/login' component={LoginPage} />
+          <Route path='/signup' component={RegisterPage} />
+          <AuthRoute path='/notification' component={NotificationPage} />
+          <Route exact path='/u/:handle' component={UserPage} />
+          <Route exact path='/u/:handle/post/:postId' component={UserPage} />
+        </Switch>
+      </div>
+    </Router>
+  </ContextProvider>
 );
-
-export default App;

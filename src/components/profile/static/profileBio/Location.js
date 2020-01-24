@@ -7,7 +7,7 @@ import style from '../../../../style';
 // Icons
 import LocationOn from '@material-ui/icons/LocationOn';
 
-const Location = ({ location }) => {
+const LocationView = ({ location }) => {
   if (!!location) {
     return (
       <Fragment>
@@ -20,4 +20,4 @@ const Location = ({ location }) => {
   return <div />;
 };
 
-export default withStyles(style)(Location);
+export const Location = withStyles(style)(LocationView);

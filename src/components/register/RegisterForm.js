@@ -22,7 +22,7 @@ import style from '../../style';
  * @param {React.ChangeEventHandler} props.handleSubmit
  * @param {React.ChangeEventHandler} props.handleChange
  */
-const RegisterForm = ({
+const RegisterFormView = ({
   classes = {},
   error = {},
   handle,
@@ -107,4 +107,4 @@ const RegisterForm = ({
   </form>
 );
 
-export default withStyles(style)(RegisterForm);
+export const RegisterForm = withStyles(style)(RegisterFormView);

@@ -1,8 +1,8 @@
 import React from 'react';
 
 // Components
-import UserProfileDisplay from './user';
-import DefaultProfileDisplay from './default';
+import { UserProfileDisplay } from './user';
+import { DefaultProfileDisplay } from './default/DefaultProfileDisplay';
 
 // MUI
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -18,7 +18,7 @@ import { connect } from 'react-redux';
  * @param {boolean} props.user.isLoading
  * @param {boolean} props.user.authenticated
  */
-const Profile = ({ classes = {}, user: { isLoading, authenticated } }) => {
+const ProfileView = ({ classes = {}, user: { isLoading, authenticated } }) => {
   if (!isLoading) {
     if (authenticated) {
       return <UserProfileDisplay classes={classes} />;
@@ -32,4 +32,4 @@ const Profile = ({ classes = {}, user: { isLoading, authenticated } }) => {
 
 const mapStateToProps = ({ user }) => ({ user });
 
-export default connect(mapStateToProps)(withStyles(style)(Profile));
+export const Profile = connect(mapStateToProps)(withStyles(style)(ProfileView));

@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 
 // Components
-import Like from '../../../like';
-import Comment from '../../../comment';
-import CommentForm from '../../../comment/newComment';
+import { Like } from '../../../like';
+import { Comment } from '../../../comment';
+import { CommentForm } from '../../../comment/newComment/CommentForm';
 import CustomButton from '../../../../util/CustomButton';
 
 // MUI
@@ -26,7 +26,7 @@ import ChatIcon from '@material-ui/icons/Chat';
  * @param {Date} props.createAt
  * @param {string} props.body
  */
-const PostDialogContent = ({
+const PostDialogContentView = ({
   classes = {},
   userHandle,
   userImage,
@@ -79,4 +79,4 @@ const PostDialogContent = ({
   );
 };
 
-export default withStyles(style)(PostDialogContent);
+export const PostDialogContent = withStyles(style)(PostDialogContentView);

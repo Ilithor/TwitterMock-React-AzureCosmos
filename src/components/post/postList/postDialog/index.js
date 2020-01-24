@@ -2,7 +2,7 @@ import React, { Fragment, useState, useEffect } from 'react';
 
 // Components
 import CustomButton from '../../../../util/CustomButton';
-import PostDialogContent from './PostDialogContent';
+import { PostDialogContent } from './PostDialogContent';
 
 // MUI
 import Dialog from '@material-ui/core/Dialog';
@@ -29,7 +29,7 @@ import { getPost, clearError } from '../../../../redux/actions/dataActions';
  * @param {object} props.post
  * @param {any} props.getPost
  */
-const PostDialog = ({
+const PostDialogView = ({
   classes = {},
   postId,
   userHandle,
@@ -121,7 +121,7 @@ const mapActionsToProps = {
   clearError,
 };
 
-export default connect(
+export const PostDialog = connect(
   mapStateToProps,
   mapActionsToProps
-)(withStyles(style)(PostDialog));
+)(withStyles(style)(PostDialogView));

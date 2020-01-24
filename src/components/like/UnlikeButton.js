@@ -17,7 +17,7 @@ import { getUnlikePost } from '../../redux/actions/dataActions';
  * @param {any} props.getUnlikePost
  * @param {object} props.UI
  */
-export const UnlikeButton = ({ postId, getUnlikePost, UI = {} }) => {
+export const UnlikeButtonView = ({ postId, getUnlikePost, UI = {} }) => {
   const makeCall = useRef(false);
   const unlikePost = () => {
     if (!!makeCall.current) return;
@@ -41,10 +41,10 @@ export const UnlikeButton = ({ postId, getUnlikePost, UI = {} }) => {
 
 const mapStateToProps = ({ UI }) => ({ UI });
 
-export default connect(
+export const UnlikeButton = connect(
   mapStateToProps,
   { getUnlikePost }
-)(UnlikeButton);
+)(UnlikeButtonView);
 
 /**
  * @typedef IUnlikeButtonComponentProps

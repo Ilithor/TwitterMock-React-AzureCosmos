@@ -2,9 +2,9 @@ import React from 'react';
 
 // Components
 import CustomButton from '../../../util/CustomButton';
-import ImageWrapper from './profile/ImageWrapper';
-import ProfileDetails from './profile/ProfileDetails';
-import EditDetails from './editDetails';
+import { ImageWrapper } from './profile/ImageWrapper';
+import { ProfileDetail } from './profile/ProfileDetail';
+import { EditDetails } from './editDetails';
 
 // MUI
 import Paper from '@material-ui/core/Paper';
@@ -31,7 +31,7 @@ import {
  * @param {any} props.logoutUserAction
  * @param {any} props.uploadImageAction
  */
-const UserProfileDisplay = ({
+const UserProfileDisplayView = ({
   classes,
   user: {
     userInfo: { handle, createdAt, bio = {} },
@@ -62,7 +62,7 @@ const UserProfileDisplay = ({
           handleEditPhoto={handleEditPhoto}
         />
         <hr />
-        <ProfileDetails handle={handle} bio={bio} createdAt={createdAt} />
+        <ProfileDetail handle={handle} bio={bio} createdAt={createdAt} />
         <CustomButton tip='Logout' onClick={handleLogout}>
           <KeyboardReturn color='primary' />
         </CustomButton>
@@ -79,7 +79,7 @@ const mapActionsToProps = {
   logoutUserAction,
 };
 
-export default connect(
+export const UserProfileDisplay = connect(
   mapStateToProps,
   mapActionsToProps
-)(withStyles(style)(UserProfileDisplay));
+)(withStyles(style)(UserProfileDisplayView));

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
 // Components
-import Post from '../components/post/postList';
-import StaticProfile from '../components/profile/static';
+import { Post } from '../components/post/postList';
+import { StaticProfile } from '../components/profile/static';
 
 // MUI
 import Grid from '@material-ui/core/Grid';
@@ -13,7 +13,7 @@ import { getUserPostAction } from '../redux/actions/userActions';
 import { getUserData } from '../util/fetch/user';
 import { getPostList } from '../redux/actions/dataActions';
 
-const User = ({ match, data, getUserPostAction, getPostList }) => {
+const UserPageView = ({ match, data, getUserPostAction, getPostList }) => {
   const [profile, setProfile] = useState(null);
   const [postList, setPostList] = useState(null);
   const [postIdParam, setPostIdParam] = useState(null);
@@ -51,10 +51,10 @@ const User = ({ match, data, getUserPostAction, getPostList }) => {
     }
     return postList?.map(post => {
       if (post.postId !== postIdParam) {
-        return <Post key={`post-${post.postId}`} post={post} />
+        return <Post key={`post-${post.postId}`} post={post} />;
       }
       return <Post key={`post-${post.postId}`} post={post} openDialog />;
-    })
+    });
   };
 
   const createStaticProfile = () => {
@@ -82,7 +82,8 @@ const mapActionsToProps = {
   getUserPostAction,
   getPostList,
 };
-export default connect(
+
+export const UserPage = connect(
   mapStateToProps,
   mapActionsToProps
-)(User);
+)(UserPageView);

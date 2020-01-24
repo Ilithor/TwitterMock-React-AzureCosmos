@@ -2,7 +2,7 @@ import React from 'react';
 
 // Components
 import CustomButton from '../../../util/CustomButton';
-import NewPostForm from './NewPostForm';
+import { NewPostForm } from './NewPostForm';
 
 // MUI
 import Dialog from '@material-ui/core/Dialog';
@@ -14,7 +14,7 @@ import style from '../../../style';
 // Icons
 import CloseIcon from '@material-ui/icons/Close';
 
-const NewPostDisplay = ({
+const NewPostDisplayView = ({
   open,
   handleClose,
   classes = {},
@@ -44,4 +44,4 @@ const NewPostDisplay = ({
   </Dialog>
 );
 
-export default withStyles(style)(NewPostDisplay);
+export const NewPostDisplay = withStyles(style)(NewPostDisplayView);

@@ -27,11 +27,9 @@ const ButtonLogInOut = ({ isLoggedIn, logout }) => {
     );
   }
   return (
-    <Link to='/login'>
-      <CustomButton tip='Login'>
-        <Icon.LockOpen />
-      </CustomButton>
-    </Link>
+    <CustomButton tip='Login' component={Link} to='/login'>
+      <Icon.LockOpen />
+    </CustomButton>
   );
 };
 
@@ -44,11 +42,9 @@ const ButtonRegister = ({ isLoggedIn }) => {
     return <div></div>;
   }
   return (
-    <Link to='/signup'>
-      <CustomButton tip='Register'>
-        <Icon.Assignment />
-      </CustomButton>
-    </Link>
+    <CustomButton tip='Register' component={Link} to='/signup'>
+      <Icon.Assignment />
+    </CustomButton>
   );
 };
 
@@ -59,11 +55,9 @@ const ButtonRegister = ({ isLoggedIn }) => {
 const ButtonNotification = ({ isLoggedIn }) => {
   if (isLoggedIn) {
     return (
-      <Link to='/notification'>
-        <CustomButton tip='Notifications'>
-          <Icon.Notifications />
-        </CustomButton>
-      </Link>
+      <CustomButton tip='Notifications' component={Link} to='/notification'>
+        <Icon.Notifications />
+      </CustomButton>
     );
   }
   return <div></div>;
@@ -74,14 +68,12 @@ const ButtonNotification = ({ isLoggedIn }) => {
  * @param {boolean} props.isLoggedIn
  * @param {any} props.logoutUserAction
  */
-const Navbar = ({ isLoggedIn = false, logoutUserAction }) => (
+const NavbarView = ({ isLoggedIn = false, logoutUserAction }) => (
   <AppBar>
     <Toolbar className='nav-container'>
-      <Link to='/'>
-        <CustomButton tip='Home'>
-          <Icon.Home />
-        </CustomButton>
-      </Link>
+      <CustomButton tip='Home' component={Link} to='/'>
+        <Icon.Home />
+      </CustomButton>
       <ButtonNotification isLoggedIn={isLoggedIn} />
       <ButtonLogInOut isLoggedIn={isLoggedIn} logout={logoutUserAction} />
       <ButtonRegister isLoggedIn={isLoggedIn} />
@@ -100,7 +92,7 @@ const mapActionsToProps = {
   logoutUserAction,
 };
 
-export default connect(
+export const Navbar = connect(
   mapStateToProps,
   mapActionsToProps
-)(Navbar);
+)(NavbarView);

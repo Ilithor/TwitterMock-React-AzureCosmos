@@ -3,11 +3,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
 // Components
-import NotificationCard from './notificationCard';
-
-// MUI
-import { withStyles } from '@material-ui/core/styles';
-import style from '../../style';
+import { NotificationCard } from './notificationCard';
 
 // Context
 import { useNotificationData } from '../context/notificationContext';
@@ -64,5 +60,3 @@ export const NotificationPanel = ({ classes = {} }) => {
     </div>
   );
 };
-
-export default NotificationPanel;

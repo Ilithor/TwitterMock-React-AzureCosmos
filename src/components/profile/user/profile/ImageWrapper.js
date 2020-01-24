@@ -17,7 +17,7 @@ import EditIcon from '@material-ui/icons/Edit';
  * @param {React.ChangeEventHandler} props.handleEditPhoto
  * @param {React.ChangeEventHandler} props.handleImageChange
  */
-const ImageWrapper = ({ bioImage, handleEditPhoto, handleImageChange }) => {
+const ImageWrapperView = ({ bioImage, handleEditPhoto, handleImageChange }) => {
   return (
     <div className='image-wrapper'>
       {bioImage ? (
@@ -42,4 +42,4 @@ const ImageWrapper = ({ bioImage, handleEditPhoto, handleImageChange }) => {
   );
 };
 
-export default withStyles(style)(ImageWrapper);
+export const ImageWrapper = withStyles(style)(ImageWrapperView);

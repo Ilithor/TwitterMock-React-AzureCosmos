@@ -2,7 +2,7 @@ import React from 'react';
 import AppIcon from '../../images/icon.png';
 
 // Components
-import RegisterForm from './RegisterForm';
+import { RegisterForm } from './RegisterForm';
 
 // MUI
 import Grid from '@material-ui/core/Grid';
@@ -21,7 +21,7 @@ import Typography from '@material-ui/core/Typography';
  * @param {React.ChangeEventHandler} props.handleSubmit
  * @param {React.ChangeEventHandler} props.handleChange
  */
-const Register = ({
+export const Register = ({
   classes = {},
   error = {},
   handle,
@@ -54,5 +54,3 @@ const Register = ({
     <Grid item sm />
   </Grid>
 );
-
-export default Register;

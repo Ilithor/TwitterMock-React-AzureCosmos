@@ -15,7 +15,7 @@ import * as Icon from '@material-ui/icons';
  * @param {string} props.postBody
  * @param {string} props.commentBody
  */
-const NotificationCardContent = ({
+const NotificationCardContentView = ({
   classes = {},
   notification = {},
   postBody,
@@ -63,4 +63,6 @@ const NotificationCardContent = ({
   );
 };
 
-export default withStyles(style)(NotificationCardContent);
+export const NotificationCardContent = withStyles(style)(
+  NotificationCardContentView
+);

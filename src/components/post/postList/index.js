@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
 // Components
-import PostContent from './PostContent';
+import { PostContent } from './PostContent';
 
 // MUI
 import Card from '@material-ui/core/Card';
@@ -31,7 +31,7 @@ const style = {
  * @param {object} props.classes
  * @param {object} props.post
  */
-const Post = ({ classes = {}, post = {}, openDialog }) => {
+const PostView = ({ classes = {}, post = {}, openDialog }) => {
   dayjs.extend(relativeTime);
   if (!post) {
     return;
@@ -67,4 +67,4 @@ const Post = ({ classes = {}, post = {}, openDialog }) => {
   );
 };
 
-export default withStyles(style)(Post);
+export const Post = withStyles(style)(PostView);

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 // Component
-import Register from '../components/register';
+import { Register } from '../components/register';
 
 // MUI
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -18,7 +18,7 @@ import { registerUserAction } from '../redux/actions/userActions';
  * @param {any} props.UI
  * @param {Reac} props.history
  */
-const RegisterPage = ({
+const RegisterPageView = ({
   classes = {},
   UI = {},
   history,
@@ -69,7 +69,8 @@ const RegisterPage = ({
 };
 
 const mapStateToProps = ({ UI }) => ({ UI });
-export default connect(
+
+export const RegisterPage = connect(
   mapStateToProps,
   { registerUserAction }
-)(withStyles(style)(RegisterPage));
+)(withStyles(style)(RegisterPageView));

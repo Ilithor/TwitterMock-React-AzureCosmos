@@ -2,7 +2,7 @@ import React from 'react';
 import { withRouter } from 'react-router-dom';
 
 // Components
-import NotificationCardContent from './NotificationCardContent';
+import { NotificationCardContent } from './NotificationCardContent';
 
 // MUI
 import { Card, CardActionArea } from '@material-ui/core';
@@ -22,7 +22,7 @@ import { markNotificationRead } from '../../../util/fetch/user';
  * @param {UserComment} props.comment
  * @param {Reac} history
  */
-export const NotificationCard = ({
+export const NotificationCardView = ({
   classes = {},
   notification = {},
   post = {},
@@ -54,4 +54,6 @@ export const NotificationCard = ({
   );
 };
 
-export default withRouter(withStyles(style)(NotificationCard));
+export const NotificationCard = withRouter(
+  withStyles(style)(NotificationCardView)
+);
