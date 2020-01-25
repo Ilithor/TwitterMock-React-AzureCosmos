@@ -19,9 +19,9 @@ const router = express.Router();
 router.post('/register', registerUser);
 router.post('/login', loginUser);
 router.post('/image', authUser, multerUploads, imageUpload);
-router.get('/:handle', getUserDetail);
+router.get('/notification', authUser, getNotification);
 router.post('/notification', authUser, markNotificationRead);
-router.get('/:handle/notification', authUser, getNotification);
+router.get('/:handle', getUserDetail);
 router.post('/', authUser, addUserDetail);
 router.get('/', authUser, getAuthenticatedUser);
 

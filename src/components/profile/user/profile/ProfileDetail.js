@@ -20,14 +20,9 @@ import CalendarToday from '@material-ui/icons/CalendarToday';
  * @param {object} props.bio
  * @param {string} props.createdAt
  */
-const ProfileDetails = ({ handle, bio = {}, createdAt }) => (
+const ProfileDetailView = ({ handle, bio = {}, createdAt }) => (
   <div className='profile-details'>
-    <MuiLink
-      component={Link}
-      to={`/u/${handle}`}
-      color='primary'
-      variant='h5'
-    >
+    <MuiLink component={Link} to={`/u/${handle}`} color='primary' variant='h5'>
       @{handle}
     </MuiLink>
     <hr />
@@ -54,4 +49,4 @@ const ProfileDetails = ({ handle, bio = {}, createdAt }) => (
   </div>
 );
 
-export default withStyles(style)(ProfileDetails);
+export const ProfileDetail = withStyles(style)(ProfileDetailView);

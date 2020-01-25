@@ -11,6 +11,8 @@ export const endpoints = {
   uploadImage: 'api/user/image',
   /** @type {Endpoint} */
   editUserDetail: 'api/user',
+  /** @type {Endpoint} */
+  notification: 'api/user/notification',
 };
 
 /** Attempts to log the user in
@@ -32,6 +34,15 @@ export const getUserData = handle => get(endpoints.userData + `/${handle}`);
  */
 export const getLikeList = handle =>
   get(endpoints.userData + `/${handle}/like`);
+
+/** Retrives notifcations for user
+ * @returns {Promise<import("axios").AxiosResponse}
+ */
+export const getNotificationList = () => get(endpoints.notification);
+
+export const markNotificationRead = notificationId =>
+  (notificationId && post(endpoints.notification, { notificationId })) ||
+  Promise.reject('notificationId was not defined');
 
 /** Attempts to upload user image
  * @returns {Promise<import("axios").AxiosResponse>}

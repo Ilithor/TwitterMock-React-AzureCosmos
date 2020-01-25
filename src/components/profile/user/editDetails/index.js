@@ -2,7 +2,7 @@ import React, { Fragment, useState } from 'react';
 
 // Components
 import CustomButton from '../../../../util/CustomButton';
-import EditDetailsDisplay from './EditDetailsDisplay';
+import { EditDetailsDisplay } from './EditDetailsDisplay';
 
 // MUI
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -23,7 +23,7 @@ import { editUserDetailAction } from '../../../../redux/actions/userActions';
  * @param {string} props.handle
  * @param {any} props.editUserDetailAction
  */
-const EditDetails = ({
+const EditDetailsView = ({
   classes = {},
   bio = {},
   handle,
@@ -98,7 +98,7 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(
+export const EditDetails = connect(
   mapStateToProps,
   { editUserDetailAction }
-)(withStyles(style)(EditDetails));
+)(withStyles(style)(EditDetailsView));

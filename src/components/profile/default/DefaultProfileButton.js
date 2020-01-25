@@ -11,7 +11,7 @@ import style from '../../../style';
  * @param {object} props
  * @param {object} props.classes
  */
-const DefaultProfileButtons = ({ classes = {} }) => {
+const DefaultProfileButtonView = ({ classes = {} }) => {
   return (
     <div className={classes.buttons}>
       <Button variant='contained' color='primary' component={Link} to='/login'>
@@ -29,4 +29,4 @@ const DefaultProfileButtons = ({ classes = {} }) => {
   );
 };
 
-export default withStyles(style)(DefaultProfileButtons);
+export const DefaultProfileButton = withStyles(style)(DefaultProfileButtonView);

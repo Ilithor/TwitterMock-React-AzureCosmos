@@ -3,9 +3,9 @@ import dayjs from 'dayjs';
 import { Link } from 'react-router-dom';
 
 // Components
-import Location from './profileBio/Location';
-import Website from './profileBio/Website';
-import AboutMe from './profileBio/AboutMe';
+import { Location } from './profileBio/Location';
+import { Website } from './profileBio/Website';
+import { AboutMe } from './profileBio/AboutMe';
 
 // MUI
 import MuiLink from '@material-ui/core/Link';
@@ -13,7 +13,7 @@ import MuiLink from '@material-ui/core/Link';
 // Icons
 import CalendarToday from '@material-ui/icons/CalendarToday';
 
-const ProfileDetails = ({ handle, bio, createdAt }) => (
+export const ProfileDetail = ({ handle, bio, createdAt }) => (
   <div className='profile-details'>
     <MuiLink component={Link} to={`/u/${handle}`} color='primary' variant='h5'>
       @{handle}
@@ -27,5 +27,3 @@ const ProfileDetails = ({ handle, bio, createdAt }) => (
     <span>Joined {dayjs(createdAt).format('MMM YYYY')}</span>
   </div>
 );
-
-export default ProfileDetails;

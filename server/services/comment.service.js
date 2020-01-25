@@ -1,11 +1,27 @@
 import Comment from '../models/comment.model';
+import mongo from 'mongodb';
 
 import mongoConnection from '../util/mongo';
 mongoConnection();
 
+/** Retrieves entire list of comments
+ * @returns {Promise<UserComment[]> | UserCommentError}
+ */
+export const getList = async () => {
+  let error = {};
+  const commentList = await Comment.find({})
+    .sort({ createdAt: -1 })
+    .read(mongo.ReadPreference.NEAREST);
+  if (commentList.length === 0) {
+    error.comment = 'No comments found';
+    return error;
+  }
+  return commentList;
+};
+
 /** Creates a new comment
  * @param {Request} commentParam
- * @return {Promise<NewUserComment> | UserCommentError}
+ * @returns {Promise<NewUserComment> | UserCommentError}
  */
 export const create = async commentParam => {
   let dataForComment = {};

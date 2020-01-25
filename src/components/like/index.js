@@ -2,8 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 // Components
-import UnlikeButton from './UnlikeButton';
-import LikeButton from './LikeButton';
+import { UnlikeButton } from './UnlikeButton';
+import { LikeButton } from './LikeButton';
 import CustomButton from '../../util/CustomButton';
 
 // MUI
@@ -23,7 +23,7 @@ import { connect } from 'react-redux';
  * @param {string} props.postId
  * @param {array} props.likeList
  */
-const Like = ({ isAuthenticated, postId, likeList }) => {
+const LikeView = ({ isAuthenticated, postId, likeList }) => {
   const alreadyLiked = () => {
     if (likeList && likeList.find(like => like.postId === postId)) {
       return true;
@@ -56,4 +56,4 @@ const mapStateToProps = ({ user }) => {
   };
 };
 
-export default connect(mapStateToProps)(withStyles(style)(Like));
+export const Like = connect(mapStateToProps)(withStyles(style)(LikeView));

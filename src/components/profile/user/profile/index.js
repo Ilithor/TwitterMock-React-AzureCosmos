@@ -2,9 +2,9 @@ import React from 'react';
 
 // Components
 import CustomButton from '../../../../util/CustomButton';
-import ImageWrapper from './ImageWrapper';
-import ProfileDetails from './ProfileDetails';
-import EditDetails from '../editDetails';
+import { ImageWrapper } from './ImageWrapper';
+import { ProfileDetails } from './ProfileDetail';
+import { EditDetails } from '../editDetails';
 
 // MUI
 import Paper from '@material-ui/core/Paper';
@@ -24,7 +24,12 @@ import {
 /** View component for displaying the user's profile
  * @type {IUserProfileDisplayComponentProps}
  */
-const UserProfileDisplay = ({ classes = {}, handle, bio = {}, createdAt }) => {
+const UserProfileDisplayView = ({
+  classes = {},
+  handle,
+  bio = {},
+  createdAt,
+}) => {
   const handleEditPhoto = () => {
     const fileInput = document.getElementById('imageUpload');
     fileInput.click();
@@ -74,10 +79,10 @@ const mapActionsToProps = {
   logoutUserAction,
 };
 
-export default connect(
+export const UserProfileDisplay = connect(
   mapStateToProps,
   mapActionsToProps
-)(withStyles(style)(UserProfileDisplay));
+)(withStyles(style)(UserProfileDisplayView));
 
 /** View component for displaying the user's profile
  * @typedef {IUserProfileDisplayComponentProps}

@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 
 // Components
-import Like from '../../like';
-import DeletePost from './deletePost';
+import { Like } from '../../like';
+import { DeletePost } from './deletePost';
 import CustomButton from '../../../util/CustomButton';
-import PostDialog from './postDialog';
+import { PostDialog } from './postDialog';
 
 // MUI
 import CardContent from '@material-ui/core/CardContent';
@@ -28,7 +28,7 @@ import ChatIcon from '@material-ui/icons/Chat';
  * @param {number} props.likeCount
  * @param {number} props.commentCount
  */
-const PostContent = ({
+const PostContentView = ({
   classes = {},
   userHandle,
   createdAt,
@@ -37,6 +37,7 @@ const PostContent = ({
   postId,
   likeCount,
   commentCount,
+  openDialog,
 }) => (
   <CardContent className={classes.content}>
     <Typography
@@ -62,11 +63,12 @@ const PostContent = ({
       classes={classes}
       postId={postId}
       userHandle={userHandle}
+      openDialog={openDialog}
     />
   </CardContent>
 );
 
-export default withStyles(style)(PostContent);
+export const PostContent = withStyles(style)(PostContentView);
 
 /** View component for displaying an individual post's content
  * @typedef IPostContentComponentProps

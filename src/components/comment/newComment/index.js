@@ -1,7 +1,7 @@
 import React from 'react';
 
 // Components
-import CommentForm from './CommentForm';
+import { CommentForm } from './CommentForm';
 
 // MUI
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -10,7 +10,7 @@ import style from '../../../style';
 // Redux
 import { connect } from 'react-redux';
 
-const NewComment = ({ classes, postId, isAuthenticated }) => {
+const NewCommentView = ({ classes, postId, isAuthenticated }) => {
   const createCommentForm = () => {
     if (isAuthenticated) {
       return <CommentForm classes={classes} postId={postId} />;
@@ -26,4 +26,6 @@ const mapStateToProps = ({ user }) => {
   return { isAuthenticated };
 };
 
-export default connect(mapStateToProps)(withStyles(style)(NewComment));
+export const NewComment = connect(mapStateToProps)(
+  withStyles(style)(NewCommentView)
+);

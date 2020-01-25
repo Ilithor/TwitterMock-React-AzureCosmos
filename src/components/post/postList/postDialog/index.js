@@ -1,8 +1,9 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 
 // Components
 import CustomButton from '../../../../util/CustomButton';
-import PostDialogContent from './PostDialogContent';
+import { PostDialogContent } from './PostDialogContent';
 
 // MUI
 import Dialog from '@material-ui/core/Dialog';
@@ -29,7 +30,7 @@ import { getPost, clearError } from '../../../../redux/actions/dataActions';
  * @param {object} props.post
  * @param {any} props.getPost
  */
-const PostDialog = ({
+const PostDialogView = ({
   classes = {},
   postId,
   userHandle,
@@ -37,13 +38,30 @@ const PostDialog = ({
   post = {},
   getPost,
   clearError,
+  openDialog,
 }) => {
   const [open, setOpen] = useState(false);
+  const [oldPath, setOldPath] = useState('');
+  const history = useHistory();
+  useEffect(() => {
+    if (!!openDialog) {
+      handleOpen();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const handleOpen = () => {
-    getPost(postId);
+    let currentOldPath = window.location.pathname;
+    const currentNewPath = `/u/${userHandle}/post/${postId}`;
+    if ((currentOldPath = currentNewPath)) {
+      currentOldPath = `/u/${userHandle}`;
+    }
+    history.push(currentNewPath);
     setOpen(true);
+    setOldPath(currentOldPath);
+    getPost(postId);
   };
   const handleClose = () => {
+    history.push(oldPath);
     setOpen(false);
     clearError();
   };
@@ -105,7 +123,7 @@ const mapActionsToProps = {
   clearError,
 };
 
-export default connect(
+export const PostDialog = connect(
   mapStateToProps,
   mapActionsToProps
-)(withStyles(style)(PostDialog));
+)(withStyles(style)(PostDialogView));

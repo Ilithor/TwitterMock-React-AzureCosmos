@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect } from 'react';
 
 // Components
-import NewPostDisplay from './NewPostDisplay';
+import { NewPostDisplay } from './NewPostDisplay';
 
 // MUI
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -15,7 +15,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { connect } from 'react-redux';
 import { newUserPost } from '../../../redux/actions/dataActions';
 
-const NewPost = ({ classes = {}, UI = {}, newUserPost }) => {
+const NewPostView = ({ classes = {}, UI = {}, newUserPost }) => {
   const [open, setOpen] = useState(false);
   const [postBody, setPostBody] = useState('');
 
@@ -65,7 +65,7 @@ const NewPost = ({ classes = {}, UI = {}, newUserPost }) => {
 
 const mapStateToProps = ({ UI }) => ({ UI });
 
-export default connect(
+export const NewPost = connect(
   mapStateToProps,
   { newUserPost }
-)(withStyles(style)(NewPost));
+)(withStyles(style)(NewPostView));

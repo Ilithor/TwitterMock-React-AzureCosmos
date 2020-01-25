@@ -7,13 +7,7 @@ import CustomButton from '../util/CustomButton';
 // MUI
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-
-// Icons
-import HomeIcon from '@material-ui/icons/Home';
-import Notifications from '@material-ui/icons/Notifications';
-import KeyboardReturn from '@material-ui/icons/KeyboardReturn';
-import LockOpenIcon from '@material-ui/icons/LockOpen';
-import AssignmentIcon from '@material-ui/icons/Assignment';
+import * as Icon from '@material-ui/icons';
 
 // Redux
 import { connect } from 'react-redux';
@@ -28,16 +22,14 @@ const ButtonLogInOut = ({ isLoggedIn, logout }) => {
   if (isLoggedIn) {
     return (
       <CustomButton tip='Logout' onClick={logout}>
-        <KeyboardReturn />
+        <Icon.KeyboardReturn />
       </CustomButton>
     );
   }
   return (
-    <Link to='/login'>
-      <CustomButton tip='Login'>
-        <LockOpenIcon />
-      </CustomButton>
-    </Link>
+    <CustomButton tip='Login' component={Link} to='/login'>
+      <Icon.LockOpen />
+    </CustomButton>
   );
 };
 
@@ -50,11 +42,9 @@ const ButtonRegister = ({ isLoggedIn }) => {
     return <div></div>;
   }
   return (
-    <Link to='/signup'>
-      <CustomButton tip='Register'>
-        <AssignmentIcon />
-      </CustomButton>
-    </Link>
+    <CustomButton tip='Register' component={Link} to='/signup'>
+      <Icon.Assignment />
+    </CustomButton>
   );
 };
 
@@ -65,8 +55,8 @@ const ButtonRegister = ({ isLoggedIn }) => {
 const ButtonNotification = ({ isLoggedIn }) => {
   if (isLoggedIn) {
     return (
-      <CustomButton tip='Notifications'>
-        <Notifications />
+      <CustomButton tip='Notifications' component={Link} to='/notification'>
+        <Icon.Notifications />
       </CustomButton>
     );
   }
@@ -78,14 +68,12 @@ const ButtonNotification = ({ isLoggedIn }) => {
  * @param {boolean} props.isLoggedIn
  * @param {any} props.logoutUserAction
  */
-const Navbar = ({ isLoggedIn = false, logoutUserAction }) => (
+const NavbarView = ({ isLoggedIn = false, logoutUserAction }) => (
   <AppBar>
     <Toolbar className='nav-container'>
-      <Link to='/'>
-        <CustomButton tip='Home'>
-          <HomeIcon />
-        </CustomButton>
-      </Link>
+      <CustomButton tip='Home' component={Link} to='/'>
+        <Icon.Home />
+      </CustomButton>
       <ButtonNotification isLoggedIn={isLoggedIn} />
       <ButtonLogInOut isLoggedIn={isLoggedIn} logout={logoutUserAction} />
       <ButtonRegister isLoggedIn={isLoggedIn} />
@@ -104,7 +92,7 @@ const mapActionsToProps = {
   logoutUserAction,
 };
 
-export default connect(
+export const Navbar = connect(
   mapStateToProps,
   mapActionsToProps
-)(Navbar);
+)(NavbarView);

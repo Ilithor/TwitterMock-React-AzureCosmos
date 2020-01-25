@@ -14,7 +14,7 @@ import style from '../../../../style';
  * @param {string} props.location
  * @param {React.ChangeEventHandler} props.handleChange
  */
-const EditDetailsForm = ({
+const EditDetailsFormView = ({
   classes,
   aboutMe,
   handleChange,
@@ -57,4 +57,4 @@ const EditDetailsForm = ({
   </form>
 );
 
-export default withStyles(style)(EditDetailsForm);
+export const EditDetailsForm = withStyles(style)(EditDetailsFormView);

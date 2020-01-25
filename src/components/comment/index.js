@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import style from '../../style';
 
-const Comment = ({ classes = {}, comment = {} }) => (
+const CommentView = ({ classes = {}, comment = {} }) => (
   <Card className={classes.commentCard}>
     <CardMedia
       className={classes.commentImage}
@@ -34,4 +34,4 @@ const Comment = ({ classes = {}, comment = {} }) => (
   </Card>
 );
 
-export default withStyles(style)(Comment);
+export const Comment = withStyles(style)(CommentView);

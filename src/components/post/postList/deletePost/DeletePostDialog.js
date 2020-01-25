@@ -25,7 +25,7 @@ import { deleteUserPost } from '../../../../redux/actions/dataActions';
  * @param {string} props.postId
  * @param {any} props.deleteUserPost
  */
-const DeletePostDialog = ({ classes = {}, postId, deleteUserPost }) => {
+const DeletePostDialogView = ({ classes = {}, postId, deleteUserPost }) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -60,7 +60,7 @@ const DeletePostDialog = ({ classes = {}, postId, deleteUserPost }) => {
   );
 };
 
-export default connect(
+export const DeletePostDialog = connect(
   null,
   { deleteUserPost }
-)(withStyles(style)(DeletePostDialog));
+)(withStyles(style)(DeletePostDialogView));

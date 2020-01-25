@@ -1,7 +1,7 @@
 import React from 'react';
 
 // Components
-import EditDetailsForm from './EditDetailsForm';
+import { EditDetailsForm } from './EditDetailsForm';
 
 // MUI
 import Button from '@material-ui/core/Button';
@@ -24,7 +24,7 @@ import style from '../../../../style';
  * @param {React.ChangeEventHandler} props.handleSubmit
  * @param {React.ChangeEventHandler} props.handleClose
  */
-const EditDetailsDisplay = ({
+const EditDetailsDisplayView = ({
   classes = {},
   open,
   handleClose,
@@ -56,4 +56,4 @@ const EditDetailsDisplay = ({
   </Dialog>
 );
 
-export default withStyles(style)(EditDetailsDisplay);
+export const EditDetailsDisplay = withStyles(style)(EditDetailsDisplayView);

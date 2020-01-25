@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 // Components
-import Post from '../components/post/postList';
-import Profile from '../components/profile';
-import NewPost from '../components/post/newPost';
+import { Post } from '../components/post/postList';
+import { Profile } from '../components/profile';
+import { NewPost } from '../components/post/newPost';
 
 // MUI
 import Grid from '@material-ui/core/Grid';
@@ -20,7 +20,7 @@ import { connect } from 'react-redux';
 import { getPostList } from '../redux/actions/dataActions';
 import { getUserDataAction } from '../redux/actions/userActions';
 
-export const Home = ({
+const HomePageView = ({
   classes = {},
   postList,
   isLoading,
@@ -85,7 +85,7 @@ const mapActionsToProps = {
   getUserDataAction,
 };
 
-export default connect(
+export const HomePage = connect(
   mapStateToProps,
   mapActionsToProps
-)(withStyles(style)(Home));
+)(withStyles(style)(HomePageView));

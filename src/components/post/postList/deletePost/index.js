@@ -1,7 +1,7 @@
 import React from 'react';
 
 // Components
-import DeletePostDialog from './DeletePostDialog';
+import { DeletePostDialog } from './DeletePostDialog';
 
 // MUI
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -17,7 +17,7 @@ import { connect } from 'react-redux';
  * @param {string} props.postId
  * @param {any} props.deleteUserPost
  */
-const DeletePost = ({
+const DeletePostView = ({
   classes = {},
   postId,
   userHandle,
@@ -41,4 +41,6 @@ const mapStateToProps = ({ user }) => {
   };
 };
 
-export default connect(mapStateToProps)(withStyles(style)(DeletePost));
+export const DeletePost = connect(mapStateToProps)(
+  withStyles(style)(DeletePostView)
+);

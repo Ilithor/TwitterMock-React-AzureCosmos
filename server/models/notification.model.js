@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 const NotificationSchema = Schema({
-  createdAt: Date,
+  createdAt: { type: Date, expires: '7d', default: Date.now },
   read: { type: Boolean, required: true },
   recipient: { type: String, required: true },
   postId: { type: String, required: true },

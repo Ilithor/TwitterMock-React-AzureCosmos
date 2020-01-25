@@ -17,7 +17,7 @@ import { getLikePost } from '../../redux/actions/dataActions';
  * @param {any} props.getLikePost
  * @param {object} props.UI
  */
-export const LikeButton = ({ postId, getLikePost, UI = {} }) => {
+export const LikeButtonView = ({ postId, getLikePost, UI = {} }) => {
   const makeCall = useRef(false);
   const likePost = () => {
     if (!!makeCall.current) return;
@@ -41,10 +41,10 @@ export const LikeButton = ({ postId, getLikePost, UI = {} }) => {
 
 const mapStateToProps = ({ UI }) => ({ UI });
 
-export default connect(
+export const LikeButton = connect(
   mapStateToProps,
   { getLikePost }
-)(LikeButton);
+)(LikeButtonView);
 
 /**
  * @typedef ILikeButtonComponentProps

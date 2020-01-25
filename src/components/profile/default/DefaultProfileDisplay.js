@@ -1,7 +1,7 @@
 import React from 'react';
 
 // Components
-import DefaultProfileButtons from './DefaultProfileButtons';
+import { DefaultProfileButton } from './DefaultProfileButton';
 
 // MUI
 import Paper from '@material-ui/core/Paper';
@@ -14,15 +14,17 @@ import style from '../../../style';
  * @param {object} props
  * @param {object} props.classes
  */
-const DefaultProfileDisplay = ({ classes = {} }) => {
+const DefaultProfileDisplayView = ({ classes = {} }) => {
   return (
     <Paper className={classes.paper}>
       <Typography varian='body2' align='center'>
         No profile found, please login again
       </Typography>
-      <DefaultProfileButtons classes={classes} />
+      <DefaultProfileButton classes={classes} />
     </Paper>
   );
 };
 
-export default withStyles(style)(DefaultProfileDisplay);
+export const DefaultProfileDisplay = withStyles(style)(
+  DefaultProfileDisplayView
+);

@@ -1,10 +1,35 @@
-import { create } from '../services/comment.service';
+import _ from 'lodash';
+import { getList, create, remove } from '../services/comment.service';
 import {
   findPostById,
   findPostAndUpdateCount,
   findCommentByHandleAndPostId,
 } from './find';
-import { remove } from '../services/comment.service';
+
+export const getCommentList = (req, res) => {
+  getList()
+    .then(data => {
+      if (!data) {
+        return res.status(404).json(data);
+      }
+      const commentList = _.map(data, doc => ({
+        _id: doc.id,
+        userHandle: doc.userHandle,
+        postId: doc.postId,
+        body: doc.body,
+        createdAt: doc.createdAt,
+      }));
+      if (commentList.length <= 0) {
+        return res.json({ message: 'No comments found' });
+      } else {
+        return res.json(commentList);
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: err.code });
+    });
+};
 
 /** Create a comment on a post
  * @type {RouteHandler}

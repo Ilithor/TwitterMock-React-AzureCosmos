@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 // Components
-import Login from '../components/login';
+import { Login } from '../components/login';
 
 // MUI
 import withStyles from '@material-ui/core/styles/withStyles';
@@ -18,7 +18,7 @@ import { loginUserAction } from '../redux/actions/userActions';
  * @param {any} props.UI
  * @param {Reac} props.history
  */
-const LoginPage = ({ classes = {}, UI = {}, history, loginUserAction }) => {
+const LoginPageView = ({ classes = {}, UI = {}, history, loginUserAction }) => {
   const [error, setError] = useState({});
   const [editorState, setEditorState] = useState({
     email: '',
@@ -66,7 +66,8 @@ const LoginPage = ({ classes = {}, UI = {}, history, loginUserAction }) => {
 };
 
 const mapStateToProps = ({ UI }) => ({ UI });
-export default connect(
+
+export const LoginPage = connect(
   mapStateToProps,
   { loginUserAction }
-)(withStyles(style)(LoginPage));
+)(withStyles(style)(LoginPageView));
