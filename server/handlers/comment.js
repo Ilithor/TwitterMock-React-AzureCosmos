@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { getList, create, remove } from '../services/comment.service';
+import { createNotification } from './notification';
 import {
   findPostById,
   findPostAndUpdateCount,
@@ -36,7 +37,6 @@ export const getCommentList = (req, res) => {
  */
 export const commentOnPost = async (req, res, next) => {
   let postToUpdate = {};
-  let newComment = {};
   req.notification = {};
   await findPostById(req.params.postId)
     .then(async post => {
@@ -51,16 +51,18 @@ export const commentOnPost = async (req, res, next) => {
             return res.status(400).json({ error: comment });
           } else {
             req.notification.typeId = comment._id;
-            newComment = comment;
             await findPostAndUpdateCount(
               req.params.postId,
               postToUpdate.likeCount,
               postToUpdate.commentCount
-            ).then(() => {
-              req.notification.type = 'comment';
-              req.notification.typeItem = newComment;
-              next();
-            });
+            );
+            const recipient = req.notification.recipient;
+            const postId = req.params.postId;
+            const sender = req.user.handle;
+            const type = 'comment';
+            const typeId = comment._id;
+            await createNotification(recipient, postId, sender, type, typeId);
+            return res.ok;
           }
         });
       }
