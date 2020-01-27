@@ -5,23 +5,26 @@ import { Link } from 'react-router-dom';
 import CustomButton from '../util/CustomButton';
 
 // MUI
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
+import { AppBar, Toolbar } from '@material-ui/core';
+
+// Icons
 import * as Icon from '@material-ui/icons';
 
-// Redux
-import { connect } from 'react-redux';
-import { logoutUserAction } from '../redux/actions/userActions';
+// Context
+import {
+  useUserAuthenticationData,
+  useUserLogout,
+} from './context/userContext';
 
 /** Shows the log in or log out button
  * @param {object} props
- * @param {boolean} props.isLoggedIn
- * @param {any} props.logout
+ * @param {boolean} props.isAuthenticated
+ * @param {any} props.logoutUser
  */
-const ButtonLogInOut = ({ isLoggedIn, logout }) => {
-  if (isLoggedIn) {
+const ButtonLogInOut = ({ isAuthenticated, logoutUser }) => {
+  if (isAuthenticated) {
     return (
-      <CustomButton tip='Logout' onClick={logout}>
+      <CustomButton tip='Logout' onClick={logoutUser}>
         <Icon.KeyboardReturn />
       </CustomButton>
     );
@@ -35,10 +38,10 @@ const ButtonLogInOut = ({ isLoggedIn, logout }) => {
 
 /** Displays either signup button or empty div
  * @param {object} props
- * @param {boolean} props.isLoggedIn
+ * @param {boolean} props.isAuthenticated
  */
-const ButtonRegister = ({ isLoggedIn }) => {
-  if (isLoggedIn) {
+const ButtonRegister = ({ isAuthenticated }) => {
+  if (isAuthenticated) {
     return <div></div>;
   }
   return (
@@ -50,10 +53,10 @@ const ButtonRegister = ({ isLoggedIn }) => {
 
 /** Displays either notification button or empty div
  * @param {object} props
- * @param {boolean} props.isLoggedIn
+ * @param {boolean} props.isAuthenticated
  */
-const ButtonNotification = ({ isLoggedIn }) => {
-  if (isLoggedIn) {
+const ButtonNotification = ({ isAuthenticated }) => {
+  if (isAuthenticated) {
     return (
       <CustomButton tip='Notifications' component={Link} to='/notification'>
         <Icon.Notifications />
@@ -64,35 +67,23 @@ const ButtonNotification = ({ isLoggedIn }) => {
 };
 
 /** View component for navbar
- * @param {object} props
- * @param {boolean} props.isLoggedIn
- * @param {any} props.logoutUserAction
  */
-const NavbarView = ({ isLoggedIn = false, logoutUserAction }) => (
-  <AppBar>
-    <Toolbar className='nav-container'>
-      <CustomButton tip='Home' component={Link} to='/'>
-        <Icon.Home />
-      </CustomButton>
-      <ButtonNotification isLoggedIn={isLoggedIn} />
-      <ButtonLogInOut isLoggedIn={isLoggedIn} logout={logoutUserAction} />
-      <ButtonRegister isLoggedIn={isLoggedIn} />
-    </Toolbar>
-  </AppBar>
-);
-
-const mapStateToProps = ({ user }) => {
-  const isLoggedIn = !!user && !!user.userInfo && !!user.userInfo.handle;
-  return {
-    isLoggedIn,
-  };
+export const Navbar = () => {
+  const { isAuthenticated } = useUserAuthenticationData();
+  const { logoutUser } = useUserLogout();
+  return (
+    <AppBar>
+      <Toolbar className='nav-container'>
+        <CustomButton tip='Home' component={Link} to='/'>
+          <Icon.Home />
+        </CustomButton>
+        <ButtonNotification isAuthenticated={isAuthenticated} />
+        <ButtonLogInOut
+          isAuthenticated={isAuthenticated}
+          logoutUser={logoutUser}
+        />
+        <ButtonRegister isAuthenticated={isAuthenticated} />
+      </Toolbar>
+    </AppBar>
+  );
 };
-
-const mapActionsToProps = {
-  logoutUserAction,
-};
-
-export const Navbar = connect(
-  mapStateToProps,
-  mapActionsToProps
-)(NavbarView);
