@@ -6,10 +6,6 @@ import { UnlikeButton } from './UnlikeButton';
 import { LikeButton } from './LikeButton';
 import CustomButton from '../../util/CustomButton';
 
-// MUI
-import withStyles from '@material-ui/core/styles/withStyles';
-import style from '../../style';
-
 // Icons
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 
@@ -23,9 +19,9 @@ import { connect } from 'react-redux';
  * @param {string} props.postId
  * @param {array} props.likeList
  */
-const LikeView = ({ isAuthenticated, postId, likeList }) => {
+const LikeView = ({ isAuthenticated, postId, like = {} }) => {
   const alreadyLiked = () => {
-    if (likeList && likeList.find(like => like.postId === postId)) {
+    if (like.postId === postId) {
       return true;
     } else {
       return false;
@@ -49,11 +45,9 @@ const LikeView = ({ isAuthenticated, postId, likeList }) => {
 
 const mapStateToProps = ({ user }) => {
   const isAuthenticated = !!user.authenticated;
-  const likeList = user.likes;
   return {
     isAuthenticated,
-    likeList,
   };
 };
 
-export const Like = connect(mapStateToProps)(withStyles(style)(LikeView));
+export const Like = connect(mapStateToProps)(LikeView);
