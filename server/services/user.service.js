@@ -13,24 +13,40 @@ import {
 } from '../util/validators';
 
 import mongoConnect from '../util/mongo';
+import Like from '../models/like.model';
 mongoConnect();
 
 /** Returns a list of users
- * @return {Promise<user[User]> | UserNotFound}
+ * @returns {Promise<user[User]> | UserNotFound}
  */
 export const getList = async () => {
-  let user = [];
   let error = {};
-  user = await User.find({})
+  const user = await User.find({})
     .sort({ createdAt: -1 })
     .read(mongo.ReadPreference.NEAREST);
 
   if (user.length === 0) {
     error.user = 'No users found';
     return error;
-  } else {
-    return user;
   }
+  return user;
+};
+
+/** Returns a list of likes by userHandle
+ * @param {string} userHandle
+ * @returns {Promise<likeList[Like]> | Error}
+ */
+export const getLikeList = async userHandle => {
+  let error = {};
+  const likeList = await Like.find({
+    userHandle: userHandle,
+  }).read(mongo.ReadPreference.NEAREST);
+
+  if (likeList.length === 0) {
+    error.like = 'No likes found';
+    return error;
+  }
+  return likeList;
 };
 
 /** Validates then creates new User

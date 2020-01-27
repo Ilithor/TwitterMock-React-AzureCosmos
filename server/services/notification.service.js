@@ -4,15 +4,15 @@ import Notification from '../models/notification.model';
  * @param {Request} notificationParam
  * @return {Promise<UserNotification>}
  */
-export const create = async notificationParam => {
+export const create = async (recipient, postId, sender, type, typeId) => {
   let dataForNotification = {};
 
   dataForNotification.read = false;
-  dataForNotification.recipient = notificationParam.notification.recipient;
-  dataForNotification.postId = notificationParam.params.postId;
-  dataForNotification.sender = notificationParam.user.handle;
-  dataForNotification.type = notificationParam.notification.type;
-  dataForNotification.typeId = notificationParam.notification.typeId;
+  dataForNotification.recipient = recipient;
+  dataForNotification.postId = postId;
+  dataForNotification.sender = sender;
+  dataForNotification.type = type;
+  dataForNotification.typeId = typeId;
 
   const newNotification = new Notification(dataForNotification);
 
