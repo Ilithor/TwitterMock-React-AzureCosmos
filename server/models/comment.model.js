@@ -16,10 +16,6 @@ const CommentSchema = Schema({
     type: String,
     required: true,
   },
-  userImage: {
-    type: String,
-    required: true,
-  },
 });
 
 const Comment = mongoose.model('Comment', CommentSchema);
