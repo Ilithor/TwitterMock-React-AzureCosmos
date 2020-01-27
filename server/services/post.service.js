@@ -36,7 +36,6 @@ export const create = async (postParam, user) => {
   }
   // Create new post
   postParam.userHandle = user.handle;
-  postParam.userImage = user.bio.image;
   const newPost = new Post(postParam);
   newPost.createdAt = new Date().toISOString();
   newPost.likeCount = 0;
