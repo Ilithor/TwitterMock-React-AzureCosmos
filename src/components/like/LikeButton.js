@@ -4,51 +4,40 @@ import React, { useRef } from 'react';
 import CustomButton from '../../util/CustomButton';
 
 // Icons
-import { FavoriteBorder } from '@material-ui/icons';
+import * as Icon from '@material-ui/icons';
 
-// Redux
-import { connect } from 'react-redux';
-import { getLikePost } from '../../redux/actions/dataActions';
+// Context
+import { usePostData } from '../post/postContext';
+import { useLikeData } from './likeContext';
+import { likePost } from '../../util/fetch/post';
 
 /** View component for displaying an icon to like a post
  * @type {React.FunctionComponent}
  * @param {object} props
  * @param {string} props.postId
- * @param {any} props.getLikePost
- * @param {object} props.UI
  */
-export const LikeButtonView = ({ postId, getLikePost, UI = {} }) => {
+export const LikeButton = ({ postId }) => {
+  const { refreshPostList } = usePostData();
+  const { refreshLikeList } = useLikeData();
   const makeCall = useRef(false);
-  const likePost = () => {
+  const onClick = () => {
     if (!!makeCall.current) return;
     makeCall.current = true;
-    getLikePost(postId);
-    setTimeout(() => {
-      makeCall.current = false;
-    }, 3000);
+    likePost(postId).then(() => {
+      Promise.all([refreshPostList(), refreshLikeList()]).then(() => {
+        makeCall.current = false;
+      });
+    });
   };
 
   return (
-    <CustomButton
-      tip='Like'
-      onClick={likePost}
-      disabled={!!UI.isLoading || !!makeCall.current}
-    >
-      <FavoriteBorder color='primary' />
+    <CustomButton tip='Like' onClick={onClick} disabled={!!makeCall.current}>
+      <Icon.FavoriteBorder color='primary' />
     </CustomButton>
   );
 };
 
-const mapStateToProps = ({ UI }) => ({ UI });
-
-export const LikeButton = connect(
-  mapStateToProps,
-  { getLikePost }
-)(LikeButtonView);
-
 /**
  * @typedef ILikeButtonComponentProps
  * @param {string} postId
- * @param {any} getLikePost
- * @param {object} UI
  */
