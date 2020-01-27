@@ -1,15 +1,25 @@
 import React, { useState, useEffect } from 'react';
 
 // MUI
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
+import { Button, Grid, TextField } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 // Redux
 import { connect } from 'react-redux';
 import { getCommentPost } from '../../../redux/actions/dataActions';
 
-const CommentFormView = ({ classes = {}, postId, UI, getCommentPost }) => {
+const useStyles = makeStyles({
+  textField: {
+    margin: '10px auto 10px auto',
+  },
+  button: {
+    marginTop: '20',
+    position: 'relative',
+  },
+});
+
+const CommentFormView = ({ postId, UI, getCommentPost }) => {
+  const classes = useStyles();
   const [body, setBody] = useState('');
 
   const handleChange = event => {
@@ -39,13 +49,13 @@ const CommentFormView = ({ classes = {}, postId, UI, getCommentPost }) => {
           value={body}
           onChange={handleChange}
           fullWidth
-          className={classes.textField}
+          className={classes?.textField}
         />
         <Button
           type='submit'
           variant='contained'
           color='primary'
-          className={classes.button}
+          className={classes?.button}
         >
           Submit
         </Button>
