@@ -1,73 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 // Components
 import { Login } from '../components/login';
 
-// MUI
-import withStyles from '@material-ui/core/styles/withStyles';
-import style from '../style';
-
-// Redux
-import { connect } from 'react-redux';
-import { loginUserAction } from '../redux/actions/userActions';
-
 /**
  * @type {React.FunctionComponent}
- * @param {object} props
- * @param {object} props.classes
- * @param {any} props.UI
- * @param {Reac} props.history
  */
-const LoginPageView = ({ classes = {}, UI = {}, history, loginUserAction }) => {
-  const [error, setError] = useState({});
-  const [editorState, setEditorState] = useState({
-    email: '',
-    password: '',
-  });
-  const { email, password } = editorState;
-
-  useEffect(() => setError(UI.error), [UI.error]);
-
-  /** Try to log the user in with the current data
-   *
-   * @param {React.ChangeEvent} event
-   */
-  const handleSubmit = event => {
-    event.preventDefault();
-    const userData = {
-      email,
-      password,
-    };
-    loginUserAction(userData, history);
-  };
-
-  /** Saves editor change to local state
-   *
-   * @param {React.ChangeEvent} event
-   */
-  const handleChange = event => {
-    const { name, value } = event.target;
-    setEditorState({
-      ...editorState,
-      [name]: value,
-    });
-  };
-  return (
-    <Login
-      classes={classes}
-      error={error}
-      email={email}
-      password={password}
-      handleSubmit={handleSubmit}
-      handleChange={handleChange}
-      isLoading={UI.isLoading}
-    />
-  );
+export const LoginPage = () => {
+  return <Login />;
 };
-
-const mapStateToProps = ({ UI }) => ({ UI });
-
-export const LoginPage = connect(
-  mapStateToProps,
-  { loginUserAction }
-)(withStyles(style)(LoginPageView));
