@@ -1,4 +1,11 @@
-import { getList, register, login, updateBio } from '../services/user.service';
+import _ from 'lodash';
+import {
+  getList,
+  getLikeList,
+  register,
+  login,
+  updateBio,
+} from '../services/user.service';
 import { generateUserToken } from './token';
 import { dataUri } from '../util/multer';
 import {
@@ -22,17 +29,44 @@ export const getUserList = (req, res, next) => {
         return res.status(404).json({ error: data.user });
       }
 
-      let user = [];
-      data.forEach(user => {
-        user.push({
-          userId: user.id,
-          email: user.credential.email,
-          password: user.credential.password,
-          handle: user.handle,
-        });
-      });
-      // Returns list of users in array
-      return res.json(user);
+      const userList = _.map(data, user => ({
+        handle: user.handle,
+        userImage: user.bio.image,
+        createdAt: user.createdAt,
+        aboutMe: user.bio.aboutMe,
+        location: user.bio.location,
+        website: user.bio.website,
+      }));
+      if (userList.length <= 0) {
+        return res.json({ message: 'No users found' });
+      } else {
+        // Returns list of users in array
+        return res.json(userList);
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      return res.status(500).json({ error: err.code });
+    });
+};
+
+export const fetchLikeList = async (req, res) => {
+  const { handle } = req.params;
+  getLikeList(handle)
+    .then(data => {
+      if (data.like) {
+        return res.status(404).json({ error: data.like });
+      }
+      const likeList = _.map(data, like => ({
+        userHandle: like.userHandle,
+        postId: like.postId,
+      }));
+      if (likeList.length <= 0) {
+        return res.json({ message: 'No likes found' });
+      } else {
+        // Returns list of likes in array
+        return res.json(likeList);
+      }
     })
     .catch(err => {
       console.error(err);

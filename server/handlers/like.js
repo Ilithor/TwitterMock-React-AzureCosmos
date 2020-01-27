@@ -1,4 +1,5 @@
 import { create, remove } from '../services/like.service';
+import { createNotification } from './notification';
 import {
   findPostById,
   findLikeByHandleAndPostId,
@@ -33,9 +34,13 @@ export const likePost = async (req, res, next) => {
                 postToUpdate.likeCount,
                 postToUpdate.commentCount
               );
-              req.notification.type = 'like';
-              req.notification.typeItem = like;
-              next();
+              const recipient = req.notification.recipient;
+              const postId = req.params.postId;
+              const sender = req.user.handle;
+              const type = 'like';
+              const typeId = like._id;
+              await createNotification(recipient, postId, sender, type, typeId);
+              return res.status(200).send();
             });
           }
         });

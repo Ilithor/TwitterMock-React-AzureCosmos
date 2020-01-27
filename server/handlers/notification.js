@@ -44,15 +44,14 @@ export const getNotification = async (req, res) => {
  *  of a like or comment
  * @type {RouteHandler}
  */
-export const createNotification = async (req, res) => {
-  await create(req)
-    .then(doc => {
-      res.status(201).json({ message: `${doc.type} successfully added` });
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).json({ error: err.code });
-    });
+export const createNotification = async (
+  recipient,
+  postId,
+  sender,
+  type,
+  typeId
+) => {
+  await create(recipient, postId, sender, type, typeId);
 };
 
 /** Marks notification as read by user
