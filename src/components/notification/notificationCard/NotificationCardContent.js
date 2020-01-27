@@ -3,24 +3,30 @@ import dayjs from 'dayjs';
 
 // MUI
 import { CardContent, Typography } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
-import style from '../../../style';
+import { makeStyles } from '@material-ui/core/styles';
 
 // Icons
 import * as Icon from '@material-ui/icons';
 
+const useStyles = makeStyles({
+  content: {
+    padding: 25,
+    objectFit: 'cover',
+  },
+});
+
 /** Displays individual notification content
  * @param {object} props
- * @param {object} props.classes
+ * @param {object} props.notification
  * @param {string} props.postBody
  * @param {string} props.commentBody
  */
-const NotificationCardContentView = ({
-  classes = {},
+export const NotificationCardContent = ({
   notification = {},
   postBody,
   commentBody,
 }) => {
+  const classes = useStyles();
   const NotificationContent = ({ type, postBody, commentBody }) => {
     if (type === 'like') {
       return <React.Fragment>"{postBody}"</React.Fragment>;
@@ -51,7 +57,7 @@ const NotificationCardContentView = ({
   };
   return (
     <CardContent className={classes?.content}>
-      <NotificationNew classes={classes} read={notification?.read} />
+      <NotificationNew read={notification?.read} />
       <FromSenderType type={notification?.type} sender={notification?.sender} />
       <NotificationContent
         type={notification?.type}
@@ -65,7 +71,3 @@ const NotificationCardContentView = ({
     </CardContent>
   );
 };
-
-export const NotificationCardContent = withStyles(style)(
-  NotificationCardContentView
-);

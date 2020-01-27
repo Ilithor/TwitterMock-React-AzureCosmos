@@ -1,13 +1,9 @@
 import React, { Fragment } from 'react';
 
-// MUI
-import withStyles from '@material-ui/core/styles/withStyles';
-import style from '../../../../style';
-
 // Icons
-import LinkIcon from '@material-ui/icons/Link';
+import * as Icon from '@material-ui/icons';
 
-const WebsiteView = ({ website }) => {
+export const Website = ({ website }) => {
   if (!!website) {
     const link = (
       <a href={website} target='_blank' rel='noopener noreferrer'>
@@ -17,7 +13,7 @@ const WebsiteView = ({ website }) => {
     );
     return (
       <Fragment>
-        <LinkIcon color='primary' />
+        <Icon.Link color='primary' />
         {link}
         <hr />
       </Fragment>
@@ -25,5 +21,3 @@ const WebsiteView = ({ website }) => {
   }
   return <div />;
 };
-
-export const Website = withStyles(style)(WebsiteView);

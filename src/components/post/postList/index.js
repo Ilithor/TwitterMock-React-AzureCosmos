@@ -6,11 +6,10 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { PostContent } from './PostContent';
 
 // MUI
-import Card from '@material-ui/core/Card';
-import CardMedia from '@material-ui/core/CardMedia';
-import withStyles from '@material-ui/core/styles/withStyles';
+import { Card, CardMedia } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
-const style = {
+const useStyles = makeStyles({
   card: {
     position: 'relative',
     display: 'flex',
@@ -23,7 +22,7 @@ const style = {
     padding: 25,
     objectFit: 'cover',
   },
-};
+});
 
 /** View component for displaying an individual post on the site
  * @type {React.FunctionComponent}
@@ -31,40 +30,25 @@ const style = {
  * @param {object} props.classes
  * @param {object} props.post
  */
-const PostView = ({ classes = {}, post = {}, openDialog }) => {
+export const Post = ({ post = {}, user = {}, like = {} }) => {
+  const classes = useStyles();
   dayjs.extend(relativeTime);
   if (!post) {
     return;
   }
-  const {
-    userImage,
-    userHandle,
-    createdAt,
-    body,
-    postId,
-    likeCount,
-    commentCount,
-  } = post;
   return (
     <Card className={classes.card}>
       <CardMedia
-        image={userImage}
+        image={user?.userImage}
         title='Profile image'
-        className={classes.image}
+        className={classes?.image}
       />
       <PostContent
         classes={classes}
-        userHandle={userHandle}
-        createdAt={createdAt}
-        body={body}
-        userImage={userImage}
-        postId={postId}
-        likeCount={likeCount}
-        commentCount={commentCount}
-        openDialog={openDialog}
+        post={post}
+        userImage={user?.userImage}
+        like={like}
       />
     </Card>
   );
 };
-
-export const Post = withStyles(style)(PostView);

@@ -3,12 +3,8 @@ import React from 'react';
 // Components
 import CustomButton from '../../../../util/CustomButton';
 
-// MUI
-import withStyles from '@material-ui/core/styles/withStyles';
-import style from '../../../../style';
-
 // Icons
-import EditIcon from '@material-ui/icons/Edit';
+import * as Icon from '@material-ui/icons';
 
 /** View component for displaying the user image
  * @type {React.FunctionComponent}
@@ -17,14 +13,20 @@ import EditIcon from '@material-ui/icons/Edit';
  * @param {React.ChangeEventHandler} props.handleEditPhoto
  * @param {React.ChangeEventHandler} props.handleImageChange
  */
-const ImageWrapperView = ({ bioImage, handleEditPhoto, handleImageChange }) => {
+export const ImageWrapper = ({
+  bioImage,
+  handleEditPhoto,
+  handleImageChange,
+}) => {
+  const UserImage = () => {
+    if (!!bioImage) {
+      return <img className='profile-image' src={bioImage} alt='profile' />;
+    }
+    return null;
+  };
   return (
     <div className='image-wrapper'>
-      {bioImage ? (
-        <img className='profile-image' src={bioImage} alt='profile' />
-      ) : (
-        <div>Derp</div>
-      )}
+      <UserImage />
       <input
         type='file'
         id='imageUpload'
@@ -36,10 +38,8 @@ const ImageWrapperView = ({ bioImage, handleEditPhoto, handleImageChange }) => {
         onClick={handleEditPhoto}
         btnClassName='button'
       >
-        <EditIcon color='primary' />
+        <Icon.Edit color='primary' />
       </CustomButton>
     </div>
   );
 };
-
-export const ImageWrapper = withStyles(style)(ImageWrapperView);

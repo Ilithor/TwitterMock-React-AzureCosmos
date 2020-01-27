@@ -4,9 +4,8 @@ import React, { Fragment, useState, useEffect } from 'react';
 import { NewPostDisplay } from './NewPostDisplay';
 
 // MUI
-import withStyles from '@material-ui/core/styles/withStyles';
-import Button from '@material-ui/core/Button';
-import style from '../../../style';
+import { makeStyles } from '@material-ui/core/styles';
+import { Button } from '@material-ui/core';
 
 // Icons
 import AddIcon from '@material-ui/icons/Add';
@@ -15,7 +14,16 @@ import AddIcon from '@material-ui/icons/Add';
 import { connect } from 'react-redux';
 import { newUserPost } from '../../../redux/actions/dataActions';
 
-const NewPostView = ({ classes = {}, UI = {}, newUserPost }) => {
+const useStyles = makeStyles({
+  createButton: {
+    position: 'relative',
+    left: '33%',
+    marginBottom: 20,
+  },
+});
+
+const NewPostView = ({ UI = {}, newUserPost }) => {
+  const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [postBody, setPostBody] = useState('');
 
@@ -53,7 +61,6 @@ const NewPostView = ({ classes = {}, UI = {}, newUserPost }) => {
       <NewPostDisplay
         open={open}
         handleClose={handleClose}
-        classes={classes}
         handleSubmit={handleSubmit}
         error={UI.error}
         handleChange={handleChange}
@@ -68,4 +75,4 @@ const mapStateToProps = ({ UI }) => ({ UI });
 export const NewPost = connect(
   mapStateToProps,
   { newUserPost }
-)(withStyles(style)(NewPostView));
+)(NewPostView);

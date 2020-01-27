@@ -3,10 +3,6 @@ import React, { useState, useEffect } from 'react';
 // Component
 import { Register } from '../components/register';
 
-// MUI
-import withStyles from '@material-ui/core/styles/withStyles';
-import style from '../style';
-
 // Redux
 import { connect } from 'react-redux';
 import { registerUserAction } from '../redux/actions/userActions';
@@ -14,16 +10,10 @@ import { registerUserAction } from '../redux/actions/userActions';
 /**
  * @type {React.FunctionComponent}
  * @param {object} props
- * @param {object} props.classes
  * @param {any} props.UI
  * @param {Reac} props.history
  */
-const RegisterPageView = ({
-  classes = {},
-  UI = {},
-  history,
-  registerUserAction,
-}) => {
+const RegisterPageView = ({ UI = {}, history, registerUserAction }) => {
   const [error, setError] = useState({});
   const [editorState, setEditorState] = useState({
     email: '',
@@ -47,7 +37,7 @@ const RegisterPageView = ({
   };
 
   const handleChange = event => {
-    const { name, value } = event.target;
+    const { name, value } = event?.target;
     setEditorState({
       ...editorState,
       [name]: value,
@@ -55,7 +45,6 @@ const RegisterPageView = ({
   };
   return (
     <Register
-      classes={classes}
       error={error}
       handle={handle}
       email={email}
@@ -63,7 +52,7 @@ const RegisterPageView = ({
       confirmPassword={confirmPassword}
       handleSubmit={handleSubmit}
       handleChange={handleChange}
-      isLoading={UI.isLoading}
+      isLoading={UI?.isLoading}
     />
   );
 };
@@ -73,4 +62,4 @@ const mapStateToProps = ({ UI }) => ({ UI });
 export const RegisterPage = connect(
   mapStateToProps,
   { registerUserAction }
-)(withStyles(style)(RegisterPageView));
+)(RegisterPageView);

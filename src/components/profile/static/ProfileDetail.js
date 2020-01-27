@@ -11,19 +11,24 @@ import { AboutMe } from './profileBio/AboutMe';
 import MuiLink from '@material-ui/core/Link';
 
 // Icons
-import CalendarToday from '@material-ui/icons/CalendarToday';
+import * as Icon from '@material-ui/icons';
 
-export const ProfileDetail = ({ handle, bio, createdAt }) => (
+export const ProfileDetail = ({ profile }) => (
   <div className='profile-details'>
-    <MuiLink component={Link} to={`/u/${handle}`} color='primary' variant='h5'>
-      @{handle}
+    <MuiLink
+      component={Link}
+      to={`/u/${profile?.handle}`}
+      color='primary'
+      variant='h5'
+    >
+      @{profile?.handle}
     </MuiLink>
     <hr />
-    <AboutMe aboutMe={bio.aboutMe} />
+    <AboutMe aboutMe={profile?.aboutMe} />
     <hr />
-    <Location location={bio.location} />
-    <Website website={bio.website} />
-    <CalendarToday color='primary' />{' '}
-    <span>Joined {dayjs(createdAt).format('MMM YYYY')}</span>
+    <Location location={profile?.location} />
+    <Website website={profile?.website} />
+    <Icon.CalendarToday color='primary' />{' '}
+    <span>Joined {dayjs(profile?.createdAt).format('MMM YYYY')}</span>
   </div>
 );

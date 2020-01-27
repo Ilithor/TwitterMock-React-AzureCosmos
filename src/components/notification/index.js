@@ -6,27 +6,31 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { NotificationCard } from './notificationCard';
 
 // Context
-import { useNotificationData } from '../context/notificationContext';
-import { usePostData } from '../context/postContext';
-import { useCommentData } from '../context/commentContext';
+import { useNotificationData } from './notificationContext';
+import { usePostData } from '../post/postContext';
+import { useCommentListData } from '../comment/commentContext';
 
 /**
  * Displays an array of notifications for the user
- * @param {object} props
- * @param {object} props.classes
  */
-export const NotificationPanel = ({ classes = {} }) => {
-  const { notificationList, notificationError } = useNotificationData();
+export const NotificationPanel = () => {
+  const {
+    notificationList,
+    isLoadingNotifcationList,
+    notificationError,
+  } = useNotificationData();
   const { postList, postError } = usePostData();
-  const { commentList, commentError } = useCommentData();
+  const { commentList, commentError } = useCommentListData();
   dayjs.extend(relativeTime);
   const Content = () => {
+    if (!!isLoadingNotifcationList) {
+      return <div>Loading...</div>;
+    }
     if (notificationList?.length > 0) {
       return notificationList?.map(doc => {
         return (
           <NotificationCard
             key={`notification-${doc?._id}`}
-            classes={classes}
             notification={doc}
             post={postList[(doc?.postId)]}
             comment={commentList[(doc?.typeId)]}

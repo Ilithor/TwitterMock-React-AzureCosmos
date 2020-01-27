@@ -3,10 +3,6 @@ import React from 'react';
 // Components
 import { DeletePostDialog } from './DeletePostDialog';
 
-// MUI
-import withStyles from '@material-ui/core/styles/withStyles';
-import style from '../../../../style';
-
 // Redux
 import { connect } from 'react-redux';
 
@@ -18,7 +14,6 @@ import { connect } from 'react-redux';
  * @param {any} props.deleteUserPost
  */
 const DeletePostView = ({
-  classes = {},
   postId,
   userHandle,
   isAuthenticated,
@@ -26,7 +21,7 @@ const DeletePostView = ({
   deleteUserPost,
 }) => {
   if (isAuthenticated && userHandle === handle) {
-    return <DeletePostDialog classes={classes} postId={postId} />;
+    return <DeletePostDialog postId={postId} />;
   } else {
     return <div />;
   }
@@ -41,6 +36,4 @@ const mapStateToProps = ({ user }) => {
   };
 };
 
-export const DeletePost = connect(mapStateToProps)(
-  withStyles(style)(DeletePostView)
-);
+export const DeletePost = connect(mapStateToProps)(DeletePostView);

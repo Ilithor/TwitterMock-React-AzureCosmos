@@ -1,17 +1,32 @@
 import React from 'react';
-import AppIcon from '../../images/icon.png';
 
 // Components
 import { RegisterForm } from './RegisterForm';
 
 // MUI
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
+import { Grid, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+
+// Icons
+import AppIcon from '../../images/icon.png';
+
+const useStyles = makeStyles({
+  form: {
+    textAlign: 'center',
+  },
+  image: {
+    margin: 'auto',
+    width: '76px',
+    height: '76px',
+  },
+  pageTitle: {
+    margin: '10px auto 10px auto',
+  },
+});
 
 /** Control that allows the user to register
  * @type {React.FunctionComponent}
  * @param {object} props
- * @param {object} props.classes
  * @param {object} props.error
  * @param {string} props.handle
  * @param {string} props.email
@@ -22,7 +37,6 @@ import Typography from '@material-ui/core/Typography';
  * @param {React.ChangeEventHandler} props.handleChange
  */
 export const Register = ({
-  classes = {},
   error = {},
   handle,
   email,
@@ -31,26 +45,28 @@ export const Register = ({
   handleSubmit,
   handleChange,
   isLoading,
-}) => (
-  <Grid container className={classes.form}>
-    <Grid item sm />
-    <Grid item sm>
-      <img src={AppIcon} alt='eye' className={classes.image} />
-      <Typography variant='h2' className={classes.pageTitle}>
-        Register
-      </Typography>
-      <RegisterForm
-        classes={classes}
-        error={error}
-        handle={handle}
-        email={email}
-        password={password}
-        confirmPassword={confirmPassword}
-        handleSubmit={handleSubmit}
-        handleChange={handleChange}
-        isLoading={isLoading}
-      />
+}) => {
+  const classes = useStyles();
+  return (
+    <Grid container className={classes?.form}>
+      <Grid item sm />
+      <Grid item sm>
+        <img src={AppIcon} alt='eye' className={classes?.image} />
+        <Typography variant='h2' className={classes?.pageTitle}>
+          Register
+        </Typography>
+        <RegisterForm
+          error={error}
+          handle={handle}
+          email={email}
+          password={password}
+          confirmPassword={confirmPassword}
+          handleSubmit={handleSubmit}
+          handleChange={handleChange}
+          isLoading={isLoading}
+        />
+      </Grid>
+      <Grid item sm />
     </Grid>
-    <Grid item sm />
-  </Grid>
-);
+  );
+};

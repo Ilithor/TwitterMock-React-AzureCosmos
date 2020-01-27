@@ -1,46 +1,55 @@
 import React from 'react';
 
 // MUI
-import withStyles from '@material-ui/core/styles/withStyles';
-import style from '../../../style';
-import TextField from '@material-ui/core/TextField';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Button from '@material-ui/core/Button';
+import { TextField, CircularProgress, Button } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
-const NewPostFormView = ({
+const useStyles = makeStyles({
+  textField: {
+    margin: '10px auto 10px auto',
+  },
+  submitButton: {
+    position: 'relative',
+  },
+  progressSpinner: {
+    position: 'absolute',
+  },
+});
+
+export const NewPostForm = ({
   handleSubmit,
   error = {},
-  classes = {},
   handleChange,
   isLoading,
-}) => (
-  <form onSubmit={handleSubmit}>
-    <TextField
-      name='body'
-      type='text'
-      label='New Post'
-      multiline
-      rows='3'
-      placeholder='Type post here...'
-      error={error.body ? true : false}
-      helperText={error.body}
-      className={classes.textField}
-      onChange={handleChange}
-      fullWidth
-    />
-    <Button
-      type='submit'
-      variant='contained'
-      color='primary'
-      className={classes.submitButton}
-      disabled={isLoading}
-    >
-      Submit
-      {isLoading && (
-        <CircularProgress size={30} className={classes.progressSpinner} />
-      )}
-    </Button>
-  </form>
-);
-
-export const NewPostForm = withStyles(style)(NewPostFormView);
+}) => {
+  const classes = useStyles();
+  return (
+    <form onSubmit={handleSubmit}>
+      <TextField
+        name='body'
+        type='text'
+        label='New Post'
+        multiline
+        rows='3'
+        placeholder='Type post here...'
+        error={error?.body ? true : false}
+        helperText={error?.body}
+        className={classes?.textField}
+        onChange={handleChange}
+        fullWidth
+      />
+      <Button
+        type='submit'
+        variant='contained'
+        color='primary'
+        className={classes?.submitButton}
+        disabled={isLoading}
+      >
+        Submit
+        {isLoading && (
+          <CircularProgress size={30} className={classes?.progressSpinner} />
+        )}
+      </Button>
+    </form>
+  );
+};

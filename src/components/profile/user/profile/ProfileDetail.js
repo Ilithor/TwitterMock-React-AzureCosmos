@@ -4,14 +4,10 @@ import dayjs from 'dayjs';
 
 // MUI
 import MuiLink from '@material-ui/core/Link';
-import Typography from '@material-ui/core/Typography';
-import withStyles from '@material-ui/core/styles/withStyles';
-import style from '../../../../style';
+import { Typography } from '@material-ui/core';
 
 // Icons
-import LocationOn from '@material-ui/icons/LocationOn';
-import LinkIcon from '@material-ui/icons/Link';
-import CalendarToday from '@material-ui/icons/CalendarToday';
+import * as Icon from '@material-ui/icons';
 
 /** View component for displaying the user's profile details
  * @type {React.FunctionComponent}
@@ -20,33 +16,31 @@ import CalendarToday from '@material-ui/icons/CalendarToday';
  * @param {object} props.bio
  * @param {string} props.createdAt
  */
-const ProfileDetailView = ({ handle, bio = {}, createdAt }) => (
+export const ProfileDetail = ({ handle, bio = {}, createdAt }) => (
   <div className='profile-details'>
     <MuiLink component={Link} to={`/u/${handle}`} color='primary' variant='h5'>
       @{handle}
     </MuiLink>
     <hr />
-    {bio.aboutMe && <Typography variant='body2'>{bio.aboutMe}</Typography>}
+    {bio?.aboutMe && <Typography variant='body2'>{bio?.aboutMe}</Typography>}
     <hr />
-    {bio.location && (
+    {bio?.location && (
       <Fragment>
-        <LocationOn color='primary' /> <span>{bio.location}</span>
+        <Icon.LocationOn color='primary' /> <span>{bio?.location}</span>
         <hr />
       </Fragment>
     )}
-    {bio.website && (
+    {bio?.website && (
       <Fragment>
-        <LinkIcon color='primary' />
-        <a href={bio.website} target='_blank' rel='noopener noreferrer'>
+        <Icon.Link color='primary' />
+        <a href={bio?.website} target='_blank' rel='noopener noreferrer'>
           {' '}
-          {bio.website}
+          {bio?.website}
         </a>
         <hr />
       </Fragment>
     )}
-    <CalendarToday color='primary' />{' '}
+    <Icon.CalendarToday color='primary' />{' '}
     <span>Joined {dayjs(createdAt).format('MMM YYYY')}</span>
   </div>
 );
-
-export const ProfileDetail = withStyles(style)(ProfileDetailView);

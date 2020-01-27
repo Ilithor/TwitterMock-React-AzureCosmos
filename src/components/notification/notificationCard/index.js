@@ -6,11 +6,18 @@ import { NotificationCardContent } from './NotificationCardContent';
 
 // MUI
 import { Card, CardActionArea } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
-import style from '../../../style';
+import { makeStyles } from '@material-ui/core/styles';
 
 // API
 import { markNotificationRead } from '../../../util/fetch/user';
+
+const useStyles = makeStyles({
+  notificationCard: {
+    position: 'relative',
+    display: 'flex',
+    marginBottom: 20,
+  },
+});
 
 /** Displays icon appropriate to notification type
  *
@@ -21,12 +28,12 @@ import { markNotificationRead } from '../../../util/fetch/user';
  * @param {Post} props.post
  * @param {UserComment} props.comment
  */
-export const NotificationCardView = ({
-  classes = {},
+export const NotificationCard = ({
   notification = {},
   post = {},
   comment = {},
 }) => {
+  const classes = useStyles();
   const history = useHistory();
   const notificationRead = () => {
     if (notification?.read === false) {
@@ -43,7 +50,6 @@ export const NotificationCardView = ({
     <Card className={classes?.notificationCard}>
       <CardActionArea onClick={notificationRead}>
         <NotificationCardContent
-          classes={classes}
           notification={notification}
           postBody={post.body}
           commentBody={comment.body}
@@ -52,5 +58,3 @@ export const NotificationCardView = ({
     </Card>
   );
 };
-
-export const NotificationCard = withStyles(style)(NotificationCardView);
