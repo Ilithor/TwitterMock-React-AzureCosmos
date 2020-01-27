@@ -3,35 +3,55 @@ import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 
 // MUI
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Typography from '@material-ui/core/Typography';
-import withStyles from '@material-ui/core/styles/withStyles';
-import style from '../../style';
+import { Card, CardContent, CardMedia, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
-const CommentView = ({ classes = {}, comment = {} }) => (
-  <Card className={classes.commentCard}>
-    <CardMedia
-      className={classes.commentImage}
-      image={comment.userImage}
-      title='Comment'
-    />
-    <CardContent>
-      <Typography
-        variant='h5'
-        component={Link}
-        to={`/user/${comment.userHandle}`}
-        color='primary'
-      >
-        @{comment.userHandle}
-      </Typography>
-      <Typography variant='body2' color='textSecondary'>
-        {dayjs(comment.createdAt).format('h:mm a, MMMM DD YYYY')}
-      </Typography>
-      <Typography variant='body1'>{comment.body}</Typography>
-    </CardContent>
-  </Card>
-);
+// Context
+import { useUserListData } from '../context/userContext';
 
-export const Comment = withStyles(style)(CommentView);
+const useStyles = makeStyles({
+  commentCard: {
+    display: 'flex',
+    flexDirection: 'row',
+    width: 600,
+    border: '1px solid rgba(0, 0, 0, 0.5)',
+    marginBottom: 1,
+  },
+  commentImage: {
+    minWidth: 100,
+    height: 100,
+    objectFit: 'cover',
+    borderRadius: '50%',
+    marginLeft: 10,
+    marginTop: 25,
+  },
+});
+
+export const Comment = ({ comment = {} }) => {
+  const classes = useStyles();
+  const { userList } = useUserListData();
+  const { userImage } = userList[(comment?.userHandle)];
+  return (
+    <Card className={classes?.commentCard}>
+      <CardMedia
+        className={classes?.commentImage}
+        image={userImage}
+        title='Comment'
+      />
+      <CardContent>
+        <Typography
+          variant='h5'
+          component={Link}
+          to={`/user/${comment?.userHandle}`}
+          color='primary'
+        >
+          @{comment?.userHandle}
+        </Typography>
+        <Typography variant='body2' color='textSecondary'>
+          {dayjs(comment?.createdAt).format('h:mm a, MMMM DD YYYY')}
+        </Typography>
+        <Typography variant='body1'>{comment?.body}</Typography>
+      </CardContent>
+    </Card>
+  );
+};
