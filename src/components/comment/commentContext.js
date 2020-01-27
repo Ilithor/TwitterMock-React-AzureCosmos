@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
 import _ from 'lodash';
+import { commentPost } from '../../util/fetch/post';
 
 /** @type {React.Context<{commentList:Comment[],commentError:Error,getData:()=>void}} */
 const commentContext = createContext();
@@ -16,8 +17,8 @@ export const CommentProvider = ({ children, fetchCommentList }) => {
   const defaultState = [];
   const [commentError, setCommentError] = useState();
   const [commentList, setCommentList] = useState(defaultState);
-
-  const getData = () => {
+  const [isLoadingCommentOnPost, setIsLoadingCommentOnPost] = useState(false);
+  const getCommentListData = () => {
     // Fetch list of comments
     fetchCommentList()
       .then(res => {
@@ -26,11 +27,18 @@ export const CommentProvider = ({ children, fetchCommentList }) => {
       .catch(err => setCommentError(err));
   };
 
+  const commentOnPost = (postId, commentParams) => {
+    setIsLoadingCommentOnPost(true);
+    commentPost(postId, commentParams).then(() => {
+      setIsLoadingCommentOnPost(false);
+    });
+  };
+
   // Passing state to value to be passed to provider
   const value = {
     commentError,
     commentList,
-    getData,
+    getCommentListData,
   };
   return (
     <commentContext.Provider value={value}>{children}</commentContext.Provider>
@@ -40,24 +48,40 @@ export const CommentProvider = ({ children, fetchCommentList }) => {
 /** A hook for consuming our Comment context in a safe way
  *
  * @example //getting the comment list
- * import { useCommentData } from 'commentContext'
- * const { commentList } = useCommentData();
+ * import { useCommentListData } from 'commentContext'
+ * const { commentList } = useCommentListData();
  * @returns {Comment[]}
  */
-export const useCommentData = () => {
+export const useCommentListData = () => {
   // Destructuring value from provider
   const ctx = useContext(commentContext);
 
   if (ctx === undefined) {
-    throw new Error('useCommentData must be used within a CommentProvider');
+    throw new Error('useCommentListData must be used within a CommentProvider');
   }
-  const { commentList, commentError, getData } = ctx;
+  const { commentList, commentError, getCommentListData } = ctx;
   if (!commentError && _.keys(commentList)?.length === 0) {
-    getData();
+    getCommentListData();
   }
 
   // What we want this consumer hook to actually return
   return { commentList, commentError };
+};
+
+export const useCommentOnPostData = (postId, commentParams) => {
+  const ctx = useContext(commentContext);
+
+  if (ctx === undefined) {
+    throw new Error(
+      'useCommentOnPostData must be used within a CommentProvider'
+    );
+  }
+  const { commentError, commentOnPost } = ctx;
+  if (!commentError && !!postId && !!commentParams) {
+    commentOnPost(postId, commentParams);
+  }
+
+  return { commentError };
 };
 
 /**

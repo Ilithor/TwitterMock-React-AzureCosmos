@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState } from 'react';
 import _ from 'lodash';
 
-/** @type {React.Context<{postList:Post[],postError:Error,getData:()=>void}} */
+/** @type {React.Context<{postList:Post[],postError:Error,refreshPostList:()=>void}} */
 const postContext = createContext();
 
 /** This is a react component which you wrap your entire application
@@ -15,19 +15,33 @@ export const PostProvider = ({ children, fetchPostList }) => {
   const [postError, setPostError] = useState();
   /** @type {UseStateResult<_.Dictionary<Post>>} */
   const [postList, setPostList] = useState({});
+  const [isLoadingPostList, setIsLoadingPostList] = useState(true);
 
-  const getData = () => {
-    // Fetch list of posts
-    fetchPostList().then(res => {
-      setPostList(_.keyBy(res.data, 'postId'));
+  const refreshPostList = () =>
+    new Promise((resolve, reject) => {
+      setIsLoadingPostList(true);
+      // Fetch list of posts
+      fetchPostList()
+        .then(res => {
+          setPostList(_.keyBy(res.data, 'postId'));
+          resolve(postList);
+        })
+        .catch(err => {
+          setPostError(err);
+          reject(err);
+        })
+        .finally(() => {
+          setIsLoadingPostList(false);
+        });
     });
-  };
 
   // Passing state to value to be passed to provider
   const value = {
     postError,
     postList,
-    getData,
+    refreshPostList,
+    isLoadingPostList,
+    setIsLoadingPostList,
   };
   return <postContext.Provider value={value}>{children}</postContext.Provider>;
 };
@@ -47,13 +61,13 @@ export const usePostData = () => {
     throw new Error('usePostData must be used within a PostProvider');
   }
 
-  const { postList, postError, getData } = ctx;
+  const { postList, postError, refreshPostList, isLoadingPostList } = ctx;
   if (!postError && _.keys(postList)?.length === 0) {
-    getData();
+    refreshPostList();
   }
 
   // What we want this consumer hook to actually return
-  return { postList, postError };
+  return { postList, postError, isLoadingPostList, refreshPostList };
 };
 
 /**

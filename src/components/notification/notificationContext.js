@@ -16,14 +16,19 @@ export const NotificationProvider = ({ children, getNotificationList }) => {
   // setting local state
   const [notificationList, setNotificationList] = useState(defaultState);
   const [notificationError, setnotificationError] = useState();
-
+  const [isLoadingNotifcationList, setIsLoadingNotificationList] = useState(
+    true
+  );
   const getData = () => {
     // Fetch list of notifications
     getNotificationList()
       .then(response => {
         setNotificationList(response.data);
       })
-      .catch(err => setnotificationError(err));
+      .catch(err => setnotificationError(err))
+      .finally(() => {
+        setIsLoadingNotificationList(false);
+      });
   };
 
   // passing state to value to be passed to provider
@@ -31,6 +36,8 @@ export const NotificationProvider = ({ children, getNotificationList }) => {
     notificationList,
     getData,
     notificationError,
+    isLoadingNotifcationList,
+    setIsLoadingNotificationList,
   };
   return (
     <notificationContext.Provider value={value}>
@@ -55,7 +62,12 @@ export const useNotificationData = () => {
       'useNotificationData must be used within a NotificationProvider'
     );
   }
-  const { notificationList, getData, notificationError } = ctx;
+  const {
+    notificationList,
+    getData,
+    notificationError,
+    isLoadingNotifcationList,
+  } = ctx;
   if (
     !notificationError &&
     (!notificationList || notificationList?.length < 1)
@@ -64,7 +76,7 @@ export const useNotificationData = () => {
   }
 
   // What we want this consumer hook to actually return
-  return { notificationList, notificationError };
+  return { notificationList, notificationError, isLoadingNotifcationList };
 };
 
 /**
