@@ -51,8 +51,7 @@ export const getUserList = (req, res, next) => {
 };
 
 export const fetchLikeList = async (req, res) => {
-  const { handle } = req.params;
-  getLikeList(handle)
+  getLikeList()
     .then(data => {
       if (data.like) {
         return res.status(404).json({ error: data.like });

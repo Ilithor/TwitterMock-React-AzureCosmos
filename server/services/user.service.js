@@ -38,9 +38,9 @@ export const getList = async () => {
  */
 export const getLikeList = async userHandle => {
   let error = {};
-  const likeList = await Like.find({
-    userHandle: userHandle,
-  }).read(mongo.ReadPreference.NEAREST);
+  const likeList = await Like.find({})
+    .read(mongo.ReadPreference.NEAREST)
+    .limit(100);
 
   if (likeList.length === 0) {
     error.like = 'No likes found';
