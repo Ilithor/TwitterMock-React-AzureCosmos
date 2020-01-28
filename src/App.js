@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.css';
 import axios from 'axios';
@@ -20,8 +20,8 @@ import { ContextProvider } from './components/context/ContextProvider';
 axios.defaults.baseURL = '/';
 
 export const App = () => (
-  <ContextProvider>
-    <Router>
+  <Router>
+    <ContextProvider>
       <Navbar />
       <div className='container'>
         <Switch>
@@ -33,6 +33,6 @@ export const App = () => (
           <Route exact path='/u/:handle/post/:postId' component={UserPage} />
         </Switch>
       </div>
-    </Router>
-  </ContextProvider>
+    </ContextProvider>
+  </Router>
 );
