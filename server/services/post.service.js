@@ -12,7 +12,8 @@ export const getList = async () => {
   let error = {};
   post = await Post.find({})
     .sort({ createdAt: -1 })
-    .read(mongo.ReadPreference.NEAREST);
+    .read(mongo.ReadPreference.NEAREST)
+    .limit(100);
 
   if (post.length === 0) {
     error.post = 'No posts found';
