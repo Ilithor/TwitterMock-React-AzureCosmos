@@ -95,26 +95,6 @@ export const findPostByHandle = async handle => {
   return post;
 };
 
-/** Find all notifications by recipient
- * @param {string} recipient
- * @return {Promise<UserNotification> | NotificationNotFound}
- */
-export const findNotificationByRecipient = async recipient => {
-  let notification = [];
-  let error = {};
-  notification = Notification.find({
-    recipient: recipient,
-  })
-    .sort({ createdAt: 1 })
-    .read(mongo.ReadPreference.NEAREST);
-  if (notification.length === 0) {
-    error.notification = 'No notifications found';
-    return error;
-  } else {
-    return notification;
-  }
-};
-
 /** Fetches all comments attached to PostId
  * @param {string} _id
  * @return {Promise<UserComment> | NotificationNotFound}

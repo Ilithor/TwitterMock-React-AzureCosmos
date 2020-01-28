@@ -1,25 +1,22 @@
 import _ from 'lodash';
 import Notification from '../models/notification.model';
-import { create } from '../services/notification.service';
+import { create, getNotificationList } from '../services/notification.service';
 
 import mongoConnection from '../util/mongo';
-import {
-  findNotificationByRecipient,
-  findNotificationAndUpdateRead,
-} from './find';
+import { findNotificationAndUpdateRead } from './find';
 mongoConnection();
 
 /** Retrieves all notifications
  * @type {RouteHandler}
  */
 export const getNotification = async (req, res) => {
-  await findNotificationByRecipient(req.user.handle)
+  await getNotificationList()
     .then(data => {
       if (data.notification) {
         return res.status(404).json({ error: data.notification });
       }
       const notification = _.map(data, doc => ({
-        _id: doc._id,
+        notificationId: doc._id,
         createdAt: doc.createdAt,
         postId: doc.postId,
         sender: doc.sender,
@@ -51,6 +48,9 @@ export const createNotification = async (
   type,
   typeId
 ) => {
+  if (sender === recipient) {
+    return;
+  }
   await create(recipient, postId, sender, type, typeId);
 };
 
