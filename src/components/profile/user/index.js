@@ -76,11 +76,7 @@ const useStyles = makeStyles(theme => ({
  */
 export const UserProfileDisplay = () => {
   const classes = useStyles();
-  const {
-    currentUser,
-    getCurrentUserData,
-    isAuthenticated,
-  } = useCurrentUserData();
+  const { currentUser, getCurrentUserData } = useCurrentUserData();
   const { logoutUser } = useUserLogout();
 
   useEffect(() => {
@@ -108,7 +104,7 @@ export const UserProfileDisplay = () => {
   };
 
   const handleLogout = () => logoutUser();
-  if (!!isAuthenticated && Object.keys(currentUser)?.length > 0) {
+  if (Object.keys(currentUser)?.length > 0) {
     return (
       <Paper className={classes?.paper}>
         <div className={classes?.profile}>

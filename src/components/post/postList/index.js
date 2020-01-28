@@ -30,7 +30,7 @@ const useStyles = makeStyles({
  * @param {object} props.classes
  * @param {object} props.post
  */
-export const Post = ({ post = {}, user = {}, like = {} }) => {
+export const Post = ({ post, user, like }) => {
   const classes = useStyles();
   dayjs.extend(relativeTime);
   if (!post) {
@@ -43,12 +43,7 @@ export const Post = ({ post = {}, user = {}, like = {} }) => {
         title='Profile image'
         className={classes?.image}
       />
-      <PostContent
-        classes={classes}
-        post={post}
-        userImage={user?.userImage}
-        like={like}
-      />
+      <PostContent post={post} like={like} />
     </Card>
   );
 };

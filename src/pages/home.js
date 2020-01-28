@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import _ from 'lodash';
 import { Link } from 'react-router-dom';
 
@@ -40,19 +40,13 @@ export const HomePage = () => {
   const {
     isAuthenticated,
     isLoadingAuthenticated,
-    getAuthenticated,
   } = useUserAuthenticationData();
   const { userList, isLoadingUserList } = useUserListData();
   const { postList, isLoadingPostList } = usePostData();
-  const { likeList, isLoadingLikeList } = useLikeData(localStorage?.Handle);
-
-  useEffect(() => {
-    getAuthenticated();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const { likeList, isLoadingLikeList } = useLikeData();
 
   const RecentPostMarkup = () => {
-    if (!isLoadingPostList || !isLoadingUserList || !isLoadingLikeList) {
+    if (!isLoadingPostList && !isLoadingUserList && !isLoadingLikeList) {
       return createNewPostList();
     }
     return (
@@ -74,7 +68,7 @@ export const HomePage = () => {
   };
 
   const CreatePostEditor = () => {
-    if (!!isAuthenticated && !isLoadingAuthenticated) {
+    if (isAuthenticated && !isLoadingAuthenticated) {
       return <NewPost />;
     }
     return (

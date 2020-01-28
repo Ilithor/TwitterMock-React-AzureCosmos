@@ -12,7 +12,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 // Icons
 import * as Icon from '@material-ui/icons';
-
+import defaultImage from '../../../../images/user.png';
 // Context
 import { usePostData } from '../../postContext';
 import { useUserListData } from '../../../context/userContext';
@@ -45,18 +45,17 @@ const useStyles = makeStyles({
  */
 export const PostDialog = ({ postId, userHandle }) => {
   const { postList, isLoadingPostList } = usePostData();
-  const { userList } = useUserListData();
+  const { userList, isLoadingUserList } = useUserListData();
   const { commentList } = useCommentListData();
   const classes = useStyles();
   const params = useParams();
   const location = useLocation();
-  const open = params.postId === postId;
+  const open = params?.postId === postId;
   const post = postList[postId];
   const dialogCommentList = _.filter(
     commentList,
-    comment => comment.postId === postId
+    comment => comment?.postId === postId
   );
-  const { userImage } = userList[(post?.userHandle)];
   const history = useHistory();
   const handleOpen = () => {
     history.push(`/u/${userHandle}/post/${postId}`);
@@ -65,24 +64,48 @@ export const PostDialog = ({ postId, userHandle }) => {
     history.push(location.pathname.replace(`/post/${postId}`, ''));
   };
   const DialogContentEditor = () => {
-    if (isLoadingPostList) {
+    if (
+      !isLoadingPostList &&
+      !isLoadingUserList &&
+      _.keys(userList).length === 0
+    ) {
+      let userImage = defaultImage;
       return (
-        <div className={classes?.spinnerDiv}>
-          <CircularProgress size={200} thickness={2} />
-        </div>
+        <PostDialogContent
+          userHandle={userHandle}
+          userImage={userImage}
+          createdAt={post?.createdAt}
+          body={post?.body}
+          postId={post?._id}
+          likeCount={post?.likeCount}
+          commentCount={post?.commentCount}
+          commentList={dialogCommentList}
+        />
+      );
+    }
+    if (
+      !isLoadingUserList &&
+      !isLoadingUserList &&
+      _.keys(userList).length > 0
+    ) {
+      const { userImage } = userList[(post?.userHandle)];
+      return (
+        <PostDialogContent
+          userHandle={userHandle}
+          userImage={userImage}
+          createdAt={post?.createdAt}
+          body={post?.body}
+          postId={post?._id}
+          likeCount={post?.likeCount}
+          commentCount={post?.commentCount}
+          commentList={dialogCommentList}
+        />
       );
     }
     return (
-      <PostDialogContent
-        userHandle={userHandle}
-        userImage={userImage}
-        createdAt={post?.createdAt}
-        body={post?.body}
-        postId={post?._id}
-        likeCount={post?.likeCount}
-        commentCount={post?.commentCount}
-        commentList={dialogCommentList}
-      />
+      <div className={classes?.spinnerDiv}>
+        <CircularProgress size={200} thickness={2} />
+      </div>
     );
   };
   return (

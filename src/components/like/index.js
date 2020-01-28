@@ -9,8 +9,11 @@ import CustomButton from '../../util/CustomButton';
 // Icons
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 
-// Redux
-import { connect } from 'react-redux';
+// Context
+import {
+  useUserAuthenticationData,
+  useCurrentUserData,
+} from '../context/userContext';
 
 /** View component for displaying either a like or unlike icon
  * @type {React.FunctionComponent}
@@ -19,9 +22,11 @@ import { connect } from 'react-redux';
  * @param {string} props.postId
  * @param {array} props.likeList
  */
-const LikeView = ({ isAuthenticated, postId, like = {} }) => {
+export const Like = ({ postId, like, userHandle }) => {
+  const { isAuthenticated } = useUserAuthenticationData();
+  const { currentUser } = useCurrentUserData();
   const alreadyLiked = () => {
-    if (like.postId === postId) {
+    if (like?.userHandle === currentUser?.userHandle) {
       return true;
     } else {
       return false;
@@ -42,12 +47,3 @@ const LikeView = ({ isAuthenticated, postId, like = {} }) => {
   }
   return <LikeButton postId={postId} />;
 };
-
-const mapStateToProps = ({ user }) => {
-  const isAuthenticated = !!user.authenticated;
-  return {
-    isAuthenticated,
-  };
-};
-
-export const Like = connect(mapStateToProps)(LikeView);

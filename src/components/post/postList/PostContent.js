@@ -26,9 +26,8 @@ const useStyles = makeStyles({
  * @type {React.FunctionComponent}
  * @param {object} props
  * @param {object} props.post
- * @param {string} props.userImage
  */
-export const PostContent = ({ post = {}, like = {} }) => {
+export const PostContent = ({ post, like }) => {
   const classes = useStyles();
   return (
     <CardContent className={classes?.content}>
@@ -45,7 +44,7 @@ export const PostContent = ({ post = {}, like = {} }) => {
         {dayjs(post?.createdAt).fromNow()}
       </Typography>
       <Typography variant='body1'>{post?.body}</Typography>
-      <Like postId={post?.postId} like={like} />
+      <Like postId={post?.postId} userHandle={post?.userHandle} like={like} />
       <span>{post?.likeCount} Likes</span>
       <CustomButton tip='comments'>
         <Icon.Chat color='primary' />
@@ -59,6 +58,4 @@ export const PostContent = ({ post = {}, like = {} }) => {
 /** View component for displaying an individual post's content
  * @typedef IPostContentComponentProps
  * @param {object} post
- * @param {string} userImage
- * @param {any} openDialog
  */

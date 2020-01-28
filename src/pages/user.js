@@ -47,7 +47,7 @@ export const UserPage = () => {
     if (userData) {
       setProfile(userData[0]);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userList]);
   const PostListMarkup = () => {
     if (isLoadingPostList) {
@@ -61,16 +61,25 @@ export const UserPage = () => {
       return <p>No posts from this user</p>;
     }
     if (!isLoadingPostList) {
-      return _.map(userPostList, post => (
-        <Post key={`post-${post?.postId}`} post={post} />
-      ));
+      return _.map(userPostList, post => {
+        if (post?.postId !== params.postId) {
+          return (
+            <Post
+              key={`post-${post?.postId}`}
+              post={post}
+              user={userList[(post?.userHandle)]}
+            />
+          );
+        }
+        return (
+          <Post
+            key={`post-${post?.postId}`}
+            post={post}
+            user={userList[(post?.userHandle)]}
+          />
+        );
+      });
     }
-    return _.map(userPostList, post => {
-      if (post?.postId !== params.postId) {
-        return <Post key={`post-${post?.postId}`} post={post} />;
-      }
-      return <Post key={`post-${post?.postId}`} post={post} openDialog />;
-    });
   };
 
   return (
