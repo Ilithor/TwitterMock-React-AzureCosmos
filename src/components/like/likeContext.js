@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useState } from 'react';
 import _ from 'lodash';
 
+import * as fetchUtil from '../../util/fetch';
+
 /** @type {React.Context<{likeList:Like[],likeError:Error,refreshLikeList:()=>void}} */
 const likeContext = createContext();
 
@@ -11,17 +13,19 @@ const likeContext = createContext();
  * @param {React.ReactChild} props.children
  * @param {()=>Promise<import('axios').AxiosResponse<Like[]>>} props.fetchLikeList
  */
-export const LikeProvider = ({ children, fetchLikeList }) => {
+export const LikeProvider = ({ children }) => {
   const [likeError, setLikeError] = useState();
+  const [lastRefreshLikeList, setlastRefreshLikeList] = useState();
   /** @type {UseStateResult<_.Dictionary<Like>>} */
   const [likeList, setLikeList] = useState({});
-  const [isLoadingLikeList, setIsLoadingLikeList] = useState(true);
+  const [isLoadingLikeList, setIsLoadingLikeList] = useState(false);
 
   const refreshLikeList = userHandle =>
     new Promise((resolve, reject) => {
       setIsLoadingLikeList(true);
       // Fetch list of likes
-      fetchLikeList(userHandle)
+      fetchUtil.user
+        .fetchLikeList(userHandle)
         .then(res => {
           setLikeList(_.keyBy(res.data, 'postId'));
           resolve(likeList);
@@ -31,6 +35,7 @@ export const LikeProvider = ({ children, fetchLikeList }) => {
           reject(err);
         })
         .finally(() => {
+          setlastRefreshLikeList(Date.now);
           setIsLoadingLikeList(false);
         });
     });
@@ -41,7 +46,7 @@ export const LikeProvider = ({ children, fetchLikeList }) => {
     likeList,
     refreshLikeList,
     isLoadingLikeList,
-    setIsLoadingLikeList,
+    lastRefreshLikeList,
   };
   return <likeContext.Provider value={value}>{children}</likeContext.Provider>;
 };
@@ -61,13 +66,25 @@ export const useLikeData = userHandle => {
     throw new Error('useLikeData must be used within a Like Provider');
   }
 
-  const { likeList, likeError, refreshLikeList, isLoadingLikeList } = ctx;
-  if (!likeError && _.keys(likeList)?.length === 0 && !!userHandle) {
-    refreshLikeList(userHandle);
+  const {
+    likeList,
+    likeError,
+    refreshLikeList,
+    isLoadingLikeList,
+    lastRefreshLikeList,
+  } = ctx;
+
+  if (
+    !isLoadingLikeList &&
+    (_.keys(likeList).length === 0 ||
+      lastRefreshLikeList === null ||
+      lastRefreshLikeList >= Date.now + 600)
+  ) {
+    refreshLikeList();
   }
 
   // What we want this consumer hook to actually return
-  return { likeList, likeError, isLoadingLikeList, refreshLikeList };
+  return { likeList, likeError, isLoadingLikeList };
 };
 
 /**

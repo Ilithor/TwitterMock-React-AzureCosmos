@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState } from 'react';
 import _ from 'lodash';
 import jwtDecode from 'jwt-decode';
 import axios from 'axios';
+import { useHistory } from 'react-router-dom';
 
 import * as fetchUtil from '../../util/fetch';
 
@@ -15,6 +16,7 @@ const userContext = createContext();
  */
 export const UserProvider = ({ children }) => {
   const [userError, setUserError] = useState();
+  const [lastRefreshUserList, setLastRefreshUserList] = useState();
   /** @type {UseStateResult<_.Dictionary<User>>} */
   const [userList, setUserList] = useState({});
   const [currentUser, setCurrentUser] = useState({});
@@ -24,16 +26,19 @@ export const UserProvider = ({ children }) => {
   const [isLoadingAuthenticated, setIsLoadingAuthenticated] = useState(false);
   const [isLoadingLogin, setIsLoadingLogin] = useState(false);
 
-  const getUserList = () => {
+  const history = useHistory();
+
+  const refreshUserList = async () => {
     if (!isLoadingUserList) {
       setIsLoadingUserList(true);
-      fetchUtil.user
+      await fetchUtil.user
         .fetchUserList()
-        .then(res => {
-          setUserList(_.keyBy(res.data, 'handle'));
+        .then(async res => {
+          await setUserList(_.keyBy(res.data, 'handle'));
         })
         .catch(err => setUserError(err))
         .finally(() => {
+          setLastRefreshUserList(Date.now);
           setIsLoadingUserList(false);
         });
     }
@@ -43,7 +48,7 @@ export const UserProvider = ({ children }) => {
     if (!!userHandle && !isLoadingUserData) {
       setIsLoadingUserData(true);
       await fetchUtil.user
-        .getUserData(userHandle)
+        .fetchUserData(userHandle)
         .then(async res => {
           await setCurrentUser(res.data.user);
         })
@@ -80,28 +85,39 @@ export const UserProvider = ({ children }) => {
     localStorage.setItem('Handle', handle);
   };
 
-  const getAuthenticated = () => {
-    if (
-      !!localStorage?.Token &&
-      !!localStorage?.Handle &&
-      !isLoadingAuthenticated
-    ) {
-      setIsLoadingAuthenticated(true);
-      const decodedToken = jwtDecode(localStorage?.Token);
-      if (decodedToken?.exp * 1000 < Date.now()) {
-        localStorage.removeItem('Token');
-        localStorage.removeItem('Handle');
-        delete axios.defaults.headers.common['Authorization'];
-        setisAuthenticated(false);
-        window.location.href = '/login';
-      } else {
-        axios.defaults.headers.common['Authorization'] = localStorage?.Token;
-        fetchUtil.user.getUserData(localStorage?.Handle);
-        setisAuthenticated(true);
-        setIsLoadingAuthenticated(false);
+  const getAuthenticated = () =>
+    new Promise(async (resolve, reject) => {
+      if (
+        localStorage?.Token &&
+        localStorage?.Handle &&
+        !isLoadingAuthenticated
+      ) {
+        setIsLoadingAuthenticated(true);
+        const decodedToken = jwtDecode(localStorage?.Token);
+        if (decodedToken?.exp * 1000 < Date.now()) {
+          localStorage.removeItem('Token');
+          localStorage.removeItem('Handle');
+          delete axios.defaults.headers.common['Authorization'];
+          setisAuthenticated(false);
+          history.push('/login');
+        } else {
+          axios.defaults.headers.common['Authorization'] = localStorage?.Token;
+          await fetchUtil.user
+            .fetchUserData(localStorage?.Handle)
+            .then(res => {
+              setCurrentUser(res.data);
+              setisAuthenticated(true);
+            })
+            .catch(err => {
+              setUserError(err);
+              reject(err);
+            })
+            .finally(() => {
+              setIsLoadingAuthenticated(false);
+            });
+        }
       }
-    }
-  };
+    });
 
   const logoutUser = () => {
     localStorage.removeItem('Token');
@@ -117,7 +133,7 @@ export const UserProvider = ({ children }) => {
     userList,
     currentUser,
     userError,
-    getUserList,
+    refreshUserList,
     getCurrentUserData,
     isLoadingUserList,
     setIsLoadingUserList,
@@ -125,6 +141,7 @@ export const UserProvider = ({ children }) => {
     loginUser,
     logoutUser,
     isLoadingLogin,
+    lastRefreshUserList,
   };
   return <userContext.Provider value={value}>{children}</userContext.Provider>;
 };
@@ -143,13 +160,24 @@ export const useUserListData = () => {
     throw new Error('useUserListData must be used within a UserProvider');
   }
 
-  const { userList, userError, getUserList, isLoadingUserList } = ctx;
-  if (!userError && _.keys(userList)?.length === 0) {
-    getUserList();
-  }
+  const {
+    userList,
+    userError,
+    refreshUserList,
+    isLoadingUserList,
+    lastRefreshUserList,
+  } = ctx;
 
+  if (
+    !isLoadingUserList &&
+    (_.keys(userList).length === 0 ||
+      lastRefreshUserList === null ||
+      lastRefreshUserList >= Date.now + 600)
+  ) {
+    refreshUserList();
+  }
   // What we want this consumer hook to actually return
-  return { userList, userError, isLoadingUserList };
+  return { refreshUserList, userList, userError, isLoadingUserList };
 };
 
 export const useUserData = () => {
@@ -203,7 +231,8 @@ export const useUserAuthenticationData = () => {
     getAuthenticated,
     isLoadingAuthenticated,
   } = ctx;
-  if (!userError && !isAuthenticated) {
+
+  if (!isLoadingAuthenticated && !isAuthenticated) {
     getAuthenticated();
   }
 

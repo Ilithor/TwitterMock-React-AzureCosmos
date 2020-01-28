@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState } from 'react';
 import _ from 'lodash';
-import { commentPost } from '../../util/fetch/post';
+
+import * as fetchUtil from '../../util/fetch';
 
 /** @type {React.Context<{commentList:Comment[],commentError:Error,getData:()=>void}} */
 const commentContext = createContext();
@@ -12,24 +13,34 @@ const commentContext = createContext();
  * @param {React.ReactChild} props.children
  * @param {()=>Promise<import('axios').AxiosResponse<Comment[]>>} props.fetchCommentList
  */
-export const CommentProvider = ({ children, fetchCommentList }) => {
+export const CommentProvider = ({ children }) => {
   /** @type {Comment[]} */
   const defaultState = [];
   const [commentError, setCommentError] = useState();
+  const [lastRefreshCommentList, setLastRefreshCommentList] = useState();
   const [commentList, setCommentList] = useState(defaultState);
+  const [isLoadingCommentList, setIsLoadingCommentList] = useState(false);
   const [isLoadingCommentOnPost, setIsLoadingCommentOnPost] = useState(false);
-  const getCommentListData = () => {
-    // Fetch list of comments
-    fetchCommentList()
-      .then(res => {
-        setCommentList(_.keyBy(res?.data, '_id'));
-      })
-      .catch(err => setCommentError(err));
+  const refreshCommentList = () => {
+    if (!isLoadingCommentList) {
+      setIsLoadingCommentList(true);
+      // Fetch list of comments
+      fetchUtil.post
+        .fetchCommentList()
+        .then(res => {
+          setCommentList(_.keyBy(res?.data, '_id'));
+        })
+        .catch(err => setCommentError(err))
+        .finally(() => {
+          setLastRefreshCommentList(Date.now);
+          setIsLoadingCommentList(false);
+        });
+    }
   };
 
   const commentOnPost = (postId, commentParams) => {
     setIsLoadingCommentOnPost(true);
-    commentPost(postId, commentParams).then(() => {
+    fetchUtil.post.commentPost(postId, commentParams).then(() => {
       setIsLoadingCommentOnPost(false);
     });
   };
@@ -38,7 +49,10 @@ export const CommentProvider = ({ children, fetchCommentList }) => {
   const value = {
     commentError,
     commentList,
-    getCommentListData,
+    isLoadingCommentOnPost,
+    commentOnPost,
+    refreshCommentList,
+    lastRefreshCommentList,
   };
   return (
     <commentContext.Provider value={value}>{children}</commentContext.Provider>
@@ -59,13 +73,29 @@ export const useCommentListData = () => {
   if (ctx === undefined) {
     throw new Error('useCommentListData must be used within a CommentProvider');
   }
-  const { commentList, commentError, getCommentListData } = ctx;
-  if (!commentError && _.keys(commentList)?.length === 0) {
-    getCommentListData();
+  const {
+    commentList,
+    commentError,
+    refreshCommentList,
+    lastRefreshCommentList,
+    isLoadingCommentList,
+  } = ctx;
+
+  if (
+    !isLoadingCommentList &&
+    (_.keys(commentList).length === 0 ||
+      lastRefreshCommentList === null ||
+      lastRefreshCommentList >= Date.now + 600)
+  ) {
+    refreshCommentList();
   }
 
   // What we want this consumer hook to actually return
-  return { commentList, commentError };
+  return {
+    commentList,
+    commentError,
+    refreshCommentList,
+  };
 };
 
 export const useCommentOnPostData = (postId, commentParams) => {
@@ -76,12 +106,9 @@ export const useCommentOnPostData = (postId, commentParams) => {
       'useCommentOnPostData must be used within a CommentProvider'
     );
   }
-  const { commentError, commentOnPost } = ctx;
-  if (!commentError && !!postId && !!commentParams) {
-    commentOnPost(postId, commentParams);
-  }
+  const { commentError, commentOnPost, isLoadingCommentOnPost } = ctx;
 
-  return { commentError };
+  return { commentError, isLoadingCommentOnPost, commentOnPost };
 };
 
 /**

@@ -1,4 +1,7 @@
 import React, { createContext, useContext, useState } from 'react';
+import _ from 'lodash';
+
+import * as fetchUtil from '../../util/fetch';
 
 /** @type {React.Context<{notificationList:Notification[],notificationError:Error,getData:()=>void}>} */
 const notificationContext = createContext();
@@ -6,38 +9,51 @@ const notificationContext = createContext();
 /** This is a react component which you wrap your entire application
  * to provide a "context", meaning: data you can access anywhere in the app.
  *
- * @param {object} props
+ * @param {Object} props
  * @param {React.ReactChild} props.children
  * @param {()=>Promise<import('axios').AxiosResponse<Notification[]>>} props.getNotificationList
  */
-export const NotificationProvider = ({ children, getNotificationList }) => {
-  /** @type {Notification[]} */
-  const defaultState = [];
-  // setting local state
-  const [notificationList, setNotificationList] = useState(defaultState);
+export const NotificationProvider = ({ children }) => {
+  /** @type {UseStateResult<_.Dictionary<Notification>>} */
+  const [notificationList, setNotificationList] = useState({});
   const [notificationError, setnotificationError] = useState();
+  const [
+    lastRefreshNotificationList,
+    setLastRefreshNotificationList,
+  ] = useState();
   const [isLoadingNotifcationList, setIsLoadingNotificationList] = useState(
-    true
+    false
   );
-  const getData = () => {
-    // Fetch list of notifications
-    getNotificationList()
-      .then(response => {
-        setNotificationList(response.data);
-      })
-      .catch(err => setnotificationError(err))
-      .finally(() => {
-        setIsLoadingNotificationList(false);
-      });
-  };
+  const refreshNotificationList = () =>
+    new Promise((resolve, reject) => {
+      if (!isLoadingNotifcationList) {
+        setIsLoadingNotificationList(true);
+        // Fetch list of notifications
+        fetchUtil.user
+          .getNotificationList()
+          .then(res => {
+            setNotificationList(_.keyBy(res.data, 'recipient'));
+            resolve(notificationList);
+          })
+          .catch(err => {
+            setnotificationError(err);
+            reject(err);
+          })
+          .finally(() => {
+            setLastRefreshNotificationList(Date.now);
+            setIsLoadingNotificationList(false);
+          });
+      }
+    });
 
   // passing state to value to be passed to provider
   const value = {
     notificationList,
-    getData,
+    refreshNotificationList,
     notificationError,
     isLoadingNotifcationList,
     setIsLoadingNotificationList,
+    lastRefreshNotificationList,
   };
   return (
     <notificationContext.Provider value={value}>
@@ -64,25 +80,37 @@ export const useNotificationData = () => {
   }
   const {
     notificationList,
-    getData,
+    refreshNotificationList,
     notificationError,
     isLoadingNotifcationList,
+    lastRefreshNotificationList,
   } = ctx;
-  if (
-    !notificationError &&
-    (!notificationList || notificationList?.length < 1)
-  ) {
-    getData();
-  }
 
+  if (
+    !isLoadingNotifcationList &&
+    (_.keys(notificationList).length === 0 ||
+      lastRefreshNotificationList === null ||
+      lastRefreshNotificationList >= Date.now + 600)
+  ) {
+    refreshNotificationList();
+  }
   // What we want this consumer hook to actually return
-  return { notificationList, notificationError, isLoadingNotifcationList };
+  return {
+    notificationList,
+    refreshNotificationList,
+    notificationError,
+    isLoadingNotifcationList,
+  };
 };
 
 /**
  * @typedef Notification
- * @property {string} postId
- * @property {string} sender
- * @property {string} type
- * @property {string} _id
+ * @property {String} notificationId
+ * @property {Date} createdAt
+ * @property {String} postId
+ * @property {String} sender
+ * @property {String} recipient
+ * @property {String} type
+ * @property {String} typeId
+ * @property {Boolean} read
  */

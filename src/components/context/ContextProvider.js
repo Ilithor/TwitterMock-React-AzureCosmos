@@ -13,9 +13,9 @@ import { NotificationProvider } from '../notification/notificationContext';
 import {
   fetchUserList,
   loginUser,
-  getUserData,
+  fetchUserData,
   fetchLikeList,
-  getNotificationList,
+  fetchNotificationList,
 } from '../../util/fetch/user';
 import { PostProvider } from '../post/postContext';
 import { fetchPostList, fetchCommentList } from '../../util/fetch/post';
@@ -35,10 +35,10 @@ export const ContextProvider = ({ children }) => {
     <ThemeProvider theme={theme}>
       <UserProvider
         fetchUserList={fetchUserList}
-        getUserData={getUserData}
+        fetchUserData={fetchUserData}
         loginUser={loginUser}
       >
-        <NotificationProvider getNotificationList={getNotificationList}>
+        <NotificationProvider fetchNotificationList={fetchNotificationList}>
           <PostProvider fetchPostList={fetchPostList}>
             <LikeProvider fetchLikeList={fetchLikeList}>
               <CommentProvider fetchCommentList={fetchCommentList}>

@@ -1,6 +1,8 @@
 import React, { createContext, useContext, useState } from 'react';
 import _ from 'lodash';
 
+import * as fetchUtil from '../../util/fetch';
+
 /** @type {React.Context<{postList:Post[],postError:Error,refreshPostList:()=>void}} */
 const postContext = createContext();
 
@@ -11,28 +13,33 @@ const postContext = createContext();
  * @param {React.ReactChild} props.children
  * @param {()=>Promise<import('axios').AxiosResponse<Post[]>>} props.fetchPostList
  */
-export const PostProvider = ({ children, fetchPostList }) => {
+export const PostProvider = ({ children }) => {
   const [postError, setPostError] = useState();
+  const [lastRefreshPostList, setLastRefreshPostList] = useState();
   /** @type {UseStateResult<_.Dictionary<Post>>} */
   const [postList, setPostList] = useState({});
-  const [isLoadingPostList, setIsLoadingPostList] = useState(true);
+  const [isLoadingPostList, setIsLoadingPostList] = useState(false);
 
   const refreshPostList = () =>
     new Promise((resolve, reject) => {
-      setIsLoadingPostList(true);
-      // Fetch list of posts
-      fetchPostList()
-        .then(res => {
-          setPostList(_.keyBy(res.data, 'postId'));
-          resolve(postList);
-        })
-        .catch(err => {
-          setPostError(err);
-          reject(err);
-        })
-        .finally(() => {
-          setIsLoadingPostList(false);
-        });
+      if (!isLoadingPostList) {
+        setIsLoadingPostList(true);
+        // Fetch list of posts
+        fetchUtil.post
+          .fetchPostList()
+          .then(res => {
+            setPostList(_.keyBy(res.data, 'postId'));
+            resolve(postList);
+          })
+          .catch(err => {
+            setPostError(err);
+            reject(err);
+          })
+          .finally(() => {
+            setLastRefreshPostList(Date.now);
+            setIsLoadingPostList(false);
+          });
+      }
     });
 
   // Passing state to value to be passed to provider
@@ -42,6 +49,7 @@ export const PostProvider = ({ children, fetchPostList }) => {
     refreshPostList,
     isLoadingPostList,
     setIsLoadingPostList,
+    lastRefreshPostList,
   };
   return <postContext.Provider value={value}>{children}</postContext.Provider>;
 };
@@ -61,13 +69,25 @@ export const usePostData = () => {
     throw new Error('usePostData must be used within a PostProvider');
   }
 
-  const { postList, postError, refreshPostList, isLoadingPostList } = ctx;
-  if (!postError && _.keys(postList)?.length === 0) {
+  const {
+    postList,
+    postError,
+    refreshPostList,
+    isLoadingPostList,
+    lastRefreshPostList,
+  } = ctx;
+
+  if (
+    !isLoadingPostList &&
+    (_.keys(postList).length === 0 ||
+      lastRefreshPostList === null ||
+      lastRefreshPostList >= Date.now + 600)
+  ) {
     refreshPostList();
   }
 
   // What we want this consumer hook to actually return
-  return { postList, postError, isLoadingPostList, refreshPostList };
+  return { postList, postError, isLoadingPostList };
 };
 
 /**
