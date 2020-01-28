@@ -38,20 +38,19 @@ export const registerUser = userData => post(endpoints.register, userData);
  *
  * @returns {Promise<import("axios").AxiosResponse>}
  */
-export const getUserData = handle => get(endpoints.userData + `/${handle}`);
+export const fetchUserData = handle => get(endpoints.userData + `/${handle}`);
 
 /** Retrieves likes made by user
  *
  * @returns {Promise<import("axios").AxiosResponse}
  */
-export const fetchLikeList = () =>
-  get(endpoints.userData + `/${localStorage?.Handle}/like`);
+export const fetchLikeList = () => get(endpoints.userData + `/like`);
 
 /** Retrives notifcations for user
  *
  * @returns {Promise<import("axios").AxiosResponse}
  */
-export const getNotificationList = () => get(endpoints.notification);
+export const fetchNotificationList = () => get(endpoints.notification);
 
 /** Attempts to mark a notification as read
  *
