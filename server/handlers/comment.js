@@ -14,7 +14,7 @@ export const getCommentList = (req, res) => {
         return res.status(404).json(data);
       }
       const commentList = _.map(data, doc => ({
-        _id: doc.id,
+        commentId: doc.id,
         userHandle: doc.userHandle,
         postId: doc.postId,
         body: doc.body,
