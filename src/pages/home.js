@@ -1,19 +1,14 @@
 import React from 'react';
 import _ from 'lodash';
-import { Link } from 'react-router-dom';
 
 // Components
 import { Post } from '../components/post/postList';
 import { Profile } from '../components/profile';
 import { NewPost } from '../components/post/newPost';
-import { CustomButton } from '../util/CustomButton';
 
 // MUI
 import { Grid, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-
-// Icons
-import * as Icon from '@material-ui/icons';
 
 // Context
 import {
@@ -26,7 +21,7 @@ import { useLikeData } from '../components/like/likeContext';
 const useStyles = makeStyles({
   createButton: {
     position: 'relative',
-    left: '33%',
+    textAlign: 'center',
     marginBottom: 20,
   },
   spinnerDiv: {
@@ -38,16 +33,13 @@ const useStyles = makeStyles({
 
 export const HomePage = () => {
   const classes = useStyles();
-  const {
-    isAuthenticated,
-    isLoadingAuthenticated,
-  } = useUserAuthenticationData();
+  const { isAuthenticated } = useUserAuthenticationData();
   const { userList, isLoadingUserList } = useUserListData();
   const { postList, isLoadingPostList } = usePostData();
   const { likeList, isLoadingLikeList } = useLikeData();
 
   const RecentPostMarkup = () => {
-    if (!isLoadingPostList && !isLoadingUserList && !isLoadingLikeList) {
+    if (!isLoadingLikeList && !isLoadingPostList && !isLoadingUserList) {
       return createNewPostList();
     }
     return (
@@ -69,22 +61,10 @@ export const HomePage = () => {
   };
 
   const CreatePostEditor = () => {
-    if (isAuthenticated && !isLoadingAuthenticated) {
+    if (isAuthenticated) {
       return <NewPost />;
     }
-    return (
-      <CustomButton
-        tip='Create Post'
-        variant='contained'
-        btnClassName={classes?.createButton}
-        color='primary'
-        component={Link}
-        to='/login'
-      >
-        <Icon.Add className={classes?.extendedIcon} />
-        Create Post
-      </CustomButton>
-    );
+    return <div />;
   };
   return (
     <Grid container spacing={2}>

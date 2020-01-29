@@ -1,25 +1,14 @@
 import React from 'react';
+import defaultImage from '../../../../images/user.png';
 
 // Components
 import { CustomButton } from '../../../../util/CustomButton';
-
-// MUI
-import { CircularProgress } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 
 // Icons
 import * as Icon from '@material-ui/icons';
 
 // Context
 import { useCurrentUserData } from '../../userContext';
-
-const useStyles = makeStyles({
-  spinnerDiv: {
-    textAlign: 'center',
-    marginTop: 50,
-    marginBottom: 50,
-  },
-});
 
 /** View component for displaying the user image
  * @type {React.FunctionComponent}
@@ -28,23 +17,10 @@ const useStyles = makeStyles({
  * @param {React.ChangeEventHandler} props.handleImageChange
  */
 export const ImageWrapper = ({ handleEditPhoto, handleImageChange }) => {
-  const classes = useStyles();
   const UserImage = () => {
     const { currentUser } = useCurrentUserData();
-    if (currentUser?.bio?.image) {
-      return (
-        <img
-          className='profile-image'
-          src={currentUser?.bio?.image}
-          alt='profile'
-        />
-      );
-    }
-    return (
-      <div className={classes?.spinnerDiv}>
-        <CircularProgress size={150} thickness={2} />
-      </div>
-    );
+    const src = currentUser?.bio?.image || defaultImage;
+    return <img className='profile-image' src={src} alt='profile' />;
   };
   return (
     <div className='image-wrapper'>
