@@ -1,6 +1,4 @@
 import React from 'react';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
 import _ from 'lodash';
 
 // Components
@@ -26,55 +24,39 @@ const useStyles = makeStyles({
 /**
  * Displays an array of notifications for the user
  */
-export const NotificationPanel = () => {
+export const NotificationContent = () => {
   const classes = useStyles();
   const { notificationList, isLoadingNotifcationList } = useNotificationData();
   const { postList } = usePostData();
   const { commentList } = useCommentListData();
-  dayjs.extend(relativeTime);
-  const Content = () => {
-    if (isLoadingNotifcationList) {
-      return (
-        <div className={classes?.spinnerDiv}>
-          <CircularProgress size={150} thickness={2} />
-        </div>
-      );
-    }
-    if (notificationList?.length > 0) {
-      return _.map(notificationList, doc => {
-        return (
-          <NotificationCard
-            key={`notification-${doc?._id}`}
-            notification={doc}
-            post={postList[(doc?.postId)]}
-            comment={commentList[(doc?.typeId)]}
-          />
-        );
-      });
-    }
+  if (isLoadingNotifcationList) {
     return (
-      <React.Fragment>
-        <h1>
-          <span role='img' aria-label=''>
-            😱😱😱
-          </span>
-          No more notifications!!!
-        </h1>
-        <p>Go make some friends, nerd!!!</p>
-      </React.Fragment>
+      <div className={classes?.spinnerDiv}>
+        <CircularProgress size={150} thickness={2} />
+      </div>
     );
-  };
-
+  }
+  if (notificationList?.length > 0) {
+    return _.map(notificationList, doc => {
+      return (
+        <NotificationCard
+          key={`notification-${doc?.notificationId}`}
+          notification={doc}
+          post={postList[(doc?.postId)]}
+          comment={commentList[(doc?.typeId)]}
+        />
+      );
+    });
+  }
   return (
-    <div>
+    <React.Fragment>
       <h1>
-        Notifications!
         <span role='img' aria-label=''>
-          💬
+          😱😱😱
         </span>
+        No more notifications!!!
       </h1>
-      <hr />
-      <Content />
-    </div>
+      <p>Go make some friends, nerd!!!</p>
+    </React.Fragment>
   );
 };

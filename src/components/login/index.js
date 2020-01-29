@@ -1,45 +1,122 @@
-import React from 'react';
-
-// Components
-import { LoginForm } from './LoginForm';
+import React, { useState, useEffect } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 
 // MUI
-import { Grid, Typography } from '@material-ui/core';
+import {
+  TextField,
+  Typography,
+  Button,
+  CircularProgress,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-// Icons
-import AppIcon from '../../images/icon.png';
+// Context
+import { useUserLoginData } from '../profile/userContext';
 
 const useStyles = makeStyles({
-  form: {
-    textAlign: 'center',
-  },
-  image: {
-    margin: 'auto',
-    width: '76px',
-    height: '76px',
-  },
-  pageTitle: {
+  textField: {
     margin: '10px auto 10px auto',
+  },
+  customError: {
+    color: 'red',
+    fontSize: '0.8rem',
+    marginTop: 10,
+  },
+  button: {
+    marginTop: '20',
+    position: 'relative',
+  },
+  progress: {
+    position: 'absolute',
   },
 });
 
-/** Control that allows the user to log in
- * @type {React.FunctionComponent}
+/** View component for displaying the login form to the user
+ * @type {ILoginFormComponentProps}
  */
-export const Login = () => {
+export const LoginForm = () => {
   const classes = useStyles();
+  const history = useHistory();
+  const { loginUser, userError, isLoadingLogin } = useUserLoginData();
+  const [editorState, setEditorState] = useState({
+    email: '',
+    password: '',
+  });
+  const { email, password } = editorState;
+
+  const handleSubmit = event => {
+    if (!isLoadingLogin) {
+      event.preventDefault();
+      const userParam = {
+        email,
+        password,
+      };
+      loginUser(userParam).then(() => {
+        history.push('/');
+      });
+    }
+  };
+  const handleChange = event => {
+    const { name, value } = event.target;
+    setEditorState({
+      ...editorState,
+      [name]: value,
+    });
+  };
+
   return (
-    <Grid container className={classes?.form}>
-      <Grid item sm />
-      <Grid item sm>
-        <img src={AppIcon} alt='eye' className={classes?.image} />
-        <Typography variant='h2' className={classes?.pageTitle}>
-          Login
+    <form noValidate onSubmit={handleSubmit}>
+      <TextField
+        id='email'
+        name='email'
+        type='email'
+        label='Email'
+        className={classes?.textField}
+        helperText={userError?.email}
+        error={userError?.email ? true : false}
+        value={email}
+        onChange={handleChange}
+        autoComplete='username'
+        fullWidth
+      />
+      <TextField
+        id='password'
+        name='password'
+        type='password'
+        label='Password'
+        className={classes?.textField}
+        helperText={userError?.password}
+        error={userError?.password ? true : false}
+        value={password}
+        onChange={handleChange}
+        autoComplete='current-password'
+        fullWidth
+      />
+      {userError?.general && (
+        <Typography variant='body2' className={classes?.customError}>
+          {userError?.general}
         </Typography>
-        <LoginForm />
-      </Grid>
-      <Grid item sm />
-    </Grid>
+      )}
+      <Button
+        type='submit'
+        variant='contained'
+        color='primary'
+        className={classes?.button}
+        disabled={!!isLoadingLogin}
+      >
+        Login
+        {!!isLoadingLogin && (
+          <CircularProgress size={30} className={classes?.progress} />
+        )}
+      </Button>
+      <br />
+      <small>
+        Don't have an account? Sign up <Link to='/signup'>here</Link>
+      </small>
+    </form>
   );
 };
+/** Various props that control how the user interacts with
+ *  the login form
+ * @typedef ILoginFormComponentProps
+ */
