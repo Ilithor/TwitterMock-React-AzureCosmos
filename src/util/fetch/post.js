@@ -56,7 +56,7 @@ export const fetchCommentList = () => get(`${endpoints.post}comment`);
  *
  * @returns {Promise<import("axios").AxiosResponse>}
  */
-export const commentPost = (postId, commentData) =>
+export const commentOnPost = (postId, commentData) =>
   post(`${endpoints.post}${postId}/comment`, commentData);
 
 /**
