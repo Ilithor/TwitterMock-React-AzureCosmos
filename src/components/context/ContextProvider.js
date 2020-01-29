@@ -4,10 +4,6 @@ import React from 'react';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { deepPurple } from '@material-ui/core/colors';
 
-// Redux
-import { Provider } from 'react-redux';
-import store from '../../redux/store';
-
 // Context
 import { NotificationProvider } from '../notification/notificationContext';
 import {
@@ -20,7 +16,7 @@ import {
 import { PostProvider } from '../post/postContext';
 import { fetchPostList, fetchCommentList } from '../../util/fetch/post';
 import { CommentProvider } from '../comment/commentContext';
-import { UserProvider } from './userContext';
+import { UserProvider } from '../profile/userContext';
 import { LikeProvider } from '../like/likeContext';
 
 const theme = createMuiTheme({
@@ -42,7 +38,7 @@ export const ContextProvider = ({ children }) => {
           <PostProvider fetchPostList={fetchPostList}>
             <LikeProvider fetchLikeList={fetchLikeList}>
               <CommentProvider fetchCommentList={fetchCommentList}>
-                <Provider store={store}>{children}</Provider>
+                {children}
               </CommentProvider>
             </LikeProvider>
           </PostProvider>

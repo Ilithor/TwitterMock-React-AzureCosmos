@@ -19,6 +19,8 @@ export const LikeProvider = ({ children }) => {
   /** @type {UseStateResult<_.Dictionary<Like>>} */
   const [likeList, setLikeList] = useState({});
   const [isLoadingLikeList, setIsLoadingLikeList] = useState(false);
+  const [isLoadingLikePost, setIsLoadingLikePost] = useState(false);
+  const [isLoadingUnlikePost, setIsLoadingUnlikePost] = useState(false);
 
   const refreshLikeList = userHandle =>
     new Promise((resolve, reject) => {
@@ -40,6 +42,40 @@ export const LikeProvider = ({ children }) => {
         });
     });
 
+  const likePost = postId =>
+    new Promise(async (resolve, reject) => {
+      if ((postId, !isLoadingLikePost)) {
+        setIsLoadingLikePost(true);
+        await fetchUtil.post
+          .likePost(postId)
+          .then(async () => {
+            resolve(likeList);
+          })
+          .catch(err => {
+            setLikeError(err);
+            reject(err);
+          })
+          .finally(() => setIsLoadingLikePost(false));
+      }
+    });
+
+  const unlikePost = postId =>
+    new Promise(async (resolve, reject) => {
+      if (postId && !isLoadingUnlikePost) {
+        setIsLoadingUnlikePost(true);
+        await fetchUtil.post
+          .unlikePost(postId)
+          .then(async () => {
+            resolve(likeList);
+          })
+          .catch(err => {
+            setLikeError(err);
+            reject(err);
+          })
+          .finally(() => setIsLoadingUnlikePost(false));
+      }
+    });
+
   // Passing state to value to be passed to provider
   const value = {
     likeError,
@@ -47,6 +83,8 @@ export const LikeProvider = ({ children }) => {
     refreshLikeList,
     isLoadingLikeList,
     lastRefreshLikeList,
+    likePost,
+    unlikePost,
   };
   return <likeContext.Provider value={value}>{children}</likeContext.Provider>;
 };
@@ -72,6 +110,8 @@ export const useLikeData = userHandle => {
     refreshLikeList,
     isLoadingLikeList,
     lastRefreshLikeList,
+    likePost,
+    unlikePost,
   } = ctx;
 
   if (
@@ -84,7 +124,7 @@ export const useLikeData = userHandle => {
   }
 
   // What we want this consumer hook to actually return
-  return { likeList, likeError, isLoadingLikeList };
+  return { likeList, likeError, isLoadingLikeList, likePost, unlikePost };
 };
 
 /**

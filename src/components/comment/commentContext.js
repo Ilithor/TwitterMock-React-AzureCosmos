@@ -21,6 +21,7 @@ export const CommentProvider = ({ children }) => {
   const [commentList, setCommentList] = useState(defaultState);
   const [isLoadingCommentList, setIsLoadingCommentList] = useState(false);
   const [isLoadingCommentOnPost, setIsLoadingCommentOnPost] = useState(false);
+
   const refreshCommentList = () => {
     if (!isLoadingCommentList) {
       setIsLoadingCommentList(true);
@@ -38,12 +39,23 @@ export const CommentProvider = ({ children }) => {
     }
   };
 
-  const commentOnPost = (postId, commentParams) => {
-    setIsLoadingCommentOnPost(true);
-    fetchUtil.post.commentPost(postId, commentParams).then(() => {
-      setIsLoadingCommentOnPost(false);
+  const commentOnPost = (postId, commentData) =>
+    new Promise(async (resolve, reject) => {
+      if (postId && commentData && !isLoadingCommentOnPost) {
+        setIsLoadingCommentOnPost(true);
+        await fetchUtil.post
+          .commentOnPost(postId, commentData)
+          .then(async () => {
+            await refreshCommentList();
+            resolve(commentList);
+          })
+          .catch(err => {
+            setCommentError(err);
+            reject(err);
+          })
+          .finally(() => setIsLoadingCommentOnPost(false));
+      }
     });
-  };
 
   // Passing state to value to be passed to provider
   const value = {

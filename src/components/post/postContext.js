@@ -19,6 +19,8 @@ export const PostProvider = ({ children }) => {
   /** @type {UseStateResult<_.Dictionary<Post>>} */
   const [postList, setPostList] = useState({});
   const [isLoadingPostList, setIsLoadingPostList] = useState(false);
+  const [isLoadingNewPost, setIsLoadingNewPost] = useState(false);
+  const [isLoadingDeletePost, setIsLoadingDeletePost] = useState(false);
 
   const refreshPostList = () =>
     new Promise((resolve, reject) => {
@@ -42,6 +44,41 @@ export const PostProvider = ({ children }) => {
       }
     });
 
+  const newPost = postParam =>
+    new Promise((resolve, reject) => {
+      if (postParam && !isLoadingNewPost) {
+        setIsLoadingNewPost(true);
+        fetchUtil.post
+          .newPost(postParam)
+          .then(res => {
+            refreshPostList();
+            resolve(postList);
+          })
+          .catch(err => {
+            setPostError(err);
+            reject(err);
+          })
+          .finally(() => setIsLoadingNewPost(false));
+      }
+    });
+
+  const deletePost = postId =>
+    new Promise(async (resolve, reject) => {
+      if (postId && !isLoadingDeletePost) {
+        setIsLoadingDeletePost(true);
+        await fetchUtil.post
+          .deletePost(postId)
+          .then(() => {
+            refreshPostList().then(() => resolve(postList));
+          })
+          .catch(err => {
+            setPostError(err);
+            reject(err);
+          })
+          .finally(() => setIsLoadingDeletePost(false));
+      }
+    });
+
   // Passing state to value to be passed to provider
   const value = {
     postError,
@@ -50,6 +87,9 @@ export const PostProvider = ({ children }) => {
     isLoadingPostList,
     setIsLoadingPostList,
     lastRefreshPostList,
+    deletePost,
+    newPost,
+    isLoadingNewPost,
   };
   return <postContext.Provider value={value}>{children}</postContext.Provider>;
 };
@@ -75,6 +115,9 @@ export const usePostData = () => {
     refreshPostList,
     isLoadingPostList,
     lastRefreshPostList,
+    deletePost,
+    newPost,
+    isLoadingNewPost,
   } = ctx;
 
   if (
@@ -87,7 +130,14 @@ export const usePostData = () => {
   }
 
   // What we want this consumer hook to actually return
-  return { postList, postError, isLoadingPostList };
+  return {
+    postList,
+    postError,
+    isLoadingPostList,
+    deletePost,
+    newPost,
+    isLoadingNewPost,
+  };
 };
 
 /**

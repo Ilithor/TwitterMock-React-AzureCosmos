@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
 import _ from 'lodash';
+import { useHistory } from 'react-router-dom';
 
 import * as fetchUtil from '../../util/fetch';
 
@@ -15,8 +16,9 @@ const notificationContext = createContext();
  */
 export const NotificationProvider = ({ children }) => {
   /** @type {UseStateResult<_.Dictionary<Notification>>} */
+  const history = useHistory();
   const [notificationList, setNotificationList] = useState({});
-  const [notificationError, setnotificationError] = useState();
+  const [notificationError, setNotificationError] = useState();
   const [
     lastRefreshNotificationList,
     setLastRefreshNotificationList,
@@ -24,24 +26,51 @@ export const NotificationProvider = ({ children }) => {
   const [isLoadingNotifcationList, setIsLoadingNotificationList] = useState(
     false
   );
+  const [
+    isLoadingMarkNotificationRead,
+    setIsLoadingMarkNotificationRead,
+  ] = useState(false);
+
   const refreshNotificationList = () =>
     new Promise((resolve, reject) => {
       if (!isLoadingNotifcationList) {
         setIsLoadingNotificationList(true);
         // Fetch list of notifications
         fetchUtil.user
-          .getNotificationList()
+          .fetchNotificationList()
           .then(res => {
             setNotificationList(_.keyBy(res.data, 'recipient'));
             resolve(notificationList);
           })
           .catch(err => {
-            setnotificationError(err);
+            setNotificationError(err);
             reject(err);
           })
           .finally(() => {
             setLastRefreshNotificationList(Date.now);
             setIsLoadingNotificationList(false);
+          });
+      }
+    });
+
+  const markNotificationRead = notification =>
+    new Promise(async (resolve, reject) => {
+      if (!isLoadingMarkNotificationRead) {
+        setIsLoadingMarkNotificationRead(true);
+        await fetchUtil.user
+          .markNotificationRead(notification?.notificationId)
+          .then(async () => {
+            await refreshNotificationList();
+          })
+          .catch(err => {
+            setNotificationError(err);
+            reject(err);
+          })
+          .finally(() => {
+            setIsLoadingMarkNotificationRead(false);
+            history.pushState(
+              `/u/${notification?.recipient}/post/${notification?.postId}`
+            );
           });
       }
     });
@@ -54,6 +83,7 @@ export const NotificationProvider = ({ children }) => {
     isLoadingNotifcationList,
     setIsLoadingNotificationList,
     lastRefreshNotificationList,
+    markNotificationRead,
   };
   return (
     <notificationContext.Provider value={value}>
@@ -84,6 +114,7 @@ export const useNotificationData = () => {
     notificationError,
     isLoadingNotifcationList,
     lastRefreshNotificationList,
+    markNotificationRead,
   } = ctx;
 
   if (
@@ -100,6 +131,7 @@ export const useNotificationData = () => {
     refreshNotificationList,
     notificationError,
     isLoadingNotifcationList,
+    markNotificationRead,
   };
 };
 
