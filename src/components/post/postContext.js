@@ -17,7 +17,7 @@ export const PostProvider = ({ children }) => {
   const [postError, setPostError] = useState();
   const [lastRefreshPostList, setLastRefreshPostList] = useState();
   /** @type {UseStateResult<_.Dictionary<Post>>} */
-  const [postList, setPostList] = useState({});
+  const [postList, setPostList] = useState();
   const [isLoadingPostList, setIsLoadingPostList] = useState(false);
   const [isLoadingNewPost, setIsLoadingNewPost] = useState(false);
   const [isLoadingDeletePost, setIsLoadingDeletePost] = useState(false);
@@ -122,9 +122,7 @@ export const usePostData = () => {
 
   if (
     !isLoadingPostList &&
-    (_.keys(postList).length === 0 ||
-      lastRefreshPostList === null ||
-      lastRefreshPostList >= Date.now + 600)
+    (!lastRefreshPostList || lastRefreshPostList + 600 <= Date.now)
   ) {
     refreshPostList();
   }
