@@ -1,12 +1,12 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 // Components
 import { ImageWrapper } from './profile/ImageWrapper';
 import { ProfileDetail } from './profile/ProfileDetail';
-import { EditDetails } from './editDetails';
-import CustomButton from '../../../util/CustomButton';
+import { EditDetail } from './editDetail';
+import { CustomButton } from '../../../util/CustomButton';
 
 // MUI
 import { Paper, CircularProgress } from '@material-ui/core';
@@ -16,7 +16,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import * as Icon from '@material-ui/icons';
 
 // Context
-import { useUserLogout, useCurrentUserData } from '../../context/userContext';
+import {
+  useUserLogout,
+  useCurrentUserData,
+  useUploadImageData,
+} from '../userContext';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -67,22 +71,12 @@ const useStyles = makeStyles(theme => ({
 
 /** View component for displaying the user's profile
  * @type {React.FunctionComponent}
- * @param {object} props
- * @param {string} props.user.handle
- * @param {string} props.user.createdAt
- * @param {object} props.user.bio
- * @param {any} props.logoutUserAction
- * @param {any} props.uploadImageAction
  */
 export const UserProfileDisplay = () => {
   const classes = useStyles();
-  const { currentUser, getCurrentUserData } = useCurrentUserData();
+  const { currentUser } = useCurrentUserData();
   const { logoutUser } = useUserLogout();
-
-  useEffect(() => {
-    getCurrentUserData(localStorage?.Handle);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const { uploadImage } = useUploadImageData();
 
   const handleEditPhoto = () => {
     const fileInput = document.getElementById('imageUpload');
@@ -90,16 +84,16 @@ export const UserProfileDisplay = () => {
   };
 
   const handleImageChange = event => {
-    const image = event?.target?.files[0];
-    if (image?.size / 1024 > 50000) {
+    const image = event.target.files[0];
+    if (image.size / 1024 > 50000) {
       toast.error('This image size exceeds the acceptable limit', {
-        position: toast?.POSITION?.BOTTOM_LEFT,
+        position: toast.POSITION.BOTTOM_LEFT,
         autoClose: 8000,
       });
     } else {
       const formData = new FormData();
-      formData.append('image', image, image?.name);
-      //uploadImageAction(formData, currentUser?.handle);
+      formData.append('image', image, image.name);
+      uploadImage(formData, currentUser?.handle);
     }
   };
 
@@ -123,7 +117,7 @@ export const UserProfileDisplay = () => {
           <CustomButton tip='Logout' onClick={handleLogout}>
             <Icon.KeyboardReturn color='primary' />
           </CustomButton>
-          <EditDetails />
+          <EditDetail />
         </div>
       </Paper>
     );
