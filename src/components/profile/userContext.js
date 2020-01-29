@@ -18,8 +18,8 @@ export const UserProvider = ({ children }) => {
   const [userError, setUserError] = useState();
   const [lastRefreshUserList, setLastRefreshUserList] = useState();
   /** @type {UseStateResult<_.Dictionary<User>>} */
-  const [userList, setUserList] = useState({});
-  const [currentUser, setCurrentUser] = useState({});
+  const [userList, setUserList] = useState();
+  const [currentUser, setCurrentUser] = useState();
   const [isAuthenticated, setisAuthenticated] = useState(false);
   const [isLoadingUserList, setIsLoadingUserList] = useState(false);
   const [isLoadingUserData, setIsLoadingUserData] = useState(false);
@@ -253,9 +253,7 @@ export const useUserListData = () => {
 
   if (
     !isLoadingUserList &&
-    (_.keys(userList).length === 0 ||
-      lastRefreshUserList === null ||
-      lastRefreshUserList >= Date.now + 600)
+    (!lastRefreshUserList || lastRefreshUserList + 600 <= Date.now)
   ) {
     refreshUserList();
   }
