@@ -4,9 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { Button, Grid, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-// Redux
-import { connect } from 'react-redux';
-import { getCommentPost } from '../../../redux/actions/dataActions';
+// Context
+import { useCommentOnPostData } from '../commentContext';
 
 const useStyles = makeStyles({
   textField: {
@@ -18,8 +17,13 @@ const useStyles = makeStyles({
   },
 });
 
-const CommentFormView = ({ postId, UI, getCommentPost }) => {
+export const CommentForm = ({ postId }) => {
   const classes = useStyles();
+  const {
+    commentOnPost,
+    isLoadingCommentOnPost,
+    commentError,
+  } = useCommentOnPostData();
   const [body, setBody] = useState('');
 
   const handleChange = event => {
@@ -29,14 +33,14 @@ const CommentFormView = ({ postId, UI, getCommentPost }) => {
   const handleSubmit = event => {
     event.preventDefault();
     const commentData = { body };
-    getCommentPost(postId, commentData);
+    commentOnPost(postId, commentData);
   };
 
   useEffect(() => {
-    if (!UI.error.comment && !UI.isLoading) {
+    if (!commentError && !isLoadingCommentOnPost) {
       setBody('');
     }
-  }, [UI.error, UI.isLoading]);
+  }, [commentError, isLoadingCommentOnPost]);
   return (
     <Grid item sm={12} style={{ textAlign: 'center' }}>
       <form onSubmit={handleSubmit}>
@@ -44,8 +48,8 @@ const CommentFormView = ({ postId, UI, getCommentPost }) => {
           name='body'
           type='text'
           label='Comment on post'
-          error={!!UI.error.comment}
-          helperText={UI.error.comment}
+          error={commentError}
+          helperText={commentError}
           value={body}
           onChange={handleChange}
           fullWidth
@@ -63,10 +67,3 @@ const CommentFormView = ({ postId, UI, getCommentPost }) => {
     </Grid>
   );
 };
-
-const mapStateToProps = ({ UI }) => ({ UI });
-
-export const CommentForm = connect(
-  mapStateToProps,
-  { getCommentPost }
-)(CommentFormView);

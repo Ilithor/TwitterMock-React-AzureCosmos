@@ -1,5 +1,4 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
 
 // Components
 import { NotificationCardContent } from './NotificationCardContent';
@@ -9,7 +8,7 @@ import { Card, CardActionArea } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 // API
-import { markNotificationRead } from '../../../util/fetch/user';
+import { useNotificationData } from '../notificationContext';
 
 const useStyles = makeStyles({
   notificationCard: {
@@ -34,25 +33,19 @@ export const NotificationCard = ({
   comment = {},
 }) => {
   const classes = useStyles();
-  const history = useHistory();
+  const { markNotificationRead } = useNotificationData();
   const notificationRead = () => {
     if (notification?.read === false) {
-      markNotificationRead(notification?._id).then(() => {
-        notification.read = true;
-        history.push(
-          `/u/${notification?.recipient}/post/${notification?.postId}`
-        );
-      });
+      markNotificationRead(notification);
     }
-    history.push(`/u/${notification?.recipient}/post/${notification?.postId}`);
   };
   return (
     <Card className={classes?.notificationCard}>
       <CardActionArea onClick={notificationRead}>
         <NotificationCardContent
           notification={notification}
-          postBody={post.body}
-          commentBody={comment.body}
+          postBody={post?.body}
+          commentBody={comment?.body}
         />
       </CardActionArea>
     </Card>
