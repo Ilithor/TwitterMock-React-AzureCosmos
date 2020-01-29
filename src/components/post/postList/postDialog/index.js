@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
-import _ from 'lodash';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
+import defaultImage from '../../../../images/user.png';
 
 // Components
 import { PostDialogContent } from './PostDialogContent';
@@ -12,11 +12,10 @@ import { makeStyles } from '@material-ui/core/styles';
 
 // Icons
 import * as Icon from '@material-ui/icons';
-import defaultImage from '../../../../images/user.png';
+
 // Context
 import { usePostData } from '../../postContext';
 import { useUserListData } from '../../../profile/userContext';
-import { useCommentListData } from '../../../comment/commentContext';
 
 const useStyles = makeStyles({
   spinnerDiv: {
@@ -44,18 +43,13 @@ const useStyles = makeStyles({
  * @param {string} props.userHandle
  */
 export const PostDialog = ({ postId, userHandle }) => {
-  const { postList, isLoadingPostList } = usePostData();
+  const { postList } = usePostData();
   const { userList, isLoadingUserList } = useUserListData();
-  const { commentList } = useCommentListData();
   const classes = useStyles();
   const params = useParams();
   const location = useLocation();
   const open = params?.postId === postId;
   const post = postList[postId];
-  const dialogCommentList = _.filter(
-    commentList,
-    comment => comment?.postId === postId
-  );
   const history = useHistory();
   const handleOpen = () => {
     history.push(`/u/${userHandle}/post/${postId}`);
@@ -64,12 +58,8 @@ export const PostDialog = ({ postId, userHandle }) => {
     history.push(location.pathname.replace(`/post/${postId}`, ''));
   };
   const DialogContentEditor = () => {
-    if (
-      !isLoadingPostList &&
-      !isLoadingUserList &&
-      _.keys(userList).length === 0
-    ) {
-      let userImage = defaultImage;
+    if (!isLoadingUserList) {
+      const { userImage } = userList[(post?.userHandle)] || defaultImage;
       return (
         <PostDialogContent
           userHandle={userHandle}
@@ -79,26 +69,6 @@ export const PostDialog = ({ postId, userHandle }) => {
           postId={post?._id}
           likeCount={post?.likeCount}
           commentCount={post?.commentCount}
-          commentList={dialogCommentList}
-        />
-      );
-    }
-    if (
-      !isLoadingUserList &&
-      !isLoadingUserList &&
-      _.keys(userList).length > 0
-    ) {
-      const { userImage } = userList[(post?.userHandle)];
-      return (
-        <PostDialogContent
-          userHandle={userHandle}
-          userImage={userImage}
-          createdAt={post?.createdAt}
-          body={post?.body}
-          postId={post?._id}
-          likeCount={post?.likeCount}
-          commentCount={post?.commentCount}
-          commentList={dialogCommentList}
         />
       );
     }

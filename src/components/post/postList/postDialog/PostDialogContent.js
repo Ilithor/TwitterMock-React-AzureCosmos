@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 
@@ -9,11 +10,14 @@ import { CommentForm } from '../../../comment/newComment/CommentForm';
 import { CustomButton } from '../../../../util/CustomButton';
 
 // MUI
-import { Grid, Typography } from '@material-ui/core';
+import { Grid, Typography, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 // Icons
 import * as Icon from '@material-ui/icons';
+
+// Context
+import { useCommentListData } from '../../../comment/commentContext';
 
 const useStyles = makeStyles({
   profileImage: {
@@ -25,6 +29,11 @@ const useStyles = makeStyles({
   separator: {
     border: 'none',
     margin: 4,
+  },
+  spinnerDiv: {
+    textAlign: 'center',
+    marginTop: 50,
+    marginBottom: 50,
   },
 });
 
@@ -44,13 +53,24 @@ export const PostDialogContent = ({
   postId,
   likeCount,
   commentCount,
-  commentList = [],
 }) => {
   const classes = useStyles();
+  const { commentList, isLoadingCommentList } = useCommentListData();
+  const dialogCommentList = _.filter(
+    commentList,
+    comment => comment?.postId === postId
+  );
   const RecentCommentMarkup = () => {
-    return commentList?.map(comment => (
-      <Comment key={`comment-${comment?._id}`} comment={comment} />
-    ));
+    if (!isLoadingCommentList && dialogCommentList) {
+      return _.map(dialogCommentList, comment => (
+        <Comment key={`comment-${comment?._id}`} comment={comment} />
+      ));
+    }
+    return (
+      <div className={classes?.spinnerDiv}>
+        <CircularProgress size={200} thickness={2} />
+      </div>
+    );
   };
   return (
     <Grid container spacing={5}>
