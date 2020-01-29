@@ -6,9 +6,10 @@ import { Link } from 'react-router-dom';
 import { Post } from '../components/post/postList';
 import { Profile } from '../components/profile';
 import { NewPost } from '../components/post/newPost';
+import { CustomButton } from '../util/CustomButton';
 
 // MUI
-import { Grid, Button, CircularProgress } from '@material-ui/core';
+import { Grid, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 // Icons
@@ -18,7 +19,7 @@ import * as Icon from '@material-ui/icons';
 import {
   useUserAuthenticationData,
   useUserListData,
-} from '../components/context/userContext';
+} from '../components/profile/userContext';
 import { usePostData } from '../components/post/postContext';
 import { useLikeData } from '../components/like/likeContext';
 
@@ -72,16 +73,17 @@ export const HomePage = () => {
       return <NewPost />;
     }
     return (
-      <Link to='/login'>
-        <Button
-          variant='contained'
-          className={classes?.createButton}
-          color='primary'
-        >
-          <Icon.Add className={classes?.extendedIcon} />
-          Create Post
-        </Button>
-      </Link>
+      <CustomButton
+        tip='Create Post'
+        variant='contained'
+        btnClassName={classes?.createButton}
+        color='primary'
+        component={Link}
+        to='/login'
+      >
+        <Icon.Add className={classes?.extendedIcon} />
+        Create Post
+      </CustomButton>
     );
   };
   return (

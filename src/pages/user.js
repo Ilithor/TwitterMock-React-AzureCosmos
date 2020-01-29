@@ -12,7 +12,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 // Context
 import { usePostData } from '../components/post/postContext';
-import { useUserListData } from '../components/context/userContext';
+import { useUserListData } from '../components/profile/userContext';
 
 const useStyles = makeStyles({
   spinnerDiv: {
