@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
+import defaultImage from '../../images/user.png';
 
 // MUI
 import { Card, CardContent, CardMedia, Typography } from '@material-ui/core';
@@ -30,7 +31,7 @@ const useStyles = makeStyles({
 export const Comment = ({ comment = {} }) => {
   const classes = useStyles();
   const { userList } = useUserListData();
-  const { userImage } = userList[(comment?.userHandle)];
+  const { userImage } = userList[(comment?.userHandle)] || defaultImage;
   return (
     <Card className={classes?.commentCard}>
       <CardMedia
