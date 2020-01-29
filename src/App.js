@@ -12,7 +12,7 @@ import { NotificationPage } from './pages/notification';
 
 // Components
 import { Navbar } from './components/Navbar';
-import AuthRoute from './util/AuthRoute';
+import { AuthRoute } from './util/AuthRoute';
 
 // Context
 import { ContextProvider } from './components/context/ContextProvider';
