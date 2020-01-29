@@ -1,4 +1,5 @@
 import React from 'react';
+import { Router } from 'react-router-dom';
 
 // MUI
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
@@ -28,22 +29,24 @@ const theme = createMuiTheme({
 
 export const ContextProvider = ({ children }) => {
   return (
-    <ThemeProvider theme={theme}>
-      <UserProvider
-        fetchUserList={fetchUserList}
-        fetchUserData={fetchUserData}
-        loginUser={loginUser}
-      >
-        <NotificationProvider fetchNotificationList={fetchNotificationList}>
-          <PostProvider fetchPostList={fetchPostList}>
-            <LikeProvider fetchLikeList={fetchLikeList}>
-              <CommentProvider fetchCommentList={fetchCommentList}>
-                {children}
-              </CommentProvider>
-            </LikeProvider>
-          </PostProvider>
-        </NotificationProvider>
-      </UserProvider>
-    </ThemeProvider>
+    <Router>
+      <ThemeProvider theme={theme}>
+        <UserProvider
+          fetchUserList={fetchUserList}
+          fetchUserData={fetchUserData}
+          loginUser={loginUser}
+        >
+          <NotificationProvider fetchNotificationList={fetchNotificationList}>
+            <PostProvider fetchPostList={fetchPostList}>
+              <LikeProvider fetchLikeList={fetchLikeList}>
+                <CommentProvider fetchCommentList={fetchCommentList}>
+                  {children}
+                </CommentProvider>
+              </LikeProvider>
+            </PostProvider>
+          </NotificationProvider>
+        </UserProvider>
+      </ThemeProvider>
+    </Router>
   );
 };
