@@ -20,10 +20,11 @@ mongoConnect();
  * @returns {Promise<user[User]> | UserNotFound}
  */
 export const getList = async () => {
-  let error = {};
+  const error = {};
   const user = await User.find({})
     .sort({ createdAt: -1 })
-    .read(mongo.ReadPreference.NEAREST);
+    .read(mongo.ReadPreference.NEAREST)
+    .limit(100);
 
   if (user.length === 0) {
     error.user = 'No users found';
@@ -37,7 +38,7 @@ export const getList = async () => {
  * @returns {Promise<likeList[Like]> | Error}
  */
 export const getLikeList = async userHandle => {
-  let error = {};
+  const error = {};
   const likeList = await Like.find({})
     .read(mongo.ReadPreference.NEAREST)
     .limit(100);
@@ -54,13 +55,12 @@ export const getLikeList = async userHandle => {
  * @return {Promise<newUser[User]> | UserError}
  */
 export const register = async userParam => {
-  let error = {};
-  let credential = {};
-  let bio = {};
-  let user = { credential, bio };
+  const credential = {};
+  const bio = {};
+  const user = { credential, bio };
 
   // Validation
-  error = await validateRegister(userParam);
+  const error = await validateRegister(userParam);
 
   if (Object.keys(error).length > 0) {
     return error;
@@ -90,12 +90,11 @@ export const login = async userParam => {
   const { email, password } = userParam;
 
   // Validation
-  let error = {};
-  let user = {};
+  const user = {};
   let userLoggedIn;
-  let dataToReturn = {};
+  const dataToReturn = {};
 
-  error = await validateLogin(userParam);
+  const error = await validateLogin(userParam);
 
   if (Object.keys(error).length > 0) {
     // Returns error if any, otherwise continue
@@ -121,7 +120,7 @@ export const login = async userParam => {
  * @return {Promise<boolean>}
  */
 export const updateBio = async (userParam, userId) => {
-  let userDetail = {};
+  const userDetail = {};
   let success = false;
 
   userDetail.bio = await validateUserDetail(userParam);

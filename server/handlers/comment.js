@@ -36,14 +36,13 @@ export const getCommentList = (req, res) => {
  * @type {RouteHandler}
  */
 export const commentOnPost = async (req, res, next) => {
-  let postToUpdate = {};
   req.notification = {};
   await findPostById(req.params.postId)
     .then(async post => {
       if (post.post) {
         return res.status(404).json({ error: post.post });
       } else {
-        postToUpdate = post;
+        const postToUpdate = post;
         req.notification.recipient = postToUpdate.userHandle;
         postToUpdate.commentCount++;
         await create(req).then(async comment => {
@@ -77,14 +76,13 @@ export const commentOnPost = async (req, res, next) => {
  * @type {RouteHandler}
  */
 export const deleteComment = async (req, res, next) => {
-  let postToUpdate = {};
   req.notification = {};
   await findPostById(req.params.postId)
     .then(async post => {
       if (post.post) {
         return res.status(404).json({ error: post.post });
       } else {
-        postToUpdate = post;
+        const postToUpdate = post;
         await findCommentByHandleAndPostId(
           req.user.handle,
           req.params.postId

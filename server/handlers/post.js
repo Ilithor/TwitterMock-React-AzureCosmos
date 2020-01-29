@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { getList, create, findAndDeletePost } from '../services/post.service';
 import {
   findPostById,
@@ -9,12 +10,12 @@ import {
  * @type {RouteHandler}
  */
 export const getPostList = (req, res, next) => {
+  const postList = [];
   getList()
     // Retrieves a list of posts, and
     // populates them in an array
     .then(data => {
-      let postList = [];
-      data.forEach(doc => {
+      _.map(data, doc => {
         postList.push({
           postId: doc.id,
           body: doc.body,

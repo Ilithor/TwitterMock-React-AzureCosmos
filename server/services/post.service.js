@@ -8,9 +8,8 @@ mongoConnection();
  * @return {Promise<post[Post]> | PostNotFound}
  */
 export const getList = async () => {
-  let post = [];
-  let error = {};
-  post = await Post.find({})
+  const error = {};
+  const post = await Post.find({})
     .sort({ createdAt: -1 })
     .read(mongo.ReadPreference.NEAREST)
     .limit(100);
@@ -30,7 +29,7 @@ export const getList = async () => {
  */
 export const create = async (postParam, user) => {
   // Validation
-  let error = {};
+  const error = {};
   if (postParam.body.trim() === '') {
     error.body = 'Body must not be empty';
     return error;
@@ -52,8 +51,7 @@ export const create = async (postParam, user) => {
  * @return {Promise<Post>}
  */
 export const findAndDeletePost = async postParam => {
-  let post = {};
-  post = await Post.findOneAndDelete({
+  const post = await Post.findOneAndDelete({
     _id: postParam.params.postId,
   });
   return post;

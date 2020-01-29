@@ -6,10 +6,11 @@ import mongo from 'mongodb';
  * @return {Promise<UserNotification> | NotificationNotFound}
  */
 export const getNotificationList = async () => {
-  let error = {};
+  const error = {};
   const notificationList = Notification.find({})
     .sort({ createdAt: 1 })
-    .read(mongo.ReadPreference.NEAREST);
+    .read(mongo.ReadPreference.NEAREST)
+    .limit(100);
   if (notificationList.length === 0) {
     error.notification = 'No notifications found';
     return error;
@@ -23,7 +24,7 @@ export const getNotificationList = async () => {
  * @return {Promise<UserNotification>}
  */
 export const create = async (recipient, postId, sender, type, typeId) => {
-  let dataForNotification = {};
+  const dataForNotification = {};
 
   dataForNotification.read = false;
   dataForNotification.recipient = recipient;
