@@ -54,13 +54,13 @@ export const NotificationProvider = ({ children }) => {
     });
 
   const markNotificationRead = notification =>
-    new Promise(async (resolve, reject) => {
+    new Promise((resolve, reject) => {
       if (!isLoadingMarkNotificationRead) {
         setIsLoadingMarkNotificationRead(true);
-        await fetchUtil.user
+        fetchUtil.user
           .markNotificationRead(notification?.notificationId)
-          .then(async () => {
-            await refreshNotificationList();
+          .then(() => {
+            refreshNotificationList();
           })
           .catch(err => {
             setNotificationError(err);

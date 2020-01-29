@@ -22,31 +22,36 @@ export const CommentProvider = ({ children }) => {
   const [isLoadingCommentList, setIsLoadingCommentList] = useState(false);
   const [isLoadingCommentOnPost, setIsLoadingCommentOnPost] = useState(false);
 
-  const refreshCommentList = () => {
-    if (!isLoadingCommentList) {
-      setIsLoadingCommentList(true);
-      // Fetch list of comments
-      fetchUtil.post
-        .fetchCommentList()
-        .then(res => {
-          setCommentList(_.keyBy(res?.data, '_id'));
-        })
-        .catch(err => setCommentError(err))
-        .finally(() => {
-          setLastRefreshCommentList(Date.now);
-          setIsLoadingCommentList(false);
-        });
-    }
-  };
+  const refreshCommentList = () =>
+    new Promise((resolve, reject) => {
+      if (!isLoadingCommentList) {
+        setIsLoadingCommentList(true);
+        // Fetch list of comments
+        fetchUtil.post
+          .fetchCommentList()
+          .then(res => {
+            setCommentList(_.keyBy(res?.data, 'commentId'));
+            resolve(commentList);
+          })
+          .catch(err => {
+            setCommentError(err);
+            reject(err);
+          })
+          .finally(() => {
+            setLastRefreshCommentList(Date.now);
+            setIsLoadingCommentList(false);
+          });
+      }
+    });
 
   const commentOnPost = (postId, commentData) =>
-    new Promise(async (resolve, reject) => {
+    new Promise((resolve, reject) => {
       if (postId && commentData && !isLoadingCommentOnPost) {
         setIsLoadingCommentOnPost(true);
-        await fetchUtil.post
+        fetchUtil.post
           .commentOnPost(postId, commentData)
           .then(async () => {
-            await refreshCommentList();
+            refreshCommentList();
             resolve(commentList);
           })
           .catch(err => {

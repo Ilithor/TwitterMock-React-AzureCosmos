@@ -32,13 +32,13 @@ export const UserProvider = ({ children }) => {
   const history = useHistory();
 
   const refreshUserList = () =>
-    new Promise(async (resolve, reject) => {
+    new Promise((resolve, reject) => {
       if (!isLoadingUserList) {
         setIsLoadingUserList(true);
-        await fetchUtil.user
+        fetchUtil.user
           .fetchUserList()
-          .then(async res => {
-            await setUserList(_.keyBy(res.data, 'handle'));
+          .then(res => {
+            setUserList(_.keyBy(res.data, 'handle'));
             resolve(userList);
           })
           .catch(err => {
@@ -53,13 +53,13 @@ export const UserProvider = ({ children }) => {
     });
 
   const getCurrentUserData = userHandle =>
-    new Promise(async (resolve, reject) => {
+    new Promise((resolve, reject) => {
       if (!!userHandle && !isLoadingUserData) {
         setIsLoadingUserData(true);
-        await fetchUtil.user
+        fetchUtil.user
           .fetchUserData(userHandle)
-          .then(async res => {
-            await setCurrentUser(res.data.user);
+          .then(res => {
+            setCurrentUser(res.data.user);
             resolve(currentUser);
           })
           .catch(err => {
@@ -73,13 +73,13 @@ export const UserProvider = ({ children }) => {
     });
 
   const editUserDetail = userDetail =>
-    new Promise(async (resolve, reject) => {
+    new Promise((resolve, reject) => {
       if (userDetail && !isLoadingEditUserDetail) {
         setIsLoadingEditUserDetail(true);
-        await fetchUtil.user
+        fetchUtil.user
           .editUserDetail(userDetail)
-          .then(async () => {
-            await getCurrentUserData(localStorage?.Handle);
+          .then(() => {
+            getCurrentUserData(localStorage?.Handle);
             resolve(currentUser);
           })
           .catch(err => {
@@ -91,13 +91,13 @@ export const UserProvider = ({ children }) => {
     });
 
   const uploadImage = formData =>
-    new Promise(async (resolve, reject) => {
+    new Promise((resolve, reject) => {
       if (formData && localStorage.Handle && !isLoadingUploadImage) {
         setIsLoadingUploadImage(true);
-        await fetchUtil.user
+        fetchUtil.user
           .uploadImage(formData)
-          .then(async () => {
-            await getCurrentUserData(localStorage?.Handle);
+          .then(() => {
+            getCurrentUserData(localStorage?.Handle);
             resolve(currentUser);
           })
           .catch(err => {
@@ -109,15 +109,15 @@ export const UserProvider = ({ children }) => {
     });
 
   const registerUser = userParam =>
-    new Promise(async (resolve, reject) => {
+    new Promise((resolve, reject) => {
       if (userParam && !isLoadingRegister) {
         setIsLoadingRegister(true);
-        await fetchUtil.user
+        fetchUtil.user
           .registerUser(userParam)
-          .then(async res => {
+          .then(res => {
             setAuthorizationHeader(res.data.token);
             setUserHandleHeader(res.data.handle);
-            await getCurrentUserData(res.data.handle);
+            getCurrentUserData(res.data.handle);
             resolve(currentUser);
           })
           .catch(err => {
@@ -132,15 +132,15 @@ export const UserProvider = ({ children }) => {
     });
 
   const loginUser = userParam =>
-    new Promise(async (resolve, reject) => {
+    new Promise((resolve, reject) => {
       if (userParam && !isLoadingLogin) {
         setIsLoadingLogin(true);
-        await fetchUtil.user
+        fetchUtil.user
           .loginUser(userParam)
-          .then(async res => {
+          .then(res => {
             setAuthorizationHeader(res.data.token);
             setUserHandleHeader(res.data.handle);
-            await getCurrentUserData(res.data.handle);
+            getCurrentUserData(res.data.handle);
             resolve(currentUser);
           })
           .catch(err => {
@@ -164,7 +164,7 @@ export const UserProvider = ({ children }) => {
   };
 
   const getAuthenticated = () =>
-    new Promise(async (resolve, reject) => {
+    new Promise((resolve, reject) => {
       if (
         localStorage?.Token &&
         localStorage?.Handle &&
@@ -181,7 +181,7 @@ export const UserProvider = ({ children }) => {
           history.push('/login');
         } else {
           axios.defaults.headers.common['Authorization'] = localStorage?.Token;
-          await getCurrentUserData(localStorage?.Handle)
+          getCurrentUserData(localStorage?.Handle)
             .then(() => {
               setisAuthenticated(true);
               resolve(currentUser);

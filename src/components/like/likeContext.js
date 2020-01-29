@@ -43,10 +43,10 @@ export const LikeProvider = ({ children }) => {
     });
 
   const likePost = postId =>
-    new Promise(async (resolve, reject) => {
+    new Promise((resolve, reject) => {
       if ((postId, !isLoadingLikePost)) {
         setIsLoadingLikePost(true);
-        await fetchUtil.post
+        fetchUtil.post
           .likePost(postId)
           .then(async () => {
             resolve(likeList);
@@ -60,10 +60,10 @@ export const LikeProvider = ({ children }) => {
     });
 
   const unlikePost = postId =>
-    new Promise(async (resolve, reject) => {
+    new Promise((resolve, reject) => {
       if (postId && !isLoadingUnlikePost) {
         setIsLoadingUnlikePost(true);
-        await fetchUtil.post
+        fetchUtil.post
           .unlikePost(postId)
           .then(async () => {
             resolve(likeList);

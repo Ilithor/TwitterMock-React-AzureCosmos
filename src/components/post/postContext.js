@@ -63,10 +63,10 @@ export const PostProvider = ({ children }) => {
     });
 
   const deletePost = postId =>
-    new Promise(async (resolve, reject) => {
+    new Promise((resolve, reject) => {
       if (postId && !isLoadingDeletePost) {
         setIsLoadingDeletePost(true);
-        await fetchUtil.post
+        fetchUtil.post
           .deletePost(postId)
           .then(() => {
             refreshPostList().then(() => resolve(postList));
