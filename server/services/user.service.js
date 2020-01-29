@@ -92,7 +92,6 @@ export const login = async userParam => {
   // Validation
   const user = {};
   let userLoggedIn;
-  const dataToReturn = {};
 
   const error = await validateLogin(userParam);
 
@@ -108,7 +107,7 @@ export const login = async userParam => {
     return userLoggedIn;
   } else {
     const token = await generateUserToken(userLoggedIn);
-    dataToReturn.token = token;
+    const dataToReturn = { token };
     dataToReturn.handle = userLoggedIn.handle;
     return dataToReturn;
   }

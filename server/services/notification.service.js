@@ -24,14 +24,14 @@ export const getNotificationList = async () => {
  * @return {Promise<UserNotification>}
  */
 export const create = async (recipient, postId, sender, type, typeId) => {
-  const dataForNotification = {};
-
-  dataForNotification.read = false;
-  dataForNotification.recipient = recipient;
-  dataForNotification.postId = postId;
-  dataForNotification.sender = sender;
-  dataForNotification.type = type;
-  dataForNotification.typeId = typeId;
+  const dataForNotification = {
+    read: false,
+    recipient,
+    postId,
+    sender,
+    type,
+    typeId,
+  };
 
   const newNotification = new Notification(dataForNotification);
 
