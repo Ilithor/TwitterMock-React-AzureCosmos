@@ -30,7 +30,7 @@ export const LikeButton = ({ postId }) => {
   };
 
   return (
-    <CustomButton tip='Like' onClick={onClick} disabled={!!makeCall.current}>
+    <CustomButton tip='Like' onClick={onClick} disabled={makeCall.current}>
       <Icon.FavoriteBorder color='primary' />
     </CustomButton>
   );

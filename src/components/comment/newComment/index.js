@@ -8,9 +8,9 @@ import { useUserAuthenticationData } from '../../profile/userContext';
 
 export const NewComment = ({ postId }) => {
   const { isAuthenticated } = useUserAuthenticationData();
-  
+
   const createCommentForm = () => {
-    if (!!isAuthenticated) {
+    if (isAuthenticated) {
       return <CommentForm postId={postId} />;
     }
     return <div />;

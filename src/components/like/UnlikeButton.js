@@ -11,7 +11,6 @@ import { usePostData } from '../post/postContext';
 import { useLikeData } from './likeContext';
 
 /** View component for displaying an icon to unlike a post
- *
  * @type {React.FunctionComponent}
  * @param {object} props
  * @param {string} props.postId
@@ -27,16 +26,11 @@ export const UnlikeButton = ({ postId }) => {
       Promise.all([refreshPostList(), refreshLikeList()]).then(() => {
         makeCall.current = false;
       });
-      throw new Error('Gonk');
     });
   };
 
   return (
-    <CustomButton
-      tip='Undo like'
-      onClick={onClick}
-      disabled={!!makeCall.current}
-    >
+    <CustomButton tip='Undo like' onClick={onClick} disabled={makeCall.current}>
       <Icon.Favorite color='primary' />
     </CustomButton>
   );
