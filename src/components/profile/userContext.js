@@ -23,57 +23,135 @@ export const UserProvider = ({ children }) => {
   const [isAuthenticated, setisAuthenticated] = useState(false);
   const [isLoadingUserList, setIsLoadingUserList] = useState(false);
   const [isLoadingUserData, setIsLoadingUserData] = useState(false);
+  const [isLoadingEditUserDetail, setIsLoadingEditUserDetail] = useState(false);
   const [isLoadingAuthenticated, setIsLoadingAuthenticated] = useState(false);
   const [isLoadingLogin, setIsLoadingLogin] = useState(false);
+  const [isLoadingRegister, setIsLoadingRegister] = useState(false);
+  const [isLoadingUploadImage, setIsLoadingUploadImage] = useState(false);
 
   const history = useHistory();
 
-  const refreshUserList = async () => {
-    if (!isLoadingUserList) {
-      setIsLoadingUserList(true);
-      await fetchUtil.user
-        .fetchUserList()
-        .then(async res => {
-          await setUserList(_.keyBy(res.data, 'handle'));
-        })
-        .catch(err => setUserError(err))
-        .finally(() => {
-          setLastRefreshUserList(Date.now);
-          setIsLoadingUserList(false);
-        });
-    }
-  };
+  const refreshUserList = () =>
+    new Promise(async (resolve, reject) => {
+      if (!isLoadingUserList) {
+        setIsLoadingUserList(true);
+        await fetchUtil.user
+          .fetchUserList()
+          .then(async res => {
+            await setUserList(_.keyBy(res.data, 'handle'));
+            resolve(userList);
+          })
+          .catch(err => {
+            setUserError(err);
+            reject(err);
+          })
+          .finally(() => {
+            setLastRefreshUserList(Date.now);
+            setIsLoadingUserList(false);
+          });
+      }
+    });
 
-  const getCurrentUserData = async userHandle => {
-    if (!!userHandle && !isLoadingUserData) {
-      setIsLoadingUserData(true);
-      await fetchUtil.user
-        .fetchUserData(userHandle)
-        .then(async res => {
-          await setCurrentUser(res.data.user);
-        })
-        .catch(err => setUserError(err))
-        .finally(() => {
-          setIsLoadingUserData(false);
-        });
-    }
-  };
+  const getCurrentUserData = userHandle =>
+    new Promise(async (resolve, reject) => {
+      if (!!userHandle && !isLoadingUserData) {
+        setIsLoadingUserData(true);
+        await fetchUtil.user
+          .fetchUserData(userHandle)
+          .then(async res => {
+            await setCurrentUser(res.data.user);
+            resolve(currentUser);
+          })
+          .catch(err => {
+            setUserError(err);
+            reject(err);
+          })
+          .finally(() => {
+            setIsLoadingUserData(false);
+          });
+      }
+    });
 
-  const loginUser = async userParam => {
-    if (!!userParam && !isLoadingLogin) {
-      setIsLoadingLogin(true);
-      await fetchUtil.user
-        .loginUser(userParam)
-        .then(async res => {
-          setAuthorizationHeader(res.data.token);
-          setUserHandleHeader(res.data.handle);
-        })
-        .catch(err => setUserError(err))
-        .finally(() => {
-          setIsLoadingLogin(false);
-        });
-    }
-  };
+  const editUserDetail = userDetail =>
+    new Promise(async (resolve, reject) => {
+      if (userDetail && !isLoadingEditUserDetail) {
+        setIsLoadingEditUserDetail(true);
+        await fetchUtil.user
+          .editUserDetail(userDetail)
+          .then(async () => {
+            await getCurrentUserData(localStorage?.Handle);
+            resolve(currentUser);
+          })
+          .catch(err => {
+            setUserError(err);
+            reject(err);
+          })
+          .finally(() => setIsLoadingEditUserDetail(false));
+      }
+    });
+
+  const uploadImage = formData =>
+    new Promise(async (resolve, reject) => {
+      if (formData && localStorage.Handle && !isLoadingUploadImage) {
+        setIsLoadingUploadImage(true);
+        await fetchUtil.user
+          .uploadImage(formData)
+          .then(async () => {
+            await getCurrentUserData(localStorage?.Handle);
+            resolve(currentUser);
+          })
+          .catch(err => {
+            setUserError(err);
+            reject(err);
+          })
+          .finally(() => setIsLoadingUploadImage(false));
+      }
+    });
+
+  const registerUser = userParam =>
+    new Promise(async (resolve, reject) => {
+      if (userParam && !isLoadingRegister) {
+        setIsLoadingRegister(true);
+        await fetchUtil.user
+          .registerUser(userParam)
+          .then(async res => {
+            setAuthorizationHeader(res.data.token);
+            setUserHandleHeader(res.data.handle);
+            await getCurrentUserData(res.data.handle);
+            resolve(currentUser);
+          })
+          .catch(err => {
+            setUserError(err);
+            reject(err);
+          })
+          .finally(() => {
+            setIsLoadingRegister(false);
+            history.push('/');
+          });
+      }
+    });
+
+  const loginUser = userParam =>
+    new Promise(async (resolve, reject) => {
+      if (userParam && !isLoadingLogin) {
+        setIsLoadingLogin(true);
+        await fetchUtil.user
+          .loginUser(userParam)
+          .then(async res => {
+            setAuthorizationHeader(res.data.token);
+            setUserHandleHeader(res.data.handle);
+            await getCurrentUserData(res.data.handle);
+            resolve(currentUser);
+          })
+          .catch(err => {
+            setUserError(err);
+            reject(err);
+          })
+          .finally(() => {
+            setIsLoadingLogin(false);
+          });
+      }
+    });
 
   const setAuthorizationHeader = token => {
     const Token = `Bearer ${token}`;
@@ -90,7 +168,8 @@ export const UserProvider = ({ children }) => {
       if (
         localStorage?.Token &&
         localStorage?.Handle &&
-        !isLoadingAuthenticated
+        !isLoadingAuthenticated &&
+        !isAuthenticated
       ) {
         setIsLoadingAuthenticated(true);
         const decodedToken = jwtDecode(localStorage?.Token);
@@ -102,11 +181,10 @@ export const UserProvider = ({ children }) => {
           history.push('/login');
         } else {
           axios.defaults.headers.common['Authorization'] = localStorage?.Token;
-          await fetchUtil.user
-            .fetchUserData(localStorage?.Handle)
-            .then(res => {
-              setCurrentUser(res.data);
+          await getCurrentUserData(localStorage?.Handle)
+            .then(() => {
               setisAuthenticated(true);
+              resolve(currentUser);
             })
             .catch(err => {
               setUserError(err);
@@ -142,6 +220,11 @@ export const UserProvider = ({ children }) => {
     logoutUser,
     isLoadingLogin,
     lastRefreshUserList,
+    registerUser,
+    isLoadingRegister,
+    editUserDetail,
+    isLoadingEditUserDetail,
+    uploadImage,
   };
   return <userContext.Provider value={value}>{children}</userContext.Provider>;
 };
@@ -216,6 +299,30 @@ export const useCurrentUserData = () => {
   };
 };
 
+export const useEditUserDetailData = () => {
+  const ctx = useContext(userContext);
+
+  if (ctx === undefined) {
+    throw new Error('useEditUserDetailData must be used within a UserProvider');
+  }
+
+  const { isLoadingEditUserDetail, editUserDetail } = ctx;
+
+  return { isLoadingEditUserDetail, editUserDetail };
+};
+
+export const useUploadImageData = () => {
+  const ctx = useContext(userContext);
+
+  if (ctx === undefined) {
+    throw new Error('useUploadImageData must be within a UserProvider');
+  }
+
+  const { userError, uploadImage } = ctx;
+
+  return { userError, uploadImage };
+};
+
 export const useUserAuthenticationData = () => {
   const ctx = useContext(userContext);
 
@@ -251,9 +358,21 @@ export const useUserLoginData = () => {
     throw new Error('useUserLoginData must be used within a UserProvider');
   }
 
-  const { currentUser, loginUser, userError, user, isLoadingLogin } = ctx;
+  const { loginUser, userError, isLoadingLogin } = ctx;
 
-  return { user, loginUser, userError, isLoadingLogin, currentUser };
+  return { loginUser, userError, isLoadingLogin };
+};
+
+export const useUserRegisterData = () => {
+  const ctx = useContext(userContext);
+
+  if (ctx === undefined) {
+    throw new Error('useUserRegisterData must be used within a UserProvider');
+  }
+
+  const { registerUser, userError, isLoadingRegister } = ctx;
+
+  return { registerUser, userError, isLoadingRegister };
 };
 
 export const useUserLogout = () => {
