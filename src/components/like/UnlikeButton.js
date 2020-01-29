@@ -1,14 +1,13 @@
 import React, { useRef } from 'react';
 
 // Components
-import CustomButton from '../../util/CustomButton';
+import { CustomButton } from '../../util/CustomButton';
 
 // Icons
 import * as Icon from '@material-ui/icons';
 
 // Context
 import { usePostData } from '../post/postContext';
-import { unlikePost } from '../../util/fetch/post';
 import { useLikeData } from './likeContext';
 
 /** View component for displaying an icon to unlike a post
@@ -19,7 +18,7 @@ import { useLikeData } from './likeContext';
  */
 export const UnlikeButton = ({ postId }) => {
   const { refreshPostList } = usePostData();
-  const { refreshLikeList } = useLikeData();
+  const { refreshLikeList, unlikePost } = useLikeData();
   const makeCall = useRef(false);
   const onClick = () => {
     if (!!makeCall.current) return;

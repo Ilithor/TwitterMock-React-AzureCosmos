@@ -1,15 +1,15 @@
 import React from 'react';
 
 // Components
-import CustomButton from '../../../util/CustomButton';
 import { NewPostForm } from './NewPostForm';
+import { CustomButton } from '../../../util/CustomButton';
 
 // MUI
 import { Dialog, DialogContent, DialogTitle } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 // Icons
-import CloseIcon from '@material-ui/icons/Close';
+import * as Icon from '@material-ui/icons';
 
 const useStyles = makeStyles({
   closeButton: {
@@ -35,7 +35,7 @@ export const NewPostDisplay = ({
         onClick={handleClose}
         tipClassName={classes?.closeButton}
       >
-        <CloseIcon />
+        <Icon.Close />
       </CustomButton>
       <DialogTitle>Create a new post</DialogTitle>
       <DialogContent>

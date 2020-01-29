@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 // Components
-import CustomButton from '../util/CustomButton';
+import { CustomButton } from '../util/CustomButton';
 
 // MUI
 import { AppBar, Toolbar } from '@material-ui/core';
@@ -14,7 +14,7 @@ import * as Icon from '@material-ui/icons';
 import {
   useUserAuthenticationData,
   useUserLogout,
-} from './context/userContext';
+} from './profile/userContext';
 
 /** Shows the log in or log out button
  * @param {object} props

@@ -5,7 +5,7 @@ import { UserProfileDisplay } from './user';
 import { DefaultProfileDisplay } from './default/DefaultProfileDisplay';
 
 // Context
-import { useUserAuthenticationData } from '../context/userContext';
+import { useUserAuthenticationData } from './userContext';
 
 /** View component for displaying either the default or user profile
  * @type {React.FunctionComponent}
@@ -17,7 +17,7 @@ export const Profile = () => {
   } = useUserAuthenticationData();
   
   if (!isLoadingAuthenticated) {
-    if (!!isAuthenticated) {
+    if (isAuthenticated) {
       return <UserProfileDisplay />;
     } else {
       return <DefaultProfileDisplay />;

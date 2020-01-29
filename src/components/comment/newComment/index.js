@@ -4,7 +4,7 @@ import React from 'react';
 import { CommentForm } from './CommentForm';
 
 // Context
-import { useUserAuthenticationData } from '../../context/userContext';
+import { useUserAuthenticationData } from '../../profile/userContext';
 
 export const NewComment = ({ postId }) => {
   const { isAuthenticated } = useUserAuthenticationData();

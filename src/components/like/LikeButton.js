@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 
 // Components
-import CustomButton from '../../util/CustomButton';
+import { CustomButton } from '../../util/CustomButton';
 
 // Icons
 import * as Icon from '@material-ui/icons';
@@ -9,7 +9,6 @@ import * as Icon from '@material-ui/icons';
 // Context
 import { usePostData } from '../post/postContext';
 import { useLikeData } from './likeContext';
-import { likePost } from '../../util/fetch/post';
 
 /** View component for displaying an icon to like a post
  * @type {React.FunctionComponent}
@@ -18,7 +17,7 @@ import { likePost } from '../../util/fetch/post';
  */
 export const LikeButton = ({ postId }) => {
   const { refreshPostList } = usePostData();
-  const { refreshLikeList } = useLikeData();
+  const { refreshLikeList, likePost } = useLikeData();
   const makeCall = useRef(false);
   const onClick = () => {
     if (!!makeCall.current) return;

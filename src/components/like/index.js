@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 // Components
 import { UnlikeButton } from './UnlikeButton';
 import { LikeButton } from './LikeButton';
-import CustomButton from '../../util/CustomButton';
+import { CustomButton } from '../../util/CustomButton';
 
 // Icons
 import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
@@ -13,7 +13,7 @@ import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 import {
   useUserAuthenticationData,
   useCurrentUserData,
-} from '../context/userContext';
+} from '../profile/userContext';
 
 /** View component for displaying either a like or unlike icon
  * @type {React.FunctionComponent}
@@ -26,7 +26,7 @@ export const Like = ({ postId, like, userHandle }) => {
   const { isAuthenticated } = useUserAuthenticationData();
   const { currentUser } = useCurrentUserData();
   const alreadyLiked = () => {
-    if (like?.userHandle === currentUser?.userHandle) {
+    if (like?.userHandle !== currentUser?.userHandle) {
       return true;
     } else {
       return false;

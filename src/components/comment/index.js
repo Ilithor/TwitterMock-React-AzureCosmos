@@ -7,7 +7,7 @@ import { Card, CardContent, CardMedia, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 // Context
-import { useUserListData } from '../context/userContext';
+import { useUserListData } from '../profile/userContext';
 
 const useStyles = makeStyles({
   commentCard: {
