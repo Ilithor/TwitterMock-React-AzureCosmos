@@ -14,11 +14,9 @@ const commentContext = createContext();
  * @param {()=>Promise<import('axios').AxiosResponse<Comment[]>>} props.fetchCommentList
  */
 export const CommentProvider = ({ children }) => {
-  /** @type {Comment[]} */
-  const defaultState = [];
   const [commentError, setCommentError] = useState();
   const [lastRefreshCommentList, setLastRefreshCommentList] = useState();
-  const [commentList, setCommentList] = useState(defaultState);
+  const [commentList, setCommentList] = useState();
   const [isLoadingCommentList, setIsLoadingCommentList] = useState(false);
   const [isLoadingCommentOnPost, setIsLoadingCommentOnPost] = useState(false);
 
@@ -101,8 +99,8 @@ export const useCommentListData = () => {
   if (
     !isLoadingCommentList &&
     (_.keys(commentList).length === 0 ||
-      lastRefreshCommentList === null ||
-      lastRefreshCommentList >= Date.now + 600)
+      !lastRefreshCommentList ||
+      lastRefreshCommentList + 600 <= Date.now)
   ) {
     refreshCommentList();
   }

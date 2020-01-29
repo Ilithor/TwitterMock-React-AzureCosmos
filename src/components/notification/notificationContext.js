@@ -17,7 +17,7 @@ const notificationContext = createContext();
 export const NotificationProvider = ({ children }) => {
   /** @type {UseStateResult<_.Dictionary<Notification>>} */
   const history = useHistory();
-  const [notificationList, setNotificationList] = useState({});
+  const [notificationList, setNotificationList] = useState();
   const [notificationError, setNotificationError] = useState();
   const [
     lastRefreshNotificationList,
@@ -119,9 +119,8 @@ export const useNotificationData = () => {
 
   if (
     !isLoadingNotifcationList &&
-    (_.keys(notificationList).length === 0 ||
-      lastRefreshNotificationList === null ||
-      lastRefreshNotificationList >= Date.now + 600)
+    (!lastRefreshNotificationList ||
+      lastRefreshNotificationList + 600 <= Date.now)
   ) {
     refreshNotificationList();
   }

@@ -17,7 +17,7 @@ export const LikeProvider = ({ children }) => {
   const [likeError, setLikeError] = useState();
   const [lastRefreshLikeList, setlastRefreshLikeList] = useState();
   /** @type {UseStateResult<_.Dictionary<Like>>} */
-  const [likeList, setLikeList] = useState({});
+  const [likeList, setLikeList] = useState();
   const [isLoadingLikeList, setIsLoadingLikeList] = useState(false);
   const [isLoadingLikePost, setIsLoadingLikePost] = useState(false);
   const [isLoadingUnlikePost, setIsLoadingUnlikePost] = useState(false);
@@ -117,8 +117,8 @@ export const useLikeData = userHandle => {
   if (
     !isLoadingLikeList &&
     (_.keys(likeList).length === 0 ||
-      lastRefreshLikeList === null ||
-      lastRefreshLikeList >= Date.now + 600)
+      !lastRefreshLikeList ||
+      lastRefreshLikeList + 600 <= Date.now)
   ) {
     refreshLikeList();
   }
