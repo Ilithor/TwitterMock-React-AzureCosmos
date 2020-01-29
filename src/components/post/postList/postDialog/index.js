@@ -4,7 +4,7 @@ import { useHistory, useParams, useLocation } from 'react-router-dom';
 
 // Components
 import { PostDialogContent } from './PostDialogContent';
-import CustomButton from '../../../../util/CustomButton';
+import { CustomButton } from '../../../../util/CustomButton';
 
 // MUI
 import { Dialog, DialogContent, CircularProgress } from '@material-ui/core';
@@ -15,7 +15,7 @@ import * as Icon from '@material-ui/icons';
 import defaultImage from '../../../../images/user.png';
 // Context
 import { usePostData } from '../../postContext';
-import { useUserListData } from '../../../context/userContext';
+import { useUserListData } from '../../../profile/userContext';
 import { useCommentListData } from '../../../comment/commentContext';
 
 const useStyles = makeStyles({

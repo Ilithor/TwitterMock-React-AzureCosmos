@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 import { Like } from '../../../like';
 import { Comment } from '../../../comment';
 import { CommentForm } from '../../../comment/newComment/CommentForm';
-import CustomButton from '../../../../util/CustomButton';
+import { CustomButton } from '../../../../util/CustomButton';
 
 // MUI
 import { Grid, Typography } from '@material-ui/core';
