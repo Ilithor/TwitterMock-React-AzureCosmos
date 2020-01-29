@@ -21,7 +21,7 @@ export const DefaultProfileDisplay = () => {
   return (
     <Paper className={classes?.paper}>
       <Typography varian='body2' align='center'>
-        No profile found, please login again
+        No profile found, please login
       </Typography>
       <DefaultProfileButton />
     </Paper>
