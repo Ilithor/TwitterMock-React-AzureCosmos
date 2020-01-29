@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 // MUI
@@ -9,6 +9,9 @@ import {
   CircularProgress,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+
+// Context
+import { useUserRegisterData } from '../profile/userContext';
 
 const useStyles = makeStyles({
   textField: {
@@ -30,27 +33,40 @@ const useStyles = makeStyles({
 
 /** Displays the register form to the user
  * @type {React.FunctionComponent}
- * @param {object} props
- * @param {object} props.error
- * @param {string} props.handle
- * @param {string} props.email
- * @param {string} props.password
- * @param {string} props.confirmPassword
- * @param {boolean} props.isLoading
- * @param {React.ChangeEventHandler} props.handleSubmit
- * @param {React.ChangeEventHandler} props.handleChange
  */
-export const RegisterForm = ({
-  error = {},
-  handle,
-  email,
-  password,
-  confirmPassword,
-  isLoading,
-  handleSubmit,
-  handleChange,
-}) => {
+export const RegisterForm = () => {
   const classes = useStyles();
+  const { registerUser, userError, isLoadingRegister } = useUserRegisterData();
+  const [error, setError] = useState({});
+  const [editorState, setEditorState] = useState({
+    email: '',
+    password: '',
+    confirmPassword: '',
+    handle: '',
+  });
+  const { email, password, confirmPassword, handle } = editorState;
+
+  useEffect(() => setError(userError), [userError]);
+
+  const handleSubmit = event => {
+    event.preventDefault();
+    const newUserData = {
+      email,
+      password,
+      confirmPassword,
+      handle,
+    };
+    registerUser(newUserData);
+  };
+
+  const handleChange = event => {
+    const { name, value } = event?.target;
+    setEditorState({
+      ...editorState,
+      [name]: value,
+    });
+  };
+
   return (
     <form noValidate onSubmit={handleSubmit}>
       <TextField
@@ -114,10 +130,10 @@ export const RegisterForm = ({
         variant='contained'
         color='primary'
         className={classes?.button}
-        disabled={isLoading}
+        disabled={isLoadingRegister}
       >
         Register
-        {isLoading && (
+        {isLoadingRegister && (
           <CircularProgress size={30} className={classes?.progress} />
         )}
       </Button>
