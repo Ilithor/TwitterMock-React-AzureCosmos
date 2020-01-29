@@ -52,10 +52,10 @@ export const NewPost = () => {
       <Button
         onClick={handleOpen}
         variant='contained'
-        className={classes.createButton}
+        className={classes?.createButton}
         color='primary'
       >
-        <Icon.Add className={classes.extendedIcon} />
+        <Icon.Add className={classes?.extendedIcon} />
         Create Post
       </Button>
       <NewPostDisplay
