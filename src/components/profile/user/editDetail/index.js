@@ -1,18 +1,15 @@
 import React, { Fragment, useState } from 'react';
 
 // Components
-import CustomButton from '../../../../util/CustomButton';
 import { EditDetailsDisplay } from './EditDetailsDisplay';
+import { CustomButton } from '../../../../util/CustomButton';
 
 // MUI
 import { makeStyles } from '@material-ui/core/styles';
 
 // Icons
 import * as Icon from '@material-ui/icons';
-
-// Redux
-import { connect } from 'react-redux';
-import { editUserDetailAction } from '../../../../redux/actions/userActions';
+import { useCurrentUserData, useEditUserDetailData } from '../../userContext';
 
 const useStyles = makeStyles({
   buttonEdit: {
@@ -27,8 +24,10 @@ const useStyles = makeStyles({
  * @param {string} props.handle
  * @param {any} props.editUserDetailAction
  */
-const EditDetailsView = ({ bio = {}, handle, editUserDetailAction }) => {
+export const EditDetail = () => {
   const classes = useStyles();
+  const { currentUser } = useCurrentUserData();
+  const { editUserDetail } = useEditUserDetailData();
   const [editorState, setEditorState] = useState({
     aboutMe: '',
     website: '',
@@ -40,9 +39,9 @@ const EditDetailsView = ({ bio = {}, handle, editUserDetailAction }) => {
   const handleOpen = () => {
     setOpen(true);
     setEditorState({
-      aboutMe: bio?.aboutMe,
-      website: bio?.website,
-      location: bio?.location,
+      aboutMe: currentUser?.bio?.aboutMe,
+      website: currentUser?.bio?.website,
+      location: currentUser?.bio?.location,
     });
   };
 
@@ -62,7 +61,7 @@ const EditDetailsView = ({ bio = {}, handle, editUserDetailAction }) => {
       website,
       location,
     };
-    editUserDetailAction(userDetail, handle);
+    editUserDetail(userDetail);
     handleClose();
   };
 
@@ -87,17 +86,3 @@ const EditDetailsView = ({ bio = {}, handle, editUserDetailAction }) => {
     </Fragment>
   );
 };
-
-const mapStateToProps = ({ user }) => {
-  const bio = user?.userInfo?.bio;
-  const handle = user?.userInfo?.handle;
-  return {
-    bio,
-    handle,
-  };
-};
-
-export const EditDetails = connect(
-  mapStateToProps,
-  { editUserDetailAction }
-)(EditDetailsView);
