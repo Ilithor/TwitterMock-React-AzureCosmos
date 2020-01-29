@@ -13,6 +13,7 @@ import { makeStyles } from '@material-ui/core/styles';
 // Context
 import { usePostData } from '../components/post/postContext';
 import { useUserListData } from '../components/profile/userContext';
+import { useLikeData } from '../components/like/likeContext';
 
 const useStyles = makeStyles({
   spinnerDiv: {
@@ -27,6 +28,7 @@ const useStyles = makeStyles({
 export const UserPage = () => {
   const { postList, isLoadingPostList } = usePostData();
   const { userList } = useUserListData();
+  const { likeList } = useLikeData();
   const [userPostList, setUserPostList] = useState({});
   const [profile, setProfile] = useState({});
   const classes = useStyles();
@@ -68,6 +70,7 @@ export const UserPage = () => {
               key={`post-${post?.postId}`}
               post={post}
               user={userList[(post?.userHandle)]}
+              like={likeList[(post?.postId)]}
             />
           );
         }
@@ -76,6 +79,7 @@ export const UserPage = () => {
             key={`post-${post?.postId}`}
             post={post}
             user={userList[(post?.userHandle)]}
+            like={likeList[(post?.postId)]}
           />
         );
       });
