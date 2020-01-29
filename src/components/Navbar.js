@@ -40,7 +40,7 @@ const ButtonLogInOut = () => {
 const ButtonRegister = () => {
   const { isAuthenticated } = useUserAuthenticationData();
   if (isAuthenticated) {
-    return <div></div>;
+    return <div />;
   }
   return (
     <CustomButton tip='Register' component={Link} to='/signup'>
@@ -60,7 +60,7 @@ const ButtonNotification = () => {
       </CustomButton>
     );
   }
-  return <div></div>;
+  return <div />;
 };
 
 /** View component for navbar
