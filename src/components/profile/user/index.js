@@ -98,7 +98,7 @@ export const UserProfileDisplay = () => {
   };
 
   const handleLogout = () => logoutUser();
-  if (Object.keys(currentUser)?.length > 0) {
+  if (currentUser?.handle || currentUser?.createdAt) {
     return (
       <Paper className={classes?.paper}>
         <div className={classes?.profile}>
