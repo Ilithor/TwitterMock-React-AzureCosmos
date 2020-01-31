@@ -4,18 +4,26 @@ import React, { Fragment, useState, useEffect } from 'react';
 import { NewPostDisplay } from './NewPostDisplay';
 
 // MUI
-import withStyles from '@material-ui/core/styles/withStyles';
-import Button from '@material-ui/core/Button';
-import style from '../../../style';
+import { Button } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 // Icons
-import AddIcon from '@material-ui/icons/Add';
+import * as Icon from '@material-ui/icons';
 
-// Redux
-import { connect } from 'react-redux';
-import { newUserPost } from '../../../redux/actions/dataActions';
+// Context
+import { usePostData } from '../postContext';
 
-const NewPostView = ({ classes = {}, UI = {}, newUserPost }) => {
+const useStyles = makeStyles({
+  createButton: {
+    position: 'relative',
+    left: '33%',
+    marginBottom: 20,
+  },
+});
+
+export const NewPost = () => {
+  const classes = useStyles();
+  const { newPost, isLoadingNewPost, postError } = usePostData();
   const [open, setOpen] = useState(false);
   const [postBody, setPostBody] = useState('');
 
@@ -31,41 +39,33 @@ const NewPostView = ({ classes = {}, UI = {}, newUserPost }) => {
   const handleSubmit = event => {
     event.preventDefault();
     const userPost = { body };
-    newUserPost(userPost);
+    newPost(userPost);
   };
   useEffect(() => {
-    if (!UI.error.body && !UI.isLoading) {
+    if (!postError && !isLoadingNewPost) {
       setPostBody('');
       handleClose();
     }
-  }, [UI.error, UI.isLoading]);
+  }, [postError, isLoadingNewPost]);
   return (
     <Fragment>
       <Button
         onClick={handleOpen}
         variant='contained'
-        className={classes.createButton}
+        className={classes?.createButton}
         color='primary'
       >
-        <AddIcon className={classes.extendedIcon} />
+        <Icon.Add className={classes?.extendedIcon} />
         Create Post
       </Button>
       <NewPostDisplay
         open={open}
         handleClose={handleClose}
-        classes={classes}
         handleSubmit={handleSubmit}
-        error={UI.error}
+        error={postError}
         handleChange={handleChange}
-        isLoading={UI.isLoading}
+        isLoading={isLoadingNewPost}
       />
     </Fragment>
   );
 };
-
-const mapStateToProps = ({ UI }) => ({ UI });
-
-export const NewPost = connect(
-  mapStateToProps,
-  { newUserPost }
-)(withStyles(style)(NewPostView));

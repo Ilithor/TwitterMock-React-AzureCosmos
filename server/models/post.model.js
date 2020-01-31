@@ -12,10 +12,6 @@ const PostSchema = Schema({
     type: String,
     required: true,
   },
-  userImage: {
-    type: String,
-    required: true,
-  },
   likeCount: {
     type: Number,
     required: true,

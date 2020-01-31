@@ -1,4 +1,5 @@
 import { create, remove } from '../services/like.service';
+import { createNotification } from './notification';
 import {
   findPostById,
   findLikeByHandleAndPostId,
@@ -9,14 +10,13 @@ import {
  * @type {RouteHandler}
  */
 export const likePost = async (req, res, next) => {
-  let postToUpdate = {};
   req.notification = {};
   await findPostById(req.params.postId)
     .then(async post => {
       if (post.post) {
         return res.status(404).json({ error: post.post });
       } else {
-        postToUpdate = post;
+        const postToUpdate = post;
         req.notification.recipient = postToUpdate.userHandle;
         await findLikeByHandleAndPostId(
           req.user.handle,
@@ -33,9 +33,13 @@ export const likePost = async (req, res, next) => {
                 postToUpdate.likeCount,
                 postToUpdate.commentCount
               );
-              req.notification.type = 'like';
-              req.notification.typeItem = like;
-              next();
+              const recipient = req.notification.recipient;
+              const postId = req.params.postId;
+              const sender = req.user.handle;
+              const type = 'like';
+              const typeId = like._id;
+              await createNotification(recipient, postId, sender, type, typeId);
+              return res.status(200).send();
             });
           }
         });
@@ -51,14 +55,13 @@ export const likePost = async (req, res, next) => {
  * @type {RouteHandler}
  */
 export const unlikePost = async (req, res, next) => {
-  let postToUpdate = {};
   req.notification = {};
   await findPostById(req.params.postId)
     .then(async post => {
       if (post.post) {
         return res.status(404).json({ error: post.post });
       } else {
-        postToUpdate = post;
+        const postToUpdate = post;
         await findLikeByHandleAndPostId(
           req.user.handle,
           req.params.postId

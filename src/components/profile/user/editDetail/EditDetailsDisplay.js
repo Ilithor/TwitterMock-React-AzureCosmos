@@ -4,18 +4,17 @@ import React from 'react';
 import { EditDetailsForm } from './EditDetailsForm';
 
 // MUI
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import withStyles from '@material-ui/core/styles/withStyles';
-import style from '../../../../style';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from '@material-ui/core';
 
 /** Displays the dialog box to edit the user's details
  * @type {React.FunctionComponent}
  * @param {object} props
- * @param {object} props.classes
  * @param {boolean} props.open
  * @param {string} props.aboutMe
  * @param {string} props.website
@@ -24,8 +23,7 @@ import style from '../../../../style';
  * @param {React.ChangeEventHandler} props.handleSubmit
  * @param {React.ChangeEventHandler} props.handleClose
  */
-const EditDetailsDisplayView = ({
-  classes = {},
+export const EditDetailsDisplay = ({
   open,
   handleClose,
   aboutMe,
@@ -38,7 +36,6 @@ const EditDetailsDisplayView = ({
     <DialogTitle>Edit your details</DialogTitle>
     <DialogContent>
       <EditDetailsForm
-        classes={classes}
         aboutMe={aboutMe}
         handleChange={handleChange}
         website={website}
@@ -55,5 +52,3 @@ const EditDetailsDisplayView = ({
     </DialogActions>
   </Dialog>
 );
-
-export const EditDetailsDisplay = withStyles(style)(EditDetailsDisplayView);

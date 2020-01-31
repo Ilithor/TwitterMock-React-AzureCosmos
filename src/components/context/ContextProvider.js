@@ -2,18 +2,22 @@ import React from 'react';
 
 // MUI
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-
-// Redux
-import { Provider } from 'react-redux';
-import store from '../../redux/store';
+import { deepPurple } from '@material-ui/core/colors';
 
 // Context
-import { NotificationProvider } from './notificationContext';
-import { getNotificationList } from '../../util/fetch/user';
-import { PostProvider } from './postContext';
+import { NotificationProvider } from '../notification/notificationContext';
+import {
+  fetchUserList,
+  loginUser,
+  fetchUserData,
+  fetchLikeList,
+  fetchNotificationList,
+} from '../../util/fetch/user';
+import { PostProvider } from '../post/postContext';
 import { fetchPostList, fetchCommentList } from '../../util/fetch/post';
-import { CommentProvider } from './commentContext';
-import { deepPurple } from '@material-ui/core/colors';
+import { CommentProvider } from '../comment/commentContext';
+import { UserProvider } from '../profile/userContext';
+import { LikeProvider } from '../like/likeContext';
 
 const theme = createMuiTheme({
   palette: {
@@ -25,13 +29,21 @@ const theme = createMuiTheme({
 export const ContextProvider = ({ children }) => {
   return (
     <ThemeProvider theme={theme}>
-      <NotificationProvider getNotificationList={getNotificationList}>
-        <PostProvider fetchPostList={fetchPostList}>
-          <CommentProvider fetchCommentList={fetchCommentList}>
-            <Provider store={store}>{children}</Provider>
-          </CommentProvider>
-        </PostProvider>
-      </NotificationProvider>
+      <UserProvider
+        fetchUserList={fetchUserList}
+        fetchUserData={fetchUserData}
+        loginUser={loginUser}
+      >
+        <NotificationProvider fetchNotificationList={fetchNotificationList}>
+          <PostProvider fetchPostList={fetchPostList}>
+            <LikeProvider fetchLikeList={fetchLikeList}>
+              <CommentProvider fetchCommentList={fetchCommentList}>
+                {children}
+              </CommentProvider>
+            </LikeProvider>
+          </PostProvider>
+        </NotificationProvider>
+      </UserProvider>
     </ThemeProvider>
   );
 };

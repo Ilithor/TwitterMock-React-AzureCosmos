@@ -4,32 +4,25 @@ import React from 'react';
 import { UserProfileDisplay } from './user';
 import { DefaultProfileDisplay } from './default/DefaultProfileDisplay';
 
-// MUI
-import withStyles from '@material-ui/core/styles/withStyles';
-import style from '../../style';
-
-// Redux
-import { connect } from 'react-redux';
+// Context
+import { useUserAuthenticationData } from './userContext';
 
 /** View component for displaying either the default or user profile
  * @type {React.FunctionComponent}
- * @param {object} props
- * @param {object} props.classes
- * @param {boolean} props.user.isLoading
- * @param {boolean} props.user.authenticated
  */
-const ProfileView = ({ classes = {}, user: { isLoading, authenticated } }) => {
-  if (!isLoading) {
-    if (authenticated) {
-      return <UserProfileDisplay classes={classes} />;
+export const Profile = () => {
+  const {
+    isAuthenticated,
+    isLoadingAuthenticated,
+  } = useUserAuthenticationData();
+  
+  if (!isLoadingAuthenticated) {
+    if (isAuthenticated) {
+      return <UserProfileDisplay />;
     } else {
-      return <DefaultProfileDisplay classes={classes} />;
+      return <DefaultProfileDisplay />;
     }
   } else {
-    return <p>loading...</p>;
+    return <p>Loading...</p>;
   }
 };
-
-const mapStateToProps = ({ user }) => ({ user });
-
-export const Profile = connect(mapStateToProps)(withStyles(style)(ProfileView));

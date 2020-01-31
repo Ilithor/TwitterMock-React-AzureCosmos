@@ -8,10 +8,11 @@ mongoConnection();
  * @returns {Promise<UserComment[]> | UserCommentError}
  */
 export const getList = async () => {
-  let error = {};
+  const error = {};
   const commentList = await Comment.find({})
     .sort({ createdAt: -1 })
-    .read(mongo.ReadPreference.NEAREST);
+    .read(mongo.ReadPreference.NEAREST)
+    .limit(100);
   if (commentList.length === 0) {
     error.comment = 'No comments found';
     return error;
@@ -24,8 +25,8 @@ export const getList = async () => {
  * @returns {Promise<NewUserComment> | UserCommentError}
  */
 export const create = async commentParam => {
-  let dataForComment = {};
-  let error = {};
+  const dataForComment = {};
+  const error = {};
 
   // Validation
   if (commentParam.body.body.trim() === '') {
@@ -51,8 +52,7 @@ export const create = async commentParam => {
  * @return {Promise<UserComment>}
  */
 export const remove = async commentParam => {
-  let comment = {};
-  comment = await Comment.findOneAndDelete({
+  const comment = await Comment.findOneAndDelete({
     postId: commentParam.params.postId,
     userHandle: commentParam.user.handle,
   });

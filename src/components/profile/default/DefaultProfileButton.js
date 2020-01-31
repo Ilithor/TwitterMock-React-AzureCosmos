@@ -2,18 +2,25 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 // MUI
-import Button from '@material-ui/core/Button';
-import withStyles from '@material-ui/core/styles/withStyles';
-import style from '../../../style';
+import { Button } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles({
+  buttons: {
+    textAlign: 'center',
+    '& a': {
+      margin: '20px 10px',
+    },
+  },
+});
 
 /** Displays the default buttons when no user found
  * @type {React.FunctionComponent}
- * @param {object} props
- * @param {object} props.classes
  */
-const DefaultProfileButtonView = ({ classes = {} }) => {
+export const DefaultProfileButton = () => {
+  const classes = useStyles();
   return (
-    <div className={classes.buttons}>
+    <div className={classes?.buttons}>
       <Button variant='contained' color='primary' component={Link} to='/login'>
         Login
       </Button>
@@ -28,5 +35,3 @@ const DefaultProfileButtonView = ({ classes = {} }) => {
     </div>
   );
 };
-
-export const DefaultProfileButton = withStyles(style)(DefaultProfileButtonView);

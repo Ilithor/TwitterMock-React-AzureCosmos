@@ -1,73 +1,45 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 // Components
-import { Login } from '../components/login';
+import { LoginForm } from '../components/login';
 
 // MUI
-import withStyles from '@material-ui/core/styles/withStyles';
-import style from '../style';
+import { Grid, Typography } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
-// Redux
-import { connect } from 'react-redux';
-import { loginUserAction } from '../redux/actions/userActions';
+// Icons
+import AppIcon from '../images/icon.png';
+
+const useStyles = makeStyles({
+  form: {
+    textAlign: 'center',
+  },
+  image: {
+    margin: 'auto',
+    width: '76px',
+    height: '76px',
+  },
+  pageTitle: {
+    margin: '10px auto 10px auto',
+  },
+});
 
 /**
  * @type {React.FunctionComponent}
- * @param {object} props
- * @param {object} props.classes
- * @param {any} props.UI
- * @param {Reac} props.history
  */
-const LoginPageView = ({ classes = {}, UI = {}, history, loginUserAction }) => {
-  const [error, setError] = useState({});
-  const [editorState, setEditorState] = useState({
-    email: '',
-    password: '',
-  });
-  const { email, password } = editorState;
-
-  useEffect(() => setError(UI.error), [UI.error]);
-
-  /** Try to log the user in with the current data
-   *
-   * @param {React.ChangeEvent} event
-   */
-  const handleSubmit = event => {
-    event.preventDefault();
-    const userData = {
-      email,
-      password,
-    };
-    loginUserAction(userData, history);
-  };
-
-  /** Saves editor change to local state
-   *
-   * @param {React.ChangeEvent} event
-   */
-  const handleChange = event => {
-    const { name, value } = event.target;
-    setEditorState({
-      ...editorState,
-      [name]: value,
-    });
-  };
-  return (
-    <Login
-      classes={classes}
-      error={error}
-      email={email}
-      password={password}
-      handleSubmit={handleSubmit}
-      handleChange={handleChange}
-      isLoading={UI.isLoading}
-    />
-  );
+export const LoginPage = () => {
+  const classes = useStyles();
+  return ((
+    <Grid container className={classes?.form}>
+      <Grid item sm />
+      <Grid item sm>
+        <img src={AppIcon} alt='eye' className={classes?.image} />
+        <Typography variant='h2' className={classes?.pageTitle}>
+          Login
+        </Typography>
+        <LoginForm />
+      </Grid>
+      <Grid item sm />
+    </Grid>
+  ));
 };
-
-const mapStateToProps = ({ UI }) => ({ UI });
-
-export const LoginPage = connect(
-  mapStateToProps,
-  { loginUserAction }
-)(withStyles(style)(LoginPageView));

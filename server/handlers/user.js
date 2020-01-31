@@ -1,4 +1,11 @@
-import { getList, register, login, updateBio } from '../services/user.service';
+import _ from 'lodash';
+import {
+  getList,
+  getLikeList,
+  register,
+  login,
+  updateBio,
+} from '../services/user.service';
 import { generateUserToken } from './token';
 import { dataUri } from '../util/multer';
 import {
@@ -21,18 +28,43 @@ export const getUserList = (req, res, next) => {
       if (data.user) {
         return res.status(404).json({ error: data.user });
       }
+      const userList = _.map(data, user => ({
+        handle: user.handle,
+        userImage: user.bio.image,
+        createdAt: user.createdAt,
+        aboutMe: user.bio.aboutMe,
+        location: user.bio.location,
+        website: user.bio.website,
+      }));
+      if (userList.length <= 0) {
+        return res.json({ message: 'No users found' });
+      } else {
+        // Returns list of users in array
+        return res.json(userList);
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      return res.status(500).json({ error: err.code });
+    });
+};
 
-      let user = [];
-      data.forEach(user => {
-        user.push({
-          userId: user.id,
-          email: user.credential.email,
-          password: user.credential.password,
-          handle: user.handle,
-        });
-      });
-      // Returns list of users in array
-      return res.json(user);
+export const fetchLikeList = async (req, res) => {
+  getLikeList()
+    .then(data => {
+      if (data.like) {
+        return res.status(404).json({ error: data.like });
+      }
+      const likeList = _.map(data, like => ({
+        userHandle: like.userHandle,
+        postId: like.postId,
+      }));
+      if (likeList.length <= 0) {
+        return res.json({ message: 'No likes found' });
+      } else {
+        // Returns list of likes in array
+        return res.json(likeList);
+      }
     })
     .catch(err => {
       console.error(err);
@@ -44,7 +76,6 @@ export const getUserList = (req, res, next) => {
  * @type {RouteHandler}
  */
 export const registerUser = async (req, res, next) => {
-  let token;
   await register(req.body)
     .then(async data => {
       // If function returns object, user
@@ -55,14 +86,15 @@ export const registerUser = async (req, res, next) => {
         });
       } else {
         // If pass validation, generate user token
-        token = await generateUserToken(data);
-      }
-    })
-    .then(() => {
-      if (token) {
-        // Returns user token
-        return res.status(201).json({
-          token,
+        const token = await generateUserToken(data).then(() => {
+          if (token) {
+            // Returns user token
+            return res.status(201).json({
+              token,
+            });
+          } else {
+            res.json(500).json({ message: 'Failed to create token' });
+          }
         });
       }
     })
@@ -78,7 +110,6 @@ export const registerUser = async (req, res, next) => {
  * @type {RouteHandler}
  */
 export const loginUser = async (req, res, next) => {
-  let token, handle;
   await login(req.body)
     .then(data => {
       // If function does not return a string,
@@ -88,17 +119,17 @@ export const loginUser = async (req, res, next) => {
           error: data,
         });
       } else {
-        token = data.token;
-        handle = data.handle;
-      }
-    })
-    .then(() => {
-      // Returns user token
-      if (token) {
-        return res.json({
-          token,
-          handle,
-        });
+        const token = data.token;
+        const handle = data.handle;
+        // Returns user token
+        if (token && handle) {
+          return res.json({
+            token,
+            handle,
+          });
+        } else {
+          return res.status(500).json({ message: 'Failed to login user' });
+        }
       }
     })
     .catch(err => {
@@ -113,7 +144,7 @@ export const loginUser = async (req, res, next) => {
  * @type {RouteHandler}
  */
 export const getAuthenticatedUser = async (req, res) => {
-  let userData = {};
+  const userData = {};
   userData.user = req.user;
   return await findLikeByHandle(userData._id)
     .then(arr => {
@@ -134,7 +165,7 @@ export const getAuthenticatedUser = async (req, res) => {
  */
 export const getUserDetail = async (req, res) => {
   const { handle } = req.params; // this is called destructuring
-  let userData = {};
+  const userData = {};
   await findByHandle(handle).then(async user => {
     if (user.user) {
       //recursion check & block
@@ -163,7 +194,7 @@ export const getUserDetail = async (req, res) => {
  */
 const pushPostIntoArray = (post, userData) => {
   userData.post = [];
-  post.forEach(doc => {
+  _.map(post, doc => {
     userData.post.push({
       body: doc.body,
       createdAt: doc.createdAt,
@@ -181,8 +212,8 @@ const pushPostIntoArray = (post, userData) => {
  * @type {RouteHandler}
  */
 export const addUserDetail = async (req, res, next) => {
-  let userParam = req.body;
-  let userId = req.user._id;
+  const userParam = req.body;
+  const userId = req.user._id;
 
   if (!userParam.aboutMe && !userParam.website && !userParam.location) {
     return res
@@ -211,30 +242,20 @@ export const addUserDetail = async (req, res, next) => {
  * @type {RouteHandler}
  */
 export const imageUpload = async (req, res, next) => {
-  let base64, _id, handle;
   if (!req.file) {
     return res.status(400).json({
       message: 'No image provided',
     });
   }
-  _id = req.user._id;
-  base64 = (await dataUri(req)).content;
+  const _id = req.user._id;
+  const base64 = (await dataUri(req)).content;
   await findUserAndUpdateImage(_id, base64)
     .then(async () => {
       await findById(_id).then(async doc => {
         if (doc.bio.image === base64) {
-          handle = req.user.handle;
-          await findAndUpdatePostImage(handle, base64).then(async () => {
-            await findPostByHandle(handle).then(post => {
-              if (post.length === 0 || post[0].userImage === base64) {
-                return res
-                  .status(200)
-                  .json({ message: 'Image uploaded successfully' });
-              } else {
-                return res.status(500).json({ error: 'Something went wrong' });
-              }
-            });
-          });
+          return res
+            .status(200)
+            .json({ message: 'Image uploaded successfully' });
         }
       });
     })

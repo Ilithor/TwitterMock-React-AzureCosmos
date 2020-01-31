@@ -1,90 +1,81 @@
-import React, { Fragment, useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, { Fragment } from 'react';
+import { useHistory, useParams, useLocation } from 'react-router-dom';
+import defaultImage from '../../../../images/user.png';
 
 // Components
-import CustomButton from '../../../../util/CustomButton';
 import { PostDialogContent } from './PostDialogContent';
+import { CustomButton } from '../../../../util/CustomButton';
 
 // MUI
-import Dialog from '@material-ui/core/Dialog';
-import DialogContent from '@material-ui/core/DialogContent';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import withStyles from '@material-ui/core/styles/withStyles';
-import style from '../../../../style';
+import { Dialog, DialogContent, CircularProgress } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 // Icons
-import CloseIcon from '@material-ui/icons/Close';
-import UnfoldMore from '@material-ui/icons/UnfoldMore';
+import * as Icon from '@material-ui/icons';
 
-// Redux
-import { connect } from 'react-redux';
-import { getPost, clearError } from '../../../../redux/actions/dataActions';
+// Context
+import { usePostData } from '../../postContext';
+import { useUserListData } from '../../../profile/userContext';
+
+const useStyles = makeStyles({
+  spinnerDiv: {
+    textAlign: 'center',
+    marginTop: 50,
+    marginBottom: 50,
+  },
+  expandButton: {
+    position: 'absolute',
+    left: '90%',
+  },
+  closeButtonPostDialog: {
+    position: 'absolute',
+    left: '90%',
+  },
+  dialogContent: {
+    padding: 20,
+  },
+});
 
 /** View component for displaying an individual post's content in a dialog box
  * @type {React.FunctionComponent}
  * @param {object} props
- * @param {object} props.classes
  * @param {string} props.postId
  * @param {string} props.userHandle
- * @param {object} props.UI
- * @param {object} props.post
- * @param {any} props.getPost
  */
-const PostDialogView = ({
-  classes = {},
-  postId,
-  userHandle,
-  UI = {},
-  post = {},
-  getPost,
-  clearError,
-  openDialog,
-}) => {
-  const [open, setOpen] = useState(false);
-  const [oldPath, setOldPath] = useState('');
+export const PostDialog = ({ postId, userHandle }) => {
+  const { postList } = usePostData();
+  const { userList, isLoadingUserList } = useUserListData();
+  const classes = useStyles();
+  const params = useParams();
+  const location = useLocation();
+  const open = params?.postId === postId;
+  const post = postList[postId];
   const history = useHistory();
-  useEffect(() => {
-    if (!!openDialog) {
-      handleOpen();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
   const handleOpen = () => {
-    let currentOldPath = window.location.pathname;
-    const currentNewPath = `/u/${userHandle}/post/${postId}`;
-    if ((currentOldPath = currentNewPath)) {
-      currentOldPath = `/u/${userHandle}`;
-    }
-    history.push(currentNewPath);
-    setOpen(true);
-    setOldPath(currentOldPath);
-    getPost(postId);
+    history.push(`/u/${userHandle}/post/${postId}`);
   };
   const handleClose = () => {
-    history.push(oldPath);
-    setOpen(false);
-    clearError();
+    history.push(location.pathname.replace(`/post/${postId}`, ''));
   };
-  const makeDialogContentEditor = () => {
-    if (UI.isLoading) {
+  const DialogContentEditor = () => {
+    if (!isLoadingUserList) {
+      const { userImage } = userList[(post?.userHandle)] || defaultImage;
       return (
-        <div className={classes.spinnerDiv}>
-          <CircularProgress size={200} thickness={2} />
-        </div>
+        <PostDialogContent
+          userHandle={userHandle}
+          userImage={userImage}
+          createdAt={post?.createdAt}
+          body={post?.body}
+          postId={post?._id}
+          likeCount={post?.likeCount}
+          commentCount={post?.commentCount}
+        />
       );
     }
     return (
-      <PostDialogContent
-        classes={classes}
-        userHandle={userHandle}
-        userImage={post.userImage}
-        createdAt={post.createdAt}
-        body={post.body}
-        postId={post._id}
-        likeCount={post.likeCount}
-        commentCount={post.commentCount}
-        commentList={post.commentList}
-      />
+      <div className={classes?.spinnerDiv}>
+        <CircularProgress size={200} thickness={2} />
+      </div>
     );
   };
   return (
@@ -92,38 +83,22 @@ const PostDialogView = ({
       <CustomButton
         onClick={handleOpen}
         tip='Expand Post'
-        tipClassName={classes.expandButton}
+        tipClassName={classes?.expandButton}
       >
-        <UnfoldMore color='primary' />
+        <Icon.UnfoldMore color='primary' />
       </CustomButton>
       <Dialog open={open} onClose={handleClose} fullWidth maxWidth='sm'>
         <CustomButton
           tip='Close'
           onClick={handleClose}
-          tipClassName={classes.closeButtonPostDialog}
+          tipClassName={classes?.closeButtonPostDialog}
         >
-          <CloseIcon />
+          <Icon.Close />
         </CustomButton>
-        <DialogContent className={classes.dialogContent}>
-          {makeDialogContentEditor()}
+        <DialogContent className={classes?.dialogContent}>
+          <DialogContentEditor />
         </DialogContent>
       </Dialog>
     </Fragment>
   );
 };
-
-const mapStateToProps = state => {
-  const UI = state.UI;
-  const post = state.data.post;
-  return { UI, post };
-};
-
-const mapActionsToProps = {
-  getPost,
-  clearError,
-};
-
-export const PostDialog = connect(
-  mapStateToProps,
-  mapActionsToProps
-)(withStyles(style)(PostDialogView));

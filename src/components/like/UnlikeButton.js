@@ -1,54 +1,42 @@
 import React, { useRef } from 'react';
 
 // Components
-import CustomButton from '../../util/CustomButton';
+import { CustomButton } from '../../util/CustomButton';
 
 // Icons
-import FavoriteIcon from '@material-ui/icons/Favorite';
+import * as Icon from '@material-ui/icons';
 
-// Redux
-import { connect } from 'react-redux';
-import { getUnlikePost } from '../../redux/actions/dataActions';
+// Context
+import { usePostData } from '../post/postContext';
+import { useLikeData } from './likeContext';
 
 /** View component for displaying an icon to unlike a post
  * @type {React.FunctionComponent}
  * @param {object} props
  * @param {string} props.postId
- * @param {any} props.getUnlikePost
- * @param {object} props.UI
  */
-export const UnlikeButtonView = ({ postId, getUnlikePost, UI = {} }) => {
+export const UnlikeButton = ({ postId }) => {
+  const { refreshPostList } = usePostData();
+  const { refreshLikeList, unlikePost } = useLikeData();
   const makeCall = useRef(false);
-  const unlikePost = () => {
+  const onClick = () => {
     if (!!makeCall.current) return;
     makeCall.current = true;
-    getUnlikePost(postId);
-    setTimeout(() => {
-      makeCall.current = false;
-    }, 3000);
+    unlikePost(postId).then(() => {
+      Promise.all([refreshPostList(), refreshLikeList()]).then(() => {
+        makeCall.current = false;
+      });
+    });
   };
 
   return (
-    <CustomButton
-      tip='Undo like'
-      onClick={unlikePost}
-      disabled={!!UI.isLoading || !!makeCall.current}
-    >
-      <FavoriteIcon color='primary' />
+    <CustomButton tip='Undo like' onClick={onClick} disabled={makeCall.current}>
+      <Icon.Favorite color='primary' />
     </CustomButton>
   );
 };
 
-const mapStateToProps = ({ UI }) => ({ UI });
-
-export const UnlikeButton = connect(
-  mapStateToProps,
-  { getUnlikePost }
-)(UnlikeButtonView);
-
 /**
  * @typedef IUnlikeButtonComponentProps
  * @param {string} postId
- * @param {any} getUnlikePost
- * @param {object} UI
  */

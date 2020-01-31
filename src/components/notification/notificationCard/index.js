@@ -1,16 +1,22 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
 
 // Components
 import { NotificationCardContent } from './NotificationCardContent';
 
 // MUI
 import { Card, CardActionArea } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
-import style from '../../../style';
+import { makeStyles } from '@material-ui/core/styles';
 
 // API
-import { markNotificationRead } from '../../../util/fetch/user';
+import { useNotificationData } from '../notificationContext';
+
+const useStyles = makeStyles({
+  notificationCard: {
+    position: 'relative',
+    display: 'flex',
+    marginBottom: 20,
+  },
+});
 
 /** Displays icon appropriate to notification type
  *
@@ -21,36 +27,27 @@ import { markNotificationRead } from '../../../util/fetch/user';
  * @param {Post} props.post
  * @param {UserComment} props.comment
  */
-export const NotificationCardView = ({
-  classes = {},
+export const NotificationCard = ({
   notification = {},
   post = {},
   comment = {},
 }) => {
-  const history = useHistory();
+  const classes = useStyles();
+  const { markNotificationRead } = useNotificationData();
   const notificationRead = () => {
     if (notification?.read === false) {
-      markNotificationRead(notification?._id).then(() => {
-        notification.read = true;
-        history.push(
-          `/u/${notification?.recipient}/post/${notification?.postId}`
-        );
-      });
+      markNotificationRead(notification);
     }
-    history.push(`/u/${notification?.recipient}/post/${notification?.postId}`);
   };
   return (
     <Card className={classes?.notificationCard}>
       <CardActionArea onClick={notificationRead}>
         <NotificationCardContent
-          classes={classes}
           notification={notification}
-          postBody={post.body}
-          commentBody={comment.body}
+          postBody={post?.body}
+          commentBody={comment?.body}
         />
       </CardActionArea>
     </Card>
   );
 };
-
-export const NotificationCard = withStyles(style)(NotificationCardView);

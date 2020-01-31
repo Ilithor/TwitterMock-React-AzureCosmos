@@ -1,93 +1,106 @@
 import React from 'react';
 
 // Components
-import CustomButton from '../../../../util/CustomButton';
 import { ImageWrapper } from './ImageWrapper';
 import { ProfileDetails } from './ProfileDetail';
-import { EditDetails } from '../editDetails';
+import { EditDetails } from '../editDetail';
+import { CustomButton } from '../../../../util/CustomButton';
 
 // MUI
-import Paper from '@material-ui/core/Paper';
-import withStyles from '@material-ui/core/styles/withStyles';
-import style from '../../../../style';
+import { Paper } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 // Icons
-import KeyboardReturn from '@material-ui/icons/KeyboardReturn';
+import * as Icon from '@material-ui/icons';
 
-// Redux
-import { connect } from 'react-redux';
+// Context
 import {
-  uploadImageAction,
-  logoutUserAction,
-} from '../../../../redux/actions/userActions';
+  useCurrentUserData,
+  useUserLogout,
+  useUploadImageData,
+} from '../../userContext';
+
+const useStyles = makeStyles(theme => ({
+  paper: {
+    padding: 20,
+  },
+  profile: {
+    '& .image-wrapper': {
+      textAlign: 'center',
+      position: 'relative',
+      '& button': {
+        position: 'absolute',
+        top: '80%',
+        left: '70%',
+      },
+    },
+    '& .profile-image': {
+      width: 200,
+      height: 'auto',
+      objectFit: 'cover',
+      maxWidth: '100%',
+      borderRadius: '50%',
+    },
+    '& .profile-details': {
+      textAlign: 'center',
+      '& span, svg': {
+        verticalAlign: 'middle',
+      },
+      '& a': {
+        color: theme.palette.primary.main,
+      },
+    },
+    '& hr': {
+      border: 'none',
+      margin: '0 0 10px 0',
+    },
+    '& svg.button': {
+      '&:hover': {
+        cursor: 'pointer',
+      },
+    },
+  },
+}));
 
 /** View component for displaying the user's profile
  * @type {IUserProfileDisplayComponentProps}
  */
-const UserProfileDisplayView = ({
-  classes = {},
-  handle,
-  bio = {},
-  createdAt,
-}) => {
+export const UserProfileDisplay = () => {
+  const classes = useStyles();
+  const { currentUser } = useCurrentUserData();
+  const { uploadImage, userError } = useUploadImageData();
+  const { logoutUser } = useUserLogout();
   const handleEditPhoto = () => {
     const fileInput = document.getElementById('imageUpload');
     fileInput.click();
   };
-
   const handleImageChange = event => {
-    const image = event.target.files[0];
+    const image = event?.target?.files[0];
     const formData = new FormData();
-    formData.append('image', image, image.name);
-    uploadImageAction(formData, handle);
+    formData.append('image', image, image?.name);
+    uploadImage(formData).then(() => console.log(userError));
   };
 
-  const handleLogout = () => logoutUserAction();
+  const handleLogout = () => logoutUser();
 
   return (
-    <Paper className={classes.paper}>
-      <div className={classes.profile}>
+    <Paper className={classes?.paper}>
+      <div className={classes?.profile}>
         <ImageWrapper
-          bio={bio}
           handleImageChange={handleImageChange}
           handleEditPhoto={handleEditPhoto}
         />
         <hr />
-        <ProfileDetails handle={handle} bio={bio} createdAt={createdAt} />
+        <ProfileDetails
+          handle={currentUser?.handle}
+          bio={currentUser?.bio}
+          createdAt={currentUser?.createdAt}
+        />
         <CustomButton tip='Logout' onClick={handleLogout}>
-          <KeyboardReturn color='primary' />
+          <Icon.KeyboardReturn color='primary' />
         </CustomButton>
         <EditDetails />
       </div>
     </Paper>
   );
 };
-
-const mapStateToProps = ({ user }) => {
-  const handle = user.userInfo.handle;
-  const bio = user.userInfo.bio;
-  const createdAt = user.userInfo.createdAt;
-  return {
-    handle,
-    bio,
-    createdAt,
-  };
-};
-
-const mapActionsToProps = {
-  uploadImageAction,
-  logoutUserAction,
-};
-
-export const UserProfileDisplay = connect(
-  mapStateToProps,
-  mapActionsToProps
-)(withStyles(style)(UserProfileDisplayView));
-
-/** View component for displaying the user's profile
- * @typedef {IUserProfileDisplayComponentProps}
- * @param {object} classes
- * @param {string} handle
- * @param {object} bio
- * @param {string} createdAt
- */

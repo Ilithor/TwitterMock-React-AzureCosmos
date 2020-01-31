@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
+import _ from 'lodash';
 
 // Components
 import { Post } from '../components/post/postList';
@@ -7,85 +7,74 @@ import { Profile } from '../components/profile';
 import { NewPost } from '../components/post/newPost';
 
 // MUI
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import withStyles from '@material-ui/core/styles/withStyles';
-import style from '../style';
+import { Grid, CircularProgress } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
-// Icons
-import AddIcon from '@material-ui/icons/Add';
+// Context
+import {
+  useUserAuthenticationData,
+  useUserListData,
+} from '../components/profile/userContext';
+import { usePostData } from '../components/post/postContext';
+import { useLikeData } from '../components/like/likeContext';
 
-// Redux
-import { connect } from 'react-redux';
-import { getPostList } from '../redux/actions/dataActions';
-import { getUserDataAction } from '../redux/actions/userActions';
+const useStyles = makeStyles({
+  createButton: {
+    position: 'relative',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  spinnerDiv: {
+    textAlign: 'center',
+    marginTop: 50,
+    marginBottom: 50,
+  },
+});
 
-const HomePageView = ({
-  classes = {},
-  postList,
-  isLoading,
-  getPostList,
-  getUserDataAction,
-  isAuthenticated,
-}) => {
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(() => getPostList(), []);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const makeRecentPostMarkup = () => {
-    if (!isLoading) {
-      return postList.map(post => (
-        <Post key={`post-${post.postId}`} post={post} />
-      ));
+export const HomePage = () => {
+  const classes = useStyles();
+  const { isAuthenticated } = useUserAuthenticationData();
+  const { userList, isLoadingUserList } = useUserListData();
+  const { postList, isLoadingPostList } = usePostData();
+  const { likeList, isLoadingLikeList } = useLikeData();
+
+  const RecentPostMarkup = () => {
+    if (!isLoadingLikeList && !isLoadingPostList && !isLoadingUserList) {
+      return createNewPostList();
     }
-    return <p>Loading...</p>;
+    return (
+      <div className={classes?.spinnerDiv}>
+        <CircularProgress size={150} thickness={2} />
+      </div>
+    );
   };
-  const makeCreatePostEditor = () => {
+
+  const createNewPostList = () => {
+    return _.map(postList, post => (
+      <Post
+        key={`post-${post?.postId}`}
+        post={post}
+        user={userList[(post?.userHandle)]}
+        like={likeList[(post?.postId)]}
+      />
+    ));
+  };
+
+  const CreatePostEditor = () => {
     if (isAuthenticated) {
       return <NewPost />;
     }
-    return (
-      <Link to='/login'>
-        <Button
-          variant='contained'
-          className={classes.createButton}
-          color='primary'
-        >
-          <AddIcon className={classes.extendedIcon} />
-          Create Post
-        </Button>
-      </Link>
-    );
+    return <div />;
   };
   return (
-    <Grid container spacing={10}>
-      <Grid item sm={8} xs={12}>
-        {makeCreatePostEditor()}
-        {makeRecentPostMarkup()}
+    <Grid container spacing={2}>
+      <Grid item md={8} sm={9} xs={12}>
+        <CreatePostEditor />
+        <RecentPostMarkup />
       </Grid>
-      <Grid item sm={4} xs={12}>
+      <Grid item md={4} sm={3} xs={12}>
         <Profile />
       </Grid>
     </Grid>
   );
 };
-
-const mapStateToProps = state => {
-  const postList = state.data.postList;
-  const isLoading = state.data.isLoading;
-  const isAuthenticated = !!state.user.authenticated;
-  return {
-    postList,
-    isLoading,
-    isAuthenticated,
-  };
-};
-
-const mapActionsToProps = {
-  getPostList,
-  getUserDataAction,
-};
-
-export const HomePage = connect(
-  mapStateToProps,
-  mapActionsToProps
-)(withStyles(style)(HomePageView));

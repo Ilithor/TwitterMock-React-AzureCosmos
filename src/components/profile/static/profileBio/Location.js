@@ -1,17 +1,13 @@
 import React, { Fragment } from 'react';
 
-// MUI
-import withStyles from '@material-ui/core/styles/withStyles';
-import style from '../../../../style';
-
 // Icons
-import LocationOn from '@material-ui/icons/LocationOn';
+import * as Icon from '@material-ui/icons';
 
-const LocationView = ({ location }) => {
+export const Location = ({ location }) => {
   if (!!location) {
     return (
       <Fragment>
-        <LocationOn color='primary' />
+        <Icon.LocationOn color='primary' />
         <span>{location}</span>
         <hr />
       </Fragment>
@@ -19,5 +15,3 @@ const LocationView = ({ location }) => {
   }
   return <div />;
 };
-
-export const Location = withStyles(style)(LocationView);

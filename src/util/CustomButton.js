@@ -6,7 +6,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 // Icons
 import IconButton from '@material-ui/core/IconButton';
 
-export default ({
+export const CustomButton = ({
   children,
   onClick,
   component,
@@ -15,6 +15,8 @@ export default ({
   btnClassName,
   tipClassName,
   disabled,
+  color,
+  variant,
 }) => (
   <Tooltip title={tip} className={tipClassName} placement='top'>
     <span>
@@ -24,6 +26,8 @@ export default ({
         to={to}
         className={btnClassName}
         disabled={disabled}
+        color={color}
+        variant={variant}
       >
         {children}
       </IconButton>

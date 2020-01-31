@@ -6,11 +6,13 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 import { PostContent } from './PostContent';
 
 // MUI
-import Card from '@material-ui/core/Card';
-import CardMedia from '@material-ui/core/CardMedia';
-import withStyles from '@material-ui/core/styles/withStyles';
+import { Card, CardMedia } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
-const style = {
+// Context
+import { useCurrentUserData, useUserListData } from '../../profile/userContext';
+
+const useStyles = makeStyles({
   card: {
     position: 'relative',
     display: 'flex',
@@ -23,7 +25,7 @@ const style = {
     padding: 25,
     objectFit: 'cover',
   },
-};
+});
 
 /** View component for displaying an individual post on the site
  * @type {React.FunctionComponent}
@@ -31,40 +33,34 @@ const style = {
  * @param {object} props.classes
  * @param {object} props.post
  */
-const PostView = ({ classes = {}, post = {}, openDialog }) => {
+export const Post = ({ post, user, like }) => {
+  const classes = useStyles();
+  const { currentUser } = useCurrentUserData();
+  const { refreshUserList } = useUserListData();
   dayjs.extend(relativeTime);
   if (!post) {
     return;
   }
-  const {
-    userImage,
-    userHandle,
-    createdAt,
-    body,
-    postId,
-    likeCount,
-    commentCount,
-  } = post;
+
+  const ManageCardMedia = () => {
+    if (post?.userHandle === currentUser?.handle) {
+      if (currentUser?.bio?.image !== user?.userImage) {
+        refreshUserList();
+      }
+    }
+    return (
+      <CardMedia
+        image={user?.userImage}
+        title='Profile image'
+        className={classes?.image}
+      />
+    );
+  };
+
   return (
     <Card className={classes.card}>
-      <CardMedia
-        image={userImage}
-        title='Profile image'
-        className={classes.image}
-      />
-      <PostContent
-        classes={classes}
-        userHandle={userHandle}
-        createdAt={createdAt}
-        body={body}
-        userImage={userImage}
-        postId={postId}
-        likeCount={likeCount}
-        commentCount={commentCount}
-        openDialog={openDialog}
-      />
+      <ManageCardMedia />
+      <PostContent post={post} like={like} />
     </Card>
   );
 };
-
-export const Post = withStyles(style)(PostView);

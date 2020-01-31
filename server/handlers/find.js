@@ -13,7 +13,7 @@ mongoConnection();
  * @return {Promise<User> | UserCredentialError}
  */
 export const findByCredential = async user => {
-  let error = {};
+  const error = {};
 
   const foundUser = await User.findOne({
     'credential.email': user.credential.email,
@@ -34,8 +34,8 @@ export const findByCredential = async user => {
  * @return {Promise<User> | UserNotFound}
  */
 export const findById = async _id => {
-  let error = {};
-  let user = await User.findOne({
+  const error = {};
+  const user = await User.findOne({
     _id,
   });
   if (!user) {
@@ -50,9 +50,9 @@ export const findById = async _id => {
  * @return {Promise<User> | UserNotFound}
  */
 export const findByHandle = async handle => {
-  let error = {};
-  let user = await User.findOne({
-    handle: handle,
+  const error = {};
+  const user = await User.findOne({
+    handle,
   });
   if (!user) {
     error.user = 'User not found';
@@ -66,8 +66,8 @@ export const findByHandle = async handle => {
  * @return {Promise<Post> | PostNotFound}
  */
 export const findPostById = async _id => {
-  let error = {};
-  let post = await Post.findOne({
+  const error = {};
+  const post = await Post.findOne({
     _id,
   });
   if (!post) {
@@ -81,10 +81,10 @@ export const findPostById = async _id => {
  * @param {string} handle
  * @return {Promise<Post> | PostNotFound}
  */
-export const findPostByHandle = async handle => {
-  let error = {};
-  let post = await Post.find({
-    userHandle: handle,
+export const findPostByHandle = async userHandle => {
+  const error = {};
+  const post = await Post.find({
+    userHandle,
   })
     .sort({ createdAt: -1 })
     .read(mongo.ReadPreference.NEAREST);
@@ -95,33 +95,13 @@ export const findPostByHandle = async handle => {
   return post;
 };
 
-/** Find all notifications by recipient
- * @param {string} recipient
- * @return {Promise<UserNotification> | NotificationNotFound}
- */
-export const findNotificationByRecipient = async recipient => {
-  let notification = [];
-  let error = {};
-  notification = Notification.find({
-    recipient: recipient,
-  })
-    .sort({ createdAt: 1 })
-    .read(mongo.ReadPreference.NEAREST);
-  if (notification.length === 0) {
-    error.notification = 'No notifications found';
-    return error;
-  } else {
-    return notification;
-  }
-};
-
 /** Fetches all comments attached to PostId
  * @param {string} _id
  * @return {Promise<UserComment> | NotificationNotFound}
  */
-export const findCommentByPostId = _id => {
+export const findCommentByPostId = postId => {
   return Comment.find({
-    postId: _id,
+    postId,
   })
     .sort({ createdAt: 1 })
     .read(mongo.ReadPreference.NEAREST);
@@ -131,10 +111,9 @@ export const findCommentByPostId = _id => {
  * @param {string} handle
  * @return {Promise<Like> | []}
  */
-export const findLikeByHandle = async handle => {
-  let like = [];
-  like = await Like.find({
-    userHandle: handle,
+export const findLikeByHandle = async userHandle => {
+  const like = await Like.find({
+    userHandle,
   }).read(mongo.ReadPreference.NEAREST);
 
   if (like.length === 0) {
@@ -149,11 +128,10 @@ export const findLikeByHandle = async handle => {
  * @param {string} postId
  * @return {Promise<UserComment>}
  */
-export const findCommentByHandleAndPostId = async (handle, postId) => {
-  let comment = {};
-  comment = await Comment.find({
-    userHandle: handle,
-    postId: postId,
+export const findCommentByHandleAndPostId = async (userHandle, postId) => {
+  const comment = await Comment.find({
+    userHandle,
+    postId,
   }).read(mongo.ReadPreference.NEAREST);
   return comment;
 };
@@ -163,11 +141,10 @@ export const findCommentByHandleAndPostId = async (handle, postId) => {
  * @param {string} postId
  * @return {Promise<Like>}
  */
-export const findLikeByHandleAndPostId = async (handle, postId) => {
-  let like = {};
-  like = await Like.find({
-    userHandle: handle,
-    postId: postId,
+export const findLikeByHandleAndPostId = async (userHandle, postId) => {
+  const like = await Like.find({
+    userHandle,
+    postId,
   }).read(mongo.ReadPreference.NEAREST);
   return like;
 };
@@ -175,10 +152,10 @@ export const findLikeByHandleAndPostId = async (handle, postId) => {
 /** Updates all user posts with new image
  * @param {string} base64
  */
-export const findAndUpdatePostImage = async (handle, base64) => {
+export const findAndUpdatePostImage = async (userHandle, base64) => {
   await Post.updateMany(
     {
-      userHandle: handle,
+      userHandle,
     },
     {
       $set: {
@@ -199,7 +176,7 @@ export const findAndUpdatePostImage = async (handle, base64) => {
 export const findPostAndUpdateCount = async (_id, likeCount, commentCount) => {
   await Post.updateOne(
     {
-      _id: _id,
+      _id,
     },
     {
       $set: {
@@ -219,26 +196,25 @@ export const findPostAndUpdateCount = async (_id, likeCount, commentCount) => {
  */
 export const findAndDeleteLikeAndComment = async postId => {
   let success = false;
-  let like, comment;
 
   // Deletes all associated likes
   await Like.deleteMany({
-    postId: postId,
+    postId,
   });
 
   // Deletes all associated comments
   await Comment.deleteMany({
-    postId: postId,
+    postId,
   });
 
   // Checks for any leftover likes
-  like = await Like.find({
-    postId: postId,
+  const like = await Like.find({
+    postId,
   }).read(mongo.ReadPreference.NEAREST);
 
   // Checks for any leftover comments
-  comment = await Comment.find({
-    postId: postId,
+  const comment = await Comment.find({
+    postId,
   }).read(mongo.ReadPreference.NEAREST);
 
   /**
@@ -254,12 +230,12 @@ export const findAndDeleteLikeAndComment = async postId => {
 };
 
 /** Finds notification and marks read as true
- * @param {string} notificationId
+ * @param {string} _id
  */
-export const findNotificationAndUpdateRead = async notificationId => {
+export const findNotificationAndUpdateRead = async _id => {
   await Notification.updateOne(
     {
-      _id: notificationId,
+      _id,
     },
     {
       $set: {
@@ -279,7 +255,7 @@ export const findNotificationAndUpdateRead = async notificationId => {
 export const findUserAndUpdateImage = async (_id, base64) => {
   await User.updateOne(
     {
-      _id: _id,
+      _id,
     },
     {
       $set: {
@@ -297,13 +273,13 @@ export const findUserAndUpdateImage = async (_id, base64) => {
  * @param {string} _id
  */
 export const findUserAndUpdateProfile = async (userDetails, _id) => {
-  let { aboutMe, website, location } = userDetails.bio;
+  const { aboutMe, website, location } = userDetails.bio;
 
   if (!aboutMe) {
     if (!website) {
       await User.updateOne(
         {
-          _id: _id,
+          _id,
         },
         {
           $set: {
@@ -317,7 +293,7 @@ export const findUserAndUpdateProfile = async (userDetails, _id) => {
     } else if (!location) {
       await User.updateOne(
         {
-          _id: _id,
+          _id,
         },
         {
           $set: {
@@ -331,7 +307,7 @@ export const findUserAndUpdateProfile = async (userDetails, _id) => {
     } else {
       await User.updateOne(
         {
-          _id: _id,
+          _id,
         },
         {
           $set: {
@@ -348,7 +324,7 @@ export const findUserAndUpdateProfile = async (userDetails, _id) => {
     if (!location) {
       await User.updateOne(
         {
-          _id: _id,
+          _id,
         },
         {
           $set: {
@@ -362,7 +338,7 @@ export const findUserAndUpdateProfile = async (userDetails, _id) => {
     } else {
       await User.updateOne(
         {
-          _id: _id,
+          _id,
         },
         {
           $set: {
@@ -378,7 +354,7 @@ export const findUserAndUpdateProfile = async (userDetails, _id) => {
   } else if (!location) {
     await User.updateOne(
       {
-        _id: _id,
+        _id,
       },
       {
         $set: {
@@ -393,7 +369,7 @@ export const findUserAndUpdateProfile = async (userDetails, _id) => {
   } else {
     await User.updateOne(
       {
-        _id: _id,
+        _id,
       },
       {
         $set: {

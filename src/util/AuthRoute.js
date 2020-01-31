@@ -1,18 +1,21 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
 
-const AuthRoute = ({ component: Component, authenticated, ...rest }) => (
-  <Route
-    {...rest}
-    render={props =>
-      authenticated === true ? <Component {...props} /> : <Redirect to='/login' />
-    }
-  />
-);
+// Context
+import { useUserAuthenticationData } from '../components/profile/userContext';
 
-const mapStateToProps = ({ user }) => ({
-  authenticated: user.authenticated,
-});
-
-export default connect(mapStateToProps)(AuthRoute);
+export const AuthRoute = ({ component: Component, authenticated, ...rest }) => {
+  const { isAuthenticated } = useUserAuthenticationData();
+  return (
+    <Route
+      {...rest}
+      render={props =>
+        isAuthenticated === true ? (
+          <Component {...props} />
+        ) : (
+          <Redirect to='/login' />
+        )
+      }
+    />
+  );
+};

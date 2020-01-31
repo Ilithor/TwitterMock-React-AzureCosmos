@@ -1,15 +1,29 @@
 import React, { useState, useEffect } from 'react';
 
 // MUI
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
+import { Button, Grid, TextField } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
-// Redux
-import { connect } from 'react-redux';
-import { getCommentPost } from '../../../redux/actions/dataActions';
+// Context
+import { useCommentOnPostData } from '../commentContext';
 
-const CommentFormView = ({ classes = {}, postId, UI, getCommentPost }) => {
+const useStyles = makeStyles({
+  textField: {
+    margin: '10px auto 10px auto',
+  },
+  button: {
+    marginTop: '20',
+    position: 'relative',
+  },
+});
+
+export const CommentForm = ({ postId }) => {
+  const classes = useStyles();
+  const {
+    commentOnPost,
+    isLoadingCommentOnPost,
+    commentError,
+  } = useCommentOnPostData();
   const [body, setBody] = useState('');
 
   const handleChange = event => {
@@ -19,14 +33,14 @@ const CommentFormView = ({ classes = {}, postId, UI, getCommentPost }) => {
   const handleSubmit = event => {
     event.preventDefault();
     const commentData = { body };
-    getCommentPost(postId, commentData);
+    commentOnPost(postId, commentData);
   };
 
   useEffect(() => {
-    if (!UI.error.comment && !UI.isLoading) {
+    if (!commentError && !isLoadingCommentOnPost) {
       setBody('');
     }
-  }, [UI.error, UI.isLoading]);
+  }, [commentError, isLoadingCommentOnPost]);
   return (
     <Grid item sm={12} style={{ textAlign: 'center' }}>
       <form onSubmit={handleSubmit}>
@@ -34,18 +48,18 @@ const CommentFormView = ({ classes = {}, postId, UI, getCommentPost }) => {
           name='body'
           type='text'
           label='Comment on post'
-          error={!!UI.error.comment}
-          helperText={UI.error.comment}
+          error={commentError}
+          helperText={commentError}
           value={body}
           onChange={handleChange}
           fullWidth
-          className={classes.textField}
+          className={classes?.textField}
         />
         <Button
           type='submit'
           variant='contained'
           color='primary'
-          className={classes.button}
+          className={classes?.button}
         >
           Submit
         </Button>
@@ -53,10 +67,3 @@ const CommentFormView = ({ classes = {}, postId, UI, getCommentPost }) => {
     </Grid>
   );
 };
-
-const mapStateToProps = ({ UI }) => ({ UI });
-
-export const CommentForm = connect(
-  mapStateToProps,
-  { getCommentPost }
-)(CommentFormView);

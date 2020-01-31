@@ -1,45 +1,48 @@
 import React, { useState } from 'react';
 
 // Components
-import CustomButton from '../../../../util/CustomButton';
+import { CustomButton } from '../../../../util/CustomButton';
 
 // MUI
-import Dialog from '@material-ui/core/Dialog';
-import Button from '@material-ui/core/Button';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogActions from '@material-ui/core/DialogActions';
-import withStyles from '@material-ui/core/styles/withStyles';
-import style from '../../../../style';
+import { Dialog, Button, DialogTitle, DialogActions } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 
 // Icons
-import DeleteOutline from '@material-ui/icons/DeleteOutline';
+import * as Icon from '@material-ui/icons';
 
-// React
-import { connect } from 'react-redux';
-import { deleteUserPost } from '../../../../redux/actions/dataActions';
+// Context
+import { usePostData } from '../../postContext';
+
+const useStyles = makeStyles({
+  deleteButton: {
+    position: 'absolute',
+    left: '90%',
+    top: '10%',
+  },
+});
 
 /** Displays the dialog box to delete the user's post
  * @type {React.FunctionComponent}
  * @param {object} props
- * @param {object} props.classes
  * @param {string} props.postId
- * @param {any} props.deleteUserPost
  */
-const DeletePostDialogView = ({ classes = {}, postId, deleteUserPost }) => {
+export const DeletePostDialog = ({ postId }) => {
+  const classes = useStyles();
+  const { deletePost } = usePostData();
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const deletePost = () => {
-    deleteUserPost(postId);
+  const deleteUserPost = () => {
+    deletePost(postId);
     setOpen(false);
   };
   const makeDeleteButton = () => (
     <CustomButton
       tip='Delete Post'
       onClick={handleOpen}
-      btnClassName={classes.deleteButton}
+      btnClassName={classes?.deleteButton}
     >
-      <DeleteOutline color='secondary' />
+      <Icon.DeleteOutline color='secondary' />
     </CustomButton>
   );
   if (!open) {
@@ -52,15 +55,10 @@ const DeletePostDialogView = ({ classes = {}, postId, deleteUserPost }) => {
         <Button onClick={handleClose} color='primary'>
           Cancel
         </Button>
-        <Button onClick={deletePost} color='secondary'>
+        <Button onClick={deleteUserPost} color='secondary'>
           Delete
         </Button>
       </DialogActions>
     </Dialog>
   );
 };
-
-export const DeletePostDialog = connect(
-  null,
-  { deleteUserPost }
-)(withStyles(style)(DeletePostDialogView));

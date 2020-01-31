@@ -5,7 +5,7 @@ import {
   LoginForm,
   // eslint-disable-next-line no-unused-vars
   ILoginFormComponentProps,
-} from './LoginForm';
+} from './index';
 import TestWithReduxStore from '../../fixtures/component/TestWithReduxStore';
 
 jest.mock('axios');
