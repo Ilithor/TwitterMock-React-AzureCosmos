@@ -5,54 +5,50 @@ import mongoConnection from '../util/mongo';
 mongoConnection();
 
 /** Retrieves all posts in desc order
- * @return {Promise<post[Post]> | PostNotFound}
+ * @returns {Promise<post[Post[]]>}
  */
-export const getList = async () => {
-  const error = {};
-  const post = await Post.find({})
-    .sort({ createdAt: -1 })
-    .read(mongo.ReadPreference.NEAREST)
-    .limit(100);
-
-  if (post.length === 0) {
-    error.post = 'No posts found';
-    return error;
-  } else {
-    return post;
-  }
-};
+export const getList = () =>
+  new Promise(resolve => {
+    const postList = Post.find({})
+      .sort({ createdAt: -1 })
+      .read(mongo.ReadPreference.NEAREST)
+      .limit(100);
+    resolve(postList);
+  });
 
 /** Creates and saves new post
  * @param {Object} postParam
  * @param {User} user
- * @return {Promise<Post, Error>}
+ * @returns {Promise<Post>}
  */
-export const create = async (postParam, user) => {
-  // Validation
-  const error = {};
-  if (postParam.body.trim() === '') {
-    error.body = 'Body must not be empty';
-    return error;
-  }
-  // Create new post
-  postParam.userHandle = user.handle;
-  const newPost = new Post(postParam);
-  newPost.createdAt = new Date().toISOString();
-  newPost.likeCount = 0;
-  newPost.commentCount = 0;
+export const create = (postParam, user) =>
+  new Promise((resolve, reject) => {
+    // Validation
+    if (postParam.body.trim() === '') {
+      reject({ body: 'Body must not be empty' });
+    }
+    // Create new post
+    postParam.userHandle = user.userHandle;
+    const newPost = new Post(postParam);
+    newPost.likeCount = 0;
+    newPost.commentCount = 0;
 
-  // Save post
-  await newPost.save();
-  return newPost;
-};
+    // Save post
+    newPost.save();
+    resolve(newPost);
+  });
 
 /** Deletes post
- * @param {Request} postParam
- * @return {Promise<Post>}
+ * @param {String} _id
  */
-export const findAndDeletePost = async postParam => {
-  const post = await Post.findOneAndDelete({
-    _id: postParam.params.postId,
+export const findAndDeletePost = _id =>
+  new Promise((resolve, reject) => {
+    try {
+      const post = Post.deleteOne({
+        _id,
+      });
+      resolve(post);
+    } catch (err) {
+      reject(err);
+    }
   });
-  return post;
-};

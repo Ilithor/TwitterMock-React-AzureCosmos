@@ -24,13 +24,13 @@
  * @property {string} bio
  * @property {string} website
  * @property {string} location
- * @property {string} Image
+ * @property {string} userImage
  */
 
 /**
  * @typedef User
  * @property {Date} createdAt
- * @property {string} handle
+ * @property {string} userHandle
  * @property {UserCredential} credential
  * @property {UserBio} bio
  * @property {LikeList} like
@@ -39,7 +39,7 @@
 /**
  * @typedef UserRegistration
  * @property {string} email
- * @property {string} handle
+ * @property {string} userHandle
  * @property {string} password
  * @property {string} confirmPassword
  */
@@ -55,7 +55,7 @@
  * @typedef UserNew
  * @property {string} _id
  * @property {string} email
- * @property {string} handle
+ * @property {string} userHandle
  * @property {string} password
  * @property {Date} createdAt
  */
@@ -132,7 +132,7 @@
  * @typedef UserError
  * @property {string} email
  * @property {string} password
- * @property {string} handle
+ * @property {string} userHandle
  */
 
 /**
