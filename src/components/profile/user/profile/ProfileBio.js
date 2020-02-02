@@ -12,21 +12,28 @@ import * as Icon from '@material-ui/icons';
 /** View component for displaying the user's profile details
  * @type {React.FunctionComponent}
  * @param {object} props
- * @param {string} props.handle
+ * @param {string} props.userHandle
  * @param {object} props.bio
  * @param {string} props.createdAt
  */
-export const ProfileDetail = ({ handle, bio = {}, createdAt }) => (
+export const ProfileBio = ({ userHandle, bio = {}, createdAt }) => (
   <div className='profile-details'>
-    <MuiLink component={Link} to={`/u/${handle}`} color='primary' variant='h5'>
-      @{handle}
+    <MuiLink
+      component={Link}
+      to={`/u/${userHandle}`}
+      color='primary'
+      variant='h5'
+    >
+      @{userHandle}
     </MuiLink>
     <hr />
     {bio?.aboutMe && <Typography variant='body2'>{bio?.aboutMe}</Typography>}
     <hr />
     {bio?.location && (
       <Fragment>
-        <Icon.LocationOn color='primary' /> <span>{bio?.location}</span>
+        <span>
+          <Icon.LocationOn color='primary' /> {bio?.location}
+        </span>
         <hr />
       </Fragment>
     )}
@@ -34,13 +41,14 @@ export const ProfileDetail = ({ handle, bio = {}, createdAt }) => (
       <Fragment>
         <Icon.Link color='primary' />
         <a href={bio?.website} target='_blank' rel='noopener noreferrer'>
-          {' '}
           {bio?.website}
         </a>
         <hr />
       </Fragment>
     )}
-    <Icon.CalendarToday color='primary' />{' '}
-    <span>Joined {dayjs(createdAt).format('MMM YYYY')}</span>
+    <span>
+      <Icon.CalendarToday color='primary' />
+      Joined {dayjs(createdAt).format('MMM YYYY')}
+    </span>
   </div>
 );
