@@ -11,14 +11,15 @@ const commentContext = createContext();
  *
  * @param {object} props
  * @param {React.ReactChild} props.children
- * @param {()=>Promise<import('axios').AxiosResponse<Comment[]>>} props.fetchCommentList
  */
 export const CommentProvider = ({ children }) => {
   const [commentError, setCommentError] = useState();
   const [lastRefreshCommentList, setLastRefreshCommentList] = useState();
   const [commentList, setCommentList] = useState();
+  const [commentListOnPost, setCommentListOnPost] = useState();
   const [isLoadingCommentList, setIsLoadingCommentList] = useState(false);
   const [isLoadingCommentOnPost, setIsLoadingCommentOnPost] = useState(false);
+  const [isLoadingDeleteComment, setIsLoadingDeleteComment] = useState(false);
 
   const refreshCommentList = () =>
     new Promise((resolve, reject) => {
@@ -28,8 +29,7 @@ export const CommentProvider = ({ children }) => {
         fetchUtil.post
           .fetchCommentList()
           .then(res => {
-            setCommentList(_.keyBy(res?.data, 'commentId'));
-            resolve(commentList);
+            setCommentList(_.keyBy(res.data, 'commentId'));
           })
           .catch(err => {
             setCommentError(err);
@@ -38,9 +38,22 @@ export const CommentProvider = ({ children }) => {
           .finally(() => {
             setLastRefreshCommentList(Date.now);
             setIsLoadingCommentList(false);
+            resolve();
           });
       }
     });
+
+  const refreshCommentListOnPost = postId => {
+    if (!isLoadingCommentList && commentList) {
+      setIsLoadingCommentList(true);
+      const commentData = _.filter(
+        commentList,
+        comment => comment?.postId === postId
+      );
+      setCommentListOnPost(commentData);
+      setIsLoadingCommentList(false);
+    }
+  };
 
   const commentOnPost = (postId, commentData) =>
     new Promise((resolve, reject) => {
@@ -48,15 +61,37 @@ export const CommentProvider = ({ children }) => {
         setIsLoadingCommentOnPost(true);
         fetchUtil.post
           .commentOnPost(postId, commentData)
-          .then(async () => {
+          .then(() => {
             refreshCommentList();
-            resolve(commentList);
           })
           .catch(err => {
             setCommentError(err);
             reject(err);
           })
-          .finally(() => setIsLoadingCommentOnPost(false));
+          .finally(() => {
+            setIsLoadingCommentOnPost(false);
+            resolve();
+          });
+      }
+    });
+
+  const deleteComment = commentId =>
+    new Promise((resolve, reject) => {
+      if (commentId && !isLoadingDeleteComment) {
+        setIsLoadingDeleteComment(true);
+        fetchUtil.post
+          .deleteComment(commentId)
+          .then(() => {
+            refreshCommentList();
+          })
+          .catch(err => {
+            setCommentError(err);
+            reject(err);
+          })
+          .finally(() => {
+            setIsLoadingDeleteComment(false);
+            resolve();
+          });
       }
     });
 
@@ -68,10 +103,25 @@ export const CommentProvider = ({ children }) => {
     commentOnPost,
     refreshCommentList,
     lastRefreshCommentList,
+    deleteComment,
+    refreshCommentListOnPost,
+    commentListOnPost,
   };
   return (
     <commentContext.Provider value={value}>{children}</commentContext.Provider>
   );
+};
+
+export const useCommentData = () => {
+  const ctx = useContext(commentContext);
+
+  if (ctx === undefined) {
+    throw new Error('useCommentData must be used within a CommentProvider');
+  }
+
+  const { deleteComment, isLoadingDeleteComment } = ctx;
+
+  return { deleteComment, isLoadingDeleteComment };
 };
 
 /** A hook for consuming our Comment context in a safe way
@@ -94,13 +144,13 @@ export const useCommentListData = () => {
     refreshCommentList,
     lastRefreshCommentList,
     isLoadingCommentList,
+    refreshCommentListOnPost,
+    commentListOnPost,
   } = ctx;
 
   if (
     !isLoadingCommentList &&
-    (_.keys(commentList).length === 0 ||
-      !lastRefreshCommentList ||
-      lastRefreshCommentList + 600 <= Date.now)
+    (!lastRefreshCommentList || lastRefreshCommentList + 600 <= Date.now)
   ) {
     refreshCommentList();
   }
@@ -110,10 +160,12 @@ export const useCommentListData = () => {
     commentList,
     commentError,
     refreshCommentList,
+    refreshCommentListOnPost,
+    commentListOnPost,
   };
 };
 
-export const useCommentOnPostData = (postId, commentParams) => {
+export const useCommentOnPostData = () => {
   const ctx = useContext(commentContext);
 
   if (ctx === undefined) {
