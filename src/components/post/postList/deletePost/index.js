@@ -2,6 +2,8 @@ import React from 'react';
 
 // Components
 import { DeletePostDialog } from './DeletePostDialog';
+
+// Context
 import {
   useUserAuthenticationData,
   useCurrentUserData,
@@ -10,16 +12,14 @@ import {
 /** Displays the delete post button when authenticated
  * @type {React.FunctionComponent}
  * @param {object} props
- * @param {object} props.classes
  * @param {string} props.postId
  * @param {any} props.deleteUserPost
  */
 export const DeletePost = ({ postId, userHandle }) => {
   const { isAuthenticated } = useUserAuthenticationData();
   const { currentUser } = useCurrentUserData();
-  if (isAuthenticated && userHandle === currentUser?.handle) {
+  if (isAuthenticated && userHandle === currentUser?.userHandle) {
     return <DeletePostDialog postId={postId} />;
-  } else {
-    return <div />;
   }
+  return <div />;
 };
