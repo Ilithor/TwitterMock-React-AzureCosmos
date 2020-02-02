@@ -7,11 +7,6 @@ import {
 } from '../handlers/comment';
 import { likePost, unlikePost } from '../handlers/like';
 import { authUser } from '../util/auth';
-import {
-  createNotification,
-  deleteNotification,
-  deleteAllNotification,
-} from '../handlers/notification';
 
 const router = express.Router();
 
@@ -19,15 +14,14 @@ router.get('/', getPostList);
 router.post('/', authUser, createPost);
 router.get('/comment', getCommentList);
 router.get('/:postId', getPost);
-router.delete('/:postId', authUser, deletePost, deleteAllNotification);
-router.get('/:postId/like', authUser, likePost, createNotification);
-router.get('/:postId/unlike', authUser, unlikePost, deleteNotification);
-router.post('/:postId/comment', authUser, commentOnPost, createNotification);
+router.delete('/:postId', authUser, deletePost);
+router.get('/:postId/like', authUser, likePost);
+router.get('/:postId/unlike', authUser, unlikePost);
+router.post('/:postId/comment', authUser, commentOnPost);
 router.delete(
   '/:postId/uncomment',
   authUser,
-  deleteComment,
-  deleteNotification
+  deleteComment
 );
 
 export default router;
