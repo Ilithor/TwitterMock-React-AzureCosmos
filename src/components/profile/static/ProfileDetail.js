@@ -13,22 +13,22 @@ import MuiLink from '@material-ui/core/Link';
 // Icons
 import * as Icon from '@material-ui/icons';
 
-export const ProfileDetail = ({ profile }) => (
+export const ProfileDetail = ({ user }) => (
   <div className='profile-details'>
     <MuiLink
       component={Link}
-      to={`/u/${profile?.handle}`}
+      to={`/u/${user?.userHandle}`}
       color='primary'
       variant='h5'
     >
-      @{profile?.handle}
+      @{user?.userHandle}
     </MuiLink>
     <hr />
-    <AboutMe aboutMe={profile?.aboutMe} />
+    <AboutMe aboutMe={user?.aboutMe} />
     <hr />
-    <Location location={profile?.location} />
-    <Website website={profile?.website} />
-    <Icon.CalendarToday color='primary' />{' '}
-    <span>Joined {dayjs(profile?.createdAt).format('MMM YYYY')}</span>
+    <Location location={user?.location} />
+    <Website website={user?.website} />
+    <Icon.CalendarToday color='primary' />
+    <span>Joined {dayjs(user?.createdAt).format('MMM YYYY')}</span>
   </div>
 );
