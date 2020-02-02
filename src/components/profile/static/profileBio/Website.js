@@ -4,10 +4,9 @@ import React, { Fragment } from 'react';
 import * as Icon from '@material-ui/icons';
 
 export const Website = ({ website }) => {
-  if (!!website) {
+  if (website) {
     const link = (
       <a href={website} target='_blank' rel='noopener noreferrer'>
-        {' '}
         {website}
       </a>
     );
