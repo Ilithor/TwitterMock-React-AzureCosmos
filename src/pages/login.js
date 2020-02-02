@@ -10,6 +10,9 @@ import { makeStyles } from '@material-ui/core/styles';
 // Icons
 import AppIcon from '../images/icon.png';
 
+// Context
+import { LoginProvider } from '../components/login/loginContext';
+
 const useStyles = makeStyles({
   form: {
     textAlign: 'center',
@@ -37,7 +40,9 @@ export const LoginPage = () => {
         <Typography variant='h2' className={classes?.pageTitle}>
           Login
         </Typography>
-        <LoginForm />
+        <LoginProvider>
+          <LoginForm />
+        </LoginProvider>
       </Grid>
       <Grid item sm />
     </Grid>
