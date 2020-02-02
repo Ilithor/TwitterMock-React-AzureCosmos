@@ -10,6 +10,9 @@ import { makeStyles } from '@material-ui/core/styles';
 // Icons
 import AppIcon from '../images/icon.png';
 
+// Context
+import { RegisterProvider } from '../components/register/registerContext';
+
 const useStyles = makeStyles({
   form: {
     textAlign: 'center',
@@ -37,7 +40,9 @@ export const RegisterPage = () => {
         <Typography variant='h2' className={classes?.pageTitle}>
           Register
         </Typography>
-        <RegisterForm />
+        <RegisterProvider>
+          <RegisterForm />
+        </RegisterProvider>
       </Grid>
       <Grid item sm />
     </Grid>
