@@ -66,7 +66,7 @@ export const PostDialog = ({ postId, userHandle }) => {
           userImage={userImage}
           createdAt={post?.createdAt}
           body={post?.body}
-          postId={post?._id}
+          postId={postId}
           likeCount={post?.likeCount}
           commentCount={post?.commentCount}
         />

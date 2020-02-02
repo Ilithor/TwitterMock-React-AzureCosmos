@@ -29,8 +29,8 @@ export const App = () => (
           <Route path='/login' component={LoginPage} />
           <Route path='/signup' component={RegisterPage} />
           <AuthRoute path='/notification' component={NotificationPage} />
-          <Route exact path='/u/:handle' component={UserPage} />
-          <Route exact path='/u/:handle/post/:postId' component={UserPage} />
+          <Route exact path='/u/:userHandle' component={UserPage} />
+          <Route exact path='/u/:userHandle/post/:postId' component={UserPage} />
         </Switch>
       </div>
     </ContextProvider>

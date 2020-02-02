@@ -31,7 +31,6 @@ export const PostProvider = ({ children }) => {
           .fetchPostList()
           .then(res => {
             setPostList(_.keyBy(res.data, 'postId'));
-            resolve(postList);
           })
           .catch(err => {
             setPostError(err);
@@ -40,6 +39,7 @@ export const PostProvider = ({ children }) => {
           .finally(() => {
             setLastRefreshPostList(Date.now);
             setIsLoadingPostList(false);
+            resolve();
           });
       }
     });
@@ -49,16 +49,18 @@ export const PostProvider = ({ children }) => {
       if (postParam && !isLoadingNewPost) {
         setIsLoadingNewPost(true);
         fetchUtil.post
-          .newPost(postParam)
-          .then(res => {
+          .createPost(postParam)
+          .then(() => {
             refreshPostList();
-            resolve(postList);
           })
           .catch(err => {
             setPostError(err);
             reject(err);
           })
-          .finally(() => setIsLoadingNewPost(false));
+          .finally(() => {
+            setIsLoadingNewPost(false);
+            resolve();
+          });
       }
     });
 
@@ -69,13 +71,16 @@ export const PostProvider = ({ children }) => {
         fetchUtil.post
           .deletePost(postId)
           .then(() => {
-            refreshPostList().then(() => resolve(postList));
+            refreshPostList();
           })
           .catch(err => {
             setPostError(err);
             reject(err);
           })
-          .finally(() => setIsLoadingDeletePost(false));
+          .finally(() => {
+            setIsLoadingDeletePost(false);
+            resolve();
+          });
       }
     });
 
@@ -135,6 +140,7 @@ export const usePostData = () => {
     deletePost,
     newPost,
     isLoadingNewPost,
+    refreshPostList,
   };
 };
 

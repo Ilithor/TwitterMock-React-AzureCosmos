@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import _ from 'lodash';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
+import defaultImage from '../../../../images/user.png';
 
 // Components
 import { Like } from '../../../like';
 import { Comment } from '../../../comment';
-import { CommentForm } from '../../../comment/newComment/CommentForm';
+import { NewComment } from '../../../comment/newComment';
 import { CustomButton } from '../../../../util/CustomButton';
 
 // MUI
@@ -18,6 +19,7 @@ import * as Icon from '@material-ui/icons';
 
 // Context
 import { useCommentListData } from '../../../comment/commentContext';
+import { useLikeData } from '../../../like/likeContext';
 
 const useStyles = makeStyles({
   profileImage: {
@@ -39,11 +41,14 @@ const useStyles = makeStyles({
 
 /** View component for displaying the content in a post's dialog box
  * @type {React.FunctionComponent}
- * @param {object} props
- * @param {string} props.userHandle
- * @param {string} props.userImage
- * @param {Date} props.createAt
- * @param {string} props.body
+ * @param {Object} props
+ * @param {String} props.userHandle
+ * @param {String} props.userImage
+ * @param {String} props.createAt
+ * @param {String} props.body
+ * @param {String} props.postId
+ * @param {Number} props.likeCount
+ * @param {Number} props.commentCount
  */
 export const PostDialogContent = ({
   userHandle,
@@ -55,16 +60,25 @@ export const PostDialogContent = ({
   commentCount,
 }) => {
   const classes = useStyles();
-  const { commentList, isLoadingCommentList } = useCommentListData();
-  const dialogCommentList = _.filter(
-    commentList,
-    comment => comment?.postId === postId
-  );
+  const params = useParams();
+  const { likeList } = useLikeData();
+  const {
+    refreshCommentListOnPost,
+    isLoadingCommentList,
+    commentListOnPost,
+  } = useCommentListData();
+  useEffect(() => {
+    refreshCommentListOnPost(params?.postId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const RecentCommentMarkup = () => {
-    if (!isLoadingCommentList && dialogCommentList) {
-      return _.map(dialogCommentList, comment => (
-        <Comment key={`comment-${comment?._id}`} comment={comment} />
+    if (!isLoadingCommentList && commentListOnPost) {
+      return _.map(commentListOnPost, comment => (
+        <Comment key={`comment-${comment?.commentId}`} comment={comment} />
       ));
+    }
+    if (commentListOnPost?.length === 0) {
+      return <div />;
     }
     return (
       <div className={classes?.spinnerDiv}>
@@ -72,10 +86,26 @@ export const PostDialogContent = ({
       </div>
     );
   };
+  const LikePlural = () => {
+    if (likeCount === 1) {
+      return ' Like';
+    }
+    return ' Likes';
+  };
+  const CommentPlural = () => {
+    if (commentCount === 1) {
+      return ' Comment';
+    }
+    return ' Comments';
+  };
   return (
     <Grid container spacing={5}>
       <Grid item sm={5}>
-        <img src={userImage} alt='Profile' className={classes?.profileImage} />
+        <img
+          src={userImage || defaultImage}
+          alt='Profile'
+          className={classes?.profileImage}
+        />
       </Grid>
       <Grid item sm={7}>
         <Typography
@@ -92,14 +122,20 @@ export const PostDialogContent = ({
         </Typography>
         <hr className={classes?.separator} />
         <Typography variant='body1'>{body}</Typography>
-        <Like postId={postId} />
-        <span>{likeCount} likes</span>
+        <Like postId={postId} like={likeList[(params?.postId)]} />
+        <span>
+          {likeCount}
+          <LikePlural />
+        </span>
         <CustomButton tip='comments'>
           <Icon.Chat color='primary' />
         </CustomButton>
-        <span>{commentCount} comments</span>
+        <span>
+          {commentCount}
+          <CommentPlural />
+        </span>
       </Grid>
-      <CommentForm postId={postId} />
+      <NewComment postId={postId} />
       <RecentCommentMarkup />
     </Grid>
   );

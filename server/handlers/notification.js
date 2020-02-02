@@ -9,13 +9,13 @@ mongoConnection();
 /** Retrieves all notifications
  * @type {RouteHandler}
  */
-export const getNotification = async (req, res) => {
-  await getNotificationList()
+export const getNotification = (req, res) => {
+  getNotificationList()
     .then(data => {
-      if (data.notification) {
-        return res.status(404).json({ error: data.notification });
+      if (!data) {
+        return res.send(data);
       }
-      const notification = _.map(data, doc => ({
+      const notificationList = _.map(data, doc => ({
         notificationId: doc._id,
         createdAt: doc.createdAt,
         postId: doc.postId,
@@ -25,15 +25,11 @@ export const getNotification = async (req, res) => {
         typeId: doc.typeId,
         read: doc.read,
       }));
-      if (notification.length <= 0) {
-        return res.json({ message: 'No notifications found' });
-      } else {
-        return res.json(notification);
-      }
+      return res.status(200).send(notificationList);
     })
     .catch(err => {
       console.error(err);
-      return res.status(500).json({ error: err.code });
+      return res.status(500).send(err);
     });
 };
 
@@ -57,34 +53,33 @@ export const createNotification = async (
 /** Marks notification as read by user
  * @type {RouteHandler}
  */
-export const markNotificationRead = async (req, res) => {
-  await findNotificationAndUpdateRead(req.body.notificationId)
+export const markNotificationRead = (req, res) => {
+  findNotificationAndUpdateRead(req.body.notificationId)
     .then(() => {
-      return res.status(200).json({ message: 'Notifications marked read' });
+      return res.status(200);
     })
-    .catch(err => console.log);
+    .catch(err => {
+      console.error(err);
+      return res.status(500).send(err);
+    });
 };
 
 /** Deletes notification upon successful deletion
  *  of a like or comment
  * @type {RouteHandler}
  */
-export const deleteNotification = async (req, res) => {
+export const deleteNotification = async req => {
   await Notification.findOneAndDelete({
     type: req.notification.type,
     typeId: req.notification.typeId,
   });
-  return res
-    .status(200)
-    .json({ message: `${req.notification.type} successfully removed` });
 };
 
 /** Deletes all notifications that matches given postId
  * @type {RouterHandler}
  */
-export const deleteAllNotification = async (req, res) => {
+export const deleteAllNotification = async postId => {
   await Notification.deleteMany({
-    postId: req.params.postId,
+    postId,
   });
-  return res.status(200).json({ message: 'Post successfully deleted' });
 };

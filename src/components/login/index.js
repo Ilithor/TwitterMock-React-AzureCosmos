@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
 // MUI
@@ -8,28 +8,11 @@ import {
   Button,
   CircularProgress,
 } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { useStyles } from './login.style';
 
 // Context
 import { useUserLoginData } from '../profile/userContext';
-
-const useStyles = makeStyles({
-  textField: {
-    margin: '10px auto 10px auto',
-  },
-  customError: {
-    color: 'red',
-    fontSize: '0.8rem',
-    marginTop: 10,
-  },
-  button: {
-    marginTop: '20',
-    position: 'relative',
-  },
-  progress: {
-    position: 'absolute',
-  },
-});
+import { useLoginValidationData } from './loginContext';
 
 /** View component for displaying the login form to the user
  * @type {ILoginFormComponentProps}
@@ -37,7 +20,13 @@ const useStyles = makeStyles({
 export const LoginForm = () => {
   const classes = useStyles();
   const history = useHistory();
-  const { loginUser, userError, isLoadingLogin } = useUserLoginData();
+  const {
+    loginUser,
+    userError,
+    isLoadingLogin,
+    setUserError,
+  } = useUserLoginData();
+  const { validationCheckLogin, loginError } = useLoginValidationData();
   const [editorState, setEditorState] = useState({
     email: '',
     password: '',
@@ -51,17 +40,25 @@ export const LoginForm = () => {
         email,
         password,
       };
-      loginUser(userParam).then(() => {
-        history.push('/');
-      });
+      loginUser(userParam)
+        .then(() => {
+          if (!userError && Object.keys(loginError).length === 0) {
+            history.push('/');
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          setUserError(err);
+        });
     }
   };
+
   const handleChange = event => {
+    if (userError) {
+      setUserError();
+    }
     const { name, value } = event.target;
-    setEditorState({
-      ...editorState,
-      [name]: value,
-    });
+    setEditorState(validationCheckLogin({ ...editorState, [name]: value }));
   };
 
   return (
@@ -72,8 +69,10 @@ export const LoginForm = () => {
         type='email'
         label='Email'
         className={classes?.textField}
-        helperText={userError?.email}
-        error={userError?.email ? true : false}
+        helperText={loginError?.email || userError?.email}
+        error={
+          loginError?.email ? true : false || userError?.email ? true : false
+        }
         value={email}
         onChange={handleChange}
         autoComplete='username'
@@ -85,8 +84,14 @@ export const LoginForm = () => {
         type='password'
         label='Password'
         className={classes?.textField}
-        helperText={userError?.password}
-        error={userError?.password ? true : false}
+        helperText={loginError?.password || userError?.password}
+        error={
+          loginError?.password
+            ? true
+            : false || userError?.password
+            ? true
+            : false
+        }
         value={password}
         onChange={handleChange}
         autoComplete='current-password'
@@ -102,10 +107,10 @@ export const LoginForm = () => {
         variant='contained'
         color='primary'
         className={classes?.button}
-        disabled={!!isLoadingLogin}
+        disabled={isLoadingLogin}
       >
         Login
-        {!!isLoadingLogin && (
+        {isLoadingLogin && (
           <CircularProgress size={30} className={classes?.progress} />
         )}
       </Button>

@@ -6,8 +6,8 @@ const Schema = mongoose.Schema;
  * will occupy the User document
  */
 const UserSchema = Schema({
-  createdAt: Date,
-  handle: {
+  createdAt: { type: Date, default: Date.now },
+  userHandle: {
     type: String,
     unique: true,
     required: true,
@@ -24,7 +24,7 @@ const UserSchema = Schema({
     },
   },
   bio: {
-    image: String,
+    userImage: String,
     aboutMe: String,
     website: String,
     location: String,

@@ -40,7 +40,6 @@ export const NotificationProvider = ({ children }) => {
           .fetchNotificationList()
           .then(res => {
             setNotificationList(_.keyBy(res.data, 'recipient'));
-            resolve(notificationList);
           })
           .catch(err => {
             setNotificationError(err);
@@ -49,6 +48,7 @@ export const NotificationProvider = ({ children }) => {
           .finally(() => {
             setLastRefreshNotificationList(Date.now);
             setIsLoadingNotificationList(false);
+            resolve();
           });
       }
     });
@@ -71,6 +71,7 @@ export const NotificationProvider = ({ children }) => {
             history.pushState(
               `/u/${notification?.recipient}/post/${notification?.postId}`
             );
+            resolve();
           });
       }
     });

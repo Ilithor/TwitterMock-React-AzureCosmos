@@ -17,124 +17,135 @@ import Like from '../models/like.model';
 mongoConnect();
 
 /** Returns a list of users
- * @returns {Promise<user[User]> | UserNotFound}
+ * @returns {Promise<user[User]>}
  */
-export const getList = async () => {
-  const error = {};
-  const user = await User.find({})
-    .sort({ createdAt: -1 })
-    .read(mongo.ReadPreference.NEAREST)
-    .limit(100);
-
-  if (user.length === 0) {
-    error.user = 'No users found';
-    return error;
-  }
-  return user;
-};
+export const getList = () =>
+  new Promise(resolve => {
+    const userList = User.find({})
+      .sort({ createdAt: -1 })
+      .read(mongo.ReadPreference.NEAREST)
+      .limit(100);
+    resolve(userList);
+  });
 
 /** Returns a list of likes by userHandle
- * @param {string} userHandle
- * @returns {Promise<likeList[Like]> | Error}
+ * @param {String} userHandle
+ * @returns {Promise<likeList[Like]>}
  */
 export const getLikeList = async userHandle => {
-  const error = {};
-  const likeList = await Like.find({})
+  return await Like.find({ userHandle })
     .read(mongo.ReadPreference.NEAREST)
     .limit(100);
-
-  if (likeList.length === 0) {
-    error.like = 'No likes found';
-    return error;
-  }
-  return likeList;
 };
 
 /** Validates then creates new User
  * @param {UserRegistration} userParam
- * @return {Promise<newUser[User]> | UserError}
+ * @returns {Promise<newUser[User]> | UserError}
  */
-export const register = async userParam => {
-  const credential = {};
-  const bio = {};
-  const user = { credential, bio };
+export const register = userParam =>
+  new Promise((resolve, reject) => {
+    const credential = {};
+    const bio = {};
+    const user = { credential, bio };
 
-  // Validation
-  const error = await validateRegister(userParam);
+    // Validation
+    validateRegister(userParam)
+      .then(async invalid => {
+        if (invalid) {
+          reject(invalid);
+        } else {
+          // Create user
+          user.userHandle = userParam.userHandle;
+          user.credential.email = userParam.email;
+          user.credential.password = userParam.password;
+          user.bio.aboutMe = '';
+          user.bio.website = '';
+          user.bio.location = '';
+          const newUser = new User(user);
 
-  if (Object.keys(error).length > 0) {
-    return error;
-  }
-
-  // Create user
-  user.handle = userParam.handle;
-  user.credential.email = userParam.email;
-  user.credential.password = userParam.password;
-  user.bio.aboutMe = '';
-  user.bio.website = '';
-  user.bio.location = '';
-  const newUser = new User(user);
-  newUser.createdAt = new Date().toISOString();
-
-  // Save user
-  await newUser.save();
-
-  return newUser;
-};
+          // Save user
+          await newUser.save();
+          resolve(newUser);
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        reject(err);
+      });
+  });
 
 /** Checks if user exists, and then generates a new token
  * @param {UserCredential} userParam
- * @return {Promise<userLoggedIn, dataToReturn> | UserCredentialError}
+ * @returns {Promise<userLoggedIn, dataToReturn> | UserCredentialError}
  */
-export const login = async userParam => {
-  const { email, password } = userParam;
-
-  // Validation
-  const user = {};
-  let userLoggedIn;
-
-  const error = await validateLogin(userParam);
-
-  if (Object.keys(error).length > 0) {
-    // Returns error if any, otherwise continue
-    return error;
-  } else {
-    user.credential = { email, password };
-    userLoggedIn = await findByCredential(user);
-  }
-
-  if (userLoggedIn.email || userLoggedIn.password) {
-    return userLoggedIn;
-  } else {
-    const token = await generateUserToken(userLoggedIn);
-    const dataToReturn = { token };
-    dataToReturn.handle = userLoggedIn.handle;
-    return dataToReturn;
-  }
-};
+export const login = userParam =>
+  new Promise((resolve, reject) => {
+    // Validation
+    validateLogin(userParam)
+      .then(() => {
+        const user = {};
+        const { email, password } = userParam;
+        user.credential = { email, password };
+        findByCredential(user)
+          .then(userLoggedIn => {
+            if (!!userLoggedIn.email || !!userLoggedIn.password) {
+              reject(userLoggedIn);
+            } else {
+              generateUserToken(userLoggedIn)
+                .then(token => {
+                  const dataToReturn = { token };
+                  dataToReturn.userHandle = userLoggedIn.userHandle;
+                  resolve(dataToReturn);
+                })
+                .catch(err => {
+                  console.error(err);
+                  reject(err);
+                });
+            }
+          })
+          .catch(err => {
+            console.error(err);
+            reject(err);
+          });
+      })
+      .catch(err => {
+        console.error(err);
+        reject(err);
+      });
+  });
 
 /** Updates the current user's bio properties
  * @param {Object} userParam
  * @param {string} userId
- * @return {Promise<boolean>}
+ * @returns {Promise<boolean>}
  */
-export const updateBio = async (userParam, userId) => {
-  const userDetail = {};
-  let success = false;
-
-  userDetail.bio = await validateUserDetail(userParam);
-  userParam.website = userDetail.bio.website;
-  await findUserAndUpdateProfile(userDetail, userId).then(async () => {
-    await findById(userId).then(async doc => {
-      if (
-        doc.bio.aboutMe === userParam.aboutMe &&
-        doc.bio.website === userParam.website &&
-        doc.bio.location === userParam.location
-      ) {
-        success = true;
-        return success;
-      }
-    });
+export const updateBio = (userParam, userId) =>
+  new Promise((resolve, reject) => {
+    const userDetail = {};
+    let success = false;
+    userDetail.bio = validateUserDetail(userParam);
+    userParam.website = userDetail.bio.website;
+    findUserAndUpdateProfile(userDetail, userId)
+      .then(() => {
+        findById(userId)
+          .then(doc => {
+            if (
+              doc.bio.aboutMe === userParam.aboutMe &&
+              doc.bio.website === userParam.website &&
+              doc.bio.location === userParam.location
+            ) {
+              success = true;
+              resolve(success);
+            }
+            resolve(success);
+          })
+          .catch(err => {
+            console.error(err);
+            reject(err);
+          });
+      })
+      .catch(err => {
+        console.error(err);
+        reject(err);
+      });
   });
-  return success;
-};

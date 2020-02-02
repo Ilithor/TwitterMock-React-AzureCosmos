@@ -11,12 +11,13 @@ const dUri = new Datauri();
 
 /** Converts provided image into base64
  * @param {Request} req
- * @return {Datauri}
+ * @returns {Datauri}
  */
-export const dataUri = async req => {
-  const file = await dUri.format(
-    path.extname(req.file.originalname).toString(),
-    req.file.buffer
-  );
-  return file;
-};
+export const dataUri = req =>
+  new Promise(resolve => {
+    const file = dUri.format(
+      path.extname(req.file.originalname).toString(),
+      req.file.buffer
+    );
+    resolve(file);
+  });

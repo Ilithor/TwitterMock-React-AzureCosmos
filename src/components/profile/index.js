@@ -1,8 +1,12 @@
 import React from 'react';
 
 // Components
-import { UserProfileDisplay } from './user';
-import { DefaultProfileDisplay } from './default/DefaultProfileDisplay';
+import { UserProfile } from './user';
+import { DefaultProfile } from './default';
+
+// MUI
+import { CircularProgress } from '@material-ui/core';
+import { useStyles } from './profile.style';
 
 // Context
 import { useUserAuthenticationData } from './userContext';
@@ -11,18 +15,23 @@ import { useUserAuthenticationData } from './userContext';
  * @type {React.FunctionComponent}
  */
 export const Profile = () => {
+  const classes = useStyles();
   const {
     isAuthenticated,
     isLoadingAuthenticated,
   } = useUserAuthenticationData();
-  
+
   if (!isLoadingAuthenticated) {
     if (isAuthenticated) {
-      return <UserProfileDisplay />;
+      return <UserProfile classes={classes} />;
     } else {
-      return <DefaultProfileDisplay />;
+      return <DefaultProfile classes={classes} />;
     }
   } else {
-    return <p>Loading...</p>;
+    return (
+      <div className={classes?.spinnerDiv}>
+        <CircularProgress size={150} thickness={2} />
+      </div>
+    );
   }
 };

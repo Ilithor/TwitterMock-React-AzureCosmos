@@ -24,11 +24,24 @@ const useStyles = makeStyles({
 
 /** View component for displaying an individual post's content
  * @type {React.FunctionComponent}
- * @param {object} props
- * @param {object} props.post
+ * @param {Object} props
+ * @param {Object} props.post
+ * @param {Object} props.like
  */
 export const PostContent = ({ post, like }) => {
   const classes = useStyles();
+  const LikePlural = () => {
+    if (post?.likeCount === 1) {
+      return ' Like';
+    }
+    return ' Likes';
+  };
+  const CommentPlural = () => {
+    if (post?.commentCount === 1) {
+      return ' Comment';
+    }
+    return ' Comments';
+  };
   return (
     <CardContent className={classes?.content}>
       <Typography
@@ -45,11 +58,15 @@ export const PostContent = ({ post, like }) => {
       </Typography>
       <Typography variant='body1'>{post?.body}</Typography>
       <Like postId={post?.postId} userHandle={post?.userHandle} like={like} />
-      <span>{post?.likeCount} Likes</span>
+      <span>
+        {post?.likeCount} <LikePlural />
+      </span>
       <CustomButton tip='comments'>
         <Icon.Chat color='primary' />
       </CustomButton>
-      <span>{post?.commentCount} Comments</span>
+      <span>
+        {post?.commentCount} <CommentPlural />
+      </span>
       <PostDialog postId={post?.postId} userHandle={post?.userHandle} />
     </CardContent>
   );

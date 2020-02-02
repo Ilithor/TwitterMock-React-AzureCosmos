@@ -27,30 +27,27 @@ const useStyles = makeStyles({
  */
 export const UserPage = () => {
   const { postList, isLoadingPostList } = usePostData();
-  const { userList } = useUserListData();
+  const { userList, isLoadingUserList } = useUserListData();
   const { likeList } = useLikeData();
   const [userPostList, setUserPostList] = useState({});
-  const [profile, setProfile] = useState({});
+  const [userStaticProfile, setUserStaticProfile] = useState({});
   const classes = useStyles();
   const params = useParams();
   useEffect(() => {
+    const userData = _.values(userList).filter(
+      user => user?.userHandle === params.userHandle
+    );
+    if (userData) {
+      setUserStaticProfile(userData[0]);
+    }
     const postData = _.values(postList).filter(
-      post => post?.userHandle === params.handle
+      post => post?.userHandle === params.userHandle
     );
     if (postData) {
       setUserPostList(postData);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [postList]);
-  useEffect(() => {
-    const userData = _.values(userList).filter(
-      user => user?.handle === params.handle
-    );
-    if (userData) {
-      setProfile(userData[0]);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userList]);
+  }, [userList, postList]);
   const PostListMarkup = () => {
     if (isLoadingPostList) {
       return (
@@ -62,7 +59,7 @@ export const UserPage = () => {
     if (userPostList === null) {
       return <p>No posts from this user</p>;
     }
-    if (!isLoadingPostList) {
+    if (!isLoadingPostList && !isLoadingUserList) {
       return _.map(userPostList, post => {
         if (post?.postId !== params.postId) {
           return (
@@ -84,6 +81,11 @@ export const UserPage = () => {
         );
       });
     }
+    return (
+      <div className={classes?.spinnerDiv}>
+        <CircularProgress size={150} thickness={2} />
+      </div>
+    );
   };
 
   return (
@@ -92,7 +94,7 @@ export const UserPage = () => {
         <PostListMarkup />
       </Grid>
       <Grid item sm={4} sx={12}>
-        <StaticProfile profile={profile} />
+        <StaticProfile user={userStaticProfile} />
       </Grid>
     </Grid>
   );

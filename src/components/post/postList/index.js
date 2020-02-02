@@ -1,6 +1,7 @@
 import React from 'react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import defaultImage from '../../../images/user.png';
 
 // Components
 import { PostContent } from './PostContent';
@@ -43,14 +44,14 @@ export const Post = ({ post, user, like }) => {
   }
 
   const ManageCardMedia = () => {
-    if (post?.userHandle === currentUser?.handle) {
-      if (currentUser?.bio?.image !== user?.userImage) {
+    if (post?.userHandle === currentUser?.userHandle) {
+      if (currentUser?.bio?.userImage !== user?.userImage) {
         refreshUserList();
       }
     }
     return (
       <CardMedia
-        image={user?.userImage}
+        image={user?.userImage || defaultImage}
         title='Profile image'
         className={classes?.image}
       />

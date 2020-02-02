@@ -7,54 +7,51 @@ mongoConnection();
 /** Retrieves entire list of comments
  * @returns {Promise<UserComment[]> | UserCommentError}
  */
-export const getList = async () => {
-  const error = {};
-  const commentList = await Comment.find({})
-    .sort({ createdAt: -1 })
-    .read(mongo.ReadPreference.NEAREST)
-    .limit(100);
-  if (commentList.length === 0) {
-    error.comment = 'No comments found';
-    return error;
-  }
-  return commentList;
-};
+export const getList = () =>
+  new Promise(resolve => {
+    const commentList = Comment.find({})
+      .sort({ createdAt: -1 })
+      .read(mongo.ReadPreference.NEAREST)
+      .limit(100);
+    resolve(commentList);
+  });
 
 /** Creates a new comment
  * @param {Request} commentParam
  * @returns {Promise<NewUserComment> | UserCommentError}
  */
-export const create = async commentParam => {
-  const dataForComment = {};
-  const error = {};
+export const create = commentParam =>
+  new Promise((resolve, reject) => {
+    // Validation
+    if (commentParam.body.body.trim() === '') {
+      reject({ comment: 'Must not be empty' });
+    }
 
-  // Validation
-  if (commentParam.body.body.trim() === '') {
-    error.comment = 'Must not be empty';
-    return error;
-  }
+    // Construct needed properties for the comment
+    const dataForComment = {};
+    dataForComment.userHandle = commentParam.user.userHandle;
+    dataForComment.postId = commentParam.params.postId;
+    dataForComment.userImage = commentParam.user.bio.userImage;
+    dataForComment.body = commentParam.body.body;
+    const newComment = new Comment(dataForComment);
 
-  // Construct needed properties for the comment
-  dataForComment.userHandle = commentParam.user.handle;
-  dataForComment.postId = commentParam.params.postId;
-  dataForComment.userImage = commentParam.user.bio.image;
-  dataForComment.body = commentParam.body.body;
-  let newComment = new Comment(dataForComment);
-  newComment.createdAt = new Date().toISOString();
-
-  // Save the comment
-  await newComment.save();
-  return newComment;
-};
+    // Save the comment
+    newComment.save();
+    resolve(newComment);
+  });
 
 /** Deletes Comment document
  * @param {Request} commentParam
- * @return {Promise<UserComment>}
+ * @returns {Promise<UserComment>}
  */
-export const remove = async commentParam => {
-  const comment = await Comment.findOneAndDelete({
-    postId: commentParam.params.postId,
-    userHandle: commentParam.user.handle,
+export const remove = commentParam =>
+  new Promise((resolve, reject) => {
+    const comment = Comment.findOneAndDelete({
+      postId: commentParam.params.postId,
+      userHandle: commentParam.user.userHandle,
+    });
+    if (!comment) {
+      reject({ comment: 'Comment not found' });
+    }
+    resolve(comment);
   });
-  return comment;
-};

@@ -4,7 +4,7 @@ import React, { Fragment } from 'react';
 import * as Icon from '@material-ui/icons';
 
 export const Location = ({ location }) => {
-  if (!!location) {
+  if (Location) {
     return (
       <Fragment>
         <Icon.LocationOn color='primary' />
