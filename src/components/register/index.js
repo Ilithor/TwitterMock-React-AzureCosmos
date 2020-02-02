@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 // MUI
 import {
@@ -8,73 +8,83 @@ import {
   Button,
   CircularProgress,
 } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { useStyles } from './register.style';
 
 // Context
 import { useUserRegisterData } from '../profile/userContext';
-
-const useStyles = makeStyles({
-  textField: {
-    margin: '10px auto 10px auto',
-  },
-  customError: {
-    color: 'red',
-    fontSize: '0.8rem',
-    marginTop: 10,
-  },
-  button: {
-    marginTop: '20',
-    position: 'relative',
-  },
-  progress: {
-    position: 'absolute',
-  },
-});
+import { useRegisterValidationData } from './registerContext';
 
 /** Displays the register form to the user
  * @type {React.FunctionComponent}
  */
 export const RegisterForm = () => {
   const classes = useStyles();
-  const { registerUser, userError, isLoadingRegister } = useUserRegisterData();
+  const history = useHistory();
+  const {
+    registerUser,
+    userError,
+    setUserError,
+    isLoadingRegister,
+  } = useUserRegisterData();
+  const {
+    validationCheckRegister,
+    registerError,
+  } = useRegisterValidationData();
   const [editorState, setEditorState] = useState({
     email: '',
     password: '',
     confirmPassword: '',
-    handle: '',
+    userHandle: '',
   });
-  const { email, password, confirmPassword, handle } = editorState;
+  const { email, password, confirmPassword, userHandle } = editorState;
 
   const handleSubmit = event => {
-    event.preventDefault();
-    const newUserData = {
-      email,
-      password,
-      confirmPassword,
-      handle,
-    };
-    registerUser(newUserData);
+    if (!isLoadingRegister) {
+      event.preventDefault();
+      const newUserData = {
+        email,
+        password,
+        confirmPassword,
+        userHandle,
+      };
+      registerUser(newUserData)
+        .then(() => {
+          if (!userError && Object.keys(registerError).length === 0) {
+            history.push('/');
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          setUserError(err);
+        });
+    }
   };
 
   const handleChange = event => {
+    if (userError) {
+      setUserError();
+    }
     const { name, value } = event?.target;
-    setEditorState({
-      ...editorState,
-      [name]: value,
-    });
+    setEditorState(validationCheckRegister({ ...editorState, [name]: value }));
   };
 
   return (
     <form noValidate onSubmit={handleSubmit}>
       <TextField
-        id='handle'
-        name='handle'
+        id='userHandle'
+        name='userHandle'
         type='text'
-        label='Handle'
+        label='Username'
         className={classes?.textField}
-        helperText={userError?.handle}
-        error={userError?.handle ? true : false}
-        value={handle}
+        helperText={registerError?.userHandle || userError?.userHandle}
+        error={
+          registerError?.userHandle
+            ? true
+            : false || userError?.userHandle
+            ? true
+            : false
+        }
+        value={userHandle}
         onChange={handleChange}
         fullWidth
       />
@@ -84,8 +94,10 @@ export const RegisterForm = () => {
         type='email'
         label='Email'
         className={classes?.textField}
-        helperText={userError?.email}
-        error={userError?.email ? true : false}
+        helperText={registerError?.email || userError?.email}
+        error={
+          registerError?.email ? true : false || userError?.email ? true : false
+        }
         value={email}
         onChange={handleChange}
         autoComplete='off'
@@ -97,8 +109,14 @@ export const RegisterForm = () => {
         type='password'
         label='Password'
         className={classes?.textField}
-        helperText={userError?.password}
-        error={userError?.password ? true : false}
+        helperText={registerError?.password || userError?.password}
+        error={
+          registerError?.password
+            ? true
+            : false || userError?.password
+            ? true
+            : false
+        }
         value={password}
         onChange={handleChange}
         autoComplete='new-password'
@@ -110,8 +128,16 @@ export const RegisterForm = () => {
         type='password'
         label='Confirm Password'
         className={classes?.textField}
-        helperText={userError?.confirmPassword}
-        error={userError?.confirmPassword ? true : false}
+        helperText={
+          registerError?.confirmPassword || userError?.confirmPassword
+        }
+        error={
+          registerError?.confirmPassword
+            ? true
+            : false || userError?.confirmPassword
+            ? true
+            : false
+        }
         value={confirmPassword}
         onChange={handleChange}
         autoComplete='off'
