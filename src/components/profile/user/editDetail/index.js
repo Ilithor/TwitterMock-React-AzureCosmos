@@ -19,10 +19,6 @@ const useStyles = makeStyles({
 
 /** Control how the user edits their bio information
  * @type {React.FunctionComponent}
- * @param {object} props
- * @param {object} props.bio
- * @param {string} props.handle
- * @param {any} props.editUserDetailAction
  */
 export const EditDetail = () => {
   const classes = useStyles();
