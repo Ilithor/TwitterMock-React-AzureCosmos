@@ -10,7 +10,7 @@ import * as Icon from '@material-ui/icons';
 // Context
 import { useCurrentUserData } from '../../userContext';
 
-/** View component for displaying the user image
+/** View component for displaying the userImage
  * @type {React.FunctionComponent}
  * @param {object} props
  * @param {React.ChangeEventHandler} props.handleEditPhoto
@@ -19,7 +19,7 @@ import { useCurrentUserData } from '../../userContext';
 export const ImageWrapper = ({ handleEditPhoto, handleImageChange }) => {
   const UserImage = () => {
     const { currentUser } = useCurrentUserData();
-    const src = currentUser?.bio?.image || defaultImage;
+    const src = currentUser?.bio?.userImage || defaultImage;
     return <img className='profile-image' src={src} alt='profile' />;
   };
   return (

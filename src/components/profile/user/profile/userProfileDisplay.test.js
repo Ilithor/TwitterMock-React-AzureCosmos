@@ -39,7 +39,7 @@ describe('user.userProfileDisplay should', () => {
     /** @type {IUserProfileDisplayComponentProps} */
     const props = {
       classes: {},
-      handle: 'user',
+      userHandle: 'user',
       bio: {},
       createdAt: '01/01/1969',
     };
@@ -53,7 +53,7 @@ describe('user.userProfileDisplay should', () => {
     /** @type {IUserProfileDisplayComponentProps} */
     const props = {
       classes: {},
-      handle: 'user',
+      userHandle: 'user',
       bio: {},
       createdAt: '01/01/1969',
     };
