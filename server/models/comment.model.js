@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 const Schema = mongoose.Schema;
 
 const CommentSchema = Schema({
-  createdAt: Date,
+  createdAt: { type: Date, default: Date.now },
   body: {
     type: String,
     required: true,
