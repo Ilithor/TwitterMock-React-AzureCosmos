@@ -12,15 +12,15 @@ import { useLikeData } from './likeContext';
 
 /** View component for displaying an icon to like a post
  * @type {React.FunctionComponent}
- * @param {object} props
- * @param {string} props.postId
+ * @param {Object} props
+ * @param {String} props.postId
  */
 export const LikeButton = ({ postId }) => {
   const { refreshPostList } = usePostData();
   const { refreshLikeList, likePost } = useLikeData();
   const makeCall = useRef(false);
   const onClick = () => {
-    if (!!makeCall.current) return;
+    if (makeCall.current) return;
     makeCall.current = true;
     likePost(postId).then(() => {
       Promise.all([refreshPostList(), refreshLikeList()]).then(() => {

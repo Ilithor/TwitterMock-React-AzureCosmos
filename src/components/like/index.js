@@ -17,16 +17,14 @@ import {
 
 /** View component for displaying either a like or unlike icon
  * @type {React.FunctionComponent}
- * @param {object} props
- * @param {boolean} props.isAuthenticated
- * @param {string} props.postId
- * @param {array} props.likeList
+ * @param {Object} props
+ * @param {String} props.postId
  */
-export const Like = ({ postId, like, userHandle }) => {
+export const Like = ({ postId, like }) => {
   const { isAuthenticated } = useUserAuthenticationData();
   const { currentUser } = useCurrentUserData();
   const alreadyLiked = () => {
-    if (like?.userHandle !== currentUser?.userHandle) {
+    if (like?.userHandle === currentUser?.userHandle) {
       return true;
     } else {
       return false;
@@ -35,11 +33,9 @@ export const Like = ({ postId, like, userHandle }) => {
 
   if (!isAuthenticated) {
     return (
-      <Link to='/login'>
-        <CustomButton tip='Like'>
-          <FavoriteBorder color='primary' />
-        </CustomButton>
-      </Link>
+      <CustomButton tip='Like' component={Link} to='/login'>
+        <FavoriteBorder color='primary' />
+      </CustomButton>
     );
   }
   if (alreadyLiked()) {

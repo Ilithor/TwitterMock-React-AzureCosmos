@@ -20,7 +20,7 @@ export const UnlikeButton = ({ postId }) => {
   const { refreshLikeList, unlikePost } = useLikeData();
   const makeCall = useRef(false);
   const onClick = () => {
-    if (!!makeCall.current) return;
+    if (makeCall.current) return;
     makeCall.current = true;
     unlikePost(postId).then(() => {
       Promise.all([refreshPostList(), refreshLikeList()]).then(() => {
