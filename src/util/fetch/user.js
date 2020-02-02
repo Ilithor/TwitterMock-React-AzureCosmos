@@ -34,11 +34,11 @@ export const loginUser = userData => post(endpoints.login, userData);
  */
 export const registerUser = userData => post(endpoints.register, userData);
 
-/** Retrieves user data using handle
+/** Retrieves user data using userHandle
  *
  * @returns {Promise<import("axios").AxiosResponse>}
  */
-export const fetchUserData = handle => get(endpoints.userData + `/${handle}`);
+export const fetchUserData = userHandle => get(endpoints.userData + `/${userHandle}`);
 
 /** Retrieves likes made by user
  *
@@ -60,7 +60,7 @@ export const markNotificationRead = notificationId =>
   (notificationId && post(endpoints.notification, { notificationId })) ||
   Promise.reject('notificationId was not defined');
 
-/** Attempts to upload user image
+/** Attempts to upload userImage
  *
  * @returns {Promise<import("axios").AxiosResponse>}
  */
