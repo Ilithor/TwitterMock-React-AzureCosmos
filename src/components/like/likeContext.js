@@ -22,24 +22,26 @@ export const LikeProvider = ({ children }) => {
   const [isLoadingLikePost, setIsLoadingLikePost] = useState(false);
   const [isLoadingUnlikePost, setIsLoadingUnlikePost] = useState(false);
 
-  const refreshLikeList = userHandle =>
+  const refreshLikeList = () =>
     new Promise((resolve, reject) => {
-      setIsLoadingLikeList(true);
-      // Fetch list of likes
-      fetchUtil.user
-        .fetchLikeList(userHandle)
-        .then(res => {
-          setLikeList(_.keyBy(res.data, 'postId'));
-          resolve(likeList);
-        })
-        .catch(err => {
-          setLikeError(err);
-          reject(err);
-        })
-        .finally(() => {
-          setlastRefreshLikeList(Date.now);
-          setIsLoadingLikeList(false);
-        });
+      if (!isLoadingLikeList) {
+        setIsLoadingLikeList(true);
+        // Fetch list of likes
+        fetchUtil.user
+          .fetchLikeList(localStorage?.Handle)
+          .then(res => {
+            setLikeList(_.keyBy(res.data, 'postId'));
+          })
+          .catch(err => {
+            setLikeError(err);
+            reject(err);
+          })
+          .finally(() => {
+            setlastRefreshLikeList(Date.now);
+            setIsLoadingLikeList(false);
+            resolve();
+          });
+      }
     });
 
   const likePost = postId =>
@@ -48,14 +50,15 @@ export const LikeProvider = ({ children }) => {
         setIsLoadingLikePost(true);
         fetchUtil.post
           .likePost(postId)
-          .then(async () => {
-            resolve(likeList);
-          })
+          .then(async () => {})
           .catch(err => {
             setLikeError(err);
             reject(err);
           })
-          .finally(() => setIsLoadingLikePost(false));
+          .finally(() => {
+            setIsLoadingLikePost(false);
+            resolve();
+          });
       }
     });
 
@@ -65,14 +68,15 @@ export const LikeProvider = ({ children }) => {
         setIsLoadingUnlikePost(true);
         fetchUtil.post
           .unlikePost(postId)
-          .then(async () => {
-            resolve(likeList);
-          })
+          .then(async () => {})
           .catch(err => {
             setLikeError(err);
             reject(err);
           })
-          .finally(() => setIsLoadingUnlikePost(false));
+          .finally(() => {
+            setIsLoadingUnlikePost(false);
+            resolve();
+          });
       }
     });
 
@@ -96,12 +100,12 @@ export const LikeProvider = ({ children }) => {
  * const { likeList } = useLikeData();
  * @returns {Like[]}
  */
-export const useLikeData = userHandle => {
+export const useLikeData = () => {
   // Destructuring value from provider
   const ctx = useContext(likeContext);
 
   if (ctx === undefined) {
-    throw new Error('useLikeData must be used within a Like Provider');
+    throw new Error('useLikeData must be used within a LikeProvider');
   }
 
   const {
@@ -116,15 +120,20 @@ export const useLikeData = userHandle => {
 
   if (
     !isLoadingLikeList &&
-    (_.keys(likeList).length === 0 ||
-      !lastRefreshLikeList ||
-      lastRefreshLikeList + 600 <= Date.now)
+    (!lastRefreshLikeList || lastRefreshLikeList + 600 <= Date.now)
   ) {
     refreshLikeList();
   }
 
   // What we want this consumer hook to actually return
-  return { likeList, likeError, isLoadingLikeList, likePost, unlikePost };
+  return {
+    likeList,
+    likeError,
+    isLoadingLikeList,
+    likePost,
+    unlikePost,
+    refreshLikeList,
+  };
 };
 
 /**
