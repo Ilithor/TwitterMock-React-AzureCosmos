@@ -1,4 +1,5 @@
 import React from 'react';
+import defaultImage from '../../../images/user.png';
 
 // Components
 import { ProfileDetail } from './ProfileDetail';
@@ -6,6 +7,9 @@ import { ProfileDetail } from './ProfileDetail';
 // MUI
 import { Paper, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+
+// Context
+import { useUserListData } from '../userContext';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -54,30 +58,30 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export const StaticProfile = ({ profile }) => {
+export const StaticProfile = ({ user }) => {
   const classes = useStyles();
-  if (!profile) {
+  const { isLoadingUserList } = useUserListData();
+  if (!isLoadingUserList && user) {
+    const { userImage } = user;
     return (
-      <div className={classes?.spinnerDiv}>
-        <CircularProgress size={150} thickness={2} />
-      </div>
+      <Paper className={classes?.paper}>
+        <div className={classes?.profile}>
+          <div className='image-wrapper'>
+            <img
+              src={userImage ? userImage : defaultImage}
+              alt='profile'
+              className='profile-image'
+            />
+          </div>
+          <hr />
+          <ProfileDetail user={user} />
+        </div>
+      </Paper>
     );
   }
   return (
-    <Paper className={classes?.paper}>
-      <div className={classes?.profile}>
-        <div className='image-wrapper'>
-          <img
-            src={profile?.userImage}
-            alt='profile'
-            className='profile-image'
-          />
-        </div>
-        <hr />
-        <ProfileDetail
-          profile={profile}
-        />
-      </div>
-    </Paper>
+    <div className={classes?.spinnerDiv}>
+      <CircularProgress size={150} thickness={2} />
+    </div>
   );
 };
