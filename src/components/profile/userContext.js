@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 
 import * as fetchUtil from '../../util/fetch';
 
-/** @type {React.Context<{userList:User[],userError:Error,getData:()=>void}} */
+/** @type {React.Context<{userList:User[],userError:Error,getData:()=>void}>} */
 const userContext = createContext();
 
 /** This is a react component which you wrap your entire application
@@ -28,7 +28,6 @@ export const UserProvider = ({ children }) => {
   const [isLoadingLogin, setIsLoadingLogin] = useState(false);
   const [isLoadingRegister, setIsLoadingRegister] = useState(false);
   const [isLoadingUploadImage, setIsLoadingUploadImage] = useState(false);
-
   const history = useHistory();
 
   const refreshUserList = () =>
@@ -38,8 +37,7 @@ export const UserProvider = ({ children }) => {
         fetchUtil.user
           .fetchUserList()
           .then(res => {
-            setUserList(_.keyBy(res.data, 'handle'));
-            resolve(userList);
+            setUserList(_.keyBy(res.data, 'userHandle'));
           })
           .catch(err => {
             setUserError(err);
@@ -48,19 +46,19 @@ export const UserProvider = ({ children }) => {
           .finally(() => {
             setLastRefreshUserList(Date.now);
             setIsLoadingUserList(false);
+            resolve();
           });
       }
     });
 
-  const getCurrentUserData = userHandle =>
+  const getCurrentUserData = () =>
     new Promise((resolve, reject) => {
-      if (!!userHandle && !isLoadingUserData) {
+      if (!!localStorage?.Handle && !isLoadingUserData) {
         setIsLoadingUserData(true);
         fetchUtil.user
-          .fetchUserData(userHandle)
+          .fetchUserData(localStorage?.Handle)
           .then(res => {
             setCurrentUser(res.data.user);
-            resolve(currentUser);
           })
           .catch(err => {
             setUserError(err);
@@ -68,6 +66,7 @@ export const UserProvider = ({ children }) => {
           })
           .finally(() => {
             setIsLoadingUserData(false);
+            resolve();
           });
       }
     });
@@ -79,14 +78,16 @@ export const UserProvider = ({ children }) => {
         fetchUtil.user
           .editUserDetail(userDetail)
           .then(() => {
-            getCurrentUserData(localStorage?.Handle);
-            resolve(currentUser);
+            getCurrentUserData();
           })
           .catch(err => {
             setUserError(err);
             reject(err);
           })
-          .finally(() => setIsLoadingEditUserDetail(false));
+          .finally(() => {
+            setIsLoadingEditUserDetail(false);
+            resolve();
+          });
       }
     });
 
@@ -97,61 +98,107 @@ export const UserProvider = ({ children }) => {
         fetchUtil.user
           .uploadImage(formData)
           .then(() => {
-            getCurrentUserData(localStorage?.Handle);
-            resolve(currentUser);
+            getCurrentUserData();
           })
           .catch(err => {
             setUserError(err);
             reject(err);
           })
-          .finally(() => setIsLoadingUploadImage(false));
+          .finally(() => {
+            setIsLoadingUploadImage(false);
+            resolve();
+          });
       }
     });
 
   const registerUser = userParam =>
     new Promise((resolve, reject) => {
-      if (userParam && !isLoadingRegister) {
+      if (!isLoadingRegister) {
         setIsLoadingRegister(true);
-        fetchUtil.user
-          .registerUser(userParam)
-          .then(res => {
-            setAuthorizationHeader(res.data.token);
-            setUserHandleHeader(res.data.handle);
-            getCurrentUserData(res.data.handle);
-            resolve(currentUser);
-          })
-          .catch(err => {
-            setUserError(err);
-            reject(err);
-          })
-          .finally(() => {
-            setIsLoadingRegister(false);
-            history.push('/');
-          });
+        if (
+          !userParam.email ||
+          !userParam.password ||
+          !userParam.userHandle ||
+          !userParam.confirmPassword
+        ) {
+          setIsLoadingRegister(false);
+          reject(checkRegisterIfUndefined(userParam));
+        } else {
+          fetchUtil.user
+            .registerUser(userParam)
+            .then(res => {
+              console.log(res.data);
+              if (!res.data.token) {
+                reject(res.data);
+              } else {
+                setAuthorizationHeader(res?.data?.token);
+                setUserHandleHeader(res?.data?.user?.userHandle);
+                getAuthenticated();
+              }
+            })
+            .catch(err => reject(err))
+            .finally(() => {
+              setIsLoadingRegister(false);
+              resolve();
+            });
+        }
       }
     });
 
   const loginUser = userParam =>
     new Promise((resolve, reject) => {
-      if (userParam && !isLoadingLogin) {
+      if (!isLoadingLogin) {
         setIsLoadingLogin(true);
+        if (!userParam.email || !userParam.password) {
+          setIsLoadingLogin(false);
+          reject(checkLoginIfUndefined(userParam));
+        }
         fetchUtil.user
           .loginUser(userParam)
           .then(res => {
-            setAuthorizationHeader(res.data.token);
-            setUserHandleHeader(res.data.handle);
-            getCurrentUserData(res.data.handle);
-            resolve(currentUser);
+            if (!res.data.token) {
+              reject(res.data);
+            } else {
+              setAuthorizationHeader(res?.data?.token);
+              setUserHandleHeader(res?.data?.userHandle);
+              getAuthenticated();
+            }
           })
-          .catch(err => {
-            setUserError(err);
-            reject(err);
-          })
+          .catch(err => reject(err))
           .finally(() => {
             setIsLoadingLogin(false);
+            resolve();
           });
       }
     });
+
+  const checkLoginIfUndefined = userParam => {
+    let err = {};
+    if (!userParam.email) {
+      err = { ...err, email: 'Must not be empty' };
+    }
+    if (!userParam.password) {
+      err = { ...err, password: 'Must not be empty' };
+    }
+    return err;
+  };
+
+  const checkRegisterIfUndefined = userParam => {
+    let err = {};
+    if (!userParam.email) {
+      err = { ...err, email: 'Must not be empty' };
+    }
+    if (!userParam.userHandle) {
+      err = { ...err, userHandle: 'Must not be empty' };
+    }
+    if (!userParam.password) {
+      err = { ...err, password: 'Must not be empty' };
+    }
+    if (!userParam.confirmPassword) {
+      err = { ...err, confirmPassword: 'Must not be empty' };
+    }
+    return err;
+  };
 
   const setAuthorizationHeader = token => {
     const Token = `Bearer ${token}`;
@@ -159,8 +206,8 @@ export const UserProvider = ({ children }) => {
     axios.defaults.headers.common['Authorization'] = Token;
   };
 
-  const setUserHandleHeader = handle => {
-    localStorage.setItem('Handle', handle);
+  const setUserHandleHeader = userHandle => {
+    localStorage.setItem('Handle', userHandle);
   };
 
   const getAuthenticated = () =>
@@ -181,10 +228,9 @@ export const UserProvider = ({ children }) => {
           history.push('/login');
         } else {
           axios.defaults.headers.common['Authorization'] = localStorage?.Token;
-          getCurrentUserData(localStorage?.Handle)
+          getCurrentUserData()
             .then(() => {
               setisAuthenticated(true);
-              resolve(currentUser);
             })
             .catch(err => {
               setUserError(err);
@@ -192,6 +238,7 @@ export const UserProvider = ({ children }) => {
             })
             .finally(() => {
               setIsLoadingAuthenticated(false);
+              resolve();
             });
         }
       }
@@ -211,6 +258,7 @@ export const UserProvider = ({ children }) => {
     userList,
     currentUser,
     userError,
+    setUserError,
     refreshUserList,
     getCurrentUserData,
     isLoadingUserList,
@@ -356,9 +404,9 @@ export const useUserLoginData = () => {
     throw new Error('useUserLoginData must be used within a UserProvider');
   }
 
-  const { loginUser, userError, isLoadingLogin } = ctx;
+  const { loginUser, userError, setUserError, isLoadingLogin } = ctx;
 
-  return { loginUser, userError, isLoadingLogin };
+  return { loginUser, userError, setUserError, isLoadingLogin };
 };
 
 export const useUserRegisterData = () => {
@@ -368,9 +416,9 @@ export const useUserRegisterData = () => {
     throw new Error('useUserRegisterData must be used within a UserProvider');
   }
 
-  const { registerUser, userError, isLoadingRegister } = ctx;
+  const { registerUser, userError, setUserError, isLoadingRegister } = ctx;
 
-  return { registerUser, userError, isLoadingRegister };
+  return { registerUser, userError, setUserError, isLoadingRegister };
 };
 
 export const useUserLogout = () => {
