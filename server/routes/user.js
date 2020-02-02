@@ -27,6 +27,6 @@ router.post('/image', authUser, multerUploads, imageUpload);
 router.get('/notification', authUser, getNotification);
 router.post('/notification', authUser, markNotificationRead);
 router.get('/like', fetchLikeList);
-router.get('/:handle', getUserDetail);
+router.get('/:userHandle', getUserDetail);
 
 export default router;
