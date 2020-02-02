@@ -42,7 +42,6 @@ export const LoginForm = () => {
       };
       loginUser(userParam)
         .then(() => {
-          console.log(userError, loginError);
           if (!userError && Object.keys(loginError).length === 0) {
             history.push('/');
           }

@@ -127,7 +127,6 @@ export const UserProvider = ({ children }) => {
           fetchUtil.user
             .registerUser(userParam)
             .then(res => {
-              console.log(res.data);
               if (!res.data.token) {
                 reject(res.data);
               } else {

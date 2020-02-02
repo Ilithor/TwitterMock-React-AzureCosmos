@@ -71,7 +71,6 @@ export const PostProvider = ({ children }) => {
         fetchUtil.post
           .deletePost(postId)
           .then(() => {
-            console.log('derp');
             refreshPostList();
           })
           .catch(err => {

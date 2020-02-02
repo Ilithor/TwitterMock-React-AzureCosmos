@@ -13,7 +13,6 @@ export const likePost = (req, res, next) =>
   new Promise(() => {
     findPostById(req.params.postId)
       .then(post => {
-        console.log('post: ', post);
         if (post.post) {
           return res.send(post);
         } else {
@@ -22,13 +21,11 @@ export const likePost = (req, res, next) =>
           req.notification.recipient = postToUpdate.userHandle;
           findLikeByHandleAndPostId(req.user.userHandle, req.params.postId)
             .then(like => {
-              console.log('like: ', like);
               if (like) {
                 return res.send({ like: 'Like already exists' });
               } else {
                 create(req)
                   .then(like => {
-                    console.log('like2: ', like);
                     req.notification.typeId = like._id;
                     postToUpdate.likeCount++;
                     findPostAndUpdateCount(

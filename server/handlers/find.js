@@ -17,7 +17,6 @@ export const findByCredential = async user => {
   const foundUser = await User.findOne({
     'credential.email': user.credential.email,
   });
-  console.log(foundUser);
   if (!foundUser) {
     error.email = 'Email does not exist';
     return error;

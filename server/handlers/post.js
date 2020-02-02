@@ -88,7 +88,6 @@ export const deletePost = async (req, res, next) => {
     .then(post => {
       if (post) {
         findAndDeleteLikeAndComment(req.params.postId).then(result => {
-          console.log(result);
           deleteAllNotification(req.params.postId).then(() => {
             return res.status(200);
           });
