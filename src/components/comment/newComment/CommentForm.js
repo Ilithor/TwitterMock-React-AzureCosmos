@@ -2,23 +2,11 @@ import React, { useState, useEffect } from 'react';
 
 // MUI
 import { Button, Grid, TextField } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 
 // Context
 import { useCommentOnPostData } from '../commentContext';
 
-const useStyles = makeStyles({
-  textField: {
-    margin: '10px auto 10px auto',
-  },
-  button: {
-    marginTop: '20',
-    position: 'relative',
-  },
-});
-
-export const CommentForm = ({ postId }) => {
-  const classes = useStyles();
+export const CommentForm = ({ postId, classes }) => {
   const {
     commentOnPost,
     isLoadingCommentOnPost,
