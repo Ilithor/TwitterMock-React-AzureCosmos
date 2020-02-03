@@ -183,30 +183,29 @@ const pushPostIntoArray = (postList, userData) =>
 /** Edits the current user's profile with the params provided by said user
  * @type {RouteHandler}
  */
-export const addUserDetail = (req, res, next) =>
-  new Promise(() => {
-    const userParam = req.body;
-    if (!userParam.aboutMe && !userParam.website && !userParam.location) {
-      return res
-        .status(400)
-        .send({ general: 'At least one valid input is needed' });
-    }
-    const userId = req.user._id;
-    updateBio(userParam, userId)
-      .then(success => {
-        if (success === true) {
-          return res.status(200).send({
-            message: 'Profile updated successfully',
-          });
-        } else {
-          return res.status(500).send({ general: 'Something went wrong' });
-        }
-      })
-      .catch(err => {
-        console.error(err);
-        return res.json(err);
-      });
-  });
+export const addUserDetail = (req, res, next) => {
+  const userParam = req.body;
+  if (!userParam.aboutMe && !userParam.website && !userParam.location) {
+    return res
+      .status(400)
+      .send({ general: 'At least one valid input is needed' });
+  }
+  const userId = req.user._id;
+  updateBio(userParam, userId)
+    .then(success => {
+      if (success === true) {
+        return res.status(200).send({
+          message: 'Profile updated successfully',
+        });
+      } else {
+        return res.status(500).send({ general: 'Something went wrong' });
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      return res.send(err);
+    });
+};
 
 /** Converts the uploaded image to base64 and uploads it as a property in the User doc
  * @type {RouteHandler}

@@ -13,7 +13,7 @@ export const create = async likeParam => {
 
   // Save the like
   await newLike.save();
-  return newLike;
+  return Promise.resolve(newLike);
 };
 
 /** Deletes Like document
@@ -21,11 +21,7 @@ export const create = async likeParam => {
  * @returns {Promise<Like>}
  */
 export const remove = async likeParam => {
-  const like = await Like.findOneAndDelete({
+  return await Like.findOneAndDelete({
     postId: likeParam.params.postId,
   });
-  if (!like) {
-    return Promise.reject({ like: 'Like not found' });
-  }
-  return like;
 };

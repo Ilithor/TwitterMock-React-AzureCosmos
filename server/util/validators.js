@@ -7,19 +7,18 @@ mongoConnection();
  * @param {UserCredential} user
  * @returns {void}
  */
-export const validateLogin = user =>
-  new Promise((resolve, reject) => {
-    if (isEmpty(user.email)) {
-      reject({ email: 'Must not be empty' });
-    }
-    if (!isEmail(user.email)) {
-      reject({ email: 'Must be a valid email address' });
-    }
-    if (isEmpty(user.password)) {
-      reject({ password: 'Must not be empty' });
-    }
-    resolve();
-  });
+export const validateLogin = user => {
+  if (isEmpty(user.email)) {
+    return Promise.reject({ email: 'Must not be empty' });
+  }
+  if (!isEmail(user.email)) {
+    return Promise.reject({ email: 'Must be a valid email address' });
+  }
+  if (isEmpty(user.password)) {
+    return Promise.reject({ password: 'Must not be empty' });
+  }
+  return Promise.resolve();
+};
 
 /** Checks if the user inputs are valid
  * @param {UserRegistration} userParam
@@ -44,59 +43,58 @@ export const validateRegister = async userParam => {
   } else if (userParam.password !== userParam.confirmPassword) {
     error = { ...error, confirmPassword: 'Password confirmation must match' };
   }
-  return error;
+  return Promise.resolve(error);
 };
 
 /** Checks if the provided bio information is valid
  * @param {UserBioUpdate} userParam User's bio info
- * @returns {UserBioUpdate}
+ * @returns {Promise<UserBioUpdate>}
  */
-export const validateUserDetail = userParam =>
-  new Promise(resolve => {
-    const userDetail = { aboutMe: '', website: '', location: '' };
-    const { aboutMe, website, location } = userParam;
-    if (!isEmpty(aboutMe.trim())) {
-      userDetail.aboutMe = aboutMe;
-    }
-    if (!isEmpty(website.trim())) {
-      if (website.trim().substring(0, 4) !== 'http') {
-        if (website.trim().substring(0, 3) !== 'www') {
-          userDetail.website = `http://www.${website.trim()}`;
-        } else {
-          userDetail.website = `http://${website.trim()}`;
-        }
+export const validateUserDetail = userParam => {
+  const userDetail = { aboutMe: '', website: '', location: '' };
+  const { aboutMe, website, location } = userParam;
+  if (!isEmpty(aboutMe.trim())) {
+    userDetail.aboutMe = { ...aboutMe };
+  }
+  if (!isEmpty(website.trim())) {
+    if (website.trim().substring(0, 4) !== 'http') {
+      if (website.trim().substring(0, 3) !== 'www') {
+        userDetail.website = `http://www.${website.trim()}`;
       } else {
-        userDetail.website = website;
+        userDetail.website = `http://${website.trim()}`;
       }
+    } else {
+      userDetail.website = { ...website };
     }
-    if (!isEmpty(location.trim())) {
-      userDetail.location = location;
-    }
-    resolve(userDetail);
-  });
+  }
+  if (!isEmpty(location.trim())) {
+    userDetail.location = { ...location };
+  }
+  return Promise.resolve(userDetail);
+};
 
 /** Checks if provided string is empty
- * @param {string} string
- * @returns {boolean}
+ * @param {String} string
+ * @returns {Promise<Boolean>}
  */
 export const isEmpty = string => {
   if (string.trim() === '') {
-    return true;
+    return Promise.resolve(true);
   } else {
-    return false;
+    return Promise.resolve(false);
   }
 };
 
 /** Checks if provided email is valid
- * @param {string} email
- * @returns {boolean}
+ * @param {String} email
+ * @returns {Promise<Boolean>}
  */
 export const isEmail = email => {
   // eslint-disable-next-line no-useless-escape
   const emailRegEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   if (email.match(emailRegEx)) {
-    return true;
+    return Promise.resolve(true);
   } else {
-    return false;
+    return Promise.resolve(false);
   }
 };
