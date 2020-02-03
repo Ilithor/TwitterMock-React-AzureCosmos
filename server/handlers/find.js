@@ -1,5 +1,5 @@
 import User from '../models/user.model';
-import Like from '../models/like.model';
+import { Like } from '../models/like.model';
 import Notification from '../models/notification.model';
 import Comment from '../models/comment.model';
 import Post from '../models/post.model';
@@ -9,8 +9,8 @@ import mongoConnection from '../util/mongo';
 mongoConnection();
 
 /**Returns a user that has a matching email and password
- * @param {UserRegistration} user
- * @returns {Promise<User> | UserCredentialError}
+ * @param {User} user
+ * @returns {Promise<User|UserCredentialError>}
  */
 export const findByCredential = async user => {
   const error = {};
@@ -19,18 +19,18 @@ export const findByCredential = async user => {
   });
   if (!foundUser) {
     error.email = 'Email does not exist';
-    return error;
+    return Promise.reject(error);
   }
   if (user.credential.password !== foundUser.credential.password) {
     error.password = 'Invalid password';
-    return error;
+    return Promise.reject(error);
   }
   return foundUser;
 };
 
 /** Returns a user that matches _id
  * @param {string} _id
- * @returns {Promise<User> | UserNotFound}
+ * @returns {Promise<User|UserNotFound>}
  */
 export const findById = async _id => {
   const error = {};
@@ -39,14 +39,14 @@ export const findById = async _id => {
   });
   if (!foundUser) {
     error.user = 'User not found';
-    return error;
+    return Promise.reject(error);
   }
   return foundUser;
 };
 
 /** Returns a user that matches handle
- * @param {string} handle
- * @returns {Promise<User> | UserNotFound}
+ * @param {string} userHandle
+ * @returns {Promise<User|UserNotFound>}
  */
 export const findByHandle = async userHandle => {
   const error = {};
@@ -62,7 +62,7 @@ export const findByHandle = async userHandle => {
 
 /** Returns post that matches _id
  * @param {string} _id
- * @returns {Promise<Post> | PostNotFound}
+ * @returns {Promise<Post|PostNotFound>}
  */
 export const findPostById = async _id => {
   const error = {};
@@ -71,14 +71,14 @@ export const findPostById = async _id => {
   });
   if (!post) {
     error.post = 'Post not found';
-    return error;
+    return Promise.reject(error);
   }
   return post;
 };
 
 /** Returns post that matches user handle
- * @param {string} handle
- * @returns {Promise<Post> | PostNotFound}
+ * @param {string} userHandle
+ * @returns {Promise<Post|PostNotFound>}
  */
 export const findPostByHandle = async userHandle => {
   const postList = await Post.find({
@@ -90,8 +90,8 @@ export const findPostByHandle = async userHandle => {
 };
 
 /** Fetches all comments attached to PostId
- * @param {string} _id
- * @returns {Promise<UserComment> | NotificationNotFound}
+ * @param {string} postId
+ * @returns {Promise<UserComment|NotificationNotFound>}
  */
 export const findCommentByPostId = async postId => {
   const commentList = await Comment.find({
@@ -103,8 +103,8 @@ export const findCommentByPostId = async postId => {
 };
 
 /** Find all likes by userHandle
- * @param {string} handle
- * @returns {Promise<Like[]> | []}
+ * @param {string} userHandle
+ * @returns {Promise<Like[]|any[]>}
  */
 export const findLikeByHandle = async userHandle => {
   const likeList = await Like.find({
@@ -114,7 +114,7 @@ export const findLikeByHandle = async userHandle => {
 };
 
 /** Finds all commenets by userHandle and PostId
- * @param {string} handle
+ * @param {string} userHandle
  * @param {string} postId
  * @returns {Promise<UserComment>}
  */
@@ -139,6 +139,7 @@ export const findLikeByHandleAndPostId = async (userHandle, postId) => {
 };
 
 /** Updates all user posts with new image
+ * @param {String} userHandle
  * @param {String} base64
  */
 export const findAndUpdatePostImage = async (userHandle, base64) => {
@@ -164,7 +165,7 @@ export const findPostAndUpdateCount = async (_id, likeCount, commentCount) => {
 
 /** Finds and removes all likes and comments linked to a particular post
  * @param {string} postId
- * @return {boolean}
+ * @returns {Promise<{like:any,comment:any}>}
  */
 export const findAndDeleteLikeAndComment = postId =>
   new Promise((resolve, reject) => {
@@ -174,7 +175,7 @@ export const findAndDeleteLikeAndComment = postId =>
 
       // Deletes all associated comments
       const comment = Comment.deleteMany({ postId });
-      resolve(like, comment);
+      resolve({ like, comment });
     } catch (err) {
       reject(err);
     }
@@ -204,7 +205,7 @@ export const findUserAndUpdateImage = async (_id, base64) => {
 };
 
 /** Finds and updates the user's profile bio
- * @param {UserBioUpdate} userDetails
+ * @param {User} userDetails
  * @param {string} _id
  */
 export const findUserAndUpdateProfile = async (userDetails, _id) => {

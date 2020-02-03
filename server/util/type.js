@@ -21,7 +21,7 @@
 
 /**
  * @typedef UserBio
- * @property {string} bio
+ * @property {string} aboutMe
  * @property {string} website
  * @property {string} location
  * @property {string} userImage

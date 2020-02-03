@@ -1,4 +1,4 @@
-import Like from '../models/like.model';
+import { Like } from '../models/like.model';
 
 /** Create Like document
  * @param {Request} likeParam
@@ -6,10 +6,10 @@ import Like from '../models/like.model';
  */
 export const create = async likeParam => {
   // Construct needed properties for the document
-  const dataForLike = {};
-  dataForLike.userHandle = likeParam.user.userHandle;
-  dataForLike.postId = likeParam.params.postId;
-  const newLike = new Like(dataForLike);
+  const newLike = new Like({
+    userHandle: likeParam.user.userHandle,
+    postId: likeParam.params.postId,
+  });
 
   // Save the like
   await newLike.save();
@@ -20,13 +20,12 @@ export const create = async likeParam => {
  * @param {Request} likeParam
  * @returns {Promise<Like>}
  */
-export const remove = likeParam =>
-  new Promise((resolve, reject) => {
-    const like = Like.findOneAndDelete({
-      postId: likeParam.params.postId,
-    });
-    if (!like) {
-      reject({ like: 'Like not found' });
-    }
-    return like;
+export const remove = async likeParam => {
+  const like = await Like.findOneAndDelete({
+    postId: likeParam.params.postId,
   });
+  if (!like) {
+    return Promise.reject({ like: 'Like not found' });
+  }
+  return like;
+};

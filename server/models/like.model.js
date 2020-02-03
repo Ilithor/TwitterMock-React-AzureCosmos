@@ -1,8 +1,6 @@
 import mongoose from 'mongoose';
 
-const Schema = mongoose.Schema;
-
-const LikeSchema = Schema({
+const LikeSchema = new mongoose.Schema({
   userHandle: {
     type: String,
     required: true,
@@ -13,6 +11,4 @@ const LikeSchema = Schema({
   },
 });
 
-const Like = mongoose.model('Like', LikeSchema);
-
-export default Like;
+export const Like = mongoose.model('Like', LikeSchema);
