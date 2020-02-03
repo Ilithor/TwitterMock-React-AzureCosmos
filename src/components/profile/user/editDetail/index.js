@@ -34,6 +34,7 @@ export const EditDetail = () => {
 
   const handleOpen = () => {
     setOpen(true);
+    console.log(currentUser);
     setEditorState({
       aboutMe: currentUser?.bio?.aboutMe,
       website: currentUser?.bio?.website,

@@ -11,7 +11,7 @@ const userContext = createContext();
 
 /** This is a react component which you wrap your entire application
  * to provide a "context", meaning: data you can access anywhere in the app.
- * @param {object} props
+ * @param {Object} props
  * @param {React.ReactChild} props.children
  */
 export const UserProvider = ({ children }) => {
@@ -71,25 +71,27 @@ export const UserProvider = ({ children }) => {
       }
     });
 
-  const editUserDetail = userDetail =>
-    new Promise((resolve, reject) => {
-      if (userDetail && !isLoadingEditUserDetail) {
-        setIsLoadingEditUserDetail(true);
-        fetchUtil.user
-          .editUserDetail(userDetail)
-          .then(() => {
+  const editUserDetail = async userDetail => {
+    console.log(userDetail);
+    if (userDetail && !isLoadingEditUserDetail) {
+      setIsLoadingEditUserDetail(true);
+      await fetchUtil.user
+        .editUserDetail(userDetail)
+        .then(async success => {
+          if (success) {
             getCurrentUserData();
-          })
-          .catch(err => {
-            setUserError(err);
-            reject(err);
-          })
-          .finally(() => {
-            setIsLoadingEditUserDetail(false);
-            resolve();
-          });
-      }
-    });
+          }
+        })
+        .catch(err => {
+          setUserError(err);
+          Promise.reject(err);
+        })
+        .finally(() => {
+          setIsLoadingEditUserDetail(false);
+          Promise.resolve();
+        });
+    }
+  };
 
   const uploadImage = async formData => {
     if (formData && localStorage?.Handle && !isLoadingUploadImage) {
