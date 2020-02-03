@@ -64,39 +64,27 @@ export const getPost = (req, res) =>
 /** Creates a single post
  * @type {RouteHandler}
  */
-export const createPost = (req, res, next) =>
-  new Promise(() => {
-    create(req.body, req.user)
-      .then(doc => {
-        if (doc._id) {
-          return res
-            .status(201)
-            .send({ message: `document ${doc._id} created successfully` });
-        }
-      })
-      .catch(err => {
-        console.error(err);
-        return res.send(err);
-      });
+export const createPost = async (req, res, next) => {
+  const doc = await create(req.body, req.user).catch(err => {
+    console.error(err);
+    return Promise.reject(err);
   });
+  if (doc._id) {
+    return res.send(true);
+  }
+};
 
 /** Deletes post
  * @type {RouteHandler}
  */
 export const deletePost = async (req, res, next) => {
-  await findAndDeletePost(req.params.postId)
-    .then(post => {
-      if (post) {
-        findAndDeleteLikeAndComment(req.params.postId).then(result => {
-          deleteAllNotification(req.params.postId).then(() => {
-            return res.status(200);
-          });
-        });
-      }
-      return res.status(200);
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).json(err);
-    });
+  const post = await findAndDeletePost(req.params.postId).catch(err => {
+    console.error(err);
+    Promise.reject(err);
+  });
+  if (post) {
+    findAndDeleteLikeAndComment(req.params.postId);
+    deleteAllNotification(req.params.postId);
+    return res.send(true);
+  }
 };

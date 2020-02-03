@@ -44,25 +44,26 @@ export const PostProvider = ({ children }) => {
       }
     });
 
-  const newPost = postParam =>
-    new Promise((resolve, reject) => {
-      if (postParam && !isLoadingNewPost) {
-        setIsLoadingNewPost(true);
-        fetchUtil.post
-          .createPost(postParam)
-          .then(() => {
-            refreshPostList();
-          })
-          .catch(err => {
-            setPostError(err);
-            reject(err);
-          })
-          .finally(() => {
-            setIsLoadingNewPost(false);
-            resolve();
-          });
-      }
-    });
+  const newPost = async postParam => {
+    if (postParam && !isLoadingNewPost) {
+      setIsLoadingNewPost(true);
+      await fetchUtil.post
+        .createPost(postParam)
+        .then(async success => {
+          if (success) {
+            await refreshPostList();
+          }
+        })
+        .catch(err => {
+          setPostError(err);
+          Promise.reject(err);
+        })
+        .finally(() => {
+          setIsLoadingNewPost(false);
+          Promise.resolve();
+        });
+    }
+  };
 
   const deletePost = postId =>
     new Promise((resolve, reject) => {
