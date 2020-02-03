@@ -1,4 +1,4 @@
-import Comment from '../models/comment.model';
+import { Comment } from '../models/comment.model';
 import mongo from 'mongodb';
 
 import mongoConnection from '../util/mongo';

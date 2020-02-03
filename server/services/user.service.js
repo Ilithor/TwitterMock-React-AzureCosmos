@@ -1,4 +1,3 @@
-import User from '../models/user.model';
 import mongo from 'mongodb';
 import {
   findByCredential,
@@ -13,6 +12,7 @@ import {
 } from '../util/validators';
 
 import mongoConnect from '../util/mongo';
+import { User } from '../models/user.model';
 import { Like } from '../models/like.model';
 mongoConnect();
 

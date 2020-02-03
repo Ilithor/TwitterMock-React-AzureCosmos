@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import Notification from '../models/notification.model';
+import { Notification } from '../models/notification.model';
 import { create, getNotificationList } from '../services/notification.service';
 
 import mongoConnection from '../util/mongo';

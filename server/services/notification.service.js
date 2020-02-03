@@ -1,4 +1,4 @@
-import Notification from '../models/notification.model';
+import { Notification } from '../models/notification.model';
 import mongo from 'mongodb';
 
 /** Find all notifications

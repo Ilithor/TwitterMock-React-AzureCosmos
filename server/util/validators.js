@@ -1,4 +1,4 @@
-import User from '../models/user.model';
+import { User } from '../models/user.model';
 
 import mongoConnection from '../util/mongo';
 mongoConnection();
