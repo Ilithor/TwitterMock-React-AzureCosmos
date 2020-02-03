@@ -13,7 +13,7 @@ import {
 } from '../util/validators';
 
 import mongoConnect from '../util/mongo';
-import Like from '../models/like.model';
+import { Like } from '../models/like.model';
 mongoConnect();
 
 /** Returns a list of users
