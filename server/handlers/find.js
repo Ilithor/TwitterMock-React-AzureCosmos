@@ -1,5 +1,5 @@
 import User from '../models/user.model';
-import Like from '../models/like.model';
+import { Like } from '../models/like.model';
 import Notification from '../models/notification.model';
 import Comment from '../models/comment.model';
 import Post from '../models/post.model';
