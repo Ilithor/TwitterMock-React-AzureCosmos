@@ -219,16 +219,13 @@ export const imageUpload = async (req, res, next) => {
   const base64 = dataUri(req).content;
   await findUserAndUpdateImage(_id, base64)
     .then(async () => {
-      await findById(_id)
-        .then(doc => {
-          if (doc.bio.userImage === base64) {
-            return res.send(true);
-          }
-        })
-        .catch(err => {
-          console.error(err);
-          return Promise.reject(err);
-        });
+      const doc = await findById(_id).catch(err => {
+        console.error(err);
+        return Promise.reject(err);
+      });
+      if (doc.bio.userImage === base64) {
+        return res.send(true);
+      }
     })
     .catch(err => {
       console.error(err);
