@@ -211,30 +211,27 @@ export const addUserDetail = (req, res, next) =>
 /** Converts the uploaded image to base64 and uploads it as a property in the User doc
  * @type {RouteHandler}
  */
-export const imageUpload = (req, res, next) =>
-  new Promise(() => {
-    if (!req.file) {
-      return res.status(400).send({ general: 'No image provided' });
-    }
-    const _id = req.user._id;
-    const base64 = dataUri(req).content;
-    findUserAndUpdateImage(_id, base64)
-      .then(() => {
-        findById(_id)
-          .then(doc => {
-            if (doc.bio.userImage === base64) {
-              return res
-                .status(200)
-                .send({ message: 'Image uploaded successfully' });
-            }
-          })
-          .catch(err => {
-            console.error(err);
-            return res.status(500).send(err);
-          });
-      })
-      .catch(err => {
-        console.log(err);
-        return res.status(500).send(err);
-      });
-  });
+export const imageUpload = async (req, res, next) => {
+  if (!req.file) {
+    return Promise.reject({ general: 'No image provided' });
+  }
+  const _id = req.user._id;
+  const base64 = dataUri(req).content;
+  await findUserAndUpdateImage(_id, base64)
+    .then(async () => {
+      await findById(_id)
+        .then(doc => {
+          if (doc.bio.userImage === base64) {
+            return res.send(true);
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          return Promise.reject(err);
+        });
+    })
+    .catch(err => {
+      console.error(err);
+      return Promise.reject(err);
+    });
+};
