@@ -35,9 +35,10 @@ export const authUser = async (req, res, next) => {
 export const authByToken = req => {
   let idToken;
   if (
-    req.headers &&
-    req.headers.authorization &&
-    req.headers.authorization.startsWith('Bearer ')
+    req?.headers &&
+    req?.headers?.authorization &&
+    req?.headers?.authorization?.startsWith &&
+    req?.headers?.authorization?.startsWith('Bearer ')
   ) {
     idToken = req.headers.authorization.split('Bearer ')[1];
   } else if (req.startsWith && req.startsWith('Bearer ')) {
