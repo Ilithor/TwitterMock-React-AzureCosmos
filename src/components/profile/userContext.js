@@ -91,25 +91,26 @@ export const UserProvider = ({ children }) => {
       }
     });
 
-  const uploadImage = formData =>
-    new Promise((resolve, reject) => {
-      if (formData && localStorage.Handle && !isLoadingUploadImage) {
-        setIsLoadingUploadImage(true);
-        fetchUtil.user
-          .uploadImage(formData)
-          .then(() => {
-            getCurrentUserData();
-          })
-          .catch(err => {
-            setUserError(err);
-            reject(err);
-          })
-          .finally(() => {
-            setIsLoadingUploadImage(false);
-            resolve();
-          });
-      }
-    });
+  const uploadImage = async formData => {
+    if (formData && localStorage?.Handle && !isLoadingUploadImage) {
+      setIsLoadingUploadImage(true);
+      await fetchUtil.user
+        .uploadImage(formData)
+        .then(async success => {
+          if (success) {
+            await getCurrentUserData();
+          }
+        })
+        .catch(err => {
+          setUserError(err);
+          Promise.reject(err);
+        })
+        .finally(() => {
+          setIsLoadingUploadImage(false);
+          Promise.resolve();
+        });
+    }
+  };
 
   const registerUser = userParam =>
     new Promise((resolve, reject) => {

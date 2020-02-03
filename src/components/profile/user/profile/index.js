@@ -44,7 +44,7 @@ export const ProfileDetail = ({ classes }) => {
     } else {
       const formData = new FormData();
       formData.append('image', image, image.name);
-      uploadImage(formData, currentUser?.userHandle);
+      uploadImage(formData);
     }
   };
   const handleLogout = () => logoutUser();
