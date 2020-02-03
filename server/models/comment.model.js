@@ -1,8 +1,6 @@
 import mongoose from 'mongoose';
 
-const Schema = mongoose.Schema;
-
-const CommentSchema = Schema({
+const CommentSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
   body: {
     type: String,
@@ -18,6 +16,4 @@ const CommentSchema = Schema({
   },
 });
 
-const Comment = mongoose.model('Comment', CommentSchema);
-
-export default Comment;
+export const Comment = mongoose.model('Comment', CommentSchema);

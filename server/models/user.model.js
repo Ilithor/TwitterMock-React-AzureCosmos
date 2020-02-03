@@ -1,11 +1,6 @@
 import mongoose from 'mongoose';
 
-const Schema = mongoose.Schema;
-
-/**Creates new schema that dictates what properties
- * will occupy the User document
- */
-const UserSchema = Schema({
+const UserSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now },
   userHandle: {
     type: String,
@@ -31,6 +26,4 @@ const UserSchema = Schema({
   },
 });
 
-const User = mongoose.model('User', UserSchema);
-
-export default User;
+export const User = mongoose.model('User', UserSchema);
