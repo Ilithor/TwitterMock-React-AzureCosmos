@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import _ from 'lodash';
 import { Link, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
@@ -62,22 +62,26 @@ export const PostDialogContent = ({
   const classes = useStyles();
   const params = useParams();
   const { likeList } = useLikeData();
-  const {
-    refreshCommentListOnPost,
-    isLoadingCommentList,
-    commentListOnPost,
-  } = useCommentListData();
+  const { commentList, isLoadingCommentList } = useCommentListData();
+  const [postCommentList, setPostCommentList] = useState({});
   useEffect(() => {
-    refreshCommentListOnPost(params?.postId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  const RecentCommentMarkup = () => {
-    if (!isLoadingCommentList && commentListOnPost) {
-      return _.map(commentListOnPost, comment => (
-        <Comment key={`comment-${comment?.commentId}`} comment={comment} />
-      ));
+    const commentData = _.values(commentList).filter(
+      comment => comment?.postId === params.postId
+    );
+    if (commentData) {
+      setPostCommentList(commentData);
     }
-    if (commentListOnPost?.length === 0) {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [commentList]);
+  const RecentCommentMarkup = () => {
+    if (!isLoadingCommentList && commentList) {
+      return _.map(postCommentList, comment => {
+        return (
+          <Comment key={`comment-${comment?.commentId}`} comment={comment} />
+        );
+      });
+    }
+    if (commentList?.length === 0) {
       return <div />;
     }
     return (
@@ -122,7 +126,7 @@ export const PostDialogContent = ({
         </Typography>
         <hr className={classes?.separator} />
         <Typography variant='body1'>{body}</Typography>
-        <Like postId={postId} like={likeList[(params?.postId)]} />
+        <Like postId={postId} like={likeList[params?.postId]} />
         <span>
           {likeCount}
           <LikePlural />
