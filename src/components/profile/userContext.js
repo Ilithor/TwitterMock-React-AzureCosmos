@@ -51,25 +51,24 @@ export const UserProvider = ({ children }) => {
       }
     });
 
-  const getCurrentUserData = () =>
-    new Promise((resolve, reject) => {
-      if (!!localStorage?.Handle && !isLoadingUserData) {
-        setIsLoadingUserData(true);
-        fetchUtil.user
-          .fetchUserData(localStorage?.Handle)
-          .then(res => {
-            setCurrentUser(res.data.user);
-          })
-          .catch(err => {
-            setUserError(err);
-            reject(err);
-          })
-          .finally(() => {
-            setIsLoadingUserData(false);
-            resolve();
-          });
-      }
-    });
+  const getCurrentUserData = async () => {
+    if (localStorage?.Handle && !isLoadingUserData) {
+      setIsLoadingUserData(true);
+      await fetchUtil.user
+        .fetchUserData(localStorage?.Handle)
+        .then(res => {
+          setCurrentUser(res?.data?.user);
+        })
+        .catch(err => {
+          setUserError(err);
+          return Promise.reject(err);
+        })
+        .finally(() => {
+          setIsLoadingUserData(false);
+          return Promise.resolve();
+        });
+    }
+  };
 
   const editUserDetail = async userDetail => {
     console.log(userDetail);
@@ -147,32 +146,34 @@ export const UserProvider = ({ children }) => {
       }
     });
 
-  const loginUser = userParam =>
-    new Promise((resolve, reject) => {
-      if (!isLoadingLogin) {
-        setIsLoadingLogin(true);
-        if (!userParam.email || !userParam.password) {
-          setIsLoadingLogin(false);
-          reject(checkLoginIfUndefined(userParam));
-        }
-        fetchUtil.user
-          .loginUser(userParam)
-          .then(res => {
-            if (!res.data.token) {
-              reject(res.data);
-            } else {
-              setAuthorizationHeader(res?.data?.token);
-              setUserHandleHeader(res?.data?.userHandle);
-              getAuthenticated();
-            }
-          })
-          .catch(err => reject(err))
-          .finally(() => {
-            setIsLoadingLogin(false);
-            resolve();
-          });
+  const loginUser = async userParam => {
+    if (!isLoadingLogin) {
+      setIsLoadingLogin(true);
+      if (!userParam?.email || !userParam?.password) {
+        setIsLoadingLogin(false);
+        return Promise.reject(await checkLoginIfUndefined(userParam));
       }
-    });
+      fetchUtil.user
+        .loginUser(userParam)
+        .then(async res => {
+          if (!res?.data?.token) {
+            return Promise.reject(res.data);
+          } else {
+            console.log(res.data.token, res.data.userHandle);
+            setAuthorizationHeader(res?.data?.token);
+            setUserHandleHeader(res?.data?.userHandle);
+            await getAuthenticated();
+          }
+        })
+        .catch(err => {
+          return Promise.reject(err);
+        })
+        .finally(() => {
+          setIsLoadingLogin(false);
+          return Promise.resolve();
+        });
+    }
+  };
 
   const checkLoginIfUndefined = userParam => {
     let err = {};

@@ -14,7 +14,6 @@ import { useCurrentUserData } from '../userContext';
  */
 export const UserProfile = ({ classes }) => {
   const { currentUser } = useCurrentUserData();
-
   if (currentUser?.userHandle || currentUser?.createdAt) {
     return <ProfileDetail classes={classes} />;
   }
