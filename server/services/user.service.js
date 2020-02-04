@@ -77,35 +77,28 @@ export const register = async userParam => {
 
 /** Checks if user exists, and then generates a new token
  * @param {UserCredential} userParam
- * @returns {Promise<userLoggedIn, dataToReturn> | UserCredentialError}
+ * @returns {Promise<dataToReturn> | UserCredentialError}
  */
 export const login = async userParam => {
   // Validation
-  await validateLogin(userParam)
-    .then(async () => {
-      const user = {};
-      const { email, password } = userParam;
-      user.credential = { email, password };
-      const userLoggedIn = await findByCredential(user).catch(err => {
-        console.error(err);
-        return Promise.reject(err);
-      });
-      if (!!userLoggedIn.email || !!userLoggedIn.password) {
-        return Promise.reject(userLoggedIn);
-      } else {
-        const token = await generateUserToken(userLoggedIn).catch(err => {
-          console.error(err);
-          return Promise.reject(err);
-        });
-        const dataToReturn = { token };
-        dataToReturn.userHandle = userLoggedIn.userHandle;
-        return Promise.resolve(dataToReturn);
-      }
-    })
-    .catch(err => {
-      console.error(err);
-      return Promise.reject(err);
-    });
+  await validateLogin(userParam).catch(err => {
+    console.error(err);
+    return Promise.reject(err);
+  });
+  const user = {};
+  const { email, password } = userParam;
+  user.credential = { email, password };
+  const userLoggedIn = await findByCredential(user).catch(err => {
+    console.error(err);
+    return Promise.reject(err);
+  });
+  const token = await generateUserToken(userLoggedIn).catch(err => {
+    console.error(err);
+    return Promise.reject(err);
+  });
+  const dataToReturn = { token };
+  dataToReturn.userHandle = userLoggedIn.userHandle;
+  return Promise.resolve(dataToReturn);
 };
 
 /** Updates the current user's bio properties

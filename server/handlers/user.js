@@ -57,7 +57,7 @@ export const fetchLikeList = async (req, res) => {
 export const registerUser = async (req, res, next) => {
   const user = await register(req.body).catch(err => {
     console.error(err);
-    return res.status(500);
+    return res.send(err);
   });
   const token = await generateUserToken(user).catch(err => {
     console.error(err);
@@ -67,7 +67,7 @@ export const registerUser = async (req, res, next) => {
     // Returns user token and handle
     return res.status(201).send({ user, token });
   } else {
-    return res.json(500);
+    return res.send(500);
   }
 };
 
@@ -77,7 +77,7 @@ export const registerUser = async (req, res, next) => {
 export const loginUser = async (req, res, next) => {
   const data = await login(req.body).catch(err => {
     console.error(err);
-    return res.status(500);
+    return res.send(err);
   });
   // Checks if token exists
   const token = data.token;
