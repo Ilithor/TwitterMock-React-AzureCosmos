@@ -5,7 +5,7 @@ import { LoginForm } from '../components/login';
 
 // MUI
 import { Grid, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { useStyles } from './page.style';
 
 // Icons
 import AppIcon from '../images/icon.png';
@@ -13,21 +13,8 @@ import AppIcon from '../images/icon.png';
 // Context
 import { LoginProvider } from '../components/login/loginContext';
 
-const useStyles = makeStyles({
-  form: {
-    textAlign: 'center',
-  },
-  image: {
-    margin: 'auto',
-    width: '76px',
-    height: '76px',
-  },
-  pageTitle: {
-    margin: '10px auto 10px auto',
-  },
-});
-
-/**
+/** Displays the login page
+ * 
  * @type {React.FunctionComponent}
  */
 export const LoginPage = () => {

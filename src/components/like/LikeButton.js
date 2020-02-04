@@ -11,9 +11,10 @@ import { usePostData } from '../post/postContext';
 import { useLikeData } from './likeContext';
 
 /** View component for displaying an icon to like a post
+ * 
  * @type {React.FunctionComponent}
- * @param {Object} props
- * @param {String} props.postId
+ * @param {object} props
+ * @param {string} props.postId
  */
 export const LikeButton = ({ postId }) => {
   const { refreshPostList } = usePostData();

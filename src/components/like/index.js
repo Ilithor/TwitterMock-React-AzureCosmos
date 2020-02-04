@@ -16,9 +16,10 @@ import {
 } from '../profile/userContext';
 
 /** View component for displaying either a like or unlike icon
+ * 
  * @type {React.FunctionComponent}
- * @param {Object} props
- * @param {String} props.postId
+ * @param {object} props
+ * @param {string} props.postId
  */
 export const Like = ({ postId, like }) => {
   const { isAuthenticated } = useUserAuthenticationData();

@@ -30,6 +30,10 @@ export const UserProvider = ({ children }) => {
   const [isLoadingUploadImage, setIsLoadingUploadImage] = useState(false);
   const history = useHistory();
 
+  /** Refreshes the list of users
+   *
+   * @returns {void | Error}
+   */
   const refreshUserList = async () => {
     if (!isLoadingUserList) {
       setIsLoadingUserList(true);
@@ -50,6 +54,10 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  /** Retrieves the currently logged in user's info
+   *
+   * @returns {void | Error}
+   */
   const getCurrentUserData = async () => {
     if (localStorage?.Handle && !isLoadingUserData) {
       setIsLoadingUserData(true);
@@ -69,6 +77,11 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  /** Updates the user's info with the provided data
+   * 
+   * @param {object} userDetail
+   * @returns {void | Error}
+   */
   const editUserDetail = async userDetail => {
     if (userDetail && !isLoadingEditUserDetail) {
       setIsLoadingEditUserDetail(true);
@@ -90,6 +103,11 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  /** Updates the user's profile image
+   * 
+   * @param {object} formData
+   * @returns {void | Error}
+   */
   const uploadImage = async formData => {
     if (formData && localStorage?.Handle && !isLoadingUploadImage) {
       setIsLoadingUploadImage(true);
@@ -112,6 +130,11 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  /** Creates a new user
+   * 
+   * @param {object} userParam
+   * @returns {void | Error}
+   */
   const registerUser = async userParam => {
     if (!isLoadingRegister) {
       setIsLoadingRegister(true);
@@ -145,6 +168,11 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  /** Attempts to login with the provided login info
+   * 
+   * @param {object} userParam
+   * @returns {void | Error}
+   */
   const loginUser = async userParam => {
     if (!isLoadingLogin) {
       setIsLoadingLogin(true);
@@ -169,6 +197,11 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  /** Checks if the params are undefined
+   * 
+   * @param {object} userParam
+   * @returns {object}
+   */
   const checkLoginIfUndefined = userParam => {
     let err = {};
     if (!userParam.email) {
@@ -180,6 +213,11 @@ export const UserProvider = ({ children }) => {
     return err;
   };
 
+  /** Checks if the params are undefined
+   * 
+   * @param {object} userParam
+   * @returns {object}
+   */
   const checkRegisterIfUndefined = userParam => {
     let err = {};
     if (!userParam.email) {
@@ -197,16 +235,28 @@ export const UserProvider = ({ children }) => {
     return err;
   };
 
+  /** Sets the user token and authorization
+   * 
+   * @param {string} token 
+   */
   const setAuthorizationHeader = token => {
     const Token = `Bearer ${token}`;
     localStorage.setItem('Token', Token);
     axios.defaults.headers.common['Authorization'] = Token;
   };
 
+  /** Sets the user's handle in the local storage
+   * 
+   * @param {string} userHandle
+   */
   const setUserHandleHeader = userHandle => {
     localStorage.setItem('Handle', userHandle);
   };
 
+  /** Attempts to authenticated the user
+   * 
+   * @returns {void | Error}
+   */
   const getAuthenticated = async () => {
     if (
       localStorage?.Token &&
@@ -240,6 +290,9 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  /** Logouts the user
+   * 
+   */
   const logoutUser = () => {
     localStorage.removeItem('Token');
     localStorage.removeItem('Handle');
@@ -275,8 +328,8 @@ export const UserProvider = ({ children }) => {
 
 /** A hook for consuming our User context in a safe way
  * @example //getting the user list
- * import { useUserData } from 'userContext'
- * const { userList } = useUserData();
+ * import { useUserListData } from 'userContext'
+ * const { userList } = useUserListData();
  * @returns {User[]}
  */
 export const useUserListData = () => {
@@ -305,6 +358,12 @@ export const useUserListData = () => {
   return { refreshUserList, userList, userError, isLoadingUserList };
 };
 
+/** A hook for consuming our User context in a safe way
+ * @example //getting the user
+ * import { useUserData } from 'userContext'
+ * const { user } = useUserData();
+ * @returns {User}
+ */
 export const useUserData = () => {
   const ctx = useContext(userContext);
 
@@ -317,6 +376,12 @@ export const useUserData = () => {
   return { user, userError, isLoadingUserData };
 };
 
+/** A hook for consuming our User context in a safe way
+ * @example //getting the current user
+ * import { useCurrentUserData } from 'userContext'
+ * const { currentUser } = useCurrentUserData();
+ * @returns {User}
+ */
 export const useCurrentUserData = () => {
   const ctx = useContext(userContext);
 
@@ -341,6 +406,12 @@ export const useCurrentUserData = () => {
   };
 };
 
+/** A hook for consuming our User context in a safe way
+ * @example //getting the edit user detail function
+ * import { useEditUserDetailData } from 'userContext'
+ * const { editUserDetail } = useEditUserDetailData();
+ * @returns {Function}
+ */
 export const useEditUserDetailData = () => {
   const ctx = useContext(userContext);
 
@@ -353,6 +424,12 @@ export const useEditUserDetailData = () => {
   return { isLoadingEditUserDetail, editUserDetail };
 };
 
+/** A hook for consuming our User context in a safe way
+ * @example //getting the upload image function
+ * import { useUploadImageData } from 'userContext'
+ * const { uploadImage } = useUploadImageData();
+ * @returns {Function}
+ */
 export const useUploadImageData = () => {
   const ctx = useContext(userContext);
 
@@ -365,6 +442,12 @@ export const useUploadImageData = () => {
   return { userError, uploadImage };
 };
 
+/** A hook for consuming our User context in a safe way
+ * @example //getting the isAuthenticated state
+ * import { useUserAuthenticationData } from 'userContext'
+ * const { isAuthenticated } = useUserAuthenticationData();
+ * @returns {boolean}
+ */
 export const useUserAuthenticationData = () => {
   const ctx = useContext(userContext);
 
@@ -393,6 +476,12 @@ export const useUserAuthenticationData = () => {
   };
 };
 
+/** A hook for consuming our User context in a safe way
+ * @example //getting the login user function
+ * import { useUserLoginData } from 'userContext'
+ * const { loginUser } = useUserLoginData();
+ * @returns {Function}
+ */
 export const useUserLoginData = () => {
   const ctx = useContext(userContext);
 
@@ -405,6 +494,12 @@ export const useUserLoginData = () => {
   return { loginUser, userError, setUserError, isLoadingLogin };
 };
 
+/** A hook for consuming our User context in a safe way
+ * @example //getting the register user function
+ * import { useUserRegisterData } from 'userContext'
+ * const { registerUser } = useUserRegisterData();
+ * @returns {Function}
+ */
 export const useUserRegisterData = () => {
   const ctx = useContext(userContext);
 
@@ -417,6 +512,12 @@ export const useUserRegisterData = () => {
   return { registerUser, userError, setUserError, isLoadingRegister };
 };
 
+/** A hook for consuming our User context in a safe way
+ * @example //getting the logout user function
+ * import { useUserLogout } from 'userContext'
+ * const { logoutUser } = useUserLogout();
+ * @returns {Function}
+ */
 export const useUserLogout = () => {
   const ctx = useContext(userContext);
 

@@ -2,15 +2,10 @@ import React from 'react';
 
 // MUI
 import { TextField } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
-
-const useStyles = makeStyles({
-  textField: {
-    margin: '10px auto 10px auto',
-  },
-});
+import { useStyles } from '../../profile.style';
 
 /** Displays the edit form to edit the user's details
+ * 
  * @type {React.FunctionComponent}
  * @param {object} props
  * @param {string} props.aboutMe

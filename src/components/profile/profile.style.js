@@ -51,4 +51,10 @@ export const useStyles = makeStyles(theme => ({
       },
     },
   },
+  textField: {
+    margin: '10px auto 10px auto',
+  },
+  buttonEdit: {
+    float: 'right',
+  },
 }));

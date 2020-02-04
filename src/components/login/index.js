@@ -15,7 +15,8 @@ import { useUserLoginData } from '../profile/userContext';
 import { useLoginValidationData } from './loginContext';
 
 /** View component for displaying the login form to the user
- * @type {ILoginFormComponentProps}
+ * 
+ * @type {React.FunctionComponent}
  */
 export const LoginForm = () => {
   const classes = useStyles();
@@ -121,7 +122,3 @@ export const LoginForm = () => {
     </form>
   );
 };
-/** Various props that control how the user interacts with
- *  the login form
- * @typedef ILoginFormComponentProps
- */

@@ -9,8 +9,9 @@ const commentContext = createContext();
 /** This is a react component which you wrap your entire application
  * to provide a "context", meaning: data you can access anywhere in the app.
  *
+ * @type {React.FunctionComponent}
  * @param {object} props
- * @param {React.ReactChild} props.children
+ * @param {React.ReactChild} props.children 
  */
 export const CommentProvider = ({ children }) => {
   const [commentError, setCommentError] = useState();
@@ -20,6 +21,10 @@ export const CommentProvider = ({ children }) => {
   const [isLoadingCommentOnPost, setIsLoadingCommentOnPost] = useState(false);
   const [isLoadingDeleteComment, setIsLoadingDeleteComment] = useState(false);
 
+  /** Refreshes the comment list
+   *
+   * @returns {void | Error}
+   */
   const refreshCommentList = async () => {
     if (!isLoadingCommentList) {
       setIsLoadingCommentList(true);
@@ -41,45 +46,54 @@ export const CommentProvider = ({ children }) => {
     }
   };
 
-  const commentOnPost = (postId, commentData) =>
-    new Promise((resolve, reject) => {
-      if (postId && commentData && !isLoadingCommentOnPost) {
-        setIsLoadingCommentOnPost(true);
-        fetchUtil.post
-          .commentOnPost(postId, commentData)
-          .then(() => {
-            refreshCommentList();
-          })
-          .catch(err => {
-            setCommentError(err);
-            reject(err);
-          })
-          .finally(() => {
-            setIsLoadingCommentOnPost(false);
-            resolve();
-          });
-      }
-    });
+  /** Creates a new comment on a post
+   *
+   * @param {string} postId
+   * @param {object} commentData
+   * @returns {void | Error}
+   */
+  const commentOnPost = async (postId, commentData) => {
+    if (postId && commentData && !isLoadingCommentOnPost) {
+      setIsLoadingCommentOnPost(true);
+      await fetchUtil.post
+        .commentOnPost(postId, commentData)
+        .then(async () => {
+          await refreshCommentList();
+        })
+        .catch(err => {
+          setCommentError(err);
+          return Promise.reject(err);
+        })
+        .finally(() => {
+          setIsLoadingCommentOnPost(false);
+          return Promise.resolve();
+        });
+    }
+  };
 
-  const deleteComment = commentId =>
-    new Promise((resolve, reject) => {
-      if (commentId && !isLoadingDeleteComment) {
-        setIsLoadingDeleteComment(true);
-        fetchUtil.post
-          .deleteComment(commentId)
-          .then(() => {
-            refreshCommentList();
-          })
-          .catch(err => {
-            setCommentError(err);
-            reject(err);
-          })
-          .finally(() => {
-            setIsLoadingDeleteComment(false);
-            resolve();
-          });
-      }
-    });
+  /** Deletes user comment
+   *
+   * @param {string} commentId CommentId of the comment being deleted
+   * @returns {void | Error}
+   */
+  const deleteComment = async commentId => {
+    if (commentId && !isLoadingDeleteComment) {
+      setIsLoadingDeleteComment(true);
+      await fetchUtil.post
+        .deleteComment(commentId)
+        .then(async () => {
+          await refreshCommentList();
+        })
+        .catch(err => {
+          setCommentError(err);
+          return Promise.reject(err);
+        })
+        .finally(() => {
+          setIsLoadingDeleteComment(false);
+          return Promise.resolve();
+        });
+    }
+  };
 
   // Passing state to value to be passed to provider
   const value = {
@@ -96,6 +110,13 @@ export const CommentProvider = ({ children }) => {
   );
 };
 
+/** A hook for consuming our Comment context in a safe way
+ *
+ * @example //getting the comment deleting function
+ * import { useCommentData } from 'commentContext'
+ * const { deleteComment } = useCommentData();
+ * @returns {()=>void, boolean}
+ */
 export const useCommentData = () => {
   const ctx = useContext(commentContext);
 
@@ -113,7 +134,7 @@ export const useCommentData = () => {
  * @example //getting the comment list
  * import { useCommentListData } from 'commentContext'
  * const { commentList } = useCommentListData();
- * @returns {Comment[]}
+ * @returns {Comment[], Error, ()=>void}
  */
 export const useCommentListData = () => {
   // Destructuring value from provider
@@ -145,6 +166,13 @@ export const useCommentListData = () => {
   };
 };
 
+/** A hook for consuming our Comment context in a safe way
+ *
+ * @example //getting the comment list
+ * import { useCommentOnPostData } from 'commentContext'
+ * const { commentOnPost } = useCommentOnPostData();
+ * @returns {Error, Boolean, ()=>void}
+ */
 export const useCommentOnPostData = () => {
   const ctx = useContext(commentContext);
 
