@@ -2,11 +2,19 @@ import React, { useState, useEffect } from 'react';
 
 // MUI
 import { Button, Grid, TextField } from '@material-ui/core';
+import { useStyles } from '../comment.style';
 
 // Context
 import { useCommentOnPostData } from '../commentContext';
 
-export const CommentForm = ({ postId, classes }) => {
+/** Displays and handles the new comment form
+ * 
+ * @type {React.FunctionComponent}
+ * @param {object} props
+ * @param {string} props.postId
+ */
+export const CommentForm = ({ postId }) => {
+  const classes = useStyles();
   const {
     commentOnPost,
     isLoadingCommentOnPost,

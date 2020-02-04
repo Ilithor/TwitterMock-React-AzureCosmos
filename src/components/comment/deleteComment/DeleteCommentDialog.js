@@ -10,6 +10,12 @@ import * as Icon from '@material-ui/icons';
 // Context
 import { useCommentData } from '../commentContext';
 
+/** Displays the dialog box for comment deletion confirmation
+ * 
+ * @type {React.FunctionComponent}
+ * @param {object} props
+ * @param {string} props.postId
+ */
 export const DeleteCommentDialog = ({ postId }) => {
   const { deleteComment } = useCommentData();
   const [open, setOpen] = useState(false);
@@ -20,10 +26,7 @@ export const DeleteCommentDialog = ({ postId }) => {
     setOpen(false);
   };
   const makeDeleteButton = () => (
-    <CustomButton
-      tip='Delete Comment'
-      onClick={handleOpen}
-    >
+    <CustomButton tip='Delete Comment' onClick={handleOpen}>
       <Icon.DeleteOutline color='secondary' />
     </CustomButton>
   );

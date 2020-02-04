@@ -6,23 +6,16 @@ import { NotificationCard } from './notificationCard';
 
 // MUI
 import { CircularProgress } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { useStyles } from './notification.style';
 
 // Context
 import { useNotificationData } from './notificationContext';
 import { usePostData } from '../post/postContext';
 import { useCommentListData } from '../comment/commentContext';
 
-const useStyles = makeStyles({
-  spinnerDiv: {
-    textAlign: 'center',
-    marginTop: 50,
-    marginBottom: 50,
-  },
-});
-
-/**
- * Displays an array of notifications for the user
+/** Displays an array of notifications for the user
+ * 
+ * @type {React.FunctionComponent}
  */
 export const NotificationContent = () => {
   const classes = useStyles();
@@ -42,8 +35,8 @@ export const NotificationContent = () => {
         <NotificationCard
           key={`notification-${doc?.notificationId}`}
           notification={doc}
-          post={postList[(doc?.postId)]}
-          comment={commentList[(doc?.typeId)]}
+          post={postList[doc?.postId]}
+          comment={commentList[doc?.typeId]}
         />
       );
     });

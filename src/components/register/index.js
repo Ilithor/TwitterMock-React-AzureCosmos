@@ -15,6 +15,7 @@ import { useUserRegisterData } from '../profile/userContext';
 import { useRegisterValidationData } from './registerContext';
 
 /** Displays the register form to the user
+ * 
  * @type {React.FunctionComponent}
  */
 export const RegisterForm = () => {

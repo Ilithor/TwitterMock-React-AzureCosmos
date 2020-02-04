@@ -11,7 +11,6 @@ const likeContext = createContext();
  *
  * @param {object} props
  * @param {React.ReactChild} props.children
- * @param {()=>Promise<import('axios').AxiosResponse<Like[]>>} props.fetchLikeList
  */
 export const LikeProvider = ({ children }) => {
   const [likeError, setLikeError] = useState();

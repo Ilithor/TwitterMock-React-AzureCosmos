@@ -25,20 +25,24 @@ export const fetchUserList = () => get(endpoints.userList);
 
 /** Attempts to log the user in
  *
+ * @param {object} userData
  * @returns {Promise<import("axios").AxiosResponse>}
  */
 export const loginUser = userData => post(endpoints.login, userData);
 /** Attempts to register the user
  *
+ * @param {object} userData
  * @returns {Promise<import("axios").AxiosResponse>}
  */
 export const registerUser = userData => post(endpoints.register, userData);
 
 /** Retrieves user data using userHandle
  *
+ * @param {string} userHandle
  * @returns {Promise<import("axios").AxiosResponse>}
  */
-export const fetchUserData = userHandle => get(endpoints.userData + `/${userHandle}`);
+export const fetchUserData = userHandle =>
+  get(endpoints.userData + `/${userHandle}`);
 
 /** Retrieves likes made by user
  *
@@ -54,6 +58,7 @@ export const fetchNotificationList = () => get(endpoints.notification);
 
 /** Attempts to mark a notification as read
  *
+ * @param {string} notificationId
  * @returns {Promise<import("axios").AxiosResponse>}
  */
 export const markNotificationRead = notificationId =>
@@ -62,12 +67,14 @@ export const markNotificationRead = notificationId =>
 
 /** Attempts to upload userImage
  *
+ * @param {object} formData
  * @returns {Promise<import("axios").AxiosResponse>}
  */
 export const uploadImage = formData => post(endpoints.uploadImage, formData);
 
 /** Attempts to update user details
  *
+ * @param {object} userDetail
  * @returns {Promise<import("axios").AxiosResponse>}
  */
 export const editUserDetail = userDetail =>

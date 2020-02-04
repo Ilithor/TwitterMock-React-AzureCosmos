@@ -8,7 +8,7 @@ import { NewPost } from '../components/post/newPost';
 
 // MUI
 import { Grid, CircularProgress } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { useStyles } from './page.style';
 
 // Context
 import {
@@ -18,19 +18,11 @@ import {
 import { usePostData } from '../components/post/postContext';
 import { useLikeData } from '../components/like/likeContext';
 
-const useStyles = makeStyles({
-  createButton: {
-    position: 'relative',
-    textAlign: 'center',
-    marginBottom: 20,
-  },
-  spinnerDiv: {
-    textAlign: 'center',
-    marginTop: 50,
-    marginBottom: 50,
-  },
-});
 
+/** Displays the home page
+ * 
+ * @type {React.FunctionComponent}
+ */
 export const HomePage = () => {
   const classes = useStyles();
   const { isAuthenticated } = useUserAuthenticationData();

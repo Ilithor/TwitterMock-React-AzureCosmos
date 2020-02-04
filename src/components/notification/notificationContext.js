@@ -10,9 +10,8 @@ const notificationContext = createContext();
 /** This is a react component which you wrap your entire application
  * to provide a "context", meaning: data you can access anywhere in the app.
  *
- * @param {Object} props
+ * @param {object} props
  * @param {React.ReactChild} props.children
- * @param {()=>Promise<import('axios').AxiosResponse<Notification[]>>} props.getNotificationList
  */
 export const NotificationProvider = ({ children }) => {
   /** @type {UseStateResult<_.Dictionary<Notification>>} */
@@ -31,6 +30,10 @@ export const NotificationProvider = ({ children }) => {
     setIsLoadingMarkNotificationRead,
   ] = useState(false);
 
+  /** Refreshes the user's notification list
+   *
+   * @returns {void, Error}
+   */
   const refreshNotificationList = () =>
     new Promise((resolve, reject) => {
       if (!isLoadingNotifcationList) {
@@ -53,6 +56,11 @@ export const NotificationProvider = ({ children }) => {
       }
     });
 
+  /** Marks the provided notification as read
+   *
+   * @param {object} notification
+   * @returns {void, Error}
+   */
   const markNotificationRead = notification =>
     new Promise((resolve, reject) => {
       if (!isLoadingMarkNotificationRead) {

@@ -5,19 +5,14 @@ import { EditDetailsDisplay } from './EditDetailsDisplay';
 import { CustomButton } from '../../../../util/CustomButton';
 
 // MUI
-import { makeStyles } from '@material-ui/core/styles';
+import { useStyles } from '../../profile.style';
 
 // Icons
 import * as Icon from '@material-ui/icons';
 import { useCurrentUserData, useEditUserDetailData } from '../../userContext';
 
-const useStyles = makeStyles({
-  buttonEdit: {
-    float: 'right',
-  },
-});
-
 /** Control how the user edits their bio information
+ * 
  * @type {React.FunctionComponent}
  */
 export const EditDetail = () => {

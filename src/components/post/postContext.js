@@ -22,6 +22,10 @@ export const PostProvider = ({ children }) => {
   const [isLoadingNewPost, setIsLoadingNewPost] = useState(false);
   const [isLoadingDeletePost, setIsLoadingDeletePost] = useState(false);
 
+  /** Refreshes the post list
+   *
+   * @returns {void | Error}
+   */
   const refreshPostList = () =>
     new Promise((resolve, reject) => {
       if (!isLoadingPostList) {
@@ -44,6 +48,11 @@ export const PostProvider = ({ children }) => {
       }
     });
 
+  /** Creates a new post with the provided user info
+   *
+   * @param {object} postParam
+   * @returns {void | Error}
+   */
   const newPost = async postParam => {
     if (postParam && !isLoadingNewPost) {
       setIsLoadingNewPost(true);
@@ -65,6 +74,11 @@ export const PostProvider = ({ children }) => {
     }
   };
 
+  /** Deletes post with the provided postId
+   *
+   * @param {string} postId
+   * @returns {void | Error}
+   */
   const deletePost = postId =>
     new Promise((resolve, reject) => {
       if (postId && !isLoadingDeletePost) {
@@ -105,7 +119,7 @@ export const PostProvider = ({ children }) => {
  * @example //getting the post list
  * import { usePostData } from 'postContext'
  * const { postList } = usePostData();
- * @returns {Post[]}
+ * @returns {Post[],Error,boolean,()=>void,()=>void,boolean,()=>void}
  */
 export const usePostData = () => {
   // Destructuring value from provider

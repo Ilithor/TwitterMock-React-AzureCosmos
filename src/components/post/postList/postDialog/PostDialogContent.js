@@ -12,7 +12,7 @@ import { CustomButton } from '../../../../util/CustomButton';
 
 // MUI
 import { Grid, Typography, CircularProgress } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { useStyles } from '../../post.style';
 
 // Icons
 import * as Icon from '@material-ui/icons';
@@ -21,34 +21,17 @@ import * as Icon from '@material-ui/icons';
 import { useCommentListData } from '../../../comment/commentContext';
 import { useLikeData } from '../../../like/likeContext';
 
-const useStyles = makeStyles({
-  profileImage: {
-    maxWidth: 200,
-    height: 200,
-    borderRadius: '50%',
-    objectFit: 'cover',
-  },
-  separator: {
-    border: 'none',
-    margin: 4,
-  },
-  spinnerDiv: {
-    textAlign: 'center',
-    marginTop: 50,
-    marginBottom: 50,
-  },
-});
-
 /** View component for displaying the content in a post's dialog box
+ *
  * @type {React.FunctionComponent}
- * @param {Object} props
- * @param {String} props.userHandle
- * @param {String} props.userImage
- * @param {String} props.createAt
- * @param {String} props.body
- * @param {String} props.postId
- * @param {Number} props.likeCount
- * @param {Number} props.commentCount
+ * @param {object} props
+ * @param {string} props.userHandle
+ * @param {string} props.userImage
+ * @param {string} props.createAt
+ * @param {string} props.body
+ * @param {string} props.postId
+ * @param {number} props.likeCount
+ * @param {number} props.commentCount
  */
 export const PostDialogContent = ({
   userHandle,

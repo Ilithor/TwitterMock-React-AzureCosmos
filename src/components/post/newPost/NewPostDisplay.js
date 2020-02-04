@@ -6,24 +6,27 @@ import { CustomButton } from '../../../util/CustomButton';
 
 // MUI
 import { Dialog, DialogContent, DialogTitle } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { useStyles } from '../post.style';
 
 // Icons
 import * as Icon from '@material-ui/icons';
 
-const useStyles = makeStyles({
-  closeButton: {
-    position: 'absolute',
-    left: '90%',
-    top: '10%',
-  },
-});
-
+/** Displays the dialog box that allows the user to create a post
+ *
+ * @type {React.FunctionComponent}
+ * @param {object} props
+ * @param {boolean} props.open
+ * @param {React.ChangeEventHandler} props.handleClose
+ * @param {React.ChangeEventHandler} props.handleSubmit
+ * @param {Error} props.error
+ * @param {React.ChangeEventHandler} props.handleChange
+ * @param {boolean} props.isLoading
+ */
 export const NewPostDisplay = ({
   open,
   handleClose,
   handleSubmit,
-  error = {},
+  error,
   handleChange,
   isLoading,
 }) => {

@@ -19,6 +19,10 @@ import { ContextProvider } from './components/context/ContextProvider';
 
 axios.defaults.baseURL = '/';
 
+/** Displays the application to the user
+ * 
+ * @type {React.FunctionComponent}
+ */
 export const App = () => (
   <Router>
     <ContextProvider>

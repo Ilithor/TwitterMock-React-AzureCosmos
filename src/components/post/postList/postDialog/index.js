@@ -8,7 +8,7 @@ import { CustomButton } from '../../../../util/CustomButton';
 
 // MUI
 import { Dialog, DialogContent, CircularProgress } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { useStyles } from '../../post.style';
 
 // Icons
 import * as Icon from '@material-ui/icons';
@@ -17,26 +17,8 @@ import * as Icon from '@material-ui/icons';
 import { usePostData } from '../../postContext';
 import { useUserListData } from '../../../profile/userContext';
 
-const useStyles = makeStyles({
-  spinnerDiv: {
-    textAlign: 'center',
-    marginTop: 50,
-    marginBottom: 50,
-  },
-  expandButton: {
-    position: 'absolute',
-    left: '90%',
-  },
-  closeButtonPostDialog: {
-    position: 'absolute',
-    left: '90%',
-  },
-  dialogContent: {
-    padding: 20,
-  },
-});
-
 /** View component for displaying an individual post's content in a dialog box
+ * 
  * @type {React.FunctionComponent}
  * @param {object} props
  * @param {string} props.postId
@@ -59,7 +41,7 @@ export const PostDialog = ({ postId, userHandle }) => {
   };
   const DialogContentEditor = () => {
     if (!isLoadingUserList) {
-      const { userImage } = userList[(post?.userHandle)] || defaultImage;
+      const { userImage } = userList[post?.userHandle] || defaultImage;
       return (
         <PostDialogContent
           userHandle={userHandle}

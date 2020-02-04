@@ -11,6 +11,7 @@ import { usePostData } from '../post/postContext';
 import { useLikeData } from './likeContext';
 
 /** View component for displaying an icon to unlike a post
+ * 
  * @type {React.FunctionComponent}
  * @param {object} props
  * @param {string} props.postId

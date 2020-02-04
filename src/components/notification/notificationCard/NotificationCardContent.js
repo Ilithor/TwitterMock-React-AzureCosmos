@@ -3,26 +3,21 @@ import dayjs from 'dayjs';
 
 // MUI
 import { CardContent, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { useStyles } from '../notification.style';
 
 // Icons
 import * as Icon from '@material-ui/icons';
 
-const useStyles = makeStyles({
-  content: {
-    padding: 25,
-    objectFit: 'cover',
-  },
-});
-
 /** Displays individual notification content
+ *
+ * @type {React.FunctionComponent}
  * @param {object} props
  * @param {object} props.notification
  * @param {string} props.postBody
  * @param {string} props.commentBody
  */
 export const NotificationCardContent = ({
-  notification = {},
+  notification,
   postBody,
   commentBody,
 }) => {

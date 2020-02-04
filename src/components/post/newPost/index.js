@@ -5,7 +5,7 @@ import { NewPostDisplay } from './NewPostDisplay';
 
 // MUI
 import { Button } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { useStyles } from '../post.style';
 
 // Icons
 import * as Icon from '@material-ui/icons';
@@ -13,14 +13,11 @@ import * as Icon from '@material-ui/icons';
 // Context
 import { usePostData } from '../postContext';
 
-const useStyles = makeStyles({
-  createButton: {
-    position: 'relative',
-    left: '33%',
-    marginBottom: 20,
-  },
-});
 
+/** Handles new posts created by the user
+ * 
+ * @type {React.FunctionComponent}
+ */
 export const NewPost = () => {
   const classes = useStyles();
   const { newPost, isLoadingNewPost, postError } = usePostData();

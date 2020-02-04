@@ -13,6 +13,7 @@ import {
 } from '@material-ui/core';
 
 /** Displays the dialog box to edit the user's details
+ * 
  * @type {React.FunctionComponent}
  * @param {object} props
  * @param {boolean} props.open

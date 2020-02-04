@@ -5,7 +5,7 @@ import { CustomButton } from '../../../../util/CustomButton';
 
 // MUI
 import { Dialog, Button, DialogTitle, DialogActions } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { useStyles } from '../../post.style';
 
 // Icons
 import * as Icon from '@material-ui/icons';
@@ -13,15 +13,8 @@ import * as Icon from '@material-ui/icons';
 // Context
 import { usePostData } from '../../postContext';
 
-const useStyles = makeStyles({
-  deleteButton: {
-    position: 'absolute',
-    left: '90%',
-    top: '10%',
-  },
-});
-
 /** Displays the dialog box to delete the user's post
+ * 
  * @type {React.FunctionComponent}
  * @param {object} props
  * @param {string} props.postId

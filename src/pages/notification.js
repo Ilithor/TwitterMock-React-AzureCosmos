@@ -5,8 +5,9 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 // Components
 import { NotificationContent } from '../components/notification';
 
-/**
- * Displays an array of notifications for the user
+/** Displays an array of notifications for the user
+ * 
+ * @type {React.FunctionComponent}
  */
 export const NotificationPage = () => {
   dayjs.extend(relativeTime);

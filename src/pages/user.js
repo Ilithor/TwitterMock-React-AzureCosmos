@@ -8,23 +8,16 @@ import { StaticProfile } from '../components/profile/static';
 
 // MUI
 import { Grid, CircularProgress } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { useStyles } from './page.style';
 
 // Context
 import { usePostData } from '../components/post/postContext';
 import { useUserListData } from '../components/profile/userContext';
 import { useLikeData } from '../components/like/likeContext';
 
-const useStyles = makeStyles({
-  spinnerDiv: {
-    textAlign: 'center',
-    marginTop: 50,
-    marginBottom: 50,
-  },
-});
-
-/**
- * Displays the user's profile page
+/** Displays the user's profile page
+ * 
+ * @type {React.FunctionComponent}
  */
 export const UserPage = () => {
   const { postList, isLoadingPostList } = usePostData();
@@ -57,7 +50,7 @@ export const UserPage = () => {
         </div>
       );
     }
-    if (userPostList === null) {
+    if (userPostList.length === 0) {
       return <p>No posts from this user</p>;
     }
     if (!isLoadingPostList && !isLoadingUserList && !isLoadingLikeList) {
