@@ -8,23 +8,17 @@ import { findById } from '../handlers/find';
  * @type {RouteHandler}
  */
 export const authUser = async (req, res, next) => {
-  await this.authByToken(req)
-    .then(async data => {
-      // Returns a document of type User
-      await findById(data)
-        .then(doc => {
-          req.user = doc;
-          next();
-        })
-        .catch(err => {
-          console.error(err);
-          return Promise.reject(err);
-        });
-    })
-    .catch(err => {
-      console.error(err);
-      return Promise.reject(err);
-    });
+  const data = await this.authByToken(req).catch(err => {
+    console.error(err);
+    return res.status(500);
+  });
+  // Returns a document of type User
+  const doc = await findById(data).catch(err => {
+    console.error(err);
+    return Promise.reject(err);
+  });
+  req.user = doc;
+  next();
 };
 
 /** Decodes token and returns _id
@@ -50,6 +44,6 @@ export const authByToken = req => {
     const decoded = jwt.verify(idToken, env.jwt);
     return Promise.resolve(decoded._id);
   } catch (err) {
-    return Promise.eject({ token: 'Invalid token' });
+    return Promise.reject({ token: 'Invalid token' });
   }
 };

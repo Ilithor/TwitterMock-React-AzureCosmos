@@ -11,7 +11,11 @@ export const getList = async () => {
   return await Post.find({})
     .sort({ createdAt: -1 })
     .read(mongo.ReadPreference.NEAREST)
-    .limit(100);
+    .limit(100)
+    .catch(err => {
+      console.error(err);
+      return Promise.reject(err);
+    });
 };
 
 /** Creates and saves new post
@@ -25,7 +29,7 @@ export const create = async (postParam, user) => {
     return Promise.reject({ body: 'Body must not be empty' });
   }
   // Create new post
-  postParam.userHandle = { ...user.userHandle };
+  postParam.userHandle = user.userHandle;
   const newPost = new Post(postParam);
   newPost.likeCount = 0;
   newPost.commentCount = 0;
@@ -41,5 +45,8 @@ export const create = async (postParam, user) => {
 export const findAndDeletePost = async _id => {
   return await Post.deleteOne({
     _id,
+  }).catch(err => {
+    console.error(err);
+    return Promise.reject(err);
   });
 };

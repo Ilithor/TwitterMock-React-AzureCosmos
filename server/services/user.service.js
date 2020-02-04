@@ -23,7 +23,11 @@ export const getList = async () => {
   return await User.find({})
     .sort({ createdAt: -1 })
     .read(mongo.ReadPreference.NEAREST)
-    .limit(100);
+    .limit(100)
+    .catch(err => {
+      console.error(err);
+      return Promise.reject(err);
+    });
 };
 
 /** Returns a list of likes by userHandle
@@ -33,7 +37,11 @@ export const getList = async () => {
 export const getLikeList = async userHandle => {
   return await Like.find({ userHandle })
     .read(mongo.ReadPreference.NEAREST)
-    .limit(100);
+    .limit(100)
+    .catch(err => {
+      console.error(err);
+      return Promise.reject(err);
+    });
 };
 
 /** Validates then creates new User
@@ -54,9 +62,9 @@ export const register = async userParam => {
     return Promise.reject(invalid);
   }
   // Create user
-  user.userHandle = { ...userParam.userHandle };
-  user.credential.email = { ...userParam.email };
-  user.credential.password = { ...userParam.password };
+  user.userHandle = userParam.userHandle;
+  user.credential.email = userParam.email;
+  user.credential.password = userParam.password;
   user.bio.aboutMe = '';
   user.bio.website = '';
   user.bio.location = '';
@@ -90,7 +98,7 @@ export const login = async userParam => {
           return Promise.reject(err);
         });
         const dataToReturn = { token };
-        dataToReturn.userHandle = { ...userLoggedIn.userHandle };
+        dataToReturn.userHandle = userLoggedIn.userHandle;
         return Promise.resolve(dataToReturn);
       }
     })
@@ -102,14 +110,14 @@ export const login = async userParam => {
 
 /** Updates the current user's bio properties
  * @param {Object} userParam
- * @param {string} userId
+ * @param {String} userId
  * @returns {Promise<boolean>}
  */
 export const updateBio = async (userParam, userId) => {
   const userDetail = {};
   let success = false;
   userDetail.bio = await validateUserDetail(userParam);
-  userParam.website = { ...userDetail.bio.website };
+  userParam.website = userDetail.bio.website;
   await findUserAndUpdateProfile(userDetail, userId)
     .then(async () => {
       const doc = await findById(userId).catch(err => {

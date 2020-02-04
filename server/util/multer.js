@@ -18,5 +18,5 @@ export const dataUri = req => {
     path.extname(req.file.originalname).toString(),
     req.file.buffer
   );
-  return file;
+  return Promise.resolve(file);
 };

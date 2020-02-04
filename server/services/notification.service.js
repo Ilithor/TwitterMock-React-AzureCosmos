@@ -8,7 +8,11 @@ export const getNotificationList = async () => {
   return await Notification.find({})
     .sort({ createdAt: 1 })
     .read(mongo.ReadPreference.NEAREST)
-    .limit(100);
+    .limit(100)
+    .catch(err => {
+      console.error(err);
+      return Promise.reject(err);
+    });
 };
 
 /** Creates new notification
