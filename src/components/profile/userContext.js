@@ -103,11 +103,11 @@ export const UserProvider = ({ children }) => {
         })
         .catch(err => {
           setUserError(err);
-          Promise.reject(err);
+          return Promise.reject(err);
         })
         .finally(() => {
           setIsLoadingUploadImage(false);
-          Promise.resolve();
+          return Promise.resolve();
         });
     }
   };
