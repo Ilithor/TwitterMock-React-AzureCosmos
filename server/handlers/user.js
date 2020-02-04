@@ -177,7 +177,7 @@ export const imageUpload = async (req, res, next) => {
     return res.send({ general: 'No image provided' });
   }
   const _id = req.user._id;
-  const base64 = dataUri(req).content;
+  const base64 = await dataUri(req).content;
   await findUserAndUpdateImage(_id, base64).catch(err => {
     console.error(err);
     return res.status(404);
