@@ -14,9 +14,7 @@ export const likePost = async (req, res, next) => {
     console.error(err);
     return res.status(404);
   });
-  const postToUpdate = { ...post };
-  const newNotification = {};
-  newNotification.recipient = postToUpdate.userHandle;
+  const postToUpdate = post;
   const like = await findLikeByHandleAndPostId(
     req.user.userHandle,
     req.params.postId
@@ -27,13 +25,12 @@ export const likePost = async (req, res, next) => {
   if (like) {
     return res.status(409);
   } else {
-    const newLike = create(req).catch(err => {
+    const newLike = await create(req).catch(err => {
       console.error(err);
       return res.status(500);
     });
-    newNotification.typeId = newLike._id;
     postToUpdate.likeCount++;
-    findPostAndUpdateCount(
+    await findPostAndUpdateCount(
       req.params.postId,
       postToUpdate.likeCount,
       postToUpdate.commentCount
@@ -41,13 +38,13 @@ export const likePost = async (req, res, next) => {
       console.error(err);
       return res.status(404);
     });
-    const recipient = newNotification.recipient;
+    const recipient = postToUpdate.userHandle;
     const postId = req.params.postId;
     const sender = req.user.userHandle;
     const type = 'like';
     const typeId = newLike._id;
-    createNotification(recipient, postId, sender, type, typeId);
-    return res.status(200);
+    await createNotification(recipient, postId, sender, type, typeId);
+    return res.status(200).send(true);
   }
 };
 
@@ -59,24 +56,24 @@ export const unlikePost = async (req, res, next) => {
     console.error(err);
     return res.status(404);
   });
-  const doc = remove(req).catch(err => {
-    console.error(err);
-    return res.stauts(500);
-  });
+  const doc = await remove(req.user.userHandle, req.params.postId).catch(
+    err => {
+      console.error(err);
+      return res.status(404);
+    }
+  );
   if (doc.postId === req.params.postId) {
-    const postToUpdate = { ...post };
-    const newNotification = {};
-    newNotification.typeId = doc._id;
+    const postToUpdate = post;
     postToUpdate.likeCount--;
     await findPostAndUpdateCount(
-      req.params.postId,
+      postToUpdate._id,
       postToUpdate.likeCount,
       postToUpdate.commentCount
     );
-    newNotification.type = 'like';
-    deleteNotification(req);
-    return res.status(200);
-  } else {
-    return res.status(500);
+    const userHandle = req.user.userHandle;
+    const type = 'like';
+    const typeId = doc._id;
+    await deleteNotification(userHandle, type, typeId);
+    return res.status(200).send(true);
   }
 };

@@ -17,13 +17,12 @@ export const create = async likeParam => {
 };
 
 /** Deletes Like document
- * @param {Request} likeParam
+ * @param {String} userHandle
+ * @param {String} postId
  * @returns {Promise<Like>}
  */
-export const remove = async likeParam => {
-  return await Like.findOneAndDelete({
-    postId: likeParam.params.postId,
-  }).catch(err => {
+export const remove = async (userHandle, postId) => {
+  return await Like.findOneAndDelete({ userHandle, postId }).catch(err => {
     console.error(err);
     return Promise.reject(err);
   });

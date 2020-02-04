@@ -45,10 +45,7 @@ export const createNotification = async (
   if (sender === recipient) {
     return Promise.resolve();
   }
-  await create(recipient, postId, sender, type, typeId).catch(err => {
-    console.error(err);
-    return Promise.reject(err);
-  });
+  await create(recipient, postId, sender, type, typeId);
 };
 
 /** Marks notification as read by user
@@ -66,10 +63,11 @@ export const markNotificationRead = async (req, res) => {
  *  of a like or comment
  * @type {RouteHandler}
  */
-export const deleteNotification = async req => {
+export const deleteNotification = async (userHandle, type, typeId) => {
   await Notification.findOneAndDelete({
-    type: req.notification.type,
-    typeId: req.notification.typeId,
+    userHandle,
+    type,
+    typeId,
   }).catch(err => {
     console.error(err);
     return Promise.reject(err);
