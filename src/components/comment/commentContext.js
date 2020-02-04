@@ -16,42 +16,28 @@ export const CommentProvider = ({ children }) => {
   const [commentError, setCommentError] = useState();
   const [lastRefreshCommentList, setLastRefreshCommentList] = useState();
   const [commentList, setCommentList] = useState();
-  const [commentListOnPost, setCommentListOnPost] = useState();
   const [isLoadingCommentList, setIsLoadingCommentList] = useState(false);
   const [isLoadingCommentOnPost, setIsLoadingCommentOnPost] = useState(false);
   const [isLoadingDeleteComment, setIsLoadingDeleteComment] = useState(false);
 
-  const refreshCommentList = () =>
-    new Promise((resolve, reject) => {
-      if (!isLoadingCommentList) {
-        setIsLoadingCommentList(true);
-        // Fetch list of comments
-        fetchUtil.post
-          .fetchCommentList()
-          .then(res => {
-            setCommentList(_.keyBy(res.data, 'commentId'));
-          })
-          .catch(err => {
-            setCommentError(err);
-            reject(err);
-          })
-          .finally(() => {
-            setLastRefreshCommentList(Date.now);
-            setIsLoadingCommentList(false);
-            resolve();
-          });
-      }
-    });
-
-  const refreshCommentListOnPost = postId => {
-    if (!isLoadingCommentList && commentList) {
+  const refreshCommentList = async () => {
+    if (!isLoadingCommentList) {
       setIsLoadingCommentList(true);
-      const commentData = _.filter(
-        commentList,
-        comment => comment?.postId === postId
-      );
-      setCommentListOnPost(commentData);
-      setIsLoadingCommentList(false);
+      // Fetch list of comments
+      await fetchUtil.post
+        .fetchCommentList()
+        .then(res => {
+          setCommentList(_.keyBy(res.data, 'commentId'));
+        })
+        .catch(err => {
+          setCommentError(err);
+          return Promise.reject(err);
+        })
+        .finally(() => {
+          setLastRefreshCommentList(Date.now);
+          setIsLoadingCommentList(false);
+          return Promise.resolve();
+        });
     }
   };
 
@@ -104,8 +90,6 @@ export const CommentProvider = ({ children }) => {
     refreshCommentList,
     lastRefreshCommentList,
     deleteComment,
-    refreshCommentListOnPost,
-    commentListOnPost,
   };
   return (
     <commentContext.Provider value={value}>{children}</commentContext.Provider>
@@ -144,8 +128,6 @@ export const useCommentListData = () => {
     refreshCommentList,
     lastRefreshCommentList,
     isLoadingCommentList,
-    refreshCommentListOnPost,
-    commentListOnPost,
   } = ctx;
 
   if (
@@ -160,8 +142,6 @@ export const useCommentListData = () => {
     commentList,
     commentError,
     refreshCommentList,
-    refreshCommentListOnPost,
-    commentListOnPost,
   };
 };
 

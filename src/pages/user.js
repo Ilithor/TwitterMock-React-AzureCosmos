@@ -28,7 +28,7 @@ const useStyles = makeStyles({
 export const UserPage = () => {
   const { postList, isLoadingPostList } = usePostData();
   const { userList, isLoadingUserList } = useUserListData();
-  const { likeList } = useLikeData();
+  const { likeList, isLoadingLikeList } = useLikeData();
   const [userPostList, setUserPostList] = useState({});
   const [userStaticProfile, setUserStaticProfile] = useState({});
   const classes = useStyles();
@@ -59,15 +59,15 @@ export const UserPage = () => {
     if (userPostList === null) {
       return <p>No posts from this user</p>;
     }
-    if (!isLoadingPostList && !isLoadingUserList) {
+    if (!isLoadingPostList && !isLoadingUserList && !isLoadingLikeList) {
       return _.map(userPostList, post => {
         if (post?.postId !== params.postId) {
           return (
             <Post
               key={`post-${post?.postId}`}
               post={post}
-              user={userList[(post?.userHandle)]}
-              like={likeList[(post?.postId)]}
+              user={userList[post?.userHandle]}
+              like={likeList[post?.postId]}
             />
           );
         }
@@ -75,8 +75,8 @@ export const UserPage = () => {
           <Post
             key={`post-${post?.postId}`}
             post={post}
-            user={userList[(post?.userHandle)]}
-            like={likeList[(post?.postId)]}
+            user={userList[post?.userHandle]}
+            like={likeList[post?.postId]}
           />
         );
       });
