@@ -23,5 +23,8 @@ export const create = async likeParam => {
 export const remove = async likeParam => {
   return await Like.findOneAndDelete({
     postId: likeParam.params.postId,
+  }).catch(err => {
+    console.error(err);
+    return Promise.reject(err);
   });
 };

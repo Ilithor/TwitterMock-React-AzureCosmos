@@ -54,7 +54,7 @@ export const validateUserDetail = userParam => {
   const userDetail = { aboutMe: '', website: '', location: '' };
   const { aboutMe, website, location } = userParam;
   if (!isEmpty(aboutMe.trim())) {
-    userDetail.aboutMe = { ...aboutMe };
+    userDetail.aboutMe = aboutMe;
   }
   if (!isEmpty(website.trim())) {
     if (website.trim().substring(0, 4) !== 'http') {
@@ -64,11 +64,11 @@ export const validateUserDetail = userParam => {
         userDetail.website = `http://${website.trim()}`;
       }
     } else {
-      userDetail.website = { ...website };
+      userDetail.website = website;
     }
   }
   if (!isEmpty(location.trim())) {
-    userDetail.location = { ...location };
+    userDetail.location = location;
   }
   return Promise.resolve(userDetail);
 };

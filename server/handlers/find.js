@@ -16,6 +16,9 @@ export const findByCredential = async user => {
   const error = {};
   const foundUser = await User.findOne({
     'credential.email': user.credential.email,
+  }).catch(err => {
+    console.error(err);
+    return Promise.reject(err);
   });
   if (!foundUser) {
     error.email = 'Email does not exist';
@@ -25,196 +28,220 @@ export const findByCredential = async user => {
     error.password = 'Invalid password';
     return Promise.reject(error);
   }
-  return foundUser;
+  return Promise.resolve(foundUser);
 };
 
 /** Returns a user that matches _id
- *
  * @param {string} _id
  * @returns {Promise<User|UserNotFound>}
  */
 export const findById = async _id => {
   return await User.findOne({
     _id,
+  }).catch(err => {
+    console.error(err);
+    return Promise.reject(err);
   });
 };
 
 /** Returns a user that matches handle
- *
  * @param {string} userHandle
  * @returns {Promise<User|UserNotFound>}
  */
 export const findByHandle = async userHandle => {
-  const error = {};
   const foundUser = await User.findOne({
     userHandle,
+  }).catch(err => {
+    console.error(err);
+    return Promise.reject(err);
   });
   if (!foundUser) {
-    error.user = 'User not found';
-    return error;
+    return Promise.reject({ user: 'User not found' });
   }
-  return foundUser;
+  return Promise.resolve(foundUser);
 };
 
 /** Returns post that matches _id
  *
- * @param {string} _id
+ * @param {String} _id
  * @returns {Promise<Post|PostNotFound>}
  */
 export const findPostById = async _id => {
-  const error = {};
   const post = await Post.findOne({
     _id,
+  }).catch(err => {
+    console.error(err);
+    return Promise.reject(err);
   });
   if (!post) {
-    error.post = 'Post not found';
-    return Promise.reject(error);
+    return Promise.reject({ post: 'Post not found' });
   }
-  return post;
+  return Promise.resolve(post);
 };
 
 /** Returns post that matches user handle
- *
- * @param {string} userHandle
+ * @param {String} userHandle
  * @returns {Promise<Post|PostNotFound>}
  */
 export const findPostByHandle = async userHandle => {
-  const postList = await Post.find({
+  return await Post.find({
     userHandle,
   })
     .sort({ createdAt: -1 })
-    .read(mongo.ReadPreference.NEAREST);
-  return postList;
+    .read(mongo.ReadPreference.NEAREST)
+    .catch(err => {
+      console.error(err);
+      return Promise.reject(err);
+    });
 };
 
 /** Fetches all comments attached to PostId
- *
- * @param {string} postId
+ * @param {String} postId
  * @returns {Promise<UserComment|NotificationNotFound>}
  */
 export const findCommentByPostId = async postId => {
-  const commentList = await Comment.find({
+  return await Comment.find({
     postId,
   })
     .sort({ createdAt: 1 })
-    .read(mongo.ReadPreference.NEAREST);
-  return commentList;
+    .read(mongo.ReadPreference.NEAREST)
+    .catch(err => {
+      console.error(err);
+      return Promise.reject(err);
+    });
 };
 
 /** Find all likes by userHandle
- *
- * @param {string} userHandle
+ * @param {String} userHandle
  * @returns {Promise<Like[]|any[]>}
  */
 export const findLikeByHandle = async userHandle => {
-  const likeList = await Like.find({
+  return await Like.find({
     userHandle,
-  }).read(mongo.ReadPreference.NEAREST);
-  return likeList;
+  })
+    .read(mongo.ReadPreference.NEAREST)
+    .catch(err => {
+      console.error(err);
+      return Promise.reject(err);
+    });
 };
 
 /** Finds all commenets by userHandle and PostId
- *
- * @param {string} userHandle
- * @param {string} postId
+ * @param {String} userHandle
+ * @param {String} postId
  * @returns {Promise<UserComment>}
  */
 export const findCommentByHandleAndPostId = async (userHandle, postId) => {
-  const commentList = await Comment.find({
+  return await Comment.find({
     userHandle,
     postId,
-  }).read(mongo.ReadPreference.NEAREST);
-  return commentList;
+  })
+    .read(mongo.ReadPreference.NEAREST)
+    .catch(err => {
+      console.error(err);
+      return Promise.reject(err);
+    });
 };
 
 /** Finds all likes that match the provided user handle
- *
  * @param {String} userHandle
  * @param {String} postId
- * @returns {Promise<Like[]>}
+ * @returns {Promise<Like[] | Error>}
  */
 export const findLikeByHandleAndPostId = async (userHandle, postId) => {
   return await Like.findOne({
     userHandle,
     postId,
-  }).read(mongo.ReadPreference.NEAREST);
+  })
+    .read(mongo.ReadPreference.NEAREST)
+    .catch(err => {
+      console.error(err);
+      return Promise.reject(err);
+    });
 };
 
 /** Updates all user posts with new image
- *
  * @param {String} userHandle
  * @param {String} base64
+ * @returns {void | Error}
  */
 export const findAndUpdatePostImage = async (userHandle, base64) => {
   await Post.updateMany(
     { userHandle },
     { $set: { userImage: base64 } },
     { useFindAndModify: false }
-  );
+  ).catch(err => {
+    console.error(err);
+    return Promise.reject(err);
+  });
 };
 
 /** Finds post and updates like/comment count
- *
- * @param {string} _id
+ * @param {String} _id
  * @param {Number} likeCount
  * @param {Number} commentCount
+ * @returns {void | Error}
  */
 export const findPostAndUpdateCount = async (_id, likeCount, commentCount) => {
   await Post.updateOne(
     { _id },
     { $set: { likeCount: likeCount, commentCount: commentCount } },
     { useFindAndModify: false }
-  );
+  ).catch(err => {
+    console.error(err);
+    return Promise.reject(err);
+  });
 };
 
 /** Finds and removes all likes and comments linked to a particular post
- *
- * @param {string} postId
+ * @param {String} postId
  * @returns {Promise<{like:any,comment:any}>}
  */
-export const findAndDeleteLikeAndComment = postId =>
-  new Promise((resolve, reject) => {
-    try {
-      // Deletes all associated likes
-      const like = Like.deleteMany({ postId });
-
-      // Deletes all associated comments
-      const comment = Comment.deleteMany({ postId });
-      resolve({ like, comment });
-    } catch (err) {
-      reject(err);
-    }
+export const findAndDeleteLikeAndComment = async postId => {
+  const like = await Like.deleteMany({ postId }).catch(err => {
+    console.error(err);
+    return Promise.reject(err);
   });
+  const comment = await Comment.deleteMany({ postId }).catch(err => {
+    console.error(err);
+    return Promise.reject(err);
+  });
+  return Promise.resolve({ like, comment });
+};
 
 /** Finds notification and marks read as true
- *
- * @param {string} _id
+ * @param {String} _id
  */
 export const findNotificationAndUpdateRead = async _id => {
   await Notification.updateOne(
     { _id },
     { $set: { read: true } },
     { useFindAndModify: false }
-  );
+  ).catch(err => {
+    console.error(err);
+    return Promise.reject(err);
+  });
 };
 
 /** Finds the exising user doc and updates the image property
- *
  * @param {String} _id
  * @param {String} base64
+ * @returns {void | Error}
  */
 export const findUserAndUpdateImage = async (_id, base64) => {
   await User.updateOne(
     { _id },
     { $set: { 'bio.userImage': base64 } },
     { useFindAndModify: false }
-  );
+  ).catch(err => {
+    console.error(err);
+    return Promise.reject(err);
+  });
 };
 
 /** Finds and updates the user's profile bio
- *
  * @param {User} userDetails
- * @param {string} _id
+ * @param {String} _id
  */
 export const findUserAndUpdateProfile = async (userDetails, _id) => {
   const { aboutMe, website, location } = userDetails.bio;
@@ -226,21 +253,30 @@ export const findUserAndUpdateProfile = async (userDetails, _id) => {
         { _id },
         { $set: { 'bio.location': location } },
         { useFindAndModify: false }
-      );
+      ).catch(err => {
+        console.error(err);
+        return Promise.reject(err);
+      });
     } else if (!location) {
       // Only changes website
       await User.updateOne(
         { _id },
         { $set: { 'bio.website': website } },
         { useFindAndModify: false }
-      );
+      ).catch(err => {
+        console.error(err);
+        return Promise.reject(err);
+      });
     } else {
       // Changes website and location
       await User.updateOne(
         { _id },
         { $set: { 'bio.website': website, 'bio.location': location } },
         { useFindAndModify: false }
-      );
+      ).catch(err => {
+        console.error(err);
+        return Promise.reject(err);
+      });
     }
   } else if (!website) {
     if (!location) {
@@ -249,14 +285,20 @@ export const findUserAndUpdateProfile = async (userDetails, _id) => {
         { _id },
         { $set: { 'bio.aboutMe': aboutMe } },
         { useFindAndModify: false }
-      );
+      ).catch(err => {
+        console.error(err);
+        return Promise.reject(err);
+      });
     } else {
       // Changes aboutMe and location
       await User.updateOne(
         { _id },
         { $set: { 'bio.aboutMe': aboutMe, 'bio.location': location } },
         { useFindAndModify: false }
-      );
+      ).catch(err => {
+        console.error(err);
+        return Promise.reject(err);
+      });
     }
   } else if (!location) {
     // Changes aboutMe and website
@@ -264,7 +306,10 @@ export const findUserAndUpdateProfile = async (userDetails, _id) => {
       { _id },
       { $set: { 'bio.aboutMe': aboutMe, 'bio.website': website } },
       { useFindAndModify: false }
-    );
+    ).catch(err => {
+      console.error(err);
+      return Promise.reject(err);
+    });
   } else {
     // Changes all 3 entries
     await User.updateOne(
@@ -277,6 +322,9 @@ export const findUserAndUpdateProfile = async (userDetails, _id) => {
         },
       },
       { useFindAndModify: false }
-    );
+    ).catch(err => {
+      console.error(err);
+      return Promise.reject(err);
+    });
   }
 };

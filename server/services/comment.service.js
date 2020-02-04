@@ -11,7 +11,11 @@ export const getList = async () => {
   return await Comment.find({})
     .sort({ createdAt: -1 })
     .read(mongo.ReadPreference.NEAREST)
-    .limit(100);
+    .limit(100)
+    .catch(err => {
+      console.error(err);
+      return Promise.reject(err);
+    });
 };
 
 /** Creates a new comment
@@ -26,10 +30,10 @@ export const create = async commentParam => {
 
   // Construct needed properties for the comment
   const dataForComment = {};
-  dataForComment.userHandle = { ...commentParam.user.userHandle };
-  dataForComment.postId = { ...commentParam.params.postId };
-  dataForComment.userImage = { ...commentParam.user.bio.userImage };
-  dataForComment.body = { ...commentParam.body.body };
+  dataForComment.userHandle = commentParam.user.userHandle;
+  dataForComment.postId = commentParam.params.postId;
+  dataForComment.userImage = commentParam.user.bio.userImage;
+  dataForComment.body = commentParam.body.body;
   const newComment = new Comment(dataForComment);
 
   // Save the comment
@@ -45,5 +49,8 @@ export const remove = async commentParam => {
   return await Comment.findOneAndDelete({
     postId: commentParam.params.postId,
     userHandle: commentParam.user.userHandle,
+  }).catch(err => {
+    console.error(err);
+    return Promise.reject(err);
   });
 };

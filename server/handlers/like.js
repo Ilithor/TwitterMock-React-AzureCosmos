@@ -9,89 +9,74 @@ import {
 /** Like a post
  * @type {RouteHandler}
  */
-export const likePost = (req, res, next) =>
-  new Promise(() => {
-    findPostById(req.params.postId)
-      .then(post => {
-        if (post.post) {
-          return res.send(post);
-        } else {
-          const postToUpdate = { ...post };
-          req.notification = {};
-          req.notification.recipient = postToUpdate.userHandle;
-          findLikeByHandleAndPostId(req.user.userHandle, req.params.postId)
-            .then(like => {
-              if (like) {
-                return res.send({ like: 'Like already exists' });
-              } else {
-                create(req)
-                  .then(like => {
-                    req.notification.typeId = like._id;
-                    postToUpdate.likeCount++;
-                    findPostAndUpdateCount(
-                      req.params.postId,
-                      postToUpdate.likeCount,
-                      postToUpdate.commentCount
-                    );
-                    const recipient = req.notification.recipient;
-                    const postId = req.params.postId;
-                    const sender = req.user.userHandle;
-                    const type = 'like';
-                    const typeId = like._id;
-                    createNotification(recipient, postId, sender, type, typeId);
-                    return res.status(200);
-                  })
-                  .catch(err => {
-                    console.error(err);
-                    return res.status(500).send(err);
-                  });
-              }
-            })
-            .catch(err => {
-              console.error(err);
-              return res.status(500).send(err);
-            });
-        }
-      })
-      .catch(err => {
-        console.error(err);
-        return res.send(err);
-      });
+export const likePost = async (req, res, next) => {
+  const post = await findPostById(req.params.postId).catch(err => {
+    console.error(err);
+    return res.status(404);
   });
+  const postToUpdate = { ...post };
+  const newNotification = {};
+  newNotification.recipient = postToUpdate.userHandle;
+  const like = await findLikeByHandleAndPostId(
+    req.user.userHandle,
+    req.params.postId
+  ).catch(err => {
+    console.error(err);
+    return res.status(500);
+  });
+  if (like) {
+    return res.status(409);
+  } else {
+    const newLike = create(req).catch(err => {
+      console.error(err);
+      return res.status(500);
+    });
+    newNotification.typeId = newLike._id;
+    postToUpdate.likeCount++;
+    findPostAndUpdateCount(
+      req.params.postId,
+      postToUpdate.likeCount,
+      postToUpdate.commentCount
+    ).catch(err => {
+      console.error(err);
+      return res.status(404);
+    });
+    const recipient = newNotification.recipient;
+    const postId = req.params.postId;
+    const sender = req.user.userHandle;
+    const type = 'like';
+    const typeId = newLike._id;
+    createNotification(recipient, postId, sender, type, typeId);
+    return res.status(200);
+  }
+};
 
 /** Unlike a post
  * @type {RouteHandler}
  */
-export const unlikePost = (req, res, next) =>
-  new Promise(() => {
-    findPostById(req.params.postId)
-      .then(post => {
-        remove(req)
-          .then(doc => {
-            if (doc.postId === req.params.postId) {
-              const postToUpdate = post;
-              req.notification = {};
-              req.notification.typeId = doc._id;
-              postToUpdate.likeCount--;
-              findPostAndUpdateCount(
-                req.params.postId,
-                postToUpdate.likeCount,
-                postToUpdate.commentCount
-              );
-              req.notification.type = 'like';
-              deleteNotification(req);
-              return res.status(200);
-            } else {
-              return res.status(500).send({ message: 'Something went wrong' });
-            }
-          })
-          .catch(err => {
-            console.error(err);
-            return res.send(err);
-          });
-      })
-      .catch(err => {
-        console.error(err);
-        return res.send(err);
-      });
+export const unlikePost = async (req, res, next) => {
+  const post = await findPostById(req.params.postId).catch(err => {
+    console.error(err);
+    return res.status(404);
   });
+  const doc = remove(req).catch(err => {
+    console.error(err);
+    return res.stauts(500);
+  });
+  if (doc.postId === req.params.postId) {
+    const postToUpdate = { ...post };
+    const newNotification = {};
+    newNotification.typeId = doc._id;
+    postToUpdate.likeCount--;
+    await findPostAndUpdateCount(
+      req.params.postId,
+      postToUpdate.likeCount,
+      postToUpdate.commentCount
+    );
+    newNotification.type = 'like';
+    deleteNotification(req);
+    return res.status(200);
+  } else {
+    return res.status(500);
+  }
+};

@@ -10,11 +10,10 @@ import { deleteNotification } from './notification';
 
 /**
  * Attempts to retrieve a full comment list
- * @param {RouteHandler}
+ * @type {RouteHandler}
  */
 export const getCommentList = async (req, res) => {
   const data = await getList().catch(err => {
-    console.error(err);
     res.status(500);
   });
   if (!data) {
@@ -45,7 +44,7 @@ export const commentOnPost = async (req, res, next) => {
   postToUpdate.commentCount++;
   const comment = await create(req).catch(err => {
     console.error(err);
-    res.status(500).send(err);
+    res.status(500);
   });
   newNotification.typeId = comment._id;
   await findPostAndUpdateCount(
@@ -68,36 +67,36 @@ export const commentOnPost = async (req, res, next) => {
 export const deleteComment = async (req, res, next) => {
   const post = await findPostById(req.params.postId).catch(err => {
     console.error(err);
-    res.send(err);
+    return res.status(404);
   });
   const postToUpdate = { ...post };
-  findCommentByHandleAndPostId(req.user.userHandle, req.params.postId)
-    .then(comment => {
-      req.notification = {};
-      req.notification.typeId = comment._id;
-      remove(req)
-        .then(doc => {
-          if (doc.postId === req.params.postId) {
-            postToUpdate.commentCount--;
-            findPostAndUpdateCount(
-              req.params.postId,
-              postToUpdate.likeCount,
-              postToUpdate.commentCount
-            );
-            req.notification.type = 'comment';
-            deleteNotification(req);
-            return res.status(200);
-          } else {
-            return res.status(500).send({ message: 'Something went wrong' });
-          }
-        })
-        .catch(err => {
-          console.error(err);
-          res.send(err);
-        });
-    })
-    .catch(err => {
+  const comment = await findCommentByHandleAndPostId(
+    req.user.userHandle,
+    req.params.postId
+  ).catch(err => {
+    console.error(err);
+    return res.status(404);
+  });
+  const newNotification = {};
+  newNotification.typeId = comment._id;
+  const doc = remove(req).catch(err => {
+    console.error(err);
+    return res.status(500);
+  });
+  if (doc.postId === req.params.postId) {
+    postToUpdate.commentCount--;
+    await findPostAndUpdateCount(
+      req.params.postId,
+      postToUpdate.likeCount,
+      postToUpdate.commentCount
+    ).catch(err => {
       console.error(err);
-      res.send(err);
+      res.status(404);
     });
+    newNotification.type = 'comment';
+    deleteNotification(req);
+    return res.status(200);
+  } else {
+    return res.status(500);
+  }
 };

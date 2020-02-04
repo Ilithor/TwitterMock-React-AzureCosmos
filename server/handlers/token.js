@@ -5,11 +5,10 @@ import env from '../environment/environment';
  * @param {UserNew} user
  * @returns {Token}
  */
-export const generateUserToken = user =>
-  new Promise((resolve, reject) => {
-    const token = jwt.sign({ _id: user._id }, env.jwt, {
-      expiresIn: '12h',
-    });
-    token.concat({ token });
-    resolve(token);
+export const generateUserToken = user => {
+  const token = jwt.sign({ _id: user._id }, env.jwt, {
+    expiresIn: '12h',
   });
+  token.concat({ token });
+  return Promise.resolve(token);
+};
