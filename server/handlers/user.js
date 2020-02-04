@@ -114,7 +114,7 @@ export const getUserDetail = async (req, res) => {
     res.status(404);
   });
   const userData = {};
-  userData.user = { ...user };
+  userData.user = user;
   const data = await findLikeByHandle(userHandle).catch(err => {
     console.error(err);
     res.status(404);
@@ -124,12 +124,11 @@ export const getUserDetail = async (req, res) => {
     console.error(err);
     res.status(404);
   });
-  res.status(200).send(
-    await pushPostIntoArray(postList, userData).catch(err => {
-      console.error(err);
-      return res.status(500);
-    })
-  );
+  const userResult = await pushPostIntoArray(postList, userData).catch(err => {
+    console.error(err);
+    return res.status(500);
+  });
+  res.status(200).send(userResult);
 };
 
 /** Pushes post docs into post array
@@ -138,7 +137,7 @@ export const getUserDetail = async (req, res) => {
  * @returns {userData[Object]}
  */
 const pushPostIntoArray = (postList, userData) => {
-  return _.map(postList, doc => ({
+  userData.post = _.map(postList, doc => ({
     body: doc.body,
     createdAt: doc.createdAt,
     userHandle: doc.userHandle,
@@ -147,6 +146,7 @@ const pushPostIntoArray = (postList, userData) => {
     commentCount: doc.commentCount,
     postId: doc._id,
   }));
+  return Promise.resolve(userData);
 };
 
 /** Edits the current user's profile with the params provided by said user
