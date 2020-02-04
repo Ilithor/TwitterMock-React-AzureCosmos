@@ -23,7 +23,8 @@ const useStyles = makeStyles({
   },
 });
 
-/** Displays the user's profile page
+/**
+ * Displays the user's profile page
  */
 export const UserPage = () => {
   const { postList, isLoadingPostList } = usePostData();
