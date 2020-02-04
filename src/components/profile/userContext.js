@@ -30,26 +30,25 @@ export const UserProvider = ({ children }) => {
   const [isLoadingUploadImage, setIsLoadingUploadImage] = useState(false);
   const history = useHistory();
 
-  const refreshUserList = () =>
-    new Promise((resolve, reject) => {
-      if (!isLoadingUserList) {
-        setIsLoadingUserList(true);
-        fetchUtil.user
-          .fetchUserList()
-          .then(res => {
-            setUserList(_.keyBy(res.data, 'userHandle'));
-          })
-          .catch(err => {
-            setUserError(err);
-            reject(err);
-          })
-          .finally(() => {
-            setLastRefreshUserList(Date.now);
-            setIsLoadingUserList(false);
-            resolve();
-          });
-      }
-    });
+  const refreshUserList = async () => {
+    if (!isLoadingUserList) {
+      setIsLoadingUserList(true);
+      await fetchUtil.user
+        .fetchUserList()
+        .then(res => {
+          setUserList(_.keyBy(res.data, 'userHandle'));
+        })
+        .catch(err => {
+          setUserError(err);
+          return Promise.reject(err);
+        })
+        .finally(() => {
+          setLastRefreshUserList(Date.now);
+          setIsLoadingUserList(false);
+          return Promise.resolve();
+        });
+    }
+  };
 
   const getCurrentUserData = async () => {
     if (localStorage?.Handle && !isLoadingUserData) {
