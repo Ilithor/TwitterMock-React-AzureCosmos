@@ -71,7 +71,6 @@ export const UserProvider = ({ children }) => {
   };
 
   const editUserDetail = async userDetail => {
-    console.log(userDetail);
     if (userDetail && !isLoadingEditUserDetail) {
       setIsLoadingEditUserDetail(true);
       await fetchUtil.user
@@ -113,38 +112,38 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  const registerUser = userParam =>
-    new Promise((resolve, reject) => {
-      if (!isLoadingRegister) {
-        setIsLoadingRegister(true);
-        if (
-          !userParam.email ||
-          !userParam.password ||
-          !userParam.userHandle ||
-          !userParam.confirmPassword
-        ) {
-          setIsLoadingRegister(false);
-          reject(checkRegisterIfUndefined(userParam));
-        } else {
-          fetchUtil.user
-            .registerUser(userParam)
-            .then(res => {
-              if (!res.data.token) {
-                reject(res.data);
-              } else {
-                setAuthorizationHeader(res?.data?.token);
-                setUserHandleHeader(res?.data?.user?.userHandle);
-                getAuthenticated();
-              }
-            })
-            .catch(err => reject(err))
-            .finally(() => {
-              setIsLoadingRegister(false);
-              resolve();
-            });
-        }
+  const registerUser = async userParam => {
+    if (!isLoadingRegister) {
+      setIsLoadingRegister(true);
+      if (
+        !userParam.email ||
+        !userParam.password ||
+        !userParam.userHandle ||
+        !userParam.confirmPassword
+      ) {
+        setIsLoadingRegister(false);
+        return Promise.reject(await checkRegisterIfUndefined(userParam));
+      } else {
+        await fetchUtil.user
+          .registerUser(userParam)
+          .then(async res => {
+            if (!res?.data?.token) {
+              return Promise.reject(res.data);
+            }
+            setAuthorizationHeader(res?.data?.token);
+            setUserHandleHeader(res?.data?.user?.userHandle);
+            await getAuthenticated();
+          })
+          .catch(err => {
+            return Promise.reject(err);
+          })
+          .finally(() => {
+            setIsLoadingRegister(false);
+            return Promise.resolve();
+          });
       }
-    });
+    }
+  };
 
   const loginUser = async userParam => {
     if (!isLoadingLogin) {
@@ -153,17 +152,12 @@ export const UserProvider = ({ children }) => {
         setIsLoadingLogin(false);
         return Promise.reject(await checkLoginIfUndefined(userParam));
       }
-      fetchUtil.user
+      await fetchUtil.user
         .loginUser(userParam)
         .then(async res => {
-          if (!res?.data?.token) {
-            return Promise.reject(res.data);
-          } else {
-            console.log(res.data.token, res.data.userHandle);
-            setAuthorizationHeader(res?.data?.token);
-            setUserHandleHeader(res?.data?.userHandle);
-            await getAuthenticated();
-          }
+          setAuthorizationHeader(res?.data?.token);
+          setUserHandleHeader(res?.data?.userHandle);
+          await getAuthenticated();
         })
         .catch(err => {
           return Promise.reject(err);
@@ -213,39 +207,38 @@ export const UserProvider = ({ children }) => {
     localStorage.setItem('Handle', userHandle);
   };
 
-  const getAuthenticated = () =>
-    new Promise((resolve, reject) => {
-      if (
-        localStorage?.Token &&
-        localStorage?.Handle &&
-        !isLoadingAuthenticated &&
-        !isAuthenticated
-      ) {
-        setIsLoadingAuthenticated(true);
-        const decodedToken = jwtDecode(localStorage?.Token);
-        if (decodedToken?.exp * 1000 < Date.now()) {
-          localStorage.removeItem('Token');
-          localStorage.removeItem('Handle');
-          delete axios.defaults.headers.common['Authorization'];
-          setisAuthenticated(false);
-          history.push('/login');
-        } else {
-          axios.defaults.headers.common['Authorization'] = localStorage?.Token;
-          getCurrentUserData()
-            .then(() => {
-              setisAuthenticated(true);
-            })
-            .catch(err => {
-              setUserError(err);
-              reject(err);
-            })
-            .finally(() => {
-              setIsLoadingAuthenticated(false);
-              resolve();
-            });
-        }
+  const getAuthenticated = async () => {
+    if (
+      localStorage?.Token &&
+      localStorage?.Handle &&
+      !isLoadingAuthenticated &&
+      !isAuthenticated
+    ) {
+      setIsLoadingAuthenticated(true);
+      const decodedToken = jwtDecode(localStorage?.Token);
+      if (decodedToken?.exp * 1000 < Date.now()) {
+        localStorage.removeItem('Token');
+        localStorage.removeItem('Handle');
+        delete axios.defaults.headers.common['Authorization'];
+        setisAuthenticated(false);
+        history.push('/login');
+      } else {
+        axios.defaults.headers.common['Authorization'] = localStorage?.Token;
+        await getCurrentUserData()
+          .then(() => {
+            setisAuthenticated(true);
+          })
+          .catch(err => {
+            setUserError(err);
+            return Promise.reject(err);
+          })
+          .finally(() => {
+            setIsLoadingAuthenticated(false);
+            return Promise.resolve();
+          });
       }
-    });
+    }
+  };
 
   const logoutUser = () => {
     localStorage.removeItem('Token');
