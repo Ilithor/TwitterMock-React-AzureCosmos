@@ -30,12 +30,11 @@ export const getList = async () => {
     });
 };
 
-/** Returns a list of likes by userHandle
- * @param {String} userHandle
- * @returns {Promise<likeList[Like]>}
+/** Returns a list of likes
+ * @returns {Promise<[Like]>}
  */
-export const getLikeList = async userHandle => {
-  return await Like.find({ userHandle })
+export const getLikeList = async () => {
+  return await Like.find({})
     .read(mongo.ReadPreference.NEAREST)
     .limit(100)
     .catch(err => {

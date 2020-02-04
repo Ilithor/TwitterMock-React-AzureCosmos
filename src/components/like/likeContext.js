@@ -22,27 +22,26 @@ export const LikeProvider = ({ children }) => {
   const [isLoadingLikePost, setIsLoadingLikePost] = useState(false);
   const [isLoadingUnlikePost, setIsLoadingUnlikePost] = useState(false);
 
-  const refreshLikeList = () =>
-    new Promise((resolve, reject) => {
-      if (!isLoadingLikeList) {
-        setIsLoadingLikeList(true);
-        // Fetch list of likes
-        fetchUtil.user
-          .fetchLikeList(localStorage?.Handle)
-          .then(res => {
-            setLikeList(_.keyBy(res.data, 'postId'));
-          })
-          .catch(err => {
-            setLikeError(err);
-            reject(err);
-          })
-          .finally(() => {
-            setlastRefreshLikeList(Date.now);
-            setIsLoadingLikeList(false);
-            resolve();
-          });
-      }
-    });
+  const refreshLikeList = async () => {
+    if (!isLoadingLikeList) {
+      setIsLoadingLikeList(true);
+      // Fetch list of likes
+      await fetchUtil.user
+        .fetchLikeList(localStorage?.Handle)
+        .then(res => {
+          setLikeList(_.keyBy(res.data, 'postId'));
+        })
+        .catch(err => {
+          setLikeError(err);
+          return Promise.reject(err);
+        })
+        .finally(() => {
+          setlastRefreshLikeList(Date.now);
+          setIsLoadingLikeList(false);
+          return Promise.resolve();
+        });
+    }
+  };
 
   const likePost = postId =>
     new Promise((resolve, reject) => {
