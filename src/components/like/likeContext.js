@@ -43,41 +43,47 @@ export const LikeProvider = ({ children }) => {
     }
   };
 
-  const likePost = postId =>
-    new Promise((resolve, reject) => {
-      if ((postId, !isLoadingLikePost)) {
-        setIsLoadingLikePost(true);
-        fetchUtil.post
-          .likePost(postId)
-          .then(async () => {})
-          .catch(err => {
-            setLikeError(err);
-            reject(err);
-          })
-          .finally(() => {
-            setIsLoadingLikePost(false);
-            resolve();
-          });
-      }
-    });
+  const likePost = async postId => {
+    if ((postId, !isLoadingLikePost)) {
+      setIsLoadingLikePost(true);
+      await fetchUtil.post
+        .likePost(postId)
+        .then(async success => {
+          if (success) {
+            await refreshLikeList();
+          }
+        })
+        .catch(err => {
+          setLikeError(err);
+          return Promise.reject(err);
+        })
+        .finally(() => {
+          setIsLoadingLikePost(false);
+          return Promise.resolve();
+        });
+    }
+  };
 
-  const unlikePost = postId =>
-    new Promise((resolve, reject) => {
-      if (postId && !isLoadingUnlikePost) {
-        setIsLoadingUnlikePost(true);
-        fetchUtil.post
-          .unlikePost(postId)
-          .then(async () => {})
-          .catch(err => {
-            setLikeError(err);
-            reject(err);
-          })
-          .finally(() => {
-            setIsLoadingUnlikePost(false);
-            resolve();
-          });
-      }
-    });
+  const unlikePost = async postId => {
+    if (postId && !isLoadingUnlikePost) {
+      setIsLoadingUnlikePost(true);
+      await fetchUtil.post
+        .unlikePost(postId)
+        .then(async success => {
+          if (success) {
+            await refreshLikeList();
+          }
+        })
+        .catch(err => {
+          setLikeError(err);
+          return Promise.reject(err);
+        })
+        .finally(() => {
+          setIsLoadingUnlikePost(false);
+          return Promise.resolve();
+        });
+    }
+  };
 
   // Passing state to value to be passed to provider
   const value = {
