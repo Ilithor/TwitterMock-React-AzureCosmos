@@ -98,6 +98,7 @@ export const UserProvider = ({ children }) => {
         .then(async success => {
           if (success) {
             await getCurrentUserData();
+            await refreshUserList();
           }
         })
         .catch(err => {
