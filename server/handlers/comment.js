@@ -14,7 +14,8 @@ import { deleteNotification } from './notification';
  */
 export const getCommentList = async (req, res) => {
   const data = await getList().catch(err => {
-    res.status(500);
+    console.error(err);
+    return res.send(err);
   });
   if (!data) {
     return res.status(404);
