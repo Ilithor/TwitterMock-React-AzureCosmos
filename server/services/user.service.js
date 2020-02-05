@@ -71,7 +71,7 @@ export const register = async userParam => {
 
   // Save user
   await newUser.save();
-  return Promise.resolve(newUser);
+  return newUser;
 };
 
 /** Checks if user exists, and then generates a new token
@@ -97,7 +97,7 @@ export const login = async userParam => {
   });
   const dataToReturn = { token };
   dataToReturn.userHandle = userLoggedIn.userHandle;
-  return Promise.resolve(dataToReturn);
+  return dataToReturn;
 };
 
 /** Updates the current user's bio properties
@@ -111,7 +111,7 @@ export const updateBio = async (userParam, userId) => {
   userDetail.bio = await validateUserDetail(userParam).catch(err => {
     console.error(err);
     return Promise.reject(err);
-  })
+  });
   userParam.website = userDetail.bio.website;
   await findUserAndUpdateProfile(userDetail, userId).catch(err => {
     console.error(err);
@@ -126,8 +126,8 @@ export const updateBio = async (userParam, userId) => {
     doc.bio.website === userParam.website &&
     doc.bio.location === userParam.location
   ) {
-    return Promise.resolve((success = true));
+    return (success = true);
   } else {
-    return Promise.resolve(success);
+    return success;
   }
 };

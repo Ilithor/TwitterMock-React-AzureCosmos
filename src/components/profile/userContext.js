@@ -51,7 +51,7 @@ export const UserProvider = ({ children }) => {
         .finally(() => {
           setLastRefreshUserList(Date.now);
           setIsLoadingUserList(false);
-          return Promise.resolve();
+          return;
         });
     }
   };
@@ -74,7 +74,7 @@ export const UserProvider = ({ children }) => {
         })
         .finally(() => {
           setIsLoadingUserData(false);
-          return Promise.resolve();
+          return;
         });
     }
   };
@@ -93,7 +93,7 @@ export const UserProvider = ({ children }) => {
         userDetail?.location === currentUser?.bio?.location
       ) {
         setIsLoadingEditUserDetail(false);
-        return Promise.resolve();
+        return;
       }
       await fetchUtil.user
         .editUserDetail(userDetail)
@@ -110,7 +110,7 @@ export const UserProvider = ({ children }) => {
         })
         .finally(() => {
           setIsLoadingEditUserDetail(false);
-          return Promise.resolve();
+          return;
         });
     }
   };
@@ -180,7 +180,7 @@ export const UserProvider = ({ children }) => {
         })
         .finally(() => {
           setIsLoadingUploadImage(false);
-          return Promise.resolve();
+          return;
         });
     }
   };
@@ -213,7 +213,7 @@ export const UserProvider = ({ children }) => {
           })
           .finally(() => {
             setIsLoadingRegister(false);
-            return Promise.resolve();
+            return;
           });
       }
     }
@@ -244,7 +244,7 @@ export const UserProvider = ({ children }) => {
         })
         .finally(() => {
           setIsLoadingLogin(false);
-          return Promise.resolve();
+          return;
         });
     }
   };
@@ -345,7 +345,7 @@ export const UserProvider = ({ children }) => {
           })
           .finally(() => {
             setIsLoadingAuthenticated(false);
-            return Promise.resolve();
+            return;
           });
       }
     }

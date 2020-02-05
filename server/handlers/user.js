@@ -146,7 +146,7 @@ const pushPostIntoArray = (postList, userData) => {
     commentCount: doc.commentCount,
     postId: doc._id,
   }));
-  return Promise.resolve(userData);
+  return userData;
 };
 
 /** Edits the current user's profile with the params provided by said user

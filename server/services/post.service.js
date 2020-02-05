@@ -36,7 +36,7 @@ export const create = async (postParam, user) => {
 
   // Save post
   await newPost.save();
-  return Promise.resolve(newPost);
+  return newPost;
 };
 
 /** Deletes post

@@ -10,5 +10,5 @@ export const generateUserToken = user => {
     expiresIn: '12h',
   });
   token.concat({ token });
-  return Promise.resolve(token);
+  return token;
 };

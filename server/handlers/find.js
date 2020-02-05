@@ -29,7 +29,7 @@ export const findByCredential = async user => {
     error.password = 'Invalid password';
     return Promise.reject(error);
   }
-  return Promise.resolve(foundUser);
+  return foundUser;
 };
 
 /** Returns a user that matches _id
@@ -209,7 +209,7 @@ export const findAndDeleteLikeAndComment = async postId => {
     console.error(err);
     return Promise.reject(err);
   });
-  return Promise.resolve({ like, comment });
+  return { like, comment };
 };
 
 /** Finds notification and marks read as true

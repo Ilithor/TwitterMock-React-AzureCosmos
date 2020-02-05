@@ -43,7 +43,7 @@ export const createNotification = async (
   typeId
 ) => {
   if (sender === recipient) {
-    return Promise.resolve();
+    return;
   }
   await create(recipient, postId, sender, type, typeId);
 };

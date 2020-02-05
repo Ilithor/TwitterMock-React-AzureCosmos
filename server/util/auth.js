@@ -42,7 +42,7 @@ export const authByToken = req => {
   }
   try {
     const decoded = jwt.verify(idToken, env.jwt);
-    return Promise.resolve(decoded._id);
+    return decoded._id;
   } catch (err) {
     return Promise.reject({ token: 'Invalid token' });
   }

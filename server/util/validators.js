@@ -17,7 +17,7 @@ export const validateLogin = user => {
   if (isEmpty(user.password)) {
     return Promise.reject({ password: 'Must not be empty' });
   }
-  return Promise.resolve();
+  return;
 };
 
 /** Checks if the user inputs are valid
@@ -43,7 +43,7 @@ export const validateRegister = async userParam => {
   } else if (userParam.password !== userParam.confirmPassword) {
     error = { ...error, confirmPassword: 'Password confirmation must match' };
   }
-  return Promise.resolve(error);
+  return error;
 };
 
 /** Checks if the provided bio information is valid
@@ -70,7 +70,7 @@ export const validateUserDetail = userParam => {
     userDetail.aboutMe = aboutMe;
     userDetail.website = website;
     userDetail.location = location;
-    return Promise.resolve(userDetail);
+    return userDetail;
   }
 };
 
