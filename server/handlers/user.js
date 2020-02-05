@@ -153,17 +153,18 @@ const pushPostIntoArray = (postList, userData) => {
  * @type {RouteHandler}
  */
 export const addUserDetail = async (req, res, next) => {
-  const userParam = { ...req.body };
+  const userParam = req.body;
   if (!userParam.aboutMe && !userParam.website && !userParam.location) {
     return res.send({ general: 'At least one valid input is needed' });
   }
   const userId = req.user._id;
   const success = await updateBio(userParam, userId).catch(err => {
     console.error(err);
-    return res.status(500);
+    return res.send(err);
   });
+  console.log('success: ', success);
   if (success === true) {
-    return res.status(200);
+    return res.status(200).send(success);
   } else {
     return res.status(500);
   }

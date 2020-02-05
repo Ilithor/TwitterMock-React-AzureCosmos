@@ -106,28 +106,28 @@ export const login = async userParam => {
  * @returns {Promise<boolean>}
  */
 export const updateBio = async (userParam, userId) => {
-  const userDetail = {};
   let success = false;
-  userDetail.bio = await validateUserDetail(userParam);
+  const userDetail = {};
+  userDetail.bio = await validateUserDetail(userParam).catch(err => {
+    console.error(err);
+    return Promise.reject(err);
+  })
   userParam.website = userDetail.bio.website;
-  await findUserAndUpdateProfile(userDetail, userId)
-    .then(async () => {
-      const doc = await findById(userId).catch(err => {
-        console.error(err);
-        return Promise.reject(err);
-      });
-      if (
-        doc.bio.aboutMe === userParam.aboutMe &&
-        doc.bio.website === userParam.website &&
-        doc.bio.location === userParam.location
-      ) {
-        success = true;
-        return Promise.resolve(success);
-      }
-      return Promise.resolve(success);
-    })
-    .catch(err => {
-      console.error(err);
-      return Promise.reject(err);
-    });
+  await findUserAndUpdateProfile(userDetail, userId).catch(err => {
+    console.error(err);
+    return Promise.reject(err);
+  });
+  const doc = await findById(userId).catch(err => {
+    console.error(err);
+    return Promise.reject(err);
+  });
+  if (
+    doc.bio.aboutMe === userParam.aboutMe &&
+    doc.bio.website === userParam.website &&
+    doc.bio.location === userParam.location
+  ) {
+    return Promise.resolve((success = true));
+  } else {
+    return Promise.resolve(success);
+  }
 };
