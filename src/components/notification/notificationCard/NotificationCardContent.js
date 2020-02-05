@@ -24,9 +24,9 @@ export const NotificationCardContent = ({
   const classes = useStyles();
   const NotificationContent = ({ type, postBody, commentBody }) => {
     if (type === 'like') {
-      return <React.Fragment>"{postBody}"</React.Fragment>;
+      return <h2>"{postBody}"</h2>;
     }
-    return <React.Fragment>"{commentBody}"</React.Fragment>;
+    return <h2>"{commentBody}"</h2>;
   };
   const NotificationNew = ({ classes, read }) => {
     if (read === false) {
@@ -59,7 +59,6 @@ export const NotificationCardContent = ({
         postBody={postBody}
         commentBody={commentBody}
       />
-      <br />
       <Typography variant='body2' color='textSecondary'>
         {dayjs(notification?.createdAt).fromNow()}
       </Typography>

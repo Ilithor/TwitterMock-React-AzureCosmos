@@ -461,6 +461,10 @@ export const useCurrentUserData = () => {
     isAuthenticated,
   } = ctx;
 
+  if (!currentUser && !isLoadingUserData) {
+    getCurrentUserData();
+  }
+
   return {
     isLoadingUserData,
     currentUser,
