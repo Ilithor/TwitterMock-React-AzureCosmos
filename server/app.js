@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 
 import index from './routes/index';
+import { MongoError } from 'mongodb';
 
 const app = express();
 
@@ -25,6 +26,17 @@ app.set('view engine', 'jade');
 app.use('/api', index);
 app.get('*', (req, res) => {
   res.sendFile('build/index.html', { root: global });
+});
+
+// catch 503 and forward to error handler
+app.use((err, req, res, next) => {
+  if (err instanceof MongoError) {
+    return res.status(503).json({
+      type: 'MongoError',
+      message: err.message,
+    });
+  }
+  next(err);
 });
 
 // catch 404 and forward to error handler
