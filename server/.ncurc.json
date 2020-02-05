@@ -1,0 +1,10 @@
+{
+  "upgrade": true,
+  "reject": [
+    "msal",
+    "slate",
+    "slate-html-serializer",
+    "slate-plain-serializer",
+    "slate-react"
+  ]
+}
