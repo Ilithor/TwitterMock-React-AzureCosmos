@@ -37,7 +37,7 @@ export const LikeProvider = ({ children }) => {
         .finally(() => {
           setlastRefreshLikeList(Date.now);
           setIsLoadingLikeList(false);
-          return Promise.resolve();
+          return;
         });
     }
   };
@@ -58,7 +58,7 @@ export const LikeProvider = ({ children }) => {
         })
         .finally(() => {
           setIsLoadingLikePost(false);
-          return Promise.resolve();
+          return;
         });
     }
   };
@@ -79,7 +79,7 @@ export const LikeProvider = ({ children }) => {
         })
         .finally(() => {
           setIsLoadingUnlikePost(false);
-          return Promise.resolve();
+          return;
         });
     }
   };

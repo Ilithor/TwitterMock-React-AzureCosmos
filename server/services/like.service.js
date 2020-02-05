@@ -13,7 +13,7 @@ export const create = async likeParam => {
 
   // Save the like
   await newLike.save();
-  return Promise.resolve(newLike);
+  return newLike;
 };
 
 /** Deletes Like document

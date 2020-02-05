@@ -38,7 +38,7 @@ export const create = async commentParam => {
 
   // Save the comment
   await newComment.save();
-  return Promise.resolve(newComment);
+  return newComment;
 };
 
 /** Deletes Comment document

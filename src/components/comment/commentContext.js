@@ -47,7 +47,7 @@ export const CommentProvider = ({ children }) => {
         .finally(() => {
           setLastRefreshCommentList(Date.now);
           setIsLoadingCommentList(false);
-          return Promise.resolve();
+          return;
         });
     }
   };
@@ -75,7 +75,7 @@ export const CommentProvider = ({ children }) => {
         })
         .finally(() => {
           setIsLoadingCommentOnPost(false);
-          return Promise.resolve();
+          return;
         });
     }
   };
@@ -131,7 +131,7 @@ export const CommentProvider = ({ children }) => {
         })
         .finally(() => {
           setIsLoadingDeleteComment(false);
-          return Promise.resolve();
+          return;
         });
     }
   };

@@ -69,7 +69,7 @@ export const PostProvider = ({ children }) => {
         })
         .finally(() => {
           setIsLoadingNewPost(false);
-          Promise.resolve();
+          return;
         });
     }
   };
