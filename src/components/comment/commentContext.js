@@ -33,7 +33,12 @@ export const CommentProvider = ({ children }) => {
       await fetchUtil.post
         .fetchCommentList()
         .then(res => {
-          setCommentList(_.keyBy(res.data, 'commentId'));
+          if (Array.isArray(res?.data)) {
+            setCommentList(_.keyBy(res.data, 'commentId'));
+          } else {
+            setCommentError(res?.data);
+            return Promise.reject(res?.data);
+          }
         })
         .catch(err => {
           setCommentError(err);
