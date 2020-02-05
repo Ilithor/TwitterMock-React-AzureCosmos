@@ -17,7 +17,7 @@ export const validateLogin = user => {
   if (isEmpty(user.password)) {
     return Promise.reject({ password: 'Must not be empty' });
   }
-  return;
+  return Promise.resolve();
 };
 
 /** Checks if the user inputs are valid
@@ -70,7 +70,7 @@ export const validateUserDetail = userParam => {
     userDetail.aboutMe = aboutMe;
     userDetail.website = website;
     userDetail.location = location;
-    return userDetail;
+    return Promise.resolve(userDetail);
   }
 };
 

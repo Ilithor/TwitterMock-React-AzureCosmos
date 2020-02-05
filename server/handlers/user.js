@@ -124,10 +124,7 @@ export const getUserDetail = async (req, res) => {
     console.error(err);
     res.status(404);
   });
-  const userResult = await pushPostIntoArray(postList, userData).catch(err => {
-    console.error(err);
-    return res.status(500);
-  });
+  const userResult = await pushPostIntoArray(postList, userData);
   res.status(200).send(userResult);
 };
 
