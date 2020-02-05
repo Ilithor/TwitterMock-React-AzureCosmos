@@ -139,10 +139,7 @@ export const UserProvider = ({ children }) => {
     } else {
       err = undefined;
     }
-    if (err) {
-      setDetailError(err);
-      return userParam;
-    }
+    setDetailError(err);
     return userParam;
   };
 
@@ -288,12 +285,10 @@ export const UserProvider = ({ children }) => {
   };
 
   const isWebsite = website => {
-    const websiteRegEx = /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/;
-    if (website.match(websiteRegEx)) {
+    if (_.includes(website, '.')) {
       return true;
-    } else {
-      return false;
     }
+    return false;
   };
 
   /** Sets the user token and authorization

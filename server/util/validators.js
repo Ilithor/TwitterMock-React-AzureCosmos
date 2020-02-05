@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 import { User } from '../models/user.model';
 
 import mongoConnection from '../util/mongo';
@@ -63,15 +65,16 @@ export const validateUserDetail = userParam => {
         'At least one field must be filled before this form can be submitted!',
     };
     return Promise.reject(err);
-  } else if (!isWebsite(website)) {
+  }
+  const validatedWebsite = isWebsite(website);
+  if (!validatedWebsite) {
     const err = { website: 'Must be a valid website' };
     return Promise.reject(err);
-  } else {
-    userDetail.aboutMe = aboutMe;
-    userDetail.website = website;
-    userDetail.location = location;
-    return Promise.resolve(userDetail);
   }
+  userDetail.aboutMe = aboutMe;
+  userDetail.website = validatedWebsite;
+  userDetail.location = location;
+  return Promise.resolve(userDetail);
 };
 
 /** Checks if provided string is empty
@@ -106,10 +109,11 @@ export const isEmail = email => {
  * @returns {Promise<boolean>}
  */
 export const isWebsite = website => {
-  const websiteRegEx = /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/;
-  if (website.match(websiteRegEx)) {
-    return true;
-  } else {
+  if (!_.includes(website, '.')) {
     return false;
   }
+  if (!_.includes(website, '://')) {
+    website = `http://${website}`;
+  }
+  return website;
 };
