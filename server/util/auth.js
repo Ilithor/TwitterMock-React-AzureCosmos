@@ -10,7 +10,7 @@ import { findById } from '../handlers/find';
 export const authUser = async (req, res, next) => {
   const data = await this.authByToken(req).catch(err => {
     console.error(err);
-    return res.status(500);
+    return res.send(err);
   });
   // Returns a document of type User
   const doc = await findById(data).catch(err => {
@@ -42,7 +42,7 @@ export const authByToken = req => {
   }
   try {
     const decoded = jwt.verify(idToken, env.jwt);
-    return decoded._id;
+    return Promise.resolve(decoded._id);
   } catch (err) {
     return Promise.reject({ token: 'Invalid token' });
   }
