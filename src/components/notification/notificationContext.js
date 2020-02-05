@@ -64,28 +64,31 @@ export const NotificationProvider = ({ children }) => {
    * @param {object} notification
    * @returns {void, Error}
    */
-  const markNotificationRead = notification =>
-    new Promise((resolve, reject) => {
-      if (!isLoadingMarkNotificationRead) {
-        setIsLoadingMarkNotificationRead(true);
-        fetchUtil.user
-          .markNotificationRead(notification?.notificationId)
-          .then(() => {
-            refreshNotificationList();
-          })
-          .catch(err => {
-            setNotificationError(err);
-            reject(err);
-          })
-          .finally(() => {
-            setIsLoadingMarkNotificationRead(false);
-            history.pushState(
-              `/u/${notification?.recipient}/post/${notification?.postId}`
-            );
-            resolve();
-          });
-      }
-    });
+  const markNotificationRead = async notification => {
+    if (!isLoadingMarkNotificationRead) {
+      setIsLoadingMarkNotificationRead(true);
+      await fetchUtil.user
+        .markNotificationRead(notification?.notificationId)
+        .then(async res => {
+          if (res?.data === true) {
+            await refreshNotificationList();
+          } else {
+            setNotificationError(res?.data);
+          }
+        })
+        .catch(err => {
+          setNotificationError(err);
+          return Promise.reject(err);
+        })
+        .finally(() => {
+          setIsLoadingMarkNotificationRead(false);
+          history.push(
+            `/u/${notification?.recipient}/post/${notification?.postId}`
+          );
+          return;
+        });
+    }
+  };
 
   // passing state to value to be passed to provider
   const value = {
