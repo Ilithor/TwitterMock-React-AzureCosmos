@@ -6,6 +6,7 @@ const loginContext = createContext();
 /** This is a react component which you wrap your entire application
  * to provide a "context", meaning: data you can access anywhere in the app.
  * 
+ * @type {React.FunctionComponent}
  * @param {object} props
  * @param {React.ReactChild} props.children
  */
@@ -90,6 +91,6 @@ export const useLoginValidationData = () => {
 
 /**
  * @typedef UserLoginParam
- * @property {String} email
- * @property {String} password
+ * @property {string} email
+ * @property {string} password
  */
