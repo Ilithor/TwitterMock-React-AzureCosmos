@@ -8,11 +8,13 @@ export const useStyles = makeStyles(theme => ({
   },
   notificationCard: {
     position: 'relative',
-    display: 'flex',
     marginBottom: 20,
   },
   content: {
+    display: 'flex',
+    flexDirection: 'column',
     padding: 25,
     objectFit: 'cover',
+    flexWrap: 'wrap-reverse',
   },
 }));

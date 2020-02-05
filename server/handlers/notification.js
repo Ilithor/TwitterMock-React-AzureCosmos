@@ -7,12 +7,14 @@ import { findNotificationAndUpdateRead } from './find';
 mongoConnection();
 
 /** Retrieves all notifications
+ * 
  * @type {RouteHandler}
+ * @returns {Notification[]}
  */
 export const getNotification = async (req, res) => {
   const data = await getNotificationList().catch(err => {
     console.error(err);
-    return res.status(404);
+    return res.send(err);
   });
   if (!data) {
     return res.status(404);
@@ -32,6 +34,7 @@ export const getNotification = async (req, res) => {
 
 /** Creates notification upon successful creation
  *  of a like or comment
+ * 
  * @type {RouteHandler}
  * @returns {Promise<void | Error>}
  */
@@ -49,6 +52,7 @@ export const createNotification = async (
 };
 
 /** Marks notification as read by user
+ * 
  * @type {RouteHandler}
  */
 export const markNotificationRead = async (req, res) => {
@@ -61,6 +65,7 @@ export const markNotificationRead = async (req, res) => {
 
 /** Deletes notification upon successful deletion
  *  of a like or comment
+ * 
  * @type {RouteHandler}
  */
 export const deleteNotification = async (userHandle, type, typeId) => {
@@ -75,6 +80,7 @@ export const deleteNotification = async (userHandle, type, typeId) => {
 };
 
 /** Deletes all notifications that matches given postId
+ * 
  * @type {RouterHandler}
  */
 export const deleteAllNotification = async postId => {

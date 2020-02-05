@@ -34,27 +34,30 @@ export const NotificationProvider = ({ children }) => {
    *
    * @returns {void, Error}
    */
-  const refreshNotificationList = () =>
-    new Promise((resolve, reject) => {
-      if (!isLoadingNotifcationList) {
-        setIsLoadingNotificationList(true);
-        // Fetch list of notifications
-        fetchUtil.user
-          .fetchNotificationList()
-          .then(res => {
-            setNotificationList(_.keyBy(res.data, 'recipient'));
-          })
-          .catch(err => {
-            setNotificationError(err);
-            reject(err);
-          })
-          .finally(() => {
-            setLastRefreshNotificationList(Date.now);
-            setIsLoadingNotificationList(false);
-            resolve();
-          });
-      }
-    });
+  const refreshNotificationList = async () => {
+    if (!isLoadingNotifcationList) {
+      setIsLoadingNotificationList(true);
+      // Fetch list of notifications
+      await fetchUtil.user
+        .fetchNotificationList()
+        .then(res => {
+          if (Array.isArray(res?.data)) {
+            setNotificationList(_.keyBy(res?.data, 'recipient'));
+          } else {
+            setNotificationError(res?.data);
+          }
+        })
+        .catch(err => {
+          setNotificationError(err);
+          return Promise.reject(err);
+        })
+        .finally(() => {
+          setLastRefreshNotificationList(Date.now);
+          setIsLoadingNotificationList(false);
+          return;
+        });
+    }
+  };
 
   /** Marks the provided notification as read
    *

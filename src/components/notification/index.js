@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import _ from 'lodash';
 
 // Components
@@ -12,9 +12,10 @@ import { useStyles } from './notification.style';
 import { useNotificationData } from './notificationContext';
 import { usePostData } from '../post/postContext';
 import { useCommentListData } from '../comment/commentContext';
+import { useCurrentUserData } from '../profile/userContext';
 
 /** Displays an array of notifications for the user
- * 
+ *
  * @type {React.FunctionComponent}
  */
 export const NotificationContent = () => {
@@ -22,34 +23,39 @@ export const NotificationContent = () => {
   const { notificationList, isLoadingNotifcationList } = useNotificationData();
   const { postList } = usePostData();
   const { commentList } = useCommentListData();
-  if (isLoadingNotifcationList) {
+  const { currentUser, isLoadingUserData } = useCurrentUserData();
+  const [userNotificationList, setUserNotificationList] = useState();
+  useEffect(() => {
+    if (!isLoadingNotifcationList && !isLoadingUserData) {
+      const notificationData = _.values(notificationList).filter(
+        notification => notification?.recipient === currentUser?.userHandle
+      );
+      if (notificationData) {
+        setUserNotificationList(notificationData);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoadingNotifcationList, isLoadingUserData]);
+  if (userNotificationList?.length > 0 && postList && commentList) {
+    return _.map(userNotificationList, doc => (
+      <NotificationCard
+        key={`notification-${doc?.notificationId}`}
+        notification={doc}
+        post={postList[doc?.postId]}
+        comment={commentList[doc?.typeId]}
+      />
+    ));
+  }
+  if (userNotificationList?.length === 0) {
     return (
-      <div className={classes?.spinnerDiv}>
-        <CircularProgress size={150} thickness={2} />
-      </div>
+      <React.Fragment>
+        <h1>No new notifications</h1>
+      </React.Fragment>
     );
   }
-  if (notificationList?.length > 0) {
-    return _.map(notificationList, doc => {
-      return (
-        <NotificationCard
-          key={`notification-${doc?.notificationId}`}
-          notification={doc}
-          post={postList[doc?.postId]}
-          comment={commentList[doc?.typeId]}
-        />
-      );
-    });
-  }
   return (
-    <React.Fragment>
-      <h1>
-        <span role='img' aria-label=''>
-          😱😱😱
-        </span>
-        No more notifications!!!
-      </h1>
-      <p>Go make some friends, nerd!!!</p>
-    </React.Fragment>
+    <div className={classes?.spinnerDiv}>
+      <CircularProgress size={150} thickness={2} />
+    </div>
   );
 };

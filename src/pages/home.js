@@ -18,9 +18,8 @@ import {
 import { usePostData } from '../components/post/postContext';
 import { useLikeData } from '../components/like/likeContext';
 
-
 /** Displays the home page
- * 
+ *
  * @type {React.FunctionComponent}
  */
 export const HomePage = () => {
@@ -42,14 +41,17 @@ export const HomePage = () => {
   };
 
   const createNewPostList = () => {
-    return _.map(postList, post => (
-      <Post
-        key={`post-${post?.postId}`}
-        post={post}
-        user={userList[post?.userHandle]}
-        like={likeList[post?.postId]}
-      />
-    ));
+    if (userList) {
+      return _.map(postList, post => (
+        <Post
+          key={`post-${post?.postId}`}
+          post={post}
+          user={userList[post?.userHandle]}
+          like={likeList[post?.postId]}
+        />
+      ));
+    }
+    return <div />;
   };
 
   const CreatePostEditor = () => {

@@ -20,7 +20,7 @@ import { ContextProvider } from './components/context/ContextProvider';
 axios.defaults.baseURL = '/';
 
 /** Displays the application to the user
- * 
+ *
  * @type {React.FunctionComponent}
  */
 export const App = () => (
@@ -32,9 +32,13 @@ export const App = () => (
           <Route exact path='/' component={HomePage} />
           <Route path='/login' component={LoginPage} />
           <Route path='/signup' component={RegisterPage} />
-          <AuthRoute path='/notification' component={NotificationPage} />
+          <Route path='/notification' component={NotificationPage} />
           <Route exact path='/u/:userHandle' component={UserPage} />
-          <Route exact path='/u/:userHandle/post/:postId' component={UserPage} />
+          <Route
+            exact
+            path='/u/:userHandle/post/:postId'
+            component={UserPage}
+          />
         </Switch>
       </div>
     </ContextProvider>
