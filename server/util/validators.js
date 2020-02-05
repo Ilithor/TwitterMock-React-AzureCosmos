@@ -53,24 +53,25 @@ export const validateRegister = async userParam => {
 export const validateUserDetail = userParam => {
   const userDetail = { aboutMe: '', website: '', location: '' };
   const { aboutMe, website, location } = userParam;
-  if (!isEmpty(aboutMe.trim())) {
+  if (
+    isEmpty(aboutMe.trim()) &&
+    isEmpty(website.trim()) &&
+    isEmpty(website.trim())
+  ) {
+    const err = {
+      general:
+        'At least one field must be filled before this form can be submitted!',
+    };
+    return Promise.reject(err);
+  } else if (!isWebsite(website)) {
+    const err = { website: 'Must be a valid website' };
+    return Promise.reject(err);
+  } else {
     userDetail.aboutMe = aboutMe;
-  }
-  if (!isEmpty(website.trim())) {
-    if (website.trim().substring(0, 4) !== 'http') {
-      if (website.trim().substring(0, 3) !== 'www') {
-        userDetail.website = `http://www.${website.trim()}`;
-      } else {
-        userDetail.website = `http://${website.trim()}`;
-      }
-    } else {
-      userDetail.website = website;
-    }
-  }
-  if (!isEmpty(location.trim())) {
+    userDetail.website = website;
     userDetail.location = location;
+    return Promise.resolve(userDetail);
   }
-  return Promise.resolve(userDetail);
 };
 
 /** Checks if provided string is empty
@@ -86,13 +87,27 @@ export const isEmpty = string => {
 };
 
 /** Checks if provided email is valid
- * @param {String} email
- * @returns {Promise<Boolean>}
+ * @param {string} email
+ * @returns {Promise<boolean>}
  */
 export const isEmail = email => {
   // eslint-disable-next-line no-useless-escape
   const emailRegEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   if (email.match(emailRegEx)) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+/** Checks if provided website is valid
+ *
+ * @param {string} website
+ * @returns {Promise<boolean>}
+ */
+export const isWebsite = website => {
+  const websiteRegEx = /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/;
+  if (website.match(websiteRegEx)) {
     return true;
   } else {
     return false;

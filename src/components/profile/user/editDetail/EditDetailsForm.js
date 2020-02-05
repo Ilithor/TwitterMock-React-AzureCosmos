@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
 
 // MUI
 import { TextField } from '@material-ui/core';
 import { useStyles } from '../../profile.style';
+import { useValidationEditUserDetail, useUserData } from '../../userContext';
 
 /** Displays the edit form to edit the user's details
- * 
+ *
  * @type {React.FunctionComponent}
  * @param {object} props
  * @param {string} props.aboutMe
@@ -20,6 +22,22 @@ export const EditDetailsForm = ({
   location,
 }) => {
   const classes = useStyles();
+  const { userError } = useUserData();
+  const { detailError } = useValidationEditUserDetail();
+  useEffect(() => {
+    if (detailError?.general) {
+      toast.error(detailError?.general, {
+        position: toast.POSITION.BOTTOM_LEFT,
+        autoClose: 8000,
+      });
+    }
+    if (userError?.website) {
+      toast.error(userError?.website, {
+        position: toast.POSITION.BOTTOM_LEFT,
+        autoClose: 8000,
+      });
+    }
+  }, [detailError, userError]);
   return (
     <form>
       <TextField
@@ -40,6 +58,8 @@ export const EditDetailsForm = ({
         label='Website'
         placeholder='Your personal website'
         className={classes?.textField}
+        helperText={detailError?.website}
+        error={detailError?.website ? true : false}
         value={website}
         onChange={handleChange}
         fullWidth
@@ -54,6 +74,7 @@ export const EditDetailsForm = ({
         onChange={handleChange}
         fullWidth
       />
+      <ToastContainer />
     </form>
   );
 };

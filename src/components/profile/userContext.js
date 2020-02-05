@@ -11,11 +11,13 @@ const userContext = createContext();
 
 /** This is a react component which you wrap your entire application
  * to provide a "context", meaning: data you can access anywhere in the app.
- * @param {Object} props
+ *
+ * @param {object} props
  * @param {React.ReactChild} props.children
  */
 export const UserProvider = ({ children }) => {
   const [userError, setUserError] = useState();
+  const [detailError, setDetailError] = useState();
   const [lastRefreshUserList, setLastRefreshUserList] = useState();
   /** @type {UseStateResult<_.Dictionary<User>>} */
   const [userList, setUserList] = useState();
@@ -78,33 +80,86 @@ export const UserProvider = ({ children }) => {
   };
 
   /** Updates the user's info with the provided data
-   * 
+   *
    * @param {object} userDetail
    * @returns {void | Error}
    */
   const editUserDetail = async userDetail => {
     if (userDetail && !isLoadingEditUserDetail) {
       setIsLoadingEditUserDetail(true);
+      if (
+        userDetail?.aboutMe === currentUser?.bio?.aboutMe &&
+        userDetail?.website === currentUser?.bio?.website &&
+        userDetail?.location === currentUser?.bio?.location
+      ) {
+        setIsLoadingEditUserDetail(false);
+        return Promise.resolve();
+      }
       await fetchUtil.user
         .editUserDetail(userDetail)
-        .then(async success => {
-          if (success) {
-            getCurrentUserData();
+        .then(async res => {
+          if (res?.data === true) {
+            await getCurrentUserData();
+          } else {
+            return Promise.reject(res?.data);
           }
         })
         .catch(err => {
           setUserError(err);
-          Promise.reject(err);
+          return Promise.reject(err);
         })
         .finally(() => {
           setIsLoadingEditUserDetail(false);
-          Promise.resolve();
+          return Promise.resolve();
         });
     }
   };
 
+  /** Checks if the user details provided are valid
+   *
+   * @param {object} userParam
+   * @returns {object}
+   */
+  const validationCheckUserDetail = userParam => {
+    let err;
+    if (
+      isEmpty(userParam?.aboutMe) &&
+      isEmpty(userParam?.website) &&
+      isEmpty(userParam?.location)
+    ) {
+      err = {
+        general:
+          'At least one field must be filled before this form can be submitted!',
+      };
+      setDetailError(err);
+      return userParam;
+    }
+    if (!isWebsite(userParam?.website)) {
+      err = { website: 'Must be a valid website' };
+    } else {
+      err = undefined;
+    }
+    if (err) {
+      setDetailError(err);
+      return userParam;
+    }
+    return userParam;
+  };
+
+  /** Checks if provided string is empty
+   *
+   * @param {string} string
+   * @returns {boolean}
+   */
+  const isEmpty = string => {
+    if (string.trim() === '') {
+      return true;
+    }
+    return false;
+  };
+
   /** Updates the user's profile image
-   * 
+   *
    * @param {object} formData
    * @returns {void | Error}
    */
@@ -131,21 +186,17 @@ export const UserProvider = ({ children }) => {
   };
 
   /** Creates a new user
-   * 
+   *
    * @param {object} userParam
    * @returns {void | Error}
    */
   const registerUser = async userParam => {
     if (!isLoadingRegister) {
       setIsLoadingRegister(true);
-      if (
-        !userParam.email ||
-        !userParam.password ||
-        !userParam.userHandle ||
-        !userParam.confirmPassword
-      ) {
+      const error = await checkRegisterIfUndefined(userParam);
+      if (Object.keys(error).length > 0) {
         setIsLoadingRegister(false);
-        return Promise.reject(await checkRegisterIfUndefined(userParam));
+        return Promise.reject(error);
       } else {
         await fetchUtil.user
           .registerUser(userParam)
@@ -169,16 +220,17 @@ export const UserProvider = ({ children }) => {
   };
 
   /** Attempts to login with the provided login info
-   * 
+   *
    * @param {object} userParam
    * @returns {void | Error}
    */
   const loginUser = async userParam => {
     if (!isLoadingLogin) {
       setIsLoadingLogin(true);
-      if (!userParam?.email || !userParam?.password) {
+      const error = await checkLoginIfUndefined(userParam);
+      if (Object.keys(error).length > 0) {
         setIsLoadingLogin(false);
-        return Promise.reject(await checkLoginIfUndefined(userParam));
+        return Promise.reject(error);
       }
       await fetchUtil.user
         .loginUser(userParam)
@@ -198,7 +250,7 @@ export const UserProvider = ({ children }) => {
   };
 
   /** Checks if the params are undefined
-   * 
+   *
    * @param {object} userParam
    * @returns {object}
    */
@@ -214,7 +266,7 @@ export const UserProvider = ({ children }) => {
   };
 
   /** Checks if the params are undefined
-   * 
+   *
    * @param {object} userParam
    * @returns {object}
    */
@@ -235,9 +287,18 @@ export const UserProvider = ({ children }) => {
     return err;
   };
 
+  const isWebsite = website => {
+    const websiteRegEx = /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?$/;
+    if (website.match(websiteRegEx)) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   /** Sets the user token and authorization
-   * 
-   * @param {string} token 
+   *
+   * @param {string} token
    */
   const setAuthorizationHeader = token => {
     const Token = `Bearer ${token}`;
@@ -246,7 +307,7 @@ export const UserProvider = ({ children }) => {
   };
 
   /** Sets the user's handle in the local storage
-   * 
+   *
    * @param {string} userHandle
    */
   const setUserHandleHeader = userHandle => {
@@ -254,7 +315,7 @@ export const UserProvider = ({ children }) => {
   };
 
   /** Attempts to authenticated the user
-   * 
+   *
    * @returns {void | Error}
    */
   const getAuthenticated = async () => {
@@ -291,7 +352,7 @@ export const UserProvider = ({ children }) => {
   };
 
   /** Logouts the user
-   * 
+   *
    */
   const logoutUser = () => {
     localStorage.removeItem('Token');
@@ -322,6 +383,9 @@ export const UserProvider = ({ children }) => {
     editUserDetail,
     isLoadingEditUserDetail,
     uploadImage,
+    detailError,
+    setDetailError,
+    validationCheckUserDetail,
   };
   return <userContext.Provider value={value}>{children}</userContext.Provider>;
 };
@@ -371,9 +435,9 @@ export const useUserData = () => {
     throw new Error('useUserData must be used within a UserProvider');
   }
 
-  const { user, userError, isLoadingUserData } = ctx;
+  const { user, userError, setUserError, isLoadingUserData } = ctx;
 
-  return { user, userError, isLoadingUserData };
+  return { user, userError, setUserError, isLoadingUserData };
 };
 
 /** A hook for consuming our User context in a safe way
@@ -422,6 +486,20 @@ export const useEditUserDetailData = () => {
   const { isLoadingEditUserDetail, editUserDetail } = ctx;
 
   return { isLoadingEditUserDetail, editUserDetail };
+};
+
+export const useValidationEditUserDetail = () => {
+  const ctx = useContext(userContext);
+
+  if (ctx === undefined) {
+    throw new Error(
+      'useValidationEditUserDetail must be used within a UserProvider'
+    );
+  }
+
+  const { detailError, setDetailError, validationCheckUserDetail } = ctx;
+
+  return { detailError, setDetailError, validationCheckUserDetail };
 };
 
 /** A hook for consuming our User context in a safe way
