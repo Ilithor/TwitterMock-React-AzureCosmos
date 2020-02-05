@@ -53,7 +53,7 @@ export const getPost = async (req, res) => {
 export const createPost = async (req, res, next) => {
   const doc = await create(req.body, req.user).catch(err => {
     console.error(err);
-    return res.status(500);
+    return res.send(err);
   });
   if (doc._id) {
     return res.status(200).send(true);
