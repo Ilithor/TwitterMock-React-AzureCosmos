@@ -9,6 +9,7 @@ import mongoConnection from '../util/mongo';
 mongoConnection();
 
 /**Returns a user that has a matching email and password
+ *
  * @param {User} user
  * @returns {Promise<User|UserCredentialError>}
  */
@@ -32,6 +33,7 @@ export const findByCredential = async user => {
 };
 
 /** Returns a user that matches _id
+ *
  * @param {string} _id
  * @returns {Promise<User|UserNotFound>}
  */
@@ -45,20 +47,17 @@ export const findById = async _id => {
 };
 
 /** Returns a user that matches handle
+ *
  * @param {string} userHandle
  * @returns {Promise<User|UserNotFound>}
  */
 export const findByHandle = async userHandle => {
-  const foundUser = await User.findOne({
+  return await User.findOne({
     userHandle,
   }).catch(err => {
     console.error(err);
     return Promise.reject(err);
   });
-  if (!foundUser) {
-    return Promise.reject({ user: 'User not found' });
-  }
-  return Promise.resolve(foundUser);
 };
 
 /** Returns post that matches _id
@@ -67,20 +66,17 @@ export const findByHandle = async userHandle => {
  * @returns {Promise<Post|PostNotFound>}
  */
 export const findPostById = async _id => {
-  const post = await Post.findOne({
+  return await Post.findOne({
     _id,
   }).catch(err => {
     console.error(err);
     return Promise.reject(err);
   });
-  if (!post) {
-    return Promise.reject({ post: 'Post not found' });
-  }
-  return Promise.resolve(post);
 };
 
 /** Returns post that matches user handle
- * @param {String} userHandle
+ *
+ * @param {string} userHandle
  * @returns {Promise<Post|PostNotFound>}
  */
 export const findPostByHandle = async userHandle => {
@@ -96,7 +92,8 @@ export const findPostByHandle = async userHandle => {
 };
 
 /** Fetches all comments attached to PostId
- * @param {String} postId
+ *
+ * @param {string} postId
  * @returns {Promise<UserComment|NotificationNotFound>}
  */
 export const findCommentByPostId = async postId => {
@@ -112,7 +109,8 @@ export const findCommentByPostId = async postId => {
 };
 
 /** Find all likes by userHandle
- * @param {String} userHandle
+ *
+ * @param {string} userHandle
  * @returns {Promise<Like[]|any[]>}
  */
 export const findLikeByHandle = async userHandle => {
@@ -127,8 +125,9 @@ export const findLikeByHandle = async userHandle => {
 };
 
 /** Finds all commenets by userHandle and PostId
- * @param {String} userHandle
- * @param {String} postId
+ *
+ * @param {string} userHandle
+ * @param {string} postId
  * @returns {Promise<UserComment>}
  */
 export const findCommentByHandleAndPostId = async (userHandle, postId) => {
@@ -144,8 +143,9 @@ export const findCommentByHandleAndPostId = async (userHandle, postId) => {
 };
 
 /** Finds all likes that match the provided user handle
- * @param {String} userHandle
- * @param {String} postId
+ *
+ * @param {string} userHandle
+ * @param {string} postId
  * @returns {Promise<Like[] | Error>}
  */
 export const findLikeByHandleAndPostId = async (userHandle, postId) => {
@@ -161,8 +161,9 @@ export const findLikeByHandleAndPostId = async (userHandle, postId) => {
 };
 
 /** Updates all user posts with new image
- * @param {String} userHandle
- * @param {String} base64
+ *
+ * @param {string} userHandle
+ * @param {string} base64
  * @returns {void | Error}
  */
 export const findAndUpdatePostImage = async (userHandle, base64) => {
@@ -177,9 +178,10 @@ export const findAndUpdatePostImage = async (userHandle, base64) => {
 };
 
 /** Finds post and updates like/comment count
- * @param {String} _id
- * @param {Number} likeCount
- * @param {Number} commentCount
+ *
+ * @param {string} _id
+ * @param {number} likeCount
+ * @param {number} commentCount
  * @returns {void | Error}
  */
 export const findPostAndUpdateCount = async (_id, likeCount, commentCount) => {
@@ -194,7 +196,8 @@ export const findPostAndUpdateCount = async (_id, likeCount, commentCount) => {
 };
 
 /** Finds and removes all likes and comments linked to a particular post
- * @param {String} postId
+ *
+ * @param {string} postId
  * @returns {Promise<{like:any,comment:any}>}
  */
 export const findAndDeleteLikeAndComment = async postId => {
@@ -210,7 +213,8 @@ export const findAndDeleteLikeAndComment = async postId => {
 };
 
 /** Finds notification and marks read as true
- * @param {String} _id
+ *
+ * @param {string} _id
  */
 export const findNotificationAndUpdateRead = async _id => {
   await Notification.updateOne(
@@ -224,8 +228,9 @@ export const findNotificationAndUpdateRead = async _id => {
 };
 
 /** Finds the exising user doc and updates the image property
- * @param {String} _id
- * @param {String} base64
+ *
+ * @param {string} _id
+ * @param {string} base64
  * @returns {void | Error}
  */
 export const findUserAndUpdateImage = async (_id, base64) => {
@@ -240,8 +245,9 @@ export const findUserAndUpdateImage = async (_id, base64) => {
 };
 
 /** Finds and updates the user's profile bio
+ *
  * @param {User} userDetails
- * @param {String} _id
+ * @param {string} _id
  */
 export const findUserAndUpdateProfile = async (userDetails, _id) => {
   const { aboutMe, website, location } = userDetails.bio;
