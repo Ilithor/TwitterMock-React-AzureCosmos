@@ -159,7 +159,6 @@ export const addUserDetail = async (req, res, next) => {
     console.error(err);
     return res.send(err);
   });
-  console.log('success: ', success);
   if (success === true) {
     return res.status(200).send(success);
   } else {

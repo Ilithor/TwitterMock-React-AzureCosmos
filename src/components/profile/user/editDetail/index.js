@@ -71,7 +71,6 @@ export const EditDetail = () => {
       };
       editUserDetail(userDetail)
         .then(() => {
-          console.log(userError, detailError)
           if (!userError && !detailError) {
             handleClose();
           }
