@@ -30,7 +30,8 @@ export const createPost = newPost => post(endpoints.post, newPost);
  * @param {string} postId
  * @returns {Promise<import("axios").AxiosResponse>}
  */
-export const likePost = postId => get(`${endpoints.post}${postId}/like`);
+export const likePost = (postId, likeId) =>
+  get(`${endpoints.post}${postId}/like/${likeId}`);
 
 /** Unlikes a post
  *

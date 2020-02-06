@@ -17,6 +17,7 @@ import {
 } from './find';
 
 /** Retrieves the list of users
+ * 
  * @type {RouteHandler}
  */
 export const getUserList = async (req, res, next) => {
@@ -44,6 +45,7 @@ export const fetchLikeList = async (req, res) => {
     return res.status(404);
   });
   const likeList = _.map(data, like => ({
+    _id: like._id,
     userHandle: like.userHandle,
     postId: like.postId,
   }));
@@ -52,6 +54,7 @@ export const fetchLikeList = async (req, res) => {
 };
 
 /** Registers the user
+ * 
  * @type {RouteHandler}
  */
 export const registerUser = async (req, res, next) => {
@@ -72,6 +75,7 @@ export const registerUser = async (req, res, next) => {
 };
 
 /** Logins the user
+ * 
  * @type {RouteHandler}
  */
 export const loginUser = async (req, res, next) => {
@@ -91,6 +95,7 @@ export const loginUser = async (req, res, next) => {
 };
 
 /** Get own user details
+ * 
  * @type {RouteHandler}
  */
 export const getAuthenticatedUser = async (req, res) => {
@@ -105,6 +110,7 @@ export const getAuthenticatedUser = async (req, res) => {
 };
 
 /** Retrieves any user details
+ * 
  * @type {RouteHandler}
  */
 export const getUserDetail = async (req, res) => {
@@ -129,6 +135,7 @@ export const getUserDetail = async (req, res) => {
 };
 
 /** Pushes post docs into post array
+ * 
  * @param {Document[]} postList
  * @param {Object} userData
  * @returns {userData[Object]}
@@ -147,6 +154,7 @@ const pushPostIntoArray = (postList, userData) => {
 };
 
 /** Edits the current user's profile with the params provided by said user
+ * 
  * @type {RouteHandler}
  */
 export const addUserDetail = async (req, res, next) => {
@@ -167,6 +175,7 @@ export const addUserDetail = async (req, res, next) => {
 };
 
 /** Converts the uploaded image to base64 and uploads it as a property in the User doc
+ * 
  * @type {RouteHandler}
  */
 export const imageUpload = async (req, res, next) => {

@@ -11,19 +11,19 @@ import { usePostData } from '../post/postContext';
 import { useLikeData } from './likeContext';
 
 /** View component for displaying an icon to unlike a post
- * 
+ *
  * @type {React.FunctionComponent}
  * @param {object} props
  * @param {string} props.postId
  */
-export const UnlikeButton = ({ postId }) => {
+export const UnlikeButton = ({ postId, likeId }) => {
   const { refreshPostList } = usePostData();
   const { refreshLikeList, unlikePost } = useLikeData();
   const makeCall = useRef(false);
   const onClick = () => {
     if (makeCall.current) return;
     makeCall.current = true;
-    unlikePost(postId).then(() => {
+    unlikePost(postId, likeId).then(() => {
       Promise.all([refreshPostList(), refreshLikeList()]).then(() => {
         makeCall.current = false;
       });
