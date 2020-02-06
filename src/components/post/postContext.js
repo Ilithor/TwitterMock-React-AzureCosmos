@@ -26,27 +26,28 @@ export const PostProvider = ({ children }) => {
    *
    * @returns {void | Error}
    */
-  const refreshPostList = () =>
-    new Promise((resolve, reject) => {
-      if (!isLoadingPostList) {
-        setIsLoadingPostList(true);
-        // Fetch list of posts
-        fetchUtil.post
-          .fetchPostList()
-          .then(res => {
+  const refreshPostList = async () => {
+    if (!isLoadingPostList) {
+      setIsLoadingPostList(true);
+      // Fetch list of posts
+      await fetchUtil.post
+        .fetchPostList()
+        .then(res => {
+          if (res?.data) {
             setPostList(_.keyBy(res.data, 'postId'));
-          })
-          .catch(err => {
-            setPostError(err);
-            reject(err);
-          })
-          .finally(() => {
-            setLastRefreshPostList(Date.now);
-            setIsLoadingPostList(false);
-            resolve();
-          });
-      }
-    });
+          }
+        })
+        .catch(err => {
+          setPostError(err);
+          return Promise.reject(err);
+        })
+        .finally(() => {
+          setLastRefreshPostList(Date.now);
+          setIsLoadingPostList(false);
+          return Promise.resolve();
+        });
+    }
+  };
 
   /** Creates a new post with the provided user info
    *
@@ -79,25 +80,24 @@ export const PostProvider = ({ children }) => {
    * @param {string} postId
    * @returns {void | Error}
    */
-  const deletePost = postId =>
-    new Promise((resolve, reject) => {
-      if (postId && !isLoadingDeletePost) {
-        setIsLoadingDeletePost(true);
-        fetchUtil.post
-          .deletePost(postId)
-          .then(() => {
-            refreshPostList();
-          })
-          .catch(err => {
-            setPostError(err);
-            reject(err);
-          })
-          .finally(() => {
-            setIsLoadingDeletePost(false);
-            resolve();
-          });
-      }
-    });
+  const deletePost = async postId => {
+    if (postId && !isLoadingDeletePost) {
+      setIsLoadingDeletePost(true);
+      await fetchUtil.post
+        .deletePost(postId)
+        .then(async () => {
+          await refreshPostList();
+        })
+        .catch(err => {
+          setPostError(err);
+          return Promise.reject(err);
+        })
+        .finally(() => {
+          setIsLoadingDeletePost(false);
+          return Promise.resolve();
+        });
+    }
+  };
 
   // Passing state to value to be passed to provider
   const value = {
