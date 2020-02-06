@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 // MUI
-import { Button, Grid, TextField } from '@material-ui/core';
+import { Button, Grid } from '@material-ui/core';
 import { useStyles } from '../comment.style';
 
 // Context
@@ -11,6 +11,7 @@ import {
   useCommentValidationData,
 } from '../commentContext';
 import { usePostData } from '../../post/postContext';
+import { CommentFormTextField } from './CommentFormTextField';
 
 /** Displays and handles the new comment form
  *
@@ -28,19 +29,8 @@ export const CommentForm = ({ postId }) => {
     commentError,
     setCommentError,
   } = useCommentOnPostData();
-  const {
-    validationCheckComment,
-    commentValidationError,
-    setCommentValidationError,
-  } = useCommentValidationData();
+  const { commentValidationError } = useCommentValidationData();
   const [body, setBody] = useState('');
-
-  const handleChange = event => {
-    if (commentValidationError) {
-      setCommentValidationError();
-    }
-    setBody(validationCheckComment(event.target.value));
-  };
 
   const handleSubmit = event => {
     event.preventDefault();
@@ -65,22 +55,10 @@ export const CommentForm = ({ postId }) => {
   return (
     <Grid item sm={12} style={{ textAlign: 'center' }}>
       <form onSubmit={handleSubmit}>
-        <TextField
-          name='body'
-          type='text'
-          label='Comment on post'
-          error={
-            commentValidationError?.comment
-              ? true
-              : false || commentError?.comment
-              ? true
-              : false
-          }
-          helperText={commentValidationError?.comment || commentError?.comment}
-          value={body}
-          onChange={handleChange}
-          fullWidth
-          className={classes?.textField}
+        <CommentFormTextField
+          setBody={setBody}
+          commentError={commentError}
+          body={body}
         />
         <Button
           type='submit'

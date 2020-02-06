@@ -64,10 +64,10 @@ export const CommentProvider = ({ children }) => {
       await fetchUtil.post
         .commentOnPost(postId, commentData)
         .then(async res => {
-          if (res.data === true) {
+          if (res?.data === true) {
             await refreshCommentList();
           } else {
-            return Promise.reject(res.data);
+            return Promise.reject(res?.data);
           }
         })
         .catch(err => {
@@ -120,9 +120,11 @@ export const CommentProvider = ({ children }) => {
       setIsLoadingDeleteComment(true);
       await fetchUtil.post
         .deleteComment(commentId)
-        .then(async success => {
-          if (success) {
+        .then(async res => {
+          if (res?.data === true) {
             await refreshCommentList();
+          } else {
+            return Promise.reject(res?.data);
           }
         })
         .catch(err => {
