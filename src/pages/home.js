@@ -17,6 +17,7 @@ import {
 } from '../components/profile/userContext';
 import { usePostData } from '../components/post/postContext';
 import { useLikeData } from '../components/like/likeContext';
+import { RecentCommentFeed } from '../components/comment/recentFeed';
 
 /** Displays the home page
  *
@@ -46,8 +47,8 @@ export const HomePage = () => {
         <Post
           key={`post-${post?.postId}`}
           post={post}
-          user={userList[post?.userHandle]}
-          like={likeList[post?.postId]}
+          user={userList[(post?.userHandle)]}
+          like={likeList[(post?.postId)]}
         />
       ));
     }
@@ -68,6 +69,7 @@ export const HomePage = () => {
       </Grid>
       <Grid item md={4} sm={3} xs={12}>
         <Profile />
+        <RecentCommentFeed />
       </Grid>
     </Grid>
   );
