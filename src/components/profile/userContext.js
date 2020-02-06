@@ -34,7 +34,7 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     getAuthenticated();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   /** Refreshes the list of users
@@ -234,18 +234,19 @@ export const UserProvider = ({ children }) => {
         setIsLoadingLogin(false);
         return Promise.reject(error);
       }
+      // try {
       await fetchUtil.user
         .loginUser(userParam)
         .then(async res => {
-          if (res?.data?.error) {
-            throw new Error(error);
+          if (res?.data?.email) {
+            return Promise.reject(res.data);
+          } else if (!res?.data?.token || !res?.data?.userHandle) {
+            return Promise.reject('Failed to login');
+          } else {
+            setAuthorizationHeader(res?.data?.token);
+            setUserHandleHeader(res?.data?.userHandle);
+            await getAuthenticated();
           }
-          if (!res?.data?.token || !res?.data?.userHandle) {
-            throw new Error('Failed to login');
-          }
-          setAuthorizationHeader(res?.data?.token);
-          setUserHandleHeader(res?.data?.userHandle);
-          await getAuthenticated();
         })
         .catch(err => {
           return Promise.reject(err);
@@ -254,6 +255,9 @@ export const UserProvider = ({ children }) => {
           setIsLoadingLogin(false);
           return;
         });
+      // } catch (error) {
+      //   return Promise
+      // }
     }
   };
 

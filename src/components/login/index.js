@@ -15,7 +15,7 @@ import { useUserLoginData } from '../profile/userContext';
 import { useLoginValidationData } from './loginContext';
 
 /** View component for displaying the login form to the user
- * 
+ *
  * @type {React.FunctionComponent}
  */
 export const LoginForm = () => {
