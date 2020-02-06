@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import _ from 'lodash';
 import jwtDecode from 'jwt-decode';
 import axios from 'axios';
@@ -31,6 +31,11 @@ export const UserProvider = ({ children }) => {
   const [isLoadingRegister, setIsLoadingRegister] = useState(false);
   const [isLoadingUploadImage, setIsLoadingUploadImage] = useState(false);
   const history = useHistory();
+
+  useEffect(() => {
+    getAuthenticated();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   /** Refreshes the list of users
    *
@@ -550,10 +555,6 @@ export const useUserAuthenticationData = () => {
     getAuthenticated,
     isLoadingAuthenticated,
   } = ctx;
-
-  if (!isLoadingAuthenticated && !isAuthenticated) {
-    getAuthenticated();
-  }
 
   return {
     getAuthenticated,
