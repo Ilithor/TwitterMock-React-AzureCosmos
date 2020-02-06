@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 import * as fetchUtil from '../../util/fetch';
 
-/** @type {React.Context<{commentList:Comment[],commentError:Error,getData:()=>void}} */
+/** @type {React.Context<{commentList:_.Dictionary<Comment>,commentError:Error,getData:()=>void}} */
 const commentContext = createContext();
 
 /** This is a react component which you wrap your entire application
@@ -181,7 +181,7 @@ export const useCommentData = () => {
  * @example //getting the comment list
  * import { useCommentListData } from 'commentContext'
  * const { commentList } = useCommentListData();
- * @returns {Comment[], Error, ()=>void}
+ * @returns {{commentList:_.Dictionary<Comment>, commentError:Error, refreshCommentList:()=>void}}
  */
 export const useCommentListData = () => {
   // Destructuring value from provider

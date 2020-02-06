@@ -114,12 +114,22 @@ export const PostProvider = ({ children }) => {
   return <postContext.Provider value={value}>{children}</postContext.Provider>;
 };
 
+/** @typedef UsePostDataResult
+ * @property {_.Dictionary<Post>} postList
+ * @property {Error} [postError]
+ * @property {boolean} isLoadingPostList
+ * @property {boolean} isLoadingNewPost
+ * @property {(id:string)=>void} deletePost
+ * @property {(data:{body:string})=>void} newPost
+ * @property {()=>void} refreshPostList
+ */
+
 /** A hook for consuming our Notification context in a safe way
  *
  * @example //getting the post list
  * import { usePostData } from 'postContext'
  * const { postList } = usePostData();
- * @returns {Post[],Error,boolean,()=>void,()=>void,boolean,()=>void}
+ * @returns {UsePostDataResult}
  */
 export const usePostData = () => {
   // Destructuring value from provider
