@@ -14,11 +14,11 @@ const CommentFeedCard = ({ comment }) => {
 
   const onClick = () =>
     history.push(`/u/${post.userHandle}/post/${post.postId}`);
-  return ((
+  return (
     <CardActionArea onClick={onClick}>
       <Comment comment={comment} />
     </CardActionArea>
-  ));
+  );
 };
 
 /**  @typedef CommentFeedCardProps
@@ -40,7 +40,7 @@ export const RecentCommentFeed = () => {
     .values()
     .orderBy(c => c.createdAt, 'desc')
     .take(5)
-    .map(c => <CommentFeedCard comment={c} />)
+    .map(c => <CommentFeedCard key={`comment-${c?.commentId}`} comment={c} />)
     .toArray()
     .value();
 
