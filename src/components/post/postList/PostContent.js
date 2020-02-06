@@ -16,7 +16,7 @@ import { useStyles } from '../post.style';
 import * as Icon from '@material-ui/icons';
 
 /** View component for displaying an individual post's content
- * 
+ *
  * @type {React.FunctionComponent}
  * @param {object} props
  * @param {object} props.post
@@ -51,7 +51,7 @@ export const PostContent = ({ post, like }) => {
         {dayjs(post?.createdAt).fromNow()}
       </Typography>
       <Typography variant='body1'>{post?.body}</Typography>
-      <Like postId={post?.postId} userHandle={post?.userHandle} like={like} />
+      <Like postId={post?.postId} like={like} />
       <span>
         {post?.likeCount} <LikePlural />
       </span>
