@@ -31,7 +31,6 @@ const CommentFeedCard = ({ comment }) => {
  */
 export const RecentCommentFeed = () => {
   const { commentList } = useCommentListData();
-  console.log(commentList);
 
   if (!commentList) {
     return null;
@@ -44,7 +43,6 @@ export const RecentCommentFeed = () => {
     .map(c => <CommentFeedCard comment={c} />)
     .toArray()
     .value();
-  console.log(result);
 
   return (
     <div>
