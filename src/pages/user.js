@@ -7,8 +7,7 @@ import { Post } from '../components/post/postList';
 import { StaticProfile } from '../components/profile/static';
 
 // MUI
-import { Grid, CircularProgress } from '@material-ui/core';
-import { useStyles } from './page.style';
+import { Grid } from '@material-ui/core';
 
 // Context
 import { usePostData } from '../components/post/postContext';
@@ -16,16 +15,15 @@ import { useUserListData } from '../components/profile/userContext';
 import { useLikeData } from '../components/like/likeContext';
 
 /** Displays the user's profile page
- * 
+ *
  * @type {React.FunctionComponent}
  */
 export const UserPage = () => {
-  const { postList, isLoadingPostList } = usePostData();
-  const { userList, isLoadingUserList } = useUserListData();
-  const { likeList, isLoadingLikeList } = useLikeData();
+  const { postList } = usePostData();
+  const { userList } = useUserListData();
+  const { likeList } = useLikeData();
   const [userPostList, setUserPostList] = useState({});
   const [userStaticProfile, setUserStaticProfile] = useState({});
-  const classes = useStyles();
   const params = useParams();
   useEffect(() => {
     const userData = _.values(userList).filter(
@@ -42,18 +40,11 @@ export const UserPage = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userList, postList]);
-  const PostListMarkup = () => {
-    if (isLoadingPostList) {
-      return (
-        <div className={classes?.spinnerDiv}>
-          <CircularProgress size={150} thickness={2} />
-        </div>
-      );
-    }
+  const PostList = () => {
     if (userPostList.length === 0) {
       return <p>No posts from this user</p>;
     }
-    if (!isLoadingPostList && !isLoadingUserList && !isLoadingLikeList) {
+    if (userPostList) {
       return _.map(userPostList, post => {
         if (post?.postId !== params.postId) {
           return (
@@ -75,17 +66,12 @@ export const UserPage = () => {
         );
       });
     }
-    return (
-      <div className={classes?.spinnerDiv}>
-        <CircularProgress size={150} thickness={2} />
-      </div>
-    );
   };
 
   return (
     <Grid container spacing={10}>
       <Grid item sm={8} sx={12}>
-        <PostListMarkup />
+        <PostList />
       </Grid>
       <Grid item sm={4} sx={12}>
         <StaticProfile user={userStaticProfile} />

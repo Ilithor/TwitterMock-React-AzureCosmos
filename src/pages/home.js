@@ -7,8 +7,7 @@ import { Profile } from '../components/profile';
 import { NewPost } from '../components/post/newPost';
 
 // MUI
-import { Grid, CircularProgress } from '@material-ui/core';
-import { useStyles } from './page.style';
+import { Grid } from '@material-ui/core';
 
 // Context
 import {
@@ -24,24 +23,12 @@ import { RecentCommentFeed } from '../components/comment/recentFeed';
  * @type {React.FunctionComponent}
  */
 export const HomePage = () => {
-  const classes = useStyles();
   const { isAuthenticated } = useUserAuthenticationData();
-  const { userList, isLoadingUserList } = useUserListData();
-  const { postList, isLoadingPostList } = usePostData();
-  const { likeList, isLoadingLikeList } = useLikeData();
+  const { userList } = useUserListData();
+  const { postList } = usePostData();
+  const { likeList } = useLikeData();
 
-  const RecentPostMarkup = () => {
-    if (!isLoadingLikeList && !isLoadingPostList && !isLoadingUserList) {
-      return createNewPostList();
-    }
-    return (
-      <div className={classes?.spinnerDiv}>
-        <CircularProgress size={150} thickness={2} />
-      </div>
-    );
-  };
-
-  const createNewPostList = () => {
+  const PostList = () => {
     if (userList) {
       return _.map(postList, post => (
         <Post
@@ -65,7 +52,7 @@ export const HomePage = () => {
     <Grid container spacing={2}>
       <Grid item md={8} sm={9} xs={12}>
         <CreatePostEditor />
-        <RecentPostMarkup />
+        <PostList />
       </Grid>
       <Grid item md={4} sm={3} xs={12}>
         <Profile />
