@@ -25,11 +25,13 @@ export const Comment = ({ comment }) => {
   const { userImage } = userList?.[comment?.userHandle] || defaultImage;
   return (
     <Card className={classes?.commentCard}>
-      <CardMedia
-        className={classes?.commentImage}
-        image={userImage}
-        title='Comment'
-      />
+      <div className={classes?.commentImageContainer}>
+        <CardMedia
+          className={classes?.commentImage}
+          image={userImage}
+          title='Comment'
+        />
+      </div>
       <CardContent className={classes?.cardContent}>
         <Typography
           variant='h5'

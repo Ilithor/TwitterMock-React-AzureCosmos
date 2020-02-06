@@ -1,5 +1,11 @@
 import React from 'react';
-import { CardActionArea } from '@material-ui/core';
+import {
+  CardActionArea,
+  Typography,
+  Card,
+  CardHeader,
+  CardContent,
+} from '@material-ui/core';
 import { useCommentListData } from './commentContext';
 import _ from 'lodash';
 import { Comment } from '.';
@@ -14,11 +20,11 @@ const CommentFeedCard = ({ comment }) => {
 
   const onClick = () =>
     history.push(`/u/${post.userHandle}/post/${post.postId}`);
-  return (
+  return ((
     <CardActionArea onClick={onClick}>
       <Comment comment={comment} />
     </CardActionArea>
-  );
+  ));
 };
 
 /**  @typedef CommentFeedCardProps
@@ -45,9 +51,12 @@ export const RecentCommentFeed = () => {
     .value();
 
   return (
-    <div>
-      <h1>Recent comments</h1>
-      {result}
-    </div>
+    <Card>
+      <CardHeader
+        title='Recent Comments'
+        titleTypographyProps={{ color: 'primary' }}
+      />
+      <CardContent>{result}</CardContent>
+    </Card>
   );
 };
