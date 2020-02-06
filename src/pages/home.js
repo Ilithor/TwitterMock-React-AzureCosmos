@@ -34,8 +34,8 @@ export const HomePage = () => {
         <Post
           key={`post-${post?.postId}`}
           post={post}
-          user={userList[(post?.userHandle)]}
-          like={likeList[(post?.postId)]}
+          user={userList?.[post?.userHandle]}
+          like={likeList?.[post?.postId]}
         />
       ));
     }

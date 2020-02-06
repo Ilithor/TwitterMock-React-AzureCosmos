@@ -41,8 +41,8 @@ export const NotificationContent = () => {
       <NotificationCard
         key={`notification-${doc?.notificationId}`}
         notification={doc}
-        post={postList[doc?.postId]}
-        comment={commentList[doc?.typeId]}
+        post={postList?.[doc?.postId]}
+        comment={commentList?.[doc?.typeId]}
       />
     ));
   }
