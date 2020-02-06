@@ -232,6 +232,12 @@ export const UserProvider = ({ children }) => {
       await fetchUtil.user
         .loginUser(userParam)
         .then(async res => {
+          if (res?.data?.error) {
+            throw new Error(error);
+          }
+          if (!res?.data?.token || !res?.data?.userHandle) {
+            throw new Error('Failed to login');
+          }
           setAuthorizationHeader(res?.data?.token);
           setUserHandleHeader(res?.data?.userHandle);
           await getAuthenticated();
@@ -296,9 +302,11 @@ export const UserProvider = ({ children }) => {
    * @param {string} token
    */
   const setAuthorizationHeader = token => {
-    const Token = `Bearer ${token}`;
-    localStorage.setItem('Token', Token);
-    axios.defaults.headers.common['Authorization'] = Token;
+    if (token?.length > 30) {
+      const Token = `Bearer ${token}`;
+      localStorage.setItem('Token', Token);
+      axios.defaults.headers.common['Authorization'] = Token;
+    }
   };
 
   /** Sets the user's handle in the local storage
@@ -306,7 +314,9 @@ export const UserProvider = ({ children }) => {
    * @param {string} userHandle
    */
   const setUserHandleHeader = userHandle => {
-    localStorage.setItem('Handle', userHandle);
+    if (userHandle !== 'undefined') {
+      localStorage.setItem('Handle', userHandle);
+    }
   };
 
   /** Attempts to authenticated the user
