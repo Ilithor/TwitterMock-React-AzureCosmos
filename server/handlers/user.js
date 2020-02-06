@@ -45,7 +45,6 @@ export const fetchLikeList = async (req, res) => {
     return res.status(404);
   });
   const likeList = _.map(data, like => ({
-    _id: like._id,
     userHandle: like.userHandle,
     postId: like.postId,
   }));

@@ -16,17 +16,13 @@ import { useLikeData } from './likeContext';
  * @param {object} props
  * @param {string} props.postId
  */
-export const UnlikeButton = ({ postId, likeId }) => {
+export const UnlikeButton = ({ postId }) => {
   const { refreshPostList } = usePostData();
   const { refreshLikeList, unlikePost } = useLikeData();
   const makeCall = useRef(false);
   const onClick = () => {
-    if (makeCall.current) return;
-    makeCall.current = true;
-    unlikePost(postId, likeId).then(() => {
-      Promise.all([refreshPostList(), refreshLikeList()]).then(() => {
-        makeCall.current = false;
-      });
+    unlikePost(postId).then(() => {
+      Promise.all([refreshPostList(), refreshLikeList()]);
     });
   };
 

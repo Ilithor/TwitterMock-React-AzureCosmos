@@ -40,7 +40,7 @@ export const Like = ({ postId, like }) => {
     );
   }
   if (alreadyLiked()) {
-    return <UnlikeButton postId={postId} likeId={like._id} />;
+    return <UnlikeButton postId={postId} />;
   }
-  return <LikeButton postId={postId} likeId={like._id} />;
+  return <LikeButton postId={postId} />;
 };

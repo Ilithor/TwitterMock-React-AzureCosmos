@@ -28,20 +28,16 @@ export const createPost = newPost => post(endpoints.post, newPost);
 /** Likes a post
  *
  * @param {string} postId
- * @param {string} likeId
  * @returns {Promise<import("axios").AxiosResponse>}
  */
-export const likePost = (postId, likeId) =>
-  get(`${endpoints.post}${postId}/like/${likeId}`);
+export const likePost = postId => get(`${endpoints.post}${postId}/like`);
 
 /** Unlikes a post
  *
  * @param {string} postId
- * @param {string} likeId
  * @returns {Promise<import("axios").AxiosResponse>}
  */
-export const unlikePost = (postId, likeId) =>
-  get(`${endpoints.post}${postId}/unlike/${likeId}`);
+export const unlikePost = postId => get(`${endpoints.post}${postId}/unlike`);
 
 /** Retrieves all comments
  *
