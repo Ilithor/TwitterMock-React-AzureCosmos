@@ -28,6 +28,7 @@ export const createPost = newPost => post(endpoints.post, newPost);
 /** Likes a post
  *
  * @param {string} postId
+ * @param {string} likeId
  * @returns {Promise<import("axios").AxiosResponse>}
  */
 export const likePost = (postId, likeId) =>
@@ -36,9 +37,11 @@ export const likePost = (postId, likeId) =>
 /** Unlikes a post
  *
  * @param {string} postId
+ * @param {string} likeId
  * @returns {Promise<import("axios").AxiosResponse>}
  */
-export const unlikePost = postId => get(`${endpoints.post}${postId}/unlike`);
+export const unlikePost = (postId, likeId) =>
+  get(`${endpoints.post}${postId}/unlike/${likeId}`);
 
 /** Retrieves all comments
  *
