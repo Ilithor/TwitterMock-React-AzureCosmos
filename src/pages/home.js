@@ -5,6 +5,7 @@ import _ from 'lodash';
 import { Post } from '../components/post/postList';
 import { Profile } from '../components/profile';
 import { NewPost } from '../components/post/newPost';
+import { RecentCommentFeed } from '../components/comment/recentFeed';
 
 // MUI
 import { Grid } from '@material-ui/core';
@@ -16,7 +17,6 @@ import {
 } from '../components/profile/userContext';
 import { usePostData } from '../components/post/postContext';
 import { useLikeData } from '../components/like/likeContext';
-import { RecentCommentFeed } from '../components/comment/recentFeed';
 
 /** Displays the home page
  *
