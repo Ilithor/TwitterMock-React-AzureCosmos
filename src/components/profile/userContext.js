@@ -375,29 +375,6 @@ export const UserProvider = ({ children }) => {
     setisAuthenticated(false);
   };
 
-  const deleteUser = async () => {
-    if (isAuthenticated && currentUser?.userHandle === localStorage?.Handle) {
-      const userHandle = localStorage?.Handle;
-      await logoutUser();
-      await fetchUtil.user
-        .deleteUser(userHandle)
-        .then(res => {
-          if (res?.data === true) {
-            history.push('/');
-          } else {
-            return Promise.reject(res?.data);
-          }
-        })
-        .catch(err => {
-          console.error(err);
-          return Promise.reject(err);
-        })
-        .finally(() => {
-          return;
-        });
-    }
-  };
-
   // Passing state to value to be passed to provider
   const value = {
     isAuthenticated,
@@ -424,12 +401,12 @@ export const UserProvider = ({ children }) => {
     detailError,
     setDetailError,
     validationCheckUserDetail,
-    deleteUser,
   };
   return <userContext.Provider value={value}>{children}</userContext.Provider>;
 };
 
 /** A hook for consuming our User context in a safe way
+ * 
  * @example //getting the user list
  * import { useUserListData } from 'userContext'
  * const { userList } = useUserListData();
@@ -462,6 +439,7 @@ export const useUserListData = () => {
 };
 
 /** A hook for consuming our User context in a safe way
+ * 
  * @example //getting the user
  * import { useUserData } from 'userContext'
  * const { user } = useUserData();
@@ -480,6 +458,7 @@ export const useUserData = () => {
 };
 
 /** A hook for consuming our User context in a safe way
+ * 
  * @example //getting the current user
  * import { useCurrentUserData } from 'userContext'
  * const { currentUser } = useCurrentUserData();
@@ -514,6 +493,7 @@ export const useCurrentUserData = () => {
 };
 
 /** A hook for consuming our User context in a safe way
+ * 
  * @example //getting the edit user detail function
  * import { useEditUserDetailData } from 'userContext'
  * const { editUserDetail } = useEditUserDetailData();
@@ -546,6 +526,7 @@ export const useValidationEditUserDetail = () => {
 };
 
 /** A hook for consuming our User context in a safe way
+ * 
  * @example //getting the upload image function
  * import { useUploadImageData } from 'userContext'
  * const { uploadImage } = useUploadImageData();
@@ -564,6 +545,7 @@ export const useUploadImageData = () => {
 };
 
 /** A hook for consuming our User context in a safe way
+ * 
  * @example //getting the isAuthenticated state
  * import { useUserAuthenticationData } from 'userContext'
  * const { isAuthenticated } = useUserAuthenticationData();
@@ -594,6 +576,7 @@ export const useUserAuthenticationData = () => {
 };
 
 /** A hook for consuming our User context in a safe way
+ * 
  * @example //getting the login user function
  * import { useUserLoginData } from 'userContext'
  * const { loginUser } = useUserLoginData();
@@ -612,6 +595,7 @@ export const useUserLoginData = () => {
 };
 
 /** A hook for consuming our User context in a safe way
+ * 
  * @example //getting the register user function
  * import { useUserRegisterData } from 'userContext'
  * const { registerUser } = useUserRegisterData();
@@ -630,6 +614,7 @@ export const useUserRegisterData = () => {
 };
 
 /** A hook for consuming our User context in a safe way
+ * 
  * @example //getting the logout user function
  * import { useUserLogout } from 'userContext'
  * const { logoutUser } = useUserLogout();
@@ -645,22 +630,4 @@ export const useUserLogout = () => {
   const { logoutUser } = ctx;
 
   return { logoutUser };
-};
-
-/** A hook for consuming our User context in a safe way
- * @example //getting the delete user function
- * import { useDeleteUser } from 'userContext'
- * const { deleteUser } = useDeleteUser();
- * @returns {{deleteUser:()=>void)}}
- */
-export const useDeleteUser = () => {
-  const ctx = useContext(userContext);
-
-  if (ctx === undefined) {
-    throw new Error('useDeleteUser must be used within a UserProvider');
-  }
-
-  const { deleteUser } = ctx;
-
-  return { deleteUser };
 };
