@@ -374,6 +374,28 @@ export const UserProvider = ({ children }) => {
     delete axios.defaults.headers.common['Authorization'];
     setisAuthenticated(false);
   };
+
+  const deleteUser = async () => {
+    if (isAuthenticated && currentUser?.userHandle === localStorage?.Handle) {
+      const userHandle = localStorage?.Handle;
+      await logoutUser();
+      await fetchUtil.user
+        .deleteUser(userHandle)
+        .then(res => {
+          if (res?.data === true) {
+            history.push('/');
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          return Promise.reject(err);
+        })
+        .finally(() => {
+          return;
+        });
+    }
+  };
+
   // Passing state to value to be passed to provider
   const value = {
     isAuthenticated,
@@ -400,6 +422,7 @@ export const UserProvider = ({ children }) => {
     detailError,
     setDetailError,
     validationCheckUserDetail,
+    deleteUser,
   };
   return <userContext.Provider value={value}>{children}</userContext.Provider>;
 };
@@ -614,10 +637,28 @@ export const useUserLogout = () => {
   const ctx = useContext(userContext);
 
   if (ctx === undefined) {
-    throw new Error('useUserLogout muse be used within a UserProvider');
+    throw new Error('useUserLogout must be used within a UserProvider');
   }
 
   const { logoutUser } = ctx;
 
   return { logoutUser };
+};
+
+/** A hook for consuming our User context in a safe way
+ * @example //getting the delete user function
+ * import { useDeleteUser } from 'userContext'
+ * const { deleteUser } = useDeleteUser();
+ * @returns {{deleteUser:()=>void)}}
+ */
+export const useDeleteUser = () => {
+  const ctx = useContext(userContext);
+
+  if (ctx === undefined) {
+    throw new Error('useDeleteUser must be used within a UserProvider');
+  }
+
+  const { deleteUser } = ctx;
+
+  return { deleteUser };
 };

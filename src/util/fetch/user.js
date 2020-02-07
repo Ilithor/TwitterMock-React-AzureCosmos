@@ -1,4 +1,5 @@
 import { get, post } from './fetch';
+import { remove } from '../../../server/services/comment.service';
 
 export const endpoints = {
   /** @type {Endpoint} */
@@ -79,6 +80,14 @@ export const uploadImage = formData => post(endpoints.uploadImage, formData);
  */
 export const editUserDetail = userDetail =>
   post(endpoints.editUserDetail, userDetail);
+
+/** Attempts to delete the user
+ *
+ * @param {string} userHandle
+ * @returns {Promise<import("axios").AxiosResponse>}
+ */
+export const deleteUser = userHandle =>
+  remove(`${endpoints.userData}/${userHandle}`);
 
 /**
  * @typedef {import('./fetch').Endpoint} Endpoint
