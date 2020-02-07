@@ -1,5 +1,4 @@
-import { get, post } from './fetch';
-import { remove } from '../../../server/services/comment.service';
+import { get, post, remove } from './fetch';
 
 export const endpoints = {
   /** @type {Endpoint} */

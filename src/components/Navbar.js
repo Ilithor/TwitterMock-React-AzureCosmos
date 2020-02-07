@@ -17,7 +17,7 @@ import {
 } from './profile/userContext';
 
 /** Shows the log in or log out button
- * 
+ *
  * @type {React.FunctionComponent}
  */
 const ButtonLogInOut = () => {
@@ -37,8 +37,20 @@ const ButtonLogInOut = () => {
   );
 };
 
+const ButtonSetting = () => {
+  const { isAuthenticated } = useUserAuthenticationData();
+  if (isAuthenticated) {
+    return (
+      <CustomButton tip='Settings' component={Link} to='/settings'>
+        <Icon.Settings />
+      </CustomButton>
+    );
+  }
+  return <div />;
+};
+
 /** Displays either signup button or empty div
- * 
+ *
  * @type {React.FunctionComponent}
  */
 const ButtonRegister = () => {
@@ -54,7 +66,7 @@ const ButtonRegister = () => {
 };
 
 /** Displays either notification button or empty div
- * 
+ *
  * @type {React.FunctionComponent}
  */
 const ButtonNotification = () => {
@@ -70,7 +82,7 @@ const ButtonNotification = () => {
 };
 
 /** View component for navbar
- * 
+ *
  * @type {React.FunctionComponent}
  */
 export const Navbar = () => (
@@ -80,6 +92,7 @@ export const Navbar = () => (
         <Icon.Home />
       </CustomButton>
       <ButtonNotification />
+      <ButtonSetting />
       <ButtonLogInOut />
       <ButtonRegister />
     </Toolbar>

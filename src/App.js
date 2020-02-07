@@ -9,6 +9,7 @@ import { LoginPage } from './pages/login';
 import { RegisterPage } from './pages/register';
 import { UserPage } from './pages/user';
 import { NotificationPage } from './pages/notification';
+import { SettingPage } from './pages/setting';
 
 // Components
 import { Navbar } from './components/Navbar';
@@ -31,6 +32,7 @@ export const App = () => (
           <Route exact path='/' component={HomePage} />
           <Route path='/login' component={LoginPage} />
           <Route path='/signup' component={RegisterPage} />
+          <Route path='/settings' component={SettingPage} />
           <Route path='/notification' component={NotificationPage} />
           <Route exact path='/u/:userHandle' component={UserPage} />
           <Route

@@ -384,6 +384,8 @@ export const UserProvider = ({ children }) => {
         .then(res => {
           if (res?.data === true) {
             history.push('/');
+          } else {
+            return Promise.reject(res?.data);
           }
         })
         .catch(err => {
