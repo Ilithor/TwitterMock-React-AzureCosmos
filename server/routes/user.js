@@ -8,6 +8,7 @@ import {
   getAuthenticatedUser,
   getUserDetail,
   fetchLikeList,
+  deleteUser,
 } from '../handlers/user';
 import { authUser } from '../util/auth';
 import {
@@ -28,5 +29,6 @@ router.get('/notification', authUser, getNotification);
 router.post('/notification', authUser, markNotificationRead);
 router.get('/like', fetchLikeList);
 router.get('/:userHandle', getUserDetail);
+router.delete('/:userHandle', authUser, deleteUser);
 
 export default router;

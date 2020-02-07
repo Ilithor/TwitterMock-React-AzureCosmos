@@ -334,3 +334,22 @@ export const findUserAndUpdateProfile = async (userDetails, _id) => {
     });
   }
 };
+
+export const findAndDeleteAllContent = async userHandle => {
+  await Post.deleteMany({ userHandle }).catch(err => {
+    console.error(err);
+    return Promise.reject(err);
+  });
+  await Like.deleteMany({ userHandle }).catch(err => {
+    console.error(err);
+    return Promise.reject(err);
+  });
+  await Comment.deleteMany({ userHandle }).catch(err => {
+    console.error(err);
+    return Promise.reject(err);
+  });
+  await Notification.deleteMany({ sender: userHandle }).catch(err => {
+    console.error(err);
+    return Promise.reject(err);
+  });
+};

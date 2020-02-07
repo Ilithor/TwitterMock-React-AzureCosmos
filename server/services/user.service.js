@@ -131,3 +131,14 @@ export const updateBio = async (userParam, userId) => {
     return success;
   }
 };
+
+/** Attempts to find and delete the user
+ *
+ * @param {string} _id
+ */
+export const findAndDeleteUser = async userHandle => {
+  return await User.deleteOne({ userHandle }).catch(err => {
+    console.error(err);
+    return Promise.reject(err);
+  });
+};
