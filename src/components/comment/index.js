@@ -28,7 +28,7 @@ export const Comment = ({ comment }) => {
       <div className={classes?.commentImageContainer}>
         <CardMedia
           className={classes?.commentImage}
-          image={userImage}
+          image={userImage || defaultImage}
           title='Comment'
         />
       </div>
