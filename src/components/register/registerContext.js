@@ -5,14 +5,15 @@ const registerContext = createContext();
 
 /** This is a react component which you wrap your entire application
  * to provide a "context", meaning: data you can access anywhere in the app.
+ * 
  * @param {object} props
  * @param {React.ReactChild} props.children
  */
 export const RegisterProvider = ({ children }) => {
   const [registerError, setRegisterError] = useState('');
 
-  /**
-   * Saves any errors in validation in registerError state
+  /** Saves any errors in validation in registerError state
+   * 
    * @param {UserRegisterParam} registerParam
    * @returns {UserRegisterParam}
    */
@@ -43,8 +44,9 @@ export const RegisterProvider = ({ children }) => {
   };
 
   /** Checks if provided string is empty
-   * @param {String} string
-   * @returns {Boolean}
+   * 
+   * @param {string} string
+   * @returns {boolean}
    */
   const isEmpty = string => {
     if (string.trim() === '') {
@@ -55,8 +57,9 @@ export const RegisterProvider = ({ children }) => {
   };
 
   /** Checks if provided email is valid
-   * @param {String} email
-   * @returns {Boolean}
+   * 
+   * @param {string} email
+   * @returns {boolean}
    */
   const isEmail = email => {
     // eslint-disable-next-line no-useless-escape
@@ -79,8 +82,11 @@ export const RegisterProvider = ({ children }) => {
   );
 };
 
-/**
- * A hook for consuming our Register context in a safe way
+/** A hook for consuming our Register context in a safe way
+ * @example //getting the register validation function
+ * import { useRegisterValidationData } from 'registerContext'
+ * const { validationCheckRegister } = useRegisterValidationData();
+ * @returns {Function}
  */
 export const useRegisterValidationData = () => {
   const ctx = useContext(registerContext);
@@ -98,8 +104,8 @@ export const useRegisterValidationData = () => {
 
 /**
  * @typedef UserRegisterParam
- * @property {String} userHandle
- * @property {String} email
- * @property {String} password
+ * @property {string} userHandle
+ * @property {string} email
+ * @property {string} password
  * @property {string} confirmPassword
  */

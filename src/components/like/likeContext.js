@@ -11,7 +11,6 @@ const likeContext = createContext();
  *
  * @param {object} props
  * @param {React.ReactChild} props.children
- * @param {()=>Promise<import('axios').AxiosResponse<Like[]>>} props.fetchLikeList
  */
 export const LikeProvider = ({ children }) => {
   const [likeError, setLikeError] = useState();
@@ -22,63 +21,68 @@ export const LikeProvider = ({ children }) => {
   const [isLoadingLikePost, setIsLoadingLikePost] = useState(false);
   const [isLoadingUnlikePost, setIsLoadingUnlikePost] = useState(false);
 
-  const refreshLikeList = () =>
-    new Promise((resolve, reject) => {
-      if (!isLoadingLikeList) {
-        setIsLoadingLikeList(true);
-        // Fetch list of likes
-        fetchUtil.user
-          .fetchLikeList(localStorage?.Handle)
-          .then(res => {
-            setLikeList(_.keyBy(res.data, 'postId'));
-          })
-          .catch(err => {
-            setLikeError(err);
-            reject(err);
-          })
-          .finally(() => {
-            setlastRefreshLikeList(Date.now);
-            setIsLoadingLikeList(false);
-            resolve();
-          });
-      }
-    });
+  const refreshLikeList = async () => {
+    if (!isLoadingLikeList) {
+      setIsLoadingLikeList(true);
+      // Fetch list of likes
+      await fetchUtil.user
+        .fetchLikeList(localStorage?.Handle)
+        .then(res => {
+          setLikeList(_.keyBy(res.data, 'postId'));
+        })
+        .catch(err => {
+          setLikeError(err);
+          return Promise.reject(err);
+        })
+        .finally(() => {
+          setlastRefreshLikeList(Date.now);
+          setIsLoadingLikeList(false);
+          return;
+        });
+    }
+  };
 
-  const likePost = postId =>
-    new Promise((resolve, reject) => {
-      if ((postId, !isLoadingLikePost)) {
-        setIsLoadingLikePost(true);
-        fetchUtil.post
-          .likePost(postId)
-          .then(async () => {})
-          .catch(err => {
-            setLikeError(err);
-            reject(err);
-          })
-          .finally(() => {
-            setIsLoadingLikePost(false);
-            resolve();
-          });
-      }
-    });
+  const likePost = async postId => {
+    if ((postId, !isLoadingLikePost)) {
+      setIsLoadingLikePost(true);
+      await fetchUtil.post
+        .likePost(postId)
+        .then(async success => {
+          if (success) {
+            await refreshLikeList();
+          }
+        })
+        .catch(err => {
+          setLikeError(err);
+          return Promise.reject(err);
+        })
+        .finally(() => {
+          setIsLoadingLikePost(false);
+          return;
+        });
+    }
+  };
 
-  const unlikePost = postId =>
-    new Promise((resolve, reject) => {
-      if (postId && !isLoadingUnlikePost) {
-        setIsLoadingUnlikePost(true);
-        fetchUtil.post
-          .unlikePost(postId)
-          .then(async () => {})
-          .catch(err => {
-            setLikeError(err);
-            reject(err);
-          })
-          .finally(() => {
-            setIsLoadingUnlikePost(false);
-            resolve();
-          });
-      }
-    });
+  const unlikePost = async postId => {
+    if (postId && !isLoadingUnlikePost) {
+      setIsLoadingUnlikePost(true);
+      await fetchUtil.post
+        .unlikePost(postId)
+        .then(async success => {
+          if (success) {
+            await refreshLikeList();
+          }
+        })
+        .catch(err => {
+          setLikeError(err);
+          return Promise.reject(err);
+        })
+        .finally(() => {
+          setIsLoadingUnlikePost(false);
+          return;
+        });
+    }
+  };
 
   // Passing state to value to be passed to provider
   const value = {

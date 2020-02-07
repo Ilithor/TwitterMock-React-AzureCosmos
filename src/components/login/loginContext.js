@@ -5,14 +5,16 @@ const loginContext = createContext();
 
 /** This is a react component which you wrap your entire application
  * to provide a "context", meaning: data you can access anywhere in the app.
+ * 
+ * @type {React.FunctionComponent}
  * @param {object} props
  * @param {React.ReactChild} props.children
  */
 export const LoginProvider = ({ children }) => {
   const [loginError, setLoginError] = useState();
 
-  /**
-   * Saves any errors in validation in loginError state
+  /** Saves any errors in validation in loginError state
+   * 
    * @param {UserLoginParam} loginParam
    * @returns {UserLoginParam}
    */
@@ -34,8 +36,9 @@ export const LoginProvider = ({ children }) => {
   };
 
   /** Checks if provided string is empty
-   * @param {String} string
-   * @returns {Boolean}
+   * 
+   * @param {string} string
+   * @returns {boolean}
    */
   const isEmpty = string => {
     if (string.trim() === '') {
@@ -46,8 +49,9 @@ export const LoginProvider = ({ children }) => {
   };
 
   /** Checks if provided email is valid
-   * @param {String} email
-   * @returns {Boolean}
+   * 
+   * @param {string} email
+   * @returns {boolean}
    */
   const isEmail = email => {
     // eslint-disable-next-line no-useless-escape
@@ -68,8 +72,8 @@ export const LoginProvider = ({ children }) => {
   );
 };
 
-/**
- * A hook for consuming our Login context in a safe way
+/** A hook for consuming our Login context in a safe way
+ * 
  */
 export const useLoginValidationData = () => {
   const ctx = useContext(loginContext);
@@ -87,6 +91,6 @@ export const useLoginValidationData = () => {
 
 /**
  * @typedef UserLoginParam
- * @property {String} email
- * @property {String} password
+ * @property {string} email
+ * @property {string} password
  */

@@ -10,6 +10,7 @@ import { CustomButton } from '../../../../util/CustomButton';
 
 // MUI
 import { Paper } from '@material-ui/core';
+import { useStyles } from '../../profile.style';
 
 // Icons
 import * as Icon from '@material-ui/icons';
@@ -22,9 +23,11 @@ import {
 } from '../../userContext';
 
 /** View component for displaying the user's profile
- * @type {IUserProfileDisplayComponentProps}
+ * 
+ * @type {React.FunctionComponent}
  */
-export const ProfileDetail = ({ classes }) => {
+export const ProfileDetail = () => {
+  const classes = useStyles();
   const { currentUser } = useCurrentUserData();
   const { uploadImage } = useUploadImageData();
   const { logoutUser } = useUserLogout();
@@ -44,7 +47,7 @@ export const ProfileDetail = ({ classes }) => {
     } else {
       const formData = new FormData();
       formData.append('image', image, image.name);
-      uploadImage(formData, currentUser?.userHandle);
+      uploadImage(formData);
     }
   };
   const handleLogout = () => logoutUser();

@@ -7,22 +7,28 @@ import { LikeButton } from './LikeButton';
 import { CustomButton } from '../../util/CustomButton';
 
 // Icons
-import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
+import * as Icon from '@material-ui/icons';
 
 // Context
 import {
   useUserAuthenticationData,
   useCurrentUserData,
 } from '../profile/userContext';
+import { useLikeData } from './likeContext';
+import { usePostData } from '../post/postContext';
 
 /** View component for displaying either a like or unlike icon
+ *
  * @type {React.FunctionComponent}
- * @param {Object} props
- * @param {String} props.postId
+ * @param {object} props
+ * @param {string} props.postId
+ * @param {object} props.like
  */
 export const Like = ({ postId, like }) => {
   const { isAuthenticated } = useUserAuthenticationData();
   const { currentUser } = useCurrentUserData();
+  const { refreshPostList } = usePostData();
+  const { likePost, unlikePost, refreshLikeList } = useLikeData();
   const alreadyLiked = () => {
     if (like?.userHandle === currentUser?.userHandle) {
       return true;
@@ -30,16 +36,25 @@ export const Like = ({ postId, like }) => {
       return false;
     }
   };
-
+  const onClickLike = () => {
+    likePost(postId).then(() => {
+      Promise.all([refreshPostList(), refreshLikeList()]);
+    });
+  };
+  const onClickUnlike = () => {
+    unlikePost(postId).then(() => {
+      Promise.all([refreshPostList(), refreshLikeList()]);
+    });
+  };
   if (!isAuthenticated) {
     return (
       <CustomButton tip='Like' component={Link} to='/login'>
-        <FavoriteBorder color='primary' />
+        <Icon.FavoriteBorder color='primary' />
       </CustomButton>
     );
   }
   if (alreadyLiked()) {
-    return <UnlikeButton postId={postId} />;
+    return <UnlikeButton onClick={onClickUnlike} />;
   }
-  return <LikeButton postId={postId} />;
+  return <LikeButton onClick={onClickLike} />;
 };

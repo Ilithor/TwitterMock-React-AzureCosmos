@@ -10,23 +10,17 @@ import { CustomButton } from '../../../util/CustomButton';
 
 // MUI
 import { CardContent, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { useStyles } from '../post.style';
 
 // Icons
 import * as Icon from '@material-ui/icons';
 
-const useStyles = makeStyles({
-  content: {
-    padding: 25,
-    objectFit: 'cover',
-  },
-});
-
 /** View component for displaying an individual post's content
+ *
  * @type {React.FunctionComponent}
- * @param {Object} props
- * @param {Object} props.post
- * @param {Object} props.like
+ * @param {object} props
+ * @param {object} props.post
+ * @param {object} props.like
  */
 export const PostContent = ({ post, like }) => {
   const classes = useStyles();
@@ -57,7 +51,7 @@ export const PostContent = ({ post, like }) => {
         {dayjs(post?.createdAt).fromNow()}
       </Typography>
       <Typography variant='body1'>{post?.body}</Typography>
-      <Like postId={post?.postId} userHandle={post?.userHandle} like={like} />
+      <Like postId={post?.postId} like={like} />
       <span>
         {post?.likeCount} <LikePlural />
       </span>

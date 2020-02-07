@@ -10,13 +10,14 @@ import { Typography } from '@material-ui/core';
 import * as Icon from '@material-ui/icons';
 
 /** View component for displaying the user's profile details
+ *
  * @type {React.FunctionComponent}
  * @param {object} props
  * @param {string} props.userHandle
  * @param {object} props.bio
  * @param {string} props.createdAt
  */
-export const ProfileBio = ({ userHandle, bio = {}, createdAt }) => (
+export const ProfileBio = ({ userHandle, bio, createdAt }) => (
   <div className='profile-details'>
     <MuiLink
       component={Link}

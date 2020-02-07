@@ -10,9 +10,8 @@ const notificationContext = createContext();
 /** This is a react component which you wrap your entire application
  * to provide a "context", meaning: data you can access anywhere in the app.
  *
- * @param {Object} props
+ * @param {object} props
  * @param {React.ReactChild} props.children
- * @param {()=>Promise<import('axios').AxiosResponse<Notification[]>>} props.getNotificationList
  */
 export const NotificationProvider = ({ children }) => {
   /** @type {UseStateResult<_.Dictionary<Notification>>} */
@@ -31,50 +30,65 @@ export const NotificationProvider = ({ children }) => {
     setIsLoadingMarkNotificationRead,
   ] = useState(false);
 
-  const refreshNotificationList = () =>
-    new Promise((resolve, reject) => {
-      if (!isLoadingNotifcationList) {
-        setIsLoadingNotificationList(true);
-        // Fetch list of notifications
-        fetchUtil.user
-          .fetchNotificationList()
-          .then(res => {
-            setNotificationList(_.keyBy(res.data, 'recipient'));
-          })
-          .catch(err => {
-            setNotificationError(err);
-            reject(err);
-          })
-          .finally(() => {
-            setLastRefreshNotificationList(Date.now);
-            setIsLoadingNotificationList(false);
-            resolve();
-          });
-      }
-    });
+  /** Refreshes the user's notification list
+   *
+   * @returns {void, Error}
+   */
+  const refreshNotificationList = async () => {
+    if (!isLoadingNotifcationList) {
+      setIsLoadingNotificationList(true);
+      // Fetch list of notifications
+      await fetchUtil.user
+        .fetchNotificationList()
+        .then(res => {
+          if (Array.isArray(res?.data)) {
+            setNotificationList(_.keyBy(res?.data, 'recipient'));
+          } else {
+            setNotificationError(res?.data);
+          }
+        })
+        .catch(err => {
+          setNotificationError(err);
+          return Promise.reject(err);
+        })
+        .finally(() => {
+          setLastRefreshNotificationList(Date.now);
+          setIsLoadingNotificationList(false);
+          return;
+        });
+    }
+  };
 
-  const markNotificationRead = notification =>
-    new Promise((resolve, reject) => {
-      if (!isLoadingMarkNotificationRead) {
-        setIsLoadingMarkNotificationRead(true);
-        fetchUtil.user
-          .markNotificationRead(notification?.notificationId)
-          .then(() => {
-            refreshNotificationList();
-          })
-          .catch(err => {
-            setNotificationError(err);
-            reject(err);
-          })
-          .finally(() => {
-            setIsLoadingMarkNotificationRead(false);
-            history.pushState(
-              `/u/${notification?.recipient}/post/${notification?.postId}`
-            );
-            resolve();
-          });
-      }
-    });
+  /** Marks the provided notification as read
+   *
+   * @param {object} notification
+   * @returns {void, Error}
+   */
+  const markNotificationRead = async notification => {
+    if (!isLoadingMarkNotificationRead) {
+      setIsLoadingMarkNotificationRead(true);
+      await fetchUtil.user
+        .markNotificationRead(notification?.notificationId)
+        .then(async res => {
+          if (res?.data === true) {
+            await refreshNotificationList();
+          } else {
+            setNotificationError(res?.data);
+          }
+        })
+        .catch(err => {
+          setNotificationError(err);
+          return Promise.reject(err);
+        })
+        .finally(() => {
+          setIsLoadingMarkNotificationRead(false);
+          history.push(
+            `/u/${notification?.recipient}/post/${notification?.postId}`
+          );
+          return;
+        });
+    }
+  };
 
   // passing state to value to be passed to provider
   const value = {

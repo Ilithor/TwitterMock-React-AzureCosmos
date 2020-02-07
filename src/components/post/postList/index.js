@@ -8,31 +8,18 @@ import { PostContent } from './PostContent';
 
 // MUI
 import { Card, CardMedia } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { useStyles } from '../post.style';
 
 // Context
 import { useCurrentUserData, useUserListData } from '../../profile/userContext';
 
-const useStyles = makeStyles({
-  card: {
-    position: 'relative',
-    display: 'flex',
-    marginBottom: 20,
-  },
-  image: {
-    minWidth: 200,
-  },
-  content: {
-    padding: 25,
-    objectFit: 'cover',
-  },
-});
-
 /** View component for displaying an individual post on the site
+ *
  * @type {React.FunctionComponent}
  * @param {object} props
- * @param {object} props.classes
  * @param {object} props.post
+ * @param {object} props.user
+ * @param {object} props.like
  */
 export const Post = ({ post, user, like }) => {
   const classes = useStyles();

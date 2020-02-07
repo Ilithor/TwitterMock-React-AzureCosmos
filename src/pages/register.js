@@ -5,7 +5,7 @@ import { RegisterForm } from '../components/register';
 
 // MUI
 import { Grid, Typography } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { useStyles } from './page.style';
 
 // Icons
 import AppIcon from '../images/icon.png';
@@ -13,21 +13,8 @@ import AppIcon from '../images/icon.png';
 // Context
 import { RegisterProvider } from '../components/register/registerContext';
 
-const useStyles = makeStyles({
-  form: {
-    textAlign: 'center',
-  },
-  image: {
-    margin: 'auto',
-    width: '76px',
-    height: '76px',
-  },
-  pageTitle: {
-    margin: '10px auto 10px auto',
-  },
-});
-
 /** Control that allows the user to register
+ * 
  * @type {React.FunctionComponent}
  */
 export const RegisterPage = () => {

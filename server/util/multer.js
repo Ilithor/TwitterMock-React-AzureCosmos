@@ -13,11 +13,10 @@ const dUri = new Datauri();
  * @param {Request} req
  * @returns {Datauri}
  */
-export const dataUri = req =>
-  new Promise(resolve => {
-    const file = dUri.format(
-      path.extname(req.file.originalname).toString(),
-      req.file.buffer
-    );
-    resolve(file);
-  });
+export const dataUri = req => {
+  const file = dUri.format(
+    path.extname(req.file.originalname).toString(),
+    req.file.buffer
+  );
+  return file;
+};

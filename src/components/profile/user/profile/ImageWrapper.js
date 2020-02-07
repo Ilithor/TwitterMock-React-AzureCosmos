@@ -11,6 +11,7 @@ import * as Icon from '@material-ui/icons';
 import { useCurrentUserData } from '../../userContext';
 
 /** View component for displaying the userImage
+ * 
  * @type {React.FunctionComponent}
  * @param {object} props
  * @param {React.ChangeEventHandler} props.handleEditPhoto

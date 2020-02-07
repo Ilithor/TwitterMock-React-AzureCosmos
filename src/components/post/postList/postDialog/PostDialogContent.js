@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import _ from 'lodash';
 import { Link, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
@@ -12,7 +12,7 @@ import { CustomButton } from '../../../../util/CustomButton';
 
 // MUI
 import { Grid, Typography, CircularProgress } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { useStyles } from '../../post.style';
 
 // Icons
 import * as Icon from '@material-ui/icons';
@@ -21,34 +21,17 @@ import * as Icon from '@material-ui/icons';
 import { useCommentListData } from '../../../comment/commentContext';
 import { useLikeData } from '../../../like/likeContext';
 
-const useStyles = makeStyles({
-  profileImage: {
-    maxWidth: 200,
-    height: 200,
-    borderRadius: '50%',
-    objectFit: 'cover',
-  },
-  separator: {
-    border: 'none',
-    margin: 4,
-  },
-  spinnerDiv: {
-    textAlign: 'center',
-    marginTop: 50,
-    marginBottom: 50,
-  },
-});
-
 /** View component for displaying the content in a post's dialog box
+ *
  * @type {React.FunctionComponent}
- * @param {Object} props
- * @param {String} props.userHandle
- * @param {String} props.userImage
- * @param {String} props.createAt
- * @param {String} props.body
- * @param {String} props.postId
- * @param {Number} props.likeCount
- * @param {Number} props.commentCount
+ * @param {object} props
+ * @param {string} props.userHandle
+ * @param {string} props.userImage
+ * @param {string} props.createAt
+ * @param {string} props.body
+ * @param {string} props.postId
+ * @param {number} props.likeCount
+ * @param {number} props.commentCount
  */
 export const PostDialogContent = ({
   userHandle,
@@ -62,22 +45,26 @@ export const PostDialogContent = ({
   const classes = useStyles();
   const params = useParams();
   const { likeList } = useLikeData();
-  const {
-    refreshCommentListOnPost,
-    isLoadingCommentList,
-    commentListOnPost,
-  } = useCommentListData();
+  const { commentList, isLoadingCommentList } = useCommentListData();
+  const [postCommentList, setPostCommentList] = useState({});
   useEffect(() => {
-    refreshCommentListOnPost(params?.postId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  const RecentCommentMarkup = () => {
-    if (!isLoadingCommentList && commentListOnPost) {
-      return _.map(commentListOnPost, comment => (
-        <Comment key={`comment-${comment?.commentId}`} comment={comment} />
-      ));
+    const commentData = _.values(commentList).filter(
+      comment => comment?.postId === params.postId
+    );
+    if (commentData) {
+      setPostCommentList(commentData);
     }
-    if (commentListOnPost?.length === 0) {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [commentList]);
+  const RecentCommentMarkup = () => {
+    if (!isLoadingCommentList && commentList) {
+      return _.map(postCommentList, comment => {
+        return (
+          <Comment key={`comment-${comment?.commentId}`} comment={comment} />
+        );
+      });
+    }
+    if (commentList?.length === 0) {
       return <div />;
     }
     return (
@@ -122,7 +109,7 @@ export const PostDialogContent = ({
         </Typography>
         <hr className={classes?.separator} />
         <Typography variant='body1'>{body}</Typography>
-        <Like postId={postId} like={likeList[(params?.postId)]} />
+        <Like postId={postId} like={likeList[params?.postId]} />
         <span>
           {likeCount}
           <LikePlural />

@@ -5,25 +5,30 @@ import { EditDetailsDisplay } from './EditDetailsDisplay';
 import { CustomButton } from '../../../../util/CustomButton';
 
 // MUI
-import { makeStyles } from '@material-ui/core/styles';
+import { useStyles } from '../../profile.style';
 
 // Icons
 import * as Icon from '@material-ui/icons';
-import { useCurrentUserData, useEditUserDetailData } from '../../userContext';
-
-const useStyles = makeStyles({
-  buttonEdit: {
-    float: 'right',
-  },
-});
+import {
+  useCurrentUserData,
+  useEditUserDetailData,
+  useValidationEditUserDetail,
+  useUserData,
+} from '../../userContext';
 
 /** Control how the user edits their bio information
+ *
  * @type {React.FunctionComponent}
  */
 export const EditDetail = () => {
   const classes = useStyles();
   const { currentUser } = useCurrentUserData();
-  const { editUserDetail } = useEditUserDetailData();
+  const { userError, setUserError } = useUserData();
+  const { editUserDetail, isLoadingEditUserDetail } = useEditUserDetailData();
+  const {
+    detailError,
+    validationCheckUserDetail,
+  } = useValidationEditUserDetail();
   const [editorState, setEditorState] = useState({
     aboutMe: '',
     website: '',
@@ -44,21 +49,37 @@ export const EditDetail = () => {
   const handleClose = () => setOpen(false);
 
   const handleChange = event => {
+    if (userError) {
+      setUserError();
+    }
     const { name, value } = event?.target;
-    setEditorState({
-      ...editorState,
-      [name]: value,
-    });
+    setEditorState(
+      validationCheckUserDetail({
+        ...editorState,
+        [name]: value,
+      })
+    );
   };
 
-  const handleSubmit = () => {
-    const userDetail = {
-      aboutMe,
-      website,
-      location,
-    };
-    editUserDetail(userDetail);
-    handleClose();
+  const handleSubmit = event => {
+    if (!isLoadingEditUserDetail) {
+      event.preventDefault();
+      const userDetail = {
+        aboutMe,
+        website,
+        location,
+      };
+      editUserDetail(userDetail)
+        .then(() => {
+          if (!userError && !detailError) {
+            handleClose();
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          setUserError(err);
+        });
+    }
   };
 
   return (

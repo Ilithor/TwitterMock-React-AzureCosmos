@@ -22,67 +22,82 @@ export const PostProvider = ({ children }) => {
   const [isLoadingNewPost, setIsLoadingNewPost] = useState(false);
   const [isLoadingDeletePost, setIsLoadingDeletePost] = useState(false);
 
-  const refreshPostList = () =>
-    new Promise((resolve, reject) => {
-      if (!isLoadingPostList) {
-        setIsLoadingPostList(true);
-        // Fetch list of posts
-        fetchUtil.post
-          .fetchPostList()
-          .then(res => {
+  /** Refreshes the post list
+   *
+   * @returns {void | Error}
+   */
+  const refreshPostList = async () => {
+    if (!isLoadingPostList) {
+      setIsLoadingPostList(true);
+      // Fetch list of posts
+      await fetchUtil.post
+        .fetchPostList()
+        .then(res => {
+          if (res?.data) {
             setPostList(_.keyBy(res.data, 'postId'));
-          })
-          .catch(err => {
-            setPostError(err);
-            reject(err);
-          })
-          .finally(() => {
-            setLastRefreshPostList(Date.now);
-            setIsLoadingPostList(false);
-            resolve();
-          });
-      }
-    });
+          }
+        })
+        .catch(err => {
+          setPostError(err);
+          return Promise.reject(err);
+        })
+        .finally(() => {
+          setLastRefreshPostList(Date.now);
+          setIsLoadingPostList(false);
+          return Promise.resolve();
+        });
+    }
+  };
 
-  const newPost = postParam =>
-    new Promise((resolve, reject) => {
-      if (postParam && !isLoadingNewPost) {
-        setIsLoadingNewPost(true);
-        fetchUtil.post
-          .createPost(postParam)
-          .then(() => {
-            refreshPostList();
-          })
-          .catch(err => {
-            setPostError(err);
-            reject(err);
-          })
-          .finally(() => {
-            setIsLoadingNewPost(false);
-            resolve();
-          });
-      }
-    });
+  /** Creates a new post with the provided user info
+   *
+   * @param {object} postParam
+   * @returns {void | Error}
+   */
+  const newPost = async postParam => {
+    if (postParam && !isLoadingNewPost) {
+      setIsLoadingNewPost(true);
+      await fetchUtil.post
+        .createPost(postParam)
+        .then(async success => {
+          if (success) {
+            await refreshPostList();
+          }
+        })
+        .catch(err => {
+          setPostError(err);
+          Promise.reject(err);
+        })
+        .finally(() => {
+          setIsLoadingNewPost(false);
+          return;
+        });
+    }
+  };
 
-  const deletePost = postId =>
-    new Promise((resolve, reject) => {
-      if (postId && !isLoadingDeletePost) {
-        setIsLoadingDeletePost(true);
-        fetchUtil.post
-          .deletePost(postId)
-          .then(() => {
-            refreshPostList();
-          })
-          .catch(err => {
-            setPostError(err);
-            reject(err);
-          })
-          .finally(() => {
-            setIsLoadingDeletePost(false);
-            resolve();
-          });
-      }
-    });
+  /** Deletes post with the provided postId
+   *
+   * @param {string} postId
+   * @returns {void | Error}
+   */
+  const deletePost = async postId => {
+    if (postId && !isLoadingDeletePost) {
+      setIsLoadingDeletePost(true);
+      await fetchUtil.post
+        .deletePost(postId)
+        .then(async () => {
+          await refreshPostList();
+        })
+        .catch(err => {
+          setPostError(err);
+          return Promise.reject(err);
+        })
+        .finally(() => {
+          setIsLoadingDeletePost(false);
+          return Promise.resolve();
+        });
+    }
+  };
 
   // Passing state to value to be passed to provider
   const value = {
@@ -99,12 +114,22 @@ export const PostProvider = ({ children }) => {
   return <postContext.Provider value={value}>{children}</postContext.Provider>;
 };
 
+/** @typedef UsePostDataResult
+ * @property {_.Dictionary<Post>} postList
+ * @property {Error} [postError]
+ * @property {boolean} isLoadingPostList
+ * @property {boolean} isLoadingNewPost
+ * @property {(id:string)=>void} deletePost
+ * @property {(data:{body:string})=>void} newPost
+ * @property {()=>void} refreshPostList
+ */
+
 /** A hook for consuming our Notification context in a safe way
  *
  * @example //getting the post list
  * import { usePostData } from 'postContext'
  * const { postList } = usePostData();
- * @returns {Post[]}
+ * @returns {UsePostDataResult}
  */
 export const usePostData = () => {
   // Destructuring value from provider

@@ -8,22 +8,29 @@ import { Button, Dialog, DialogTitle, DialogActions } from '@material-ui/core';
 import * as Icon from '@material-ui/icons';
 
 // Context
-import { useCommentData } from '../commentContext';
+import { useCommentData, useCommentListData } from '../commentContext';
+import { usePostData } from '../../post/postContext';
 
+/** Displays the dialog box for comment deletion confirmation
+ *
+ * @type {React.FunctionComponent}
+ * @param {object} props
+ * @param {string} props.postId
+ */
 export const DeleteCommentDialog = ({ postId }) => {
   const { deleteComment } = useCommentData();
+  const { refreshPostList } = usePostData();
+  const { refreshCommentList } = useCommentListData();
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const deleteUserComment = () => {
-    deleteComment(postId);
-    setOpen(false);
+    deleteComment(postId).then(() => {
+      Promise.all([refreshPostList(), refreshCommentList()]);
+    });
   };
   const makeDeleteButton = () => (
-    <CustomButton
-      tip='Delete Comment'
-      onClick={handleOpen}
-    >
+    <CustomButton tip='Delete Comment' onClick={handleOpen}>
       <Icon.DeleteOutline color='secondary' />
     </CustomButton>
   );

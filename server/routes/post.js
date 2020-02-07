@@ -18,10 +18,6 @@ router.delete('/:postId', authUser, deletePost);
 router.get('/:postId/like', authUser, likePost);
 router.get('/:postId/unlike', authUser, unlikePost);
 router.post('/:postId/comment', authUser, commentOnPost);
-router.delete(
-  '/:postId/uncomment',
-  authUser,
-  deleteComment
-);
+router.delete('/:postId/uncomment', authUser, deleteComment);
 
 export default router;

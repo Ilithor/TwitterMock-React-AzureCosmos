@@ -17,6 +17,8 @@ import {
 } from './profile/userContext';
 
 /** Shows the log in or log out button
+ * 
+ * @type {React.FunctionComponent}
  */
 const ButtonLogInOut = () => {
   const { isAuthenticated } = useUserAuthenticationData();
@@ -36,6 +38,8 @@ const ButtonLogInOut = () => {
 };
 
 /** Displays either signup button or empty div
+ * 
+ * @type {React.FunctionComponent}
  */
 const ButtonRegister = () => {
   const { isAuthenticated } = useUserAuthenticationData();
@@ -50,6 +54,8 @@ const ButtonRegister = () => {
 };
 
 /** Displays either notification button or empty div
+ * 
+ * @type {React.FunctionComponent}
  */
 const ButtonNotification = () => {
   const { isAuthenticated } = useUserAuthenticationData();
@@ -64,6 +70,8 @@ const ButtonNotification = () => {
 };
 
 /** View component for navbar
+ * 
+ * @type {React.FunctionComponent}
  */
 export const Navbar = () => (
   <AppBar>

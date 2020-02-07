@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 import { User } from '../models/user.model';
 
 import mongoConnection from '../util/mongo';
@@ -7,19 +9,18 @@ mongoConnection();
  * @param {UserCredential} user
  * @returns {void}
  */
-export const validateLogin = user =>
-  new Promise((resolve, reject) => {
-    if (isEmpty(user.email)) {
-      reject({ email: 'Must not be empty' });
-    }
-    if (!isEmail(user.email)) {
-      reject({ email: 'Must be a valid email address' });
-    }
-    if (isEmpty(user.password)) {
-      reject({ password: 'Must not be empty' });
-    }
-    resolve();
-  });
+export const validateLogin = user => {
+  if (isEmpty(user.email)) {
+    return Promise.reject({ email: 'Must not be empty' });
+  }
+  if (!isEmail(user.email)) {
+    return Promise.reject({ email: 'Must be a valid email address' });
+  }
+  if (isEmpty(user.password)) {
+    return Promise.reject({ password: 'Must not be empty' });
+  }
+  return Promise.resolve();
+};
 
 /** Checks if the user inputs are valid
  * @param {UserRegistration} userParam
@@ -49,35 +50,36 @@ export const validateRegister = async userParam => {
 
 /** Checks if the provided bio information is valid
  * @param {UserBioUpdate} userParam User's bio info
- * @returns {UserBioUpdate}
+ * @returns {Promise<UserBioUpdate>}
  */
-export const validateUserDetail = userParam =>
-  new Promise(resolve => {
-    const userDetail = { aboutMe: '', website: '', location: '' };
-    const { aboutMe, website, location } = userParam;
-    if (!isEmpty(aboutMe.trim())) {
-      userDetail.aboutMe = aboutMe;
-    }
-    if (!isEmpty(website.trim())) {
-      if (website.trim().substring(0, 4) !== 'http') {
-        if (website.trim().substring(0, 3) !== 'www') {
-          userDetail.website = `http://www.${website.trim()}`;
-        } else {
-          userDetail.website = `http://${website.trim()}`;
-        }
-      } else {
-        userDetail.website = website;
-      }
-    }
-    if (!isEmpty(location.trim())) {
-      userDetail.location = location;
-    }
-    resolve(userDetail);
-  });
+export const validateUserDetail = userParam => {
+  const userDetail = { aboutMe: '', website: '', location: '' };
+  const { aboutMe, website, location } = userParam;
+  if (
+    isEmpty(aboutMe.trim()) &&
+    isEmpty(website.trim()) &&
+    isEmpty(website.trim())
+  ) {
+    const err = {
+      general:
+        'At least one field must be filled before this form can be submitted!',
+    };
+    return Promise.reject(err);
+  }
+  const validatedWebsite = isWebsite(website);
+  if (!validatedWebsite) {
+    const err = { website: 'Must be a valid website' };
+    return Promise.reject(err);
+  }
+  userDetail.aboutMe = aboutMe;
+  userDetail.website = validatedWebsite;
+  userDetail.location = location;
+  return Promise.resolve(userDetail);
+};
 
 /** Checks if provided string is empty
- * @param {string} string
- * @returns {boolean}
+ * @param {String} string
+ * @returns {Promise<Boolean>}
  */
 export const isEmpty = string => {
   if (string.trim() === '') {
@@ -89,7 +91,7 @@ export const isEmpty = string => {
 
 /** Checks if provided email is valid
  * @param {string} email
- * @returns {boolean}
+ * @returns {Promise<boolean>}
  */
 export const isEmail = email => {
   // eslint-disable-next-line no-useless-escape
@@ -99,4 +101,19 @@ export const isEmail = email => {
   } else {
     return false;
   }
+};
+
+/** Checks if provided website is valid
+ *
+ * @param {string} website
+ * @returns {Promise<boolean>}
+ */
+export const isWebsite = website => {
+  if (!_.includes(website, '.')) {
+    return false;
+  }
+  if (!_.includes(website, '://')) {
+    website = `http://${website}`;
+  }
+  return website;
 };

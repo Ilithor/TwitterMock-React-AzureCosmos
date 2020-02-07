@@ -2,23 +2,20 @@ import React from 'react';
 
 // MUI
 import { TextField, CircularProgress, Button } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { useStyles } from '../post.style';
 
-const useStyles = makeStyles({
-  textField: {
-    margin: '10px auto 10px auto',
-  },
-  submitButton: {
-    position: 'relative',
-  },
-  progressSpinner: {
-    position: 'absolute',
-  },
-});
-
+/** Form for the user to create a post
+ *
+ * @type {React.FunctionComponent}
+ * @param {object} props
+ * @param {React.ChangeEventHandler} props.handleSubmit
+ * @param {Error} props.error
+ * @param {React.ChangeEventHandler} props.handleChange
+ * @param {boolean} props.isLoading
+ */
 export const NewPostForm = ({
   handleSubmit,
-  error = {},
+  error,
   handleChange,
   isLoading,
 }) => {

@@ -10,10 +10,11 @@ import {
 } from '../../../profile/userContext';
 
 /** Displays the delete post button when authenticated
+ * 
  * @type {React.FunctionComponent}
  * @param {object} props
  * @param {string} props.postId
- * @param {any} props.deleteUserPost
+ * @param {string} props.userHandle
  */
 export const DeletePost = ({ postId, userHandle }) => {
   const { isAuthenticated } = useUserAuthenticationData();

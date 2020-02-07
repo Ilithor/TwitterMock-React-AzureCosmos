@@ -13,6 +13,12 @@ import MuiLink from '@material-ui/core/Link';
 // Icons
 import * as Icon from '@material-ui/icons';
 
+/** Displays the user's bio
+ * 
+ * @type {React.FunctionComponent}
+ * @param {object} props
+ * @param {object} props.user 
+ */
 export const ProfileDetail = ({ user }) => (
   <div className='profile-details'>
     <MuiLink
