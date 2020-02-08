@@ -15,7 +15,7 @@ import {
   findLikeByHandle,
   findByHandle,
   findPostByHandle,
-  findAndDeleteAllContent,
+  findAndDeleteAllPosts,
 } from './find';
 
 /** Retrieves the list of users
@@ -207,9 +207,8 @@ export const deleteUser = async (req, res, next) => {
     console.error(err);
     return res.send(err);
   });
-  console.log(user);
   if (user.deletedCount === 1) {
-    await findAndDeleteAllContent(req.params.userHandle);
+    await findAndDeleteAllPosts(req.params.userHandle);
     return res.status(200).send(true);
   } else {
     return res.sendStatus(404);
