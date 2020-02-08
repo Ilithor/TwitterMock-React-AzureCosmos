@@ -13,7 +13,6 @@ import {
   useCurrentUserData,
   useEditUserDetailData,
   useValidationEditUserDetail,
-  useUserData,
 } from '../../userContext';
 
 /** Control how the user edits their bio information
@@ -22,8 +21,7 @@ import {
  */
 export const EditDetail = () => {
   const classes = useStyles();
-  const { currentUser } = useCurrentUserData();
-  const { userError, setUserError } = useUserData();
+  const { currentUser, userError, setUserError } = useCurrentUserData();
   const { editUserDetail, isLoadingEditUserDetail } = useEditUserDetailData();
   const {
     detailError,

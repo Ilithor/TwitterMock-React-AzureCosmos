@@ -4,7 +4,7 @@ import { ToastContainer, toast } from 'react-toastify';
 // MUI
 import { TextField } from '@material-ui/core';
 import { useStyles } from '../../profile.style';
-import { useValidationEditUserDetail, useUserData } from '../../userContext';
+import { useValidationEditUserDetail } from '../../userContext';
 
 /** Displays the edit form to edit the user's details
  *

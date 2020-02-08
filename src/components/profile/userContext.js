@@ -6,8 +6,36 @@ import { useHistory } from 'react-router-dom';
 
 import * as fetchUtil from '../../util/fetch';
 
-/** @type {React.Context<{userList:User[],userError:Error,getData:()=>void}>} */
+/** @type {React.Context<UserContextProps>} */
 const userContext = createContext();
+
+/**
+ * @typedef UserContextProps
+ * @property {boolean} isAuthenticated
+ * @property {boolean} isLoadingAuthenticated
+ * @property {any} getAuthenticated
+ * @property {User[]} userList
+ * @property {User} currentUser
+ * @property {Error} userError
+ * @property {any} setUserError
+ * @property {any} refreshUserList
+ * @property {any} getCurrentUserData
+ * @property {boolean} isLoadingUserList
+ * @property {any} setIsLoadingUserList
+ * @property {boolean} isLoadingCurrentUser
+ * @property {any} loginUser
+ * @property {any} logoutUser
+ * @property {boolean} isLoadingLogin
+ * @property {any} lastRefreshUserList
+ * @property {any} registerUser
+ * @property {boolean} isLoadingRegister
+ * @property {any} editUserDetail
+ * @property {boolean} isLoadingEditUserDetail
+ * @property {any} uploadImage
+ * @property {Error} [detailError]
+ * @property {any} setDetailError
+ * @property {any} validationCheckUserDetail
+ */
 
 /** This is a react component which you wrap your entire application
  * to provide a "context", meaning: data you can access anywhere in the app.
@@ -24,7 +52,7 @@ export const UserProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState();
   const [isAuthenticated, setisAuthenticated] = useState(false);
   const [isLoadingUserList, setIsLoadingUserList] = useState(false);
-  const [isLoadingUserData, setIsLoadingUserData] = useState(false);
+  const [isLoadingCurrentUser, setisLoadingCurrentUser] = useState(false);
   const [isLoadingEditUserDetail, setIsLoadingEditUserDetail] = useState(false);
   const [isLoadingAuthenticated, setIsLoadingAuthenticated] = useState(false);
   const [isLoadingLogin, setIsLoadingLogin] = useState(false);
@@ -66,8 +94,8 @@ export const UserProvider = ({ children }) => {
    * @returns {void | Error}
    */
   const getCurrentUserData = async () => {
-    if (localStorage?.Handle && !isLoadingUserData) {
-      setIsLoadingUserData(true);
+    if (localStorage?.Handle && !isLoadingCurrentUser) {
+      setisLoadingCurrentUser(true);
       await fetchUtil.user
         .fetchUserData(localStorage?.Handle)
         .then(res => {
@@ -78,7 +106,7 @@ export const UserProvider = ({ children }) => {
           return Promise.reject(err);
         })
         .finally(() => {
-          setIsLoadingUserData(false);
+          setisLoadingCurrentUser(false);
           return;
         });
     }
@@ -388,7 +416,7 @@ export const UserProvider = ({ children }) => {
     getCurrentUserData,
     isLoadingUserList,
     setIsLoadingUserList,
-    isLoadingUserData,
+    isLoadingCurrentUser,
     loginUser,
     logoutUser,
     isLoadingLogin,
@@ -430,7 +458,7 @@ export const useUserListData = () => {
 
   if (
     !isLoadingUserList &&
-    (!lastRefreshUserList || lastRefreshUserList + 600 <= Date.now)
+    (!lastRefreshUserList || lastRefreshUserList + 600 <= Date.now())
   ) {
     refreshUserList();
   }
@@ -440,29 +468,9 @@ export const useUserListData = () => {
 
 /** A hook for consuming our User context in a safe way
  *
- * @example //getting the user
- * import { useUserData } from 'userContext'
- * const { user } = useUserData();
- * @returns {User}
- */
-export const useUserData = () => {
-  const ctx = useContext(userContext);
-
-  if (ctx === undefined) {
-    throw new Error('useUserData must be used within a UserProvider');
-  }
-
-  const { user, userError, setUserError, isLoadingUserData } = ctx;
-
-  return { user, userError, setUserError, isLoadingUserData };
-};
-
-/** A hook for consuming our User context in a safe way
- *
  * @example //getting the current user
  * import { useCurrentUserData } from 'userContext'
  * const { currentUser } = useCurrentUserData();
- * @returns {User}
  */
 export const useCurrentUserData = () => {
   const ctx = useContext(userContext);
@@ -472,23 +480,25 @@ export const useCurrentUserData = () => {
   }
 
   const {
-    isLoadingUserData,
+    isLoadingCurrentUser,
     currentUser,
     getCurrentUserData,
     userError,
     isAuthenticated,
+    setUserError,
   } = ctx;
 
-  if (!currentUser && !isLoadingUserData) {
+  if (!currentUser && !isLoadingCurrentUser) {
     getCurrentUserData();
   }
 
   return {
-    isLoadingUserData,
+    isLoadingCurrentUser,
     currentUser,
     getCurrentUserData,
     isAuthenticated,
     userError,
+    setUserError,
   };
 };
 

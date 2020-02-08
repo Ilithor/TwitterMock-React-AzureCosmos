@@ -23,10 +23,14 @@ export const NotificationContent = () => {
   const { notificationList, isLoadingNotifcationList } = useNotificationData();
   const { postList } = usePostData();
   const { commentList } = useCommentListData();
-  const { currentUser, isLoadingUserData } = useCurrentUserData();
+  const { currentUser, isLoadingCurrentUser } = useCurrentUserData();
   const [userNotificationList, setUserNotificationList] = useState();
   useEffect(() => {
-    if (!isLoadingNotifcationList && !isLoadingUserData && notificationList) {
+    if (
+      !isLoadingNotifcationList &&
+      !isLoadingCurrentUser &&
+      notificationList
+    ) {
       const notificationData = _.values(notificationList).filter(
         notification => notification?.recipient === currentUser?.userHandle
       );
@@ -35,7 +39,12 @@ export const NotificationContent = () => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoadingNotifcationList, isLoadingUserData, notificationList]);
+  }, [
+    isLoadingNotifcationList,
+    isLoadingCurrentUser,
+    notificationList,
+    currentUser,
+  ]);
   if (userNotificationList?.length > 0 && postList && commentList) {
     return _.map(userNotificationList, doc => (
       <NotificationCard
