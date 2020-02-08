@@ -10,20 +10,24 @@ export const SettingProvider = ({ children }) => {
 
   /** Deletes the current user
    *
-   * @param {string} userHandle
+   * @param {{userHandle:string}} userParam
    * @returns {void|Error}
    */
-  const deleteUser = async userHandle => {
-    const success = isMatch(userHandle);
+  const deleteUser = async userParam => {
+    const success = await isMatch(userParam);
     if (success === true) {
       await fetchUtil.user
-        .deleteUser(userHandle)
+        .deleteUser(userParam?.userHandle)
+        .then(res => {
+          if (!!res?.data?.userHandle) {
+            return Promise.reject(res?.data);
+          }
+        })
         .catch(err => {
-          setSettingError(err);
           return Promise.reject(err);
         })
         .finally(() => {
-          return Promise.resolve();
+          return;
         });
     } else {
       return Promise.reject(success);
@@ -32,11 +36,11 @@ export const SettingProvider = ({ children }) => {
 
   /** Checks if provided userHandle matches the local storage
    *
-   * @param {string} userHandle
+   * @param {{userHandle:string}} userParam
    * @returns {boolean|{userHandle:string}}
    */
-  const isMatch = userHandle => {
-    if (userHandle === localStorage?.Handle) {
+  const isMatch = userParam => {
+    if (userParam?.userHandle === localStorage?.Handle) {
       return true;
     }
     return {
@@ -56,12 +60,14 @@ export const SettingProvider = ({ children }) => {
         userHandle: 'Must not be empty',
       };
       setSettingError(err);
+      setIsMatching(false);
       return userParam;
     }
     if (userParam?.userHandle !== localStorage?.Handle) {
       err = {
         userHandle: 'Does not match',
       };
+      setIsMatching(false);
     } else {
       err = undefined;
       setIsMatching(true);
@@ -86,6 +92,7 @@ export const SettingProvider = ({ children }) => {
   // Passing state to value to be passed to provider
   const value = {
     settingError,
+    setSettingError,
     deleteUser,
     validationMatching,
     isMatching,
@@ -115,10 +122,10 @@ export const useSettingData = () => {
     throw new Error('useSettingContext must be used within a SettingProvider');
   }
 
-  const { settingError, deleteUser } = ctx;
+  const { settingError, setSettingError, deleteUser } = ctx;
 
   // What we want this consumer hook to actually return
-  return { settingError, deleteUser };
+  return { settingError, setSettingError, deleteUser };
 };
 
 /** @typedef UseValidationDeleteUserResult

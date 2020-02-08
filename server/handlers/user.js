@@ -199,16 +199,19 @@ export const imageUpload = async (req, res, next) => {
 };
 
 /** Attempts to delete the user and all their content
- * 
- * @type {RouteHandler} 
+ *
+ * @type {RouteHandler}
  */
 export const deleteUser = async (req, res, next) => {
   const user = await findAndDeleteUser(req.params.userHandle).catch(err => {
     console.error(err);
     return res.send(err);
   });
-  if (user) {
-    await findAndDeleteAllContent(req.params.userId);
+  console.log(user);
+  if (user.deletedCount === 1) {
+    await findAndDeleteAllContent(req.params.userHandle);
     return res.status(200).send(true);
+  } else {
+    return res.sendStatus(404);
   }
 };
