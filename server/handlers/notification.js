@@ -63,13 +63,12 @@ export const markNotificationRead = async (req, res) => {
   return res.status(200).send(true);
 };
 
-/** Deletes notification upon successful deletion
- *  of a like or comment
+/** Deletes a notification
  *
  * @type {RouteHandler}
  */
 export const deleteNotification = async (userHandle, type, typeId) => {
-  await Notification.findOneAndDelete({
+  return await Notification.findOneAndDelete({
     userHandle,
     type,
     typeId,

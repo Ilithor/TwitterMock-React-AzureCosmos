@@ -10,6 +10,7 @@ const notificationContext = createContext();
 /** This is a react component which you wrap your entire application
  * to provide a "context", meaning: data you can access anywhere in the app.
  *
+ * @type {React.FunctionComponent}
  * @param {object} props
  * @param {React.ReactChild} props.children
  */
@@ -28,6 +29,10 @@ export const NotificationProvider = ({ children }) => {
   const [
     isLoadingMarkNotificationRead,
     setIsLoadingMarkNotificationRead,
+  ] = useState(false);
+  const [
+    isLoadingdeleteNotification,
+    setIsLoadingDeleteNotification,
   ] = useState(false);
 
   /** Refreshes the user's notification list
@@ -52,7 +57,7 @@ export const NotificationProvider = ({ children }) => {
           return Promise.reject(err);
         })
         .finally(() => {
-          setLastRefreshNotificationList(Date.now);
+          setLastRefreshNotificationList(Date.now());
           setIsLoadingNotificationList(false);
           return;
         });
@@ -61,8 +66,8 @@ export const NotificationProvider = ({ children }) => {
 
   /** Marks the provided notification as read
    *
-   * @param {object} notification
-   * @returns {void, Error}
+   * @param {Notification} notification
+   * @returns {void | Error}
    */
   const markNotificationRead = async notification => {
     if (!isLoadingMarkNotificationRead) {
@@ -90,6 +95,34 @@ export const NotificationProvider = ({ children }) => {
     }
   };
 
+  /** Deletes a notification
+   *
+   * @param {string} notification
+   * @returns {void|Error}
+   */
+  const deleteNotification = async notification => {
+    if (!isLoadingdeleteNotification) {
+      setIsLoadingDeleteNotification(true);
+      await fetchUtil.user
+        .deleteNotification(notification)
+        .then(async res => {
+          if (res?.data === true) {
+            await refreshNotificationList();
+          } else {
+            setNotificationError(res?.data);
+          }
+        })
+        .catch(err => {
+          setNotificationError(err);
+          return Promise.reject(err);
+        })
+        .finally(() => {
+          setIsLoadingDeleteNotification(false);
+          return;
+        });
+    }
+  };
+
   // passing state to value to be passed to provider
   const value = {
     notificationList,
@@ -99,6 +132,7 @@ export const NotificationProvider = ({ children }) => {
     setIsLoadingNotificationList,
     lastRefreshNotificationList,
     markNotificationRead,
+    deleteNotification,
   };
   return (
     <notificationContext.Provider value={value}>
@@ -130,12 +164,13 @@ export const useNotificationData = () => {
     isLoadingNotifcationList,
     lastRefreshNotificationList,
     markNotificationRead,
+    deleteNotification,
   } = ctx;
-
   if (
     !isLoadingNotifcationList &&
-    (!lastRefreshNotificationList ||
-      lastRefreshNotificationList + 600 <= Date.now)
+    (!notificationList ||
+      !lastRefreshNotificationList ||
+      lastRefreshNotificationList + 600000 <= Date.now())
   ) {
     refreshNotificationList();
   }
@@ -146,6 +181,7 @@ export const useNotificationData = () => {
     notificationError,
     isLoadingNotifcationList,
     markNotificationRead,
+    deleteNotification,
   };
 };
 

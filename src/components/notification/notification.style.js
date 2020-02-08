@@ -17,4 +17,9 @@ export const useStyles = makeStyles(theme => ({
     objectFit: 'cover',
     flexWrap: 'wrap-reverse',
   },
+  menu: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
 }));

@@ -14,6 +14,7 @@ import { authUser } from '../util/auth';
 import {
   getNotification,
   markNotificationRead,
+  deleteNotification,
 } from '../handlers/notification';
 import { multerUploads } from '../util/multer';
 
@@ -25,9 +26,10 @@ router.get('/list', getUserList);
 router.post('/register', registerUser);
 router.post('/login', loginUser);
 router.post('/image', authUser, multerUploads, imageUpload);
+router.get('/like', fetchLikeList);
 router.get('/notification', authUser, getNotification);
 router.post('/notification', authUser, markNotificationRead);
-router.get('/like', fetchLikeList);
+router.delete('/notification/:notificationId', authUser, deleteNotification);
 router.get('/:userHandle', getUserDetail);
 router.delete('/:userHandle', authUser, deleteUser);
 
