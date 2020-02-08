@@ -134,7 +134,7 @@ export const updateBio = async (userParam, userId) => {
 
 /** Attempts to find and delete the user
  *
- * @param {string} _id
+ * @param {string} userHandle
  */
 export const findAndDeleteUser = async userHandle => {
   return await User.deleteOne({ userHandle }).catch(err => {

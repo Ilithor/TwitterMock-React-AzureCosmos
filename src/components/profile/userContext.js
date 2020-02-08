@@ -406,7 +406,7 @@ export const UserProvider = ({ children }) => {
 };
 
 /** A hook for consuming our User context in a safe way
- * 
+ *
  * @example //getting the user list
  * import { useUserListData } from 'userContext'
  * const { userList } = useUserListData();
@@ -439,7 +439,7 @@ export const useUserListData = () => {
 };
 
 /** A hook for consuming our User context in a safe way
- * 
+ *
  * @example //getting the user
  * import { useUserData } from 'userContext'
  * const { user } = useUserData();
@@ -458,7 +458,7 @@ export const useUserData = () => {
 };
 
 /** A hook for consuming our User context in a safe way
- * 
+ *
  * @example //getting the current user
  * import { useCurrentUserData } from 'userContext'
  * const { currentUser } = useCurrentUserData();
@@ -493,7 +493,7 @@ export const useCurrentUserData = () => {
 };
 
 /** A hook for consuming our User context in a safe way
- * 
+ *
  * @example //getting the edit user detail function
  * import { useEditUserDetailData } from 'userContext'
  * const { editUserDetail } = useEditUserDetailData();
@@ -526,7 +526,7 @@ export const useValidationEditUserDetail = () => {
 };
 
 /** A hook for consuming our User context in a safe way
- * 
+ *
  * @example //getting the upload image function
  * import { useUploadImageData } from 'userContext'
  * const { uploadImage } = useUploadImageData();
@@ -545,7 +545,7 @@ export const useUploadImageData = () => {
 };
 
 /** A hook for consuming our User context in a safe way
- * 
+ *
  * @example //getting the isAuthenticated state
  * import { useUserAuthenticationData } from 'userContext'
  * const { isAuthenticated } = useUserAuthenticationData();
@@ -576,7 +576,7 @@ export const useUserAuthenticationData = () => {
 };
 
 /** A hook for consuming our User context in a safe way
- * 
+ *
  * @example //getting the login user function
  * import { useUserLoginData } from 'userContext'
  * const { loginUser } = useUserLoginData();
@@ -595,7 +595,7 @@ export const useUserLoginData = () => {
 };
 
 /** A hook for consuming our User context in a safe way
- * 
+ *
  * @example //getting the register user function
  * import { useUserRegisterData } from 'userContext'
  * const { registerUser } = useUserRegisterData();
@@ -614,7 +614,7 @@ export const useUserRegisterData = () => {
 };
 
 /** A hook for consuming our User context in a safe way
- * 
+ *
  * @example //getting the logout user function
  * import { useUserLogout } from 'userContext'
  * const { logoutUser } = useUserLogout();
