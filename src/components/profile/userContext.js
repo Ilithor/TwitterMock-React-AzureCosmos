@@ -89,65 +89,6 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  /** Retrieves the currently logged in user's info
-   *
-   * @returns {void | Error}
-   */
-  const getCurrentUserData = async () => {
-    if (localStorage?.Handle && !isLoadingCurrentUser) {
-      setisLoadingCurrentUser(true);
-      await fetchUtil.user
-        .fetchUserData(localStorage?.Handle)
-        .then(res => {
-          setCurrentUser(res?.data?.user);
-        })
-        .catch(err => {
-          setUserError(err);
-          return Promise.reject(err);
-        })
-        .finally(() => {
-          setisLoadingCurrentUser(false);
-          return;
-        });
-    }
-  };
-
-  /** Updates the user's info with the provided data
-   *
-   * @param {object} userDetail
-   * @returns {void | Error}
-   */
-  const editUserDetail = async userDetail => {
-    if (userDetail && !isLoadingEditUserDetail) {
-      setIsLoadingEditUserDetail(true);
-      if (
-        userDetail?.aboutMe === currentUser?.bio?.aboutMe &&
-        userDetail?.website === currentUser?.bio?.website &&
-        userDetail?.location === currentUser?.bio?.location
-      ) {
-        setIsLoadingEditUserDetail(false);
-        return;
-      }
-      await fetchUtil.user
-        .editUserDetail(userDetail)
-        .then(async res => {
-          if (res?.data === true) {
-            await getCurrentUserData();
-          } else {
-            return Promise.reject(res?.data);
-          }
-        })
-        .catch(err => {
-          setUserError(err);
-          return Promise.reject(err);
-        })
-        .finally(() => {
-          setIsLoadingEditUserDetail(false);
-          return;
-        });
-    }
-  };
-
   /** Checks if the user details provided are valid
    *
    * @param {object} userParam
@@ -413,7 +354,6 @@ export const UserProvider = ({ children }) => {
     userError,
     setUserError,
     refreshUserList,
-    getCurrentUserData,
     isLoadingUserList,
     setIsLoadingUserList,
     isLoadingCurrentUser,
@@ -423,7 +363,6 @@ export const UserProvider = ({ children }) => {
     lastRefreshUserList,
     registerUser,
     isLoadingRegister,
-    editUserDetail,
     isLoadingEditUserDetail,
     uploadImage,
     detailError,
@@ -466,60 +405,6 @@ export const useUserListData = () => {
   return { refreshUserList, userList, userError, isLoadingUserList };
 };
 
-/** A hook for consuming our User context in a safe way
- *
- * @example //getting the current user
- * import { useCurrentUserData } from 'userContext'
- * const { currentUser } = useCurrentUserData();
- */
-export const useCurrentUserData = () => {
-  const ctx = useContext(userContext);
-
-  if (ctx === undefined) {
-    throw new Error('useCurrentUserData must be used within a UserProvider');
-  }
-
-  const {
-    isLoadingCurrentUser,
-    currentUser,
-    getCurrentUserData,
-    userError,
-    isAuthenticated,
-    setUserError,
-  } = ctx;
-
-  if (!currentUser && !isLoadingCurrentUser) {
-    getCurrentUserData();
-  }
-
-  return {
-    isLoadingCurrentUser,
-    currentUser,
-    getCurrentUserData,
-    isAuthenticated,
-    userError,
-    setUserError,
-  };
-};
-
-/** A hook for consuming our User context in a safe way
- *
- * @example //getting the edit user detail function
- * import { useEditUserDetailData } from 'userContext'
- * const { editUserDetail } = useEditUserDetailData();
- * @returns {Function}
- */
-export const useEditUserDetailData = () => {
-  const ctx = useContext(userContext);
-
-  if (ctx === undefined) {
-    throw new Error('useEditUserDetailData must be used within a UserProvider');
-  }
-
-  const { isLoadingEditUserDetail, editUserDetail } = ctx;
-
-  return { isLoadingEditUserDetail, editUserDetail };
-};
 
 export const useValidationEditUserDetail = () => {
   const ctx = useContext(userContext);
