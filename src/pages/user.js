@@ -67,7 +67,6 @@ export const UserPage = () => {
       });
     }
   };
-
   return (
     <Grid container spacing={10}>
       <Grid item sm={8} sx={12}>

@@ -21,7 +21,7 @@ export const RegisterProvider = ({ children }) => {
     if (!isLoadingRegister) {
       setIsLoadingRegister(true);
       const error = await checkIfUndefined(userParam);
-      if (Object.keys(error).length > 0) {
+      if (error) {
         setIsLoadingRegister(false);
         return Promise.reject(error);
       }
@@ -31,8 +31,8 @@ export const RegisterProvider = ({ children }) => {
           if (!res?.data?.token) {
             return Promise.reject(res?.data);
           }
-          setAuthorizationHeader();
-          setUserHandleHeader();
+          setAuthorizationHeader(res?.data?.token);
+          setUserHandleHeader(res?.data?.user?.userHandle);
           await getAuthenticated();
         })
         .catch(err => {
@@ -165,6 +165,7 @@ export const RegisterProvider = ({ children }) => {
     registerError,
     registerUser,
     isLoadingRegister,
+    setRegisterError,
   };
   return (
     <registerContext.Provider value={value}>
@@ -207,6 +208,7 @@ export const useUserRegisterData = () => {
 };
 
 /** A hook for consuming our Register context in a safe way
+ *
  * @example //getting the register validation function
  * import { useRegisterValidationData } from 'registerContext'
  * const { validationCheckRegister } = useRegisterValidationData();
@@ -221,9 +223,9 @@ export const useRegisterValidationData = () => {
     );
   }
 
-  const { validationCheckRegister, registerError } = ctx;
+  const { validationCheckRegister } = ctx;
 
-  return { validationCheckRegister, registerError };
+  return { validationCheckRegister };
 };
 
 /**

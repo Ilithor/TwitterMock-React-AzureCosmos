@@ -49,7 +49,7 @@ export const RegisterForm = () => {
       };
       registerUser(newUserData)
         .then(() => {
-          if (!registerError) {
+          if (Object.keys(registerError).length === 0) {
             history.push('/');
           }
         })
