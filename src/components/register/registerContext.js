@@ -1,19 +1,108 @@
 import React, { createContext, useContext, useState } from 'react';
+import axios from 'axios';
+import * as fetchUtil from '../../util/fetch';
+import { useAuthenticationData } from '../profile/authenticationContext';
 
 /** @type {React.Context<{userList:User[],userError:Error,getData:()=>void}} */
 const registerContext = createContext();
 
 /** This is a react component which you wrap your entire application
  * to provide a "context", meaning: data you can access anywhere in the app.
- * 
+ *
  * @param {object} props
  * @param {React.ReactChild} props.children
  */
 export const RegisterProvider = ({ children }) => {
   const [registerError, setRegisterError] = useState('');
+  const [isLoadingRegister, setIsLoadingRegister] = useState(false);
+  const { getAuthenticated } = useAuthenticationData();
+
+  const registerUser = async userParam => {
+    if (!isLoadingRegister) {
+      setIsLoadingRegister(true);
+      const error = await checkIfUndefined(userParam);
+      if (Object.keys(error).length > 0) {
+        setIsLoadingRegister(false);
+        return Promise.reject(error);
+      }
+      await fetchUtil.user
+        .registerUser(userParam)
+        .then(async res => {
+          if (!res?.data?.token) {
+            return Promise.reject(res?.data);
+          }
+          setAuthorizationHeader();
+          setUserHandleHeader();
+          await getAuthenticated();
+        })
+        .catch(err => {
+          return Promise.reject(err);
+        })
+        .finally(() => {
+          setIsLoadingRegister(false);
+          return;
+        });
+    }
+  };
+
+  /** Sets the user token and authorization
+   *
+   * @param {string} token
+   */
+  const setAuthorizationHeader = token => {
+    if (token?.length > 30) {
+      const Token = `Bearer ${token}`;
+      localStorage.setItem('Token', Token);
+      axios.defaults.headers.common['Authorization'] = Token;
+    }
+  };
+
+  /** Sets the user's handle in the local storage
+   *
+   * @param {string} userHandle
+   */
+  const setUserHandleHeader = userHandle => {
+    if (userHandle !== 'undefined') {
+      localStorage.setItem('Handle', userHandle);
+    }
+  };
+
+  /** Checks if params are undefined
+   *
+   * @param {{email:string,userHandle:string,password:string,confirmPassword:string}} userParam
+   * @returns {Error}
+   */
+  const checkIfUndefined = userParam => {
+    let err;
+    if (!userParam.email) {
+      err = {
+        ...err,
+        email: 'Must not be empty',
+      };
+    }
+    if (!userParam.userHandle) {
+      err = {
+        ...err,
+        userHandle: 'Must not be empty',
+      };
+    }
+    if (!userParam.password) {
+      err = {
+        ...err,
+        password: 'Must not be empty',
+      };
+    }
+    if (!userParam.confirmPassword) {
+      err = {
+        ...err,
+        confirmPassword: 'Must not be empty',
+      };
+    }
+    return err;
+  };
 
   /** Saves any errors in validation in registerError state
-   * 
+   *
    * @param {UserRegisterParam} registerParam
    * @returns {UserRegisterParam}
    */
@@ -44,7 +133,7 @@ export const RegisterProvider = ({ children }) => {
   };
 
   /** Checks if provided string is empty
-   * 
+   *
    * @param {string} string
    * @returns {boolean}
    */
@@ -57,7 +146,7 @@ export const RegisterProvider = ({ children }) => {
   };
 
   /** Checks if provided email is valid
-   * 
+   *
    * @param {string} email
    * @returns {boolean}
    */
@@ -74,12 +163,47 @@ export const RegisterProvider = ({ children }) => {
   const value = {
     validationCheckRegister,
     registerError,
+    registerUser,
+    isLoadingRegister,
   };
   return (
     <registerContext.Provider value={value}>
       {children}
     </registerContext.Provider>
   );
+};
+
+/**
+ * @typedef UseUserRegisterDataResult
+ * @property {()=>void} registerUser
+ * @property {Error} registerError
+ * @property {boolean} isLoadingRegister
+ */
+
+/** A hook for consuming our User context in a safe way
+ *
+ * @example //getting the register user function
+ * import { useUserRegisterData } from 'registerContext'
+ * const { registerUser } = useUserRegisterData();
+ * @returns {UseUserRegisterDataResult}
+ */
+export const useUserRegisterData = () => {
+  const ctx = useContext(registerContext);
+
+  if (ctx === undefined) {
+    throw new Error(
+      'useUserRegisterData must be used within a RegisterProvider'
+    );
+  }
+
+  const {
+    registerUser,
+    registerError,
+    setRegisterError,
+    isLoadingRegister,
+  } = ctx;
+
+  return { registerUser, registerError, setRegisterError, isLoadingRegister };
 };
 
 /** A hook for consuming our Register context in a safe way

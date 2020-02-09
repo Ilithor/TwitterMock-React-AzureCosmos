@@ -3,11 +3,21 @@ import * as fetchUtil from '../../util/fetch';
 
 const currentUserContext = createContext();
 
+/** This is a react component which you wrap your entire application
+ * to provide a "context", meaning: data you can access anywhere in the app.
+ *
+ * @param {object} props
+ * @param {React.ReactChild} props.children
+ */
 export const CurrentUserProvider = ({ children }) => {
   const [currentUserError, setCurrentUserError] = useState();
   const [isLoadingCurrentUser, setIsLoadingCurrentUser] = useState(false);
   const [currentUser, setCurrentUser] = useState();
 
+  /** Attempts to fetch the current user data
+   * 
+   * @returns {void|Error}
+   */
   const fetchCurrentUser = async () => {
     if (localStorage?.Handle && !isLoadingCurrentUser) {
       setIsLoadingCurrentUser(true);
