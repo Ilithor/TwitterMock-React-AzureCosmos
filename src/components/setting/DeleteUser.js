@@ -7,7 +7,7 @@ import { useStyles } from './setting.style';
 
 // Context
 import { useSettingData, useValidationDeleteUser } from './settingContext';
-import { useUserLogout } from '../profile/userContext';
+import { useLogoutData } from '../login/logoutContext';
 
 /** Displays the dialog box to allow the user to delete their account
  *
@@ -18,7 +18,7 @@ export const DeleteUser = () => {
   const history = useHistory();
   const { settingError, setSettingError, deleteUser } = useSettingData();
   const { validationMatching, isMatching } = useValidationDeleteUser();
-  const { logoutUser } = useUserLogout();
+  const { logoutUser } = useLogoutData();
   const [open, setOpen] = useState(false);
   const [handleToMatch, setHandleToMatch] = useState('');
 

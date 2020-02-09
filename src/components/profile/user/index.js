@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 // Components
 import { ProfileDetail } from './profile';
@@ -8,7 +8,9 @@ import { Paper, CircularProgress } from '@material-ui/core';
 import { useStyles } from '../profile.style';
 
 // Context
-import { useCurrentUserData } from '../userContext';
+import { useCurrentUserData } from '../currentUserContext';
+import { ImageUploadProvider } from './profile/uploadImageContext';
+import { EditDetailProvider } from './editDetail/editDetailContext';
 
 /** View component for displaying the user's profile
  *
@@ -18,7 +20,13 @@ export const UserProfile = () => {
   const classes = useStyles();
   const { currentUser } = useCurrentUserData();
   if (currentUser?.userHandle || currentUser?.createdAt) {
-    return <ProfileDetail classes={classes} />;
+    return (
+      <EditDetailProvider>
+        <ImageUploadProvider>
+          <ProfileDetail classes={classes} />
+        </ImageUploadProvider>
+      </EditDetailProvider>
+    );
   }
   return (
     <Paper className={classes?.paper}>

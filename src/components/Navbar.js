@@ -11,18 +11,16 @@ import { AppBar, Toolbar } from '@material-ui/core';
 import * as Icon from '@material-ui/icons';
 
 // Context
-import {
-  useUserAuthenticationData,
-  useUserLogout,
-} from './profile/userContext';
+import { useAuthenticationData } from './profile/authenticationContext';
+import { useLogoutData } from './login/logoutContext';
 
 /** Shows the log in or log out button
  *
  * @type {React.FunctionComponent}
  */
 const ButtonLogInOut = () => {
-  const { isAuthenticated } = useUserAuthenticationData();
-  const { logoutUser } = useUserLogout();
+  const { isAuthenticated } = useAuthenticationData();
+  const { logoutUser } = useLogoutData();
   if (isAuthenticated) {
     return (
       <CustomButton tip='Logout' onClick={logoutUser}>
@@ -38,7 +36,7 @@ const ButtonLogInOut = () => {
 };
 
 const ButtonSetting = () => {
-  const { isAuthenticated } = useUserAuthenticationData();
+  const { isAuthenticated } = useAuthenticationData();
   if (isAuthenticated) {
     return (
       <CustomButton tip='Settings' component={Link} to='/settings'>
@@ -54,7 +52,7 @@ const ButtonSetting = () => {
  * @type {React.FunctionComponent}
  */
 const ButtonRegister = () => {
-  const { isAuthenticated } = useUserAuthenticationData();
+  const { isAuthenticated } = useAuthenticationData();
   if (isAuthenticated) {
     return <div />;
   }
@@ -70,7 +68,7 @@ const ButtonRegister = () => {
  * @type {React.FunctionComponent}
  */
 const ButtonNotification = () => {
-  const { isAuthenticated } = useUserAuthenticationData();
+  const { isAuthenticated } = useAuthenticationData();
   if (isAuthenticated) {
     return (
       <CustomButton tip='Notifications' component={Link} to='/notification'>

@@ -9,10 +9,10 @@ import { CircularProgress } from '@material-ui/core';
 import { useStyles } from './notification.style';
 
 // Context
+import { useCurrentUserData } from '../profile/currentUserContext';
 import { useNotificationData } from './notificationContext';
 import { usePostData } from '../post/postContext';
 import { useCommentListData } from '../comment/commentContext';
-import { useCurrentUserData } from '../profile/userContext';
 
 /** Displays an array of notifications for the user
  *

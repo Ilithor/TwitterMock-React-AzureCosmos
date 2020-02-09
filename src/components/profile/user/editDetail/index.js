@@ -9,11 +9,10 @@ import { useStyles } from '../../profile.style';
 
 // Icons
 import * as Icon from '@material-ui/icons';
-import {
-  useCurrentUserData,
-  useEditUserDetailData,
-  useValidationEditUserDetail,
-} from '../../userContext';
+
+// Context
+import { useCurrentUserData } from '../../currentUserContext';
+import { useEditDetailData } from './editDetailContext';
 
 /** Control how the user edits their bio information
  *
@@ -22,11 +21,12 @@ import {
 export const EditDetail = () => {
   const classes = useStyles();
   const { currentUser, userError, setUserError } = useCurrentUserData();
-  const { editUserDetail, isLoadingEditUserDetail } = useEditUserDetailData();
   const {
-    detailError,
+    editDetail,
+    isLoadingEditDetail,
+    editDetailError,
     validationCheckUserDetail,
-  } = useValidationEditUserDetail();
+  } = useEditDetailData();
   const [editorState, setEditorState] = useState({
     aboutMe: '',
     website: '',
@@ -60,16 +60,16 @@ export const EditDetail = () => {
   };
 
   const handleSubmit = event => {
-    if (!isLoadingEditUserDetail) {
+    if (!isLoadingEditDetail) {
       event.preventDefault();
       const userDetail = {
         aboutMe,
         website,
         location,
       };
-      editUserDetail(userDetail)
+      editDetail(userDetail)
         .then(() => {
-          if (!userError && !detailError) {
+          if (!userError && !editDetailError) {
             handleClose();
           }
         })

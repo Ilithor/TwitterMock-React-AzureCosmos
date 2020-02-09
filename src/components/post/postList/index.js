@@ -11,7 +11,8 @@ import { Card, CardMedia } from '@material-ui/core';
 import { useStyles } from '../post.style';
 
 // Context
-import { useCurrentUserData, useUserListData } from '../../profile/userContext';
+import { useCurrentUserData } from '../../profile/currentUserContext';
+import { useUserListData } from '../../profile/user/userListContext';
 
 /** View component for displaying an individual post on the site
  *

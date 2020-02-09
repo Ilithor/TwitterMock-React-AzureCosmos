@@ -11,10 +11,8 @@ import { RecentCommentFeed } from '../components/comment/recentFeed';
 import { Grid } from '@material-ui/core';
 
 // Context
-import {
-  useUserAuthenticationData,
-  useUserListData,
-} from '../components/profile/userContext';
+import { useUserListData } from '../components/profile/user/userListContext';
+import { useAuthenticationData } from '../components/profile/authenticationContext';
 import { usePostData } from '../components/post/postContext';
 import { useLikeData } from '../components/like/likeContext';
 
@@ -23,7 +21,7 @@ import { useLikeData } from '../components/like/likeContext';
  * @type {React.FunctionComponent}
  */
 export const HomePage = () => {
-  const { isAuthenticated } = useUserAuthenticationData();
+  const { isAuthenticated } = useAuthenticationData();
   const { userList } = useUserListData();
   const { postList } = usePostData();
   const { likeList } = useLikeData();

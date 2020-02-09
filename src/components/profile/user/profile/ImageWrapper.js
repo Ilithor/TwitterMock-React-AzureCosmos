@@ -8,10 +8,10 @@ import { CustomButton } from '../../../../util/CustomButton';
 import * as Icon from '@material-ui/icons';
 
 // Context
-import { useCurrentUserData } from '../../userContext';
+import { useCurrentUserData } from '../../currentUserContext';
 
 /** View component for displaying the userImage
- * 
+ *
  * @type {React.FunctionComponent}
  * @param {object} props
  * @param {React.ChangeEventHandler} props.handleEditPhoto

@@ -11,8 +11,7 @@ import {
 import { useStyles } from './login.style';
 
 // Context
-import { useUserLoginData } from '../profile/userContext';
-import { useLoginValidationData } from './loginContext';
+import { useLoginData, useLoginValidationData } from './loginContext';
 
 /** View component for displaying the login form to the user
  *
@@ -23,11 +22,11 @@ export const LoginForm = () => {
   const history = useHistory();
   const {
     loginUser,
-    userError,
+    loginError,
     isLoadingLogin,
-    setUserError,
-  } = useUserLoginData();
-  const { validationCheckLogin, loginError } = useLoginValidationData();
+    setLoginError,
+  } = useLoginData();
+  const { validationCheckLogin } = useLoginValidationData();
   const [editorState, setEditorState] = useState({
     email: '',
     password: '',
@@ -43,20 +42,20 @@ export const LoginForm = () => {
       };
       loginUser(userParam)
         .then(() => {
-          if (!userError && Object.keys(loginError).length === 0) {
+          if (Object.keys(loginError).length === 0) {
             history.push('/');
           }
         })
         .catch(err => {
           console.error(err);
-          setUserError(err);
+          setLoginError(err);
         });
     }
   };
 
   const handleChange = event => {
-    if (userError) {
-      setUserError();
+    if (loginError) {
+      setLoginError();
     }
     const { name, value } = event.target;
     setEditorState(validationCheckLogin({ ...editorState, [name]: value }));
@@ -70,10 +69,8 @@ export const LoginForm = () => {
         type='email'
         label='Email'
         className={classes?.textField}
-        helperText={loginError?.email || userError?.email}
-        error={
-          loginError?.email ? true : false || userError?.email ? true : false
-        }
+        helperText={loginError?.email}
+        error={loginError?.email ? true : false}
         value={email}
         onChange={handleChange}
         autoComplete='username'
@@ -85,22 +82,16 @@ export const LoginForm = () => {
         type='password'
         label='Password'
         className={classes?.textField}
-        helperText={loginError?.password || userError?.password}
-        error={
-          loginError?.password
-            ? true
-            : false || userError?.password
-            ? true
-            : false
-        }
+        helperText={loginError?.password}
+        error={loginError?.password ? true : false}
         value={password}
         onChange={handleChange}
         autoComplete='current-password'
         fullWidth
       />
-      {userError?.general && (
+      {loginError?.general && (
         <Typography variant='body2' className={classes?.customError}>
-          {userError?.general}
+          {loginError?.general}
         </Typography>
       )}
       <Button

@@ -16,21 +16,19 @@ import { useStyles } from '../../profile.style';
 import * as Icon from '@material-ui/icons';
 
 // Context
-import {
-  useCurrentUserData,
-  useUserLogout,
-  useUploadImageData,
-} from '../../userContext';
+import { useCurrentUserData } from '../../currentUserContext';
+import { useImageUploadData } from './uploadImageContext';
+import { useLogoutData } from '../../../login/logoutContext';
 
 /** View component for displaying the user's profile
- * 
+ *
  * @type {React.FunctionComponent}
  */
 export const ProfileDetail = () => {
   const classes = useStyles();
   const { currentUser } = useCurrentUserData();
-  const { uploadImage } = useUploadImageData();
-  const { logoutUser } = useUserLogout();
+  const { imageUpload } = useImageUploadData();
+  const { logoutUser } = useLogoutData();
 
   const handleEditPhoto = () => {
     const fileInput = document.getElementById('imageUpload');
@@ -47,7 +45,7 @@ export const ProfileDetail = () => {
     } else {
       const formData = new FormData();
       formData.append('image', image, image.name);
-      uploadImage(formData);
+      imageUpload(formData);
     }
   };
   const handleLogout = () => logoutUser();

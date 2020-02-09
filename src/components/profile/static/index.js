@@ -9,7 +9,7 @@ import { Paper, CircularProgress } from '@material-ui/core';
 import { useStyles } from '../profile.style';
 
 // Context
-import { useUserListData } from '../userContext';
+import { useUserListData } from '../user/userListContext';
 
 /** Displays the profile of the selected user
  *

@@ -9,18 +9,15 @@ import { CircularProgress } from '@material-ui/core';
 import { useStyles } from './profile.style';
 
 // Context
-import { useUserAuthenticationData } from './userContext';
+import { useAuthenticationData } from './authenticationContext';
 
 /** View component for displaying either the default or user profile
- * 
+ *
  * @type {React.FunctionComponent}
  */
 export const Profile = () => {
   const classes = useStyles();
-  const {
-    isAuthenticated,
-    isLoadingAuthenticated,
-  } = useUserAuthenticationData();
+  const { isAuthenticated, isLoadingAuthenticated } = useAuthenticationData();
 
   if (!isLoadingAuthenticated) {
     if (isAuthenticated) {

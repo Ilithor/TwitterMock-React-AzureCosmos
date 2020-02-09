@@ -11,11 +11,13 @@ import {
 import { useStyles } from './register.style';
 
 // Context
-import { useUserRegisterData } from '../profile/userContext';
-import { useRegisterValidationData } from './registerContext';
+import {
+  useUserRegisterData,
+  useRegisterValidationData,
+} from './registerContext';
 
 /** Displays the register form to the user
- * 
+ *
  * @type {React.FunctionComponent}
  */
 export const RegisterForm = () => {
@@ -23,14 +25,11 @@ export const RegisterForm = () => {
   const history = useHistory();
   const {
     registerUser,
-    userError,
-    setUserError,
+    registerError,
+    setRegisterError,
     isLoadingRegister,
   } = useUserRegisterData();
-  const {
-    validationCheckRegister,
-    registerError,
-  } = useRegisterValidationData();
+  const { validationCheckRegister } = useRegisterValidationData();
   const [editorState, setEditorState] = useState({
     email: '',
     password: '',
@@ -50,20 +49,20 @@ export const RegisterForm = () => {
       };
       registerUser(newUserData)
         .then(() => {
-          if (!userError && Object.keys(registerError).length === 0) {
+          if (!registerError) {
             history.push('/');
           }
         })
         .catch(err => {
           console.error(err);
-          setUserError(err);
+          setRegisterError(err);
         });
     }
   };
 
   const handleChange = event => {
-    if (userError) {
-      setUserError();
+    if (registerError) {
+      setRegisterError();
     }
     const { name, value } = event?.target;
     setEditorState(validationCheckRegister({ ...editorState, [name]: value }));
@@ -77,14 +76,8 @@ export const RegisterForm = () => {
         type='text'
         label='Username'
         className={classes?.textField}
-        helperText={registerError?.userHandle || userError?.userHandle}
-        error={
-          registerError?.userHandle
-            ? true
-            : false || userError?.userHandle
-            ? true
-            : false
-        }
+        helperText={registerError?.userHandle}
+        error={registerError?.userHandle ? true : false}
         value={userHandle}
         onChange={handleChange}
         fullWidth
@@ -95,10 +88,8 @@ export const RegisterForm = () => {
         type='email'
         label='Email'
         className={classes?.textField}
-        helperText={registerError?.email || userError?.email}
-        error={
-          registerError?.email ? true : false || userError?.email ? true : false
-        }
+        helperText={registerError?.email}
+        error={registerError?.email ? true : false}
         value={email}
         onChange={handleChange}
         autoComplete='off'
@@ -110,14 +101,8 @@ export const RegisterForm = () => {
         type='password'
         label='Password'
         className={classes?.textField}
-        helperText={registerError?.password || userError?.password}
-        error={
-          registerError?.password
-            ? true
-            : false || userError?.password
-            ? true
-            : false
-        }
+        helperText={registerError?.password}
+        error={registerError?.password ? true : false}
         value={password}
         onChange={handleChange}
         autoComplete='new-password'
@@ -129,24 +114,16 @@ export const RegisterForm = () => {
         type='password'
         label='Confirm Password'
         className={classes?.textField}
-        helperText={
-          registerError?.confirmPassword || userError?.confirmPassword
-        }
-        error={
-          registerError?.confirmPassword
-            ? true
-            : false || userError?.confirmPassword
-            ? true
-            : false
-        }
+        helperText={registerError?.confirmPassword}
+        error={registerError?.confirmPassword ? true : false}
         value={confirmPassword}
         onChange={handleChange}
         autoComplete='off'
         fullWidth
       />
-      {userError?.general && (
+      {registerError?.general && (
         <Typography variant='body2' className={classes?.customError}>
-          {userError?.general}
+          {registerError?.general}
         </Typography>
       )}
       <Button

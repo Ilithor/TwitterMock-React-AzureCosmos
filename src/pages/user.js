@@ -10,8 +10,8 @@ import { StaticProfile } from '../components/profile/static';
 import { Grid } from '@material-ui/core';
 
 // Context
+import { useUserListData } from '../components/profile/user/userListContext';
 import { usePostData } from '../components/post/postContext';
-import { useUserListData } from '../components/profile/userContext';
 import { useLikeData } from '../components/like/likeContext';
 
 /** Displays the user's profile page

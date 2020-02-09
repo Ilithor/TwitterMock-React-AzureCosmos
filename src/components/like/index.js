@@ -10,10 +10,8 @@ import { CustomButton } from '../../util/CustomButton';
 import * as Icon from '@material-ui/icons';
 
 // Context
-import {
-  useUserAuthenticationData,
-  useCurrentUserData,
-} from '../profile/userContext';
+import { useCurrentUserData } from '../profile/currentUserContext';
+import { useAuthenticationData } from '../profile/authenticationContext';
 import { useLikeData } from './likeContext';
 import { usePostData } from '../post/postContext';
 
@@ -25,7 +23,7 @@ import { usePostData } from '../post/postContext';
  * @param {object} props.like
  */
 export const Like = ({ postId, like }) => {
-  const { isAuthenticated } = useUserAuthenticationData();
+  const { isAuthenticated } = useAuthenticationData();
   const { currentUser } = useCurrentUserData();
   const { refreshPostList } = usePostData();
   const { likePost, unlikePost, refreshLikeList } = useLikeData();

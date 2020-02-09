@@ -11,7 +11,7 @@ import { Card, CardContent, CardMedia, Typography } from '@material-ui/core';
 import { useStyles } from './comment.style';
 
 // Context
-import { useUserListData } from '../profile/userContext';
+import { useUserListData } from '../profile/user/userListContext';
 
 /** Displays the comment card
  *

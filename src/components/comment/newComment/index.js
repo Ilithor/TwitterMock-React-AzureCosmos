@@ -4,16 +4,16 @@ import React from 'react';
 import { CommentForm } from './CommentForm';
 
 // Context
-import { useUserAuthenticationData } from '../../profile/userContext';
+import { useAuthenticationData } from '../../profile/authenticationContext';
 
 /** Displays the new comment form if the user is authenticated
- * 
+ *
  * @type {React.FunctionComponent}
  * @param {object} props
  * @param {string} props.postId
  */
 export const NewComment = ({ postId }) => {
-  const { isAuthenticated } = useUserAuthenticationData();
+  const { isAuthenticated } = useAuthenticationData();
 
   const createCommentForm = () => {
     if (isAuthenticated) {
