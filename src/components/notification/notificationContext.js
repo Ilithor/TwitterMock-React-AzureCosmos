@@ -47,7 +47,7 @@ export const NotificationProvider = ({ children }) => {
         .fetchNotificationList()
         .then(res => {
           if (Array.isArray(res?.data)) {
-            setNotificationList(_.keyBy(res?.data, 'recipient'));
+            setNotificationList(_.keyBy(res?.data, 'notificationId'));
           } else {
             setNotificationError(res?.data);
           }
@@ -187,12 +187,12 @@ export const useNotificationData = () => {
 
 /**
  * @typedef Notification
- * @property {String} notificationId
+ * @property {string} notificationId
  * @property {Date} createdAt
- * @property {String} postId
- * @property {String} sender
- * @property {String} recipient
- * @property {String} type
- * @property {String} typeId
- * @property {Boolean} read
+ * @property {string} postId
+ * @property {string} sender
+ * @property {string} recipient
+ * @property {string} type
+ * @property {string} typeId
+ * @property {boolean} read
  */

@@ -65,13 +65,8 @@ export const markNotificationRead = notificationId =>
   (notificationId && post(endpoints.notification, { notificationId })) ||
   Promise.reject('notificationId was not defined');
 
-export const deleteNotification = notification =>
-  notification &&
-  remove(`${endpoints.notification}/${notification?.notificationId}`, {
-    userHandle: notification?.sender,
-    type: notification?.type,
-    typeId: notification?.typeId,
-  });
+export const deleteNotification = notificationId =>
+  notificationId && remove(`${endpoints.notification}/${notificationId}`);
 
 /** Attempts to upload userImage
  *

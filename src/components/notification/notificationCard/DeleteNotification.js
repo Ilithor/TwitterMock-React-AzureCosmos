@@ -24,7 +24,7 @@ export const DeleteNotification = ({ notification }) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const deleteUserNotification = () => {
-    deleteNotification(notification).then(() => {
+    deleteNotification(notification?.notificationId).then(() => {
       refreshNotificationList();
     });
   };
