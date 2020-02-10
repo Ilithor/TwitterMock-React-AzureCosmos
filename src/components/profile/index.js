@@ -17,9 +17,9 @@ import { useAuthenticationData } from './authenticationContext';
  */
 export const Profile = () => {
   const classes = useStyles();
-  const { isAuthenticated, isLoadingAuthenticated } = useAuthenticationData();
+  const { isAuthenticated, isLoadingAuthentication } = useAuthenticationData();
 
-  if (!isLoadingAuthenticated) {
+  if (!isLoadingAuthentication) {
     if (isAuthenticated) {
       return <UserProfile classes={classes} />;
     } else {
