@@ -26,5 +26,5 @@ jobs:
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
     - run: |
-        docker build . -t ilithor/socmon
-        docker push ilithor/socmon
+        docker build . -t ilithor/socmon:latest
+        docker push ilithor/socmon:latest
