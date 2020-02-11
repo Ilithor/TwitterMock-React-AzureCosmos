@@ -21,12 +21,12 @@ jobs:
     - run: npm run build --if-present
     
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag daryk/socmon
+      run: docker build . --file Dockerfile --tag ilithor/socmon
     - name: Docker Publish
       uses: manusa/actions-publish-docker@v1.0.1
       with:
         # Name of the Docker image
-        name: daryk/socmon
+        name: socmon
         # Username for Docker registry
         username: ${{ secrets.DOCKER_USERNAME_ACCESS }}
         # Password for Docker registry
