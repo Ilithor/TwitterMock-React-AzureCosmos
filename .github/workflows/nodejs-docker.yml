@@ -22,11 +22,9 @@ jobs:
     
     - uses: azure/docker-login@v1
       with:
-        login-server: contoso.azurecr.io
+        login-server: socmon.azurecr.io
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
-    
-    - name: Build the Docker image
-      run: docker build . -t ilithor/socmon
-    - name: Publish Docker
-      run: docker push ilithor/socmon
+    - run: |
+        docker build . -t ilithor/socmon
+        docker push ilithor/socmon
