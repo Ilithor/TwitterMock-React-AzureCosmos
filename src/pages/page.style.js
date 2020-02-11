@@ -22,4 +22,8 @@ export const useStyles = makeStyles(theme => ({
   pageTitle: {
     margin: '10px auto 10px auto',
   },
+  settingButton: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
 }));

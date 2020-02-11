@@ -29,7 +29,7 @@ export const DeletePostDialog = ({ postId }) => {
     deletePost(postId);
     setOpen(false);
   };
-  const makeDeleteButton = () => (
+  const DeleteButton = () => (
     <CustomButton
       tip='Delete Post'
       onClick={handleOpen}
@@ -39,7 +39,7 @@ export const DeletePostDialog = ({ postId }) => {
     </CustomButton>
   );
   if (!open) {
-    return makeDeleteButton();
+    return <DeleteButton />;
   }
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth='sm'>

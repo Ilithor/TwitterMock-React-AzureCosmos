@@ -1,6 +1,10 @@
 import _ from 'lodash';
 import { Notification } from '../models/notification.model';
-import { create, getNotificationList } from '../services/notification.service';
+import {
+  create,
+  getNotificationList,
+  findAndDeleteNotification,
+} from '../services/notification.service';
 
 import mongoConnection from '../util/mongo';
 import { findNotificationAndUpdateRead } from './find';
@@ -63,20 +67,21 @@ export const markNotificationRead = async (req, res) => {
   return res.status(200).send(true);
 };
 
-/** Deletes notification upon successful deletion
- *  of a like or comment
+/** Deletes a notification
  *
  * @type {RouteHandler}
  */
-export const deleteNotification = async (userHandle, type, typeId) => {
-  await Notification.findOneAndDelete({
-    userHandle,
-    type,
-    typeId,
-  }).catch(err => {
+export const deleteNotification = async (req, res) => {
+  const notification = await findAndDeleteNotification(
+    req.params.notificationId
+  ).catch(err => {
     console.error(err);
     return Promise.reject(err);
   });
+  console.log(notification);
+  if (notification.deletedCount === 1) {
+    return res.status(200).send(true);
+  }
 };
 
 /** Deletes all notifications that matches given postId

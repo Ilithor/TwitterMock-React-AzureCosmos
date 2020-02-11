@@ -1,12 +1,19 @@
 import React from 'react';
 import dayjs from 'dayjs';
+import { useHistory } from 'react-router-dom';
+
+// Components
+import { DeleteNotification } from './DeleteNotification';
 
 // MUI
-import { CardContent, Typography } from '@material-ui/core';
+import { CardContent, Typography, CardActionArea } from '@material-ui/core';
 import { useStyles } from '../notification.style';
 
 // Icons
 import * as Icon from '@material-ui/icons';
+
+// Context
+import { useNotificationData } from '../notificationContext';
 
 /** Displays individual notification content
  *
@@ -22,6 +29,17 @@ export const NotificationCardContent = ({
   commentBody,
 }) => {
   const classes = useStyles();
+  const history = useHistory();
+  const { markNotificationRead } = useNotificationData();
+  const notificationRead = () => {
+    if (notification?.read === false) {
+      markNotificationRead(notification);
+    } else {
+      history.push(
+        `/u/${notification?.recipient}/post/${notification?.postId}`
+      );
+    }
+  };
   const NotificationContent = ({ type, postBody, commentBody }) => {
     if (type === 'like') {
       return <h2>"{postBody}"</h2>;
@@ -52,16 +70,24 @@ export const NotificationCardContent = ({
   };
   return (
     <CardContent className={classes?.content}>
-      <NotificationNew read={notification?.read} />
-      <FromSenderType type={notification?.type} sender={notification?.sender} />
-      <NotificationContent
-        type={notification?.type}
-        postBody={postBody}
-        commentBody={commentBody}
-      />
-      <Typography variant='body2' color='textSecondary'>
-        {dayjs(notification?.createdAt).fromNow()}
-      </Typography>
+      <div className={classes?.menu}>
+        <NotificationNew read={notification?.read} />
+        <DeleteNotification notification={notification} />
+      </div>
+      <CardActionArea onClick={notificationRead}>
+        <FromSenderType
+          type={notification?.type}
+          sender={notification?.sender}
+        />
+        <NotificationContent
+          type={notification?.type}
+          postBody={postBody}
+          commentBody={commentBody}
+        />
+        <Typography variant='body2' color='textSecondary'>
+          {dayjs(notification?.createdAt).fromNow()}
+        </Typography>
+      </CardActionArea>
     </CardContent>
   );
 };

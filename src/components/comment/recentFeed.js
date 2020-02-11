@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   CardActionArea,
-  Typography,
   Card,
   CardHeader,
   CardContent,
@@ -20,11 +19,11 @@ const CommentFeedCard = ({ comment }) => {
 
   const onClick = () =>
     history.push(`/u/${post.userHandle}/post/${post.postId}`);
-  return ((
+  return (
     <CardActionArea onClick={onClick}>
       <Comment comment={comment} />
     </CardActionArea>
-  ));
+  );
 };
 
 /**  @typedef CommentFeedCardProps

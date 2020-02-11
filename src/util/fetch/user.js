@@ -1,4 +1,4 @@
-import { get, post } from './fetch';
+import { get, post, remove } from './fetch';
 
 export const endpoints = {
   /** @type {Endpoint} */
@@ -65,6 +65,9 @@ export const markNotificationRead = notificationId =>
   (notificationId && post(endpoints.notification, { notificationId })) ||
   Promise.reject('notificationId was not defined');
 
+export const deleteNotification = notificationId =>
+  notificationId && remove(`${endpoints.notification}/${notificationId}`);
+
 /** Attempts to upload userImage
  *
  * @param {object} formData
@@ -79,6 +82,14 @@ export const uploadImage = formData => post(endpoints.uploadImage, formData);
  */
 export const editUserDetail = userDetail =>
   post(endpoints.editUserDetail, userDetail);
+
+/** Attempts to delete the user
+ *
+ * @param {string} userHandle
+ * @returns {Promise<import("axios").AxiosResponse>}
+ */
+export const deleteUser = userHandle =>
+  remove(`${endpoints.userData}/${userHandle}`);
 
 /**
  * @typedef {import('./fetch').Endpoint} Endpoint

@@ -5,6 +5,7 @@ import {
   register,
   login,
   updateBio,
+  findAndDeleteUser,
 } from '../services/user.service';
 import { generateUserToken } from './token';
 import { dataUri } from '../util/multer';
@@ -14,10 +15,11 @@ import {
   findLikeByHandle,
   findByHandle,
   findPostByHandle,
+  findAndDeleteAllPosts,
 } from './find';
 
 /** Retrieves the list of users
- * 
+ *
  * @type {RouteHandler}
  */
 export const getUserList = async (req, res, next) => {
@@ -53,7 +55,7 @@ export const fetchLikeList = async (req, res) => {
 };
 
 /** Registers the user
- * 
+ *
  * @type {RouteHandler}
  */
 export const registerUser = async (req, res, next) => {
@@ -74,7 +76,7 @@ export const registerUser = async (req, res, next) => {
 };
 
 /** Logins the user
- * 
+ *
  * @type {RouteHandler}
  */
 export const loginUser = async (req, res, next) => {
@@ -94,7 +96,7 @@ export const loginUser = async (req, res, next) => {
 };
 
 /** Get own user details
- * 
+ *
  * @type {RouteHandler}
  */
 export const getAuthenticatedUser = async (req, res) => {
@@ -109,7 +111,7 @@ export const getAuthenticatedUser = async (req, res) => {
 };
 
 /** Retrieves any user details
- * 
+ *
  * @type {RouteHandler}
  */
 export const getUserDetail = async (req, res) => {
@@ -134,7 +136,7 @@ export const getUserDetail = async (req, res) => {
 };
 
 /** Pushes post docs into post array
- * 
+ *
  * @param {Document[]} postList
  * @param {Object} userData
  * @returns {userData[Object]}
@@ -153,7 +155,7 @@ const pushPostIntoArray = (postList, userData) => {
 };
 
 /** Edits the current user's profile with the params provided by said user
- * 
+ *
  * @type {RouteHandler}
  */
 export const addUserDetail = async (req, res, next) => {
@@ -174,7 +176,7 @@ export const addUserDetail = async (req, res, next) => {
 };
 
 /** Converts the uploaded image to base64 and uploads it as a property in the User doc
- * 
+ *
  * @type {RouteHandler}
  */
 export const imageUpload = async (req, res, next) => {
@@ -193,5 +195,22 @@ export const imageUpload = async (req, res, next) => {
   });
   if (doc.bio.userImage === base64) {
     return res.status(200).send(true);
+  }
+};
+
+/** Attempts to delete the user and all their content
+ *
+ * @type {RouteHandler}
+ */
+export const deleteUser = async (req, res, next) => {
+  const user = await findAndDeleteUser(req.params.userHandle).catch(err => {
+    console.error(err);
+    return res.send(err);
+  });
+  if (user.deletedCount === 1) {
+    await findAndDeleteAllPosts(req.params.userHandle);
+    return res.status(200).send(true);
+  } else {
+    return res.sendStatus(404);
   }
 };

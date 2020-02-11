@@ -4,7 +4,9 @@ import { ToastContainer, toast } from 'react-toastify';
 // MUI
 import { TextField } from '@material-ui/core';
 import { useStyles } from '../../profile.style';
-import { useValidationEditUserDetail, useUserData } from '../../userContext';
+
+// Context
+import { useEditDetailData } from './editDetailContext';
 
 /** Displays the edit form to edit the user's details
  *
@@ -22,8 +24,7 @@ export const EditDetailsForm = ({
   location,
 }) => {
   const classes = useStyles();
-  const { userError } = useUserData();
-  const { detailError } = useValidationEditUserDetail();
+  const { editDetailError, detailError } = useEditDetailData();
   useEffect(() => {
     if (detailError?.general) {
       toast.error(detailError?.general, {
@@ -31,13 +32,13 @@ export const EditDetailsForm = ({
         autoClose: 8000,
       });
     }
-    if (userError?.website) {
-      toast.error(userError?.website, {
+    if (editDetailError?.website) {
+      toast.error(editDetailError?.website, {
         position: toast.POSITION.BOTTOM_LEFT,
         autoClose: 8000,
       });
     }
-  }, [detailError, userError]);
+  }, [detailError, editDetailError]);
   return (
     <form>
       <TextField

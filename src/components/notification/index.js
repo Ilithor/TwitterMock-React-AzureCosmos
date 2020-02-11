@@ -9,10 +9,10 @@ import { CircularProgress } from '@material-ui/core';
 import { useStyles } from './notification.style';
 
 // Context
+import { useCurrentUserData } from '../profile/currentUserContext';
 import { useNotificationData } from './notificationContext';
 import { usePostData } from '../post/postContext';
 import { useCommentListData } from '../comment/commentContext';
-import { useCurrentUserData } from '../profile/userContext';
 
 /** Displays an array of notifications for the user
  *
@@ -23,10 +23,14 @@ export const NotificationContent = () => {
   const { notificationList, isLoadingNotifcationList } = useNotificationData();
   const { postList } = usePostData();
   const { commentList } = useCommentListData();
-  const { currentUser, isLoadingUserData } = useCurrentUserData();
+  const { currentUser, isLoadingCurrentUser } = useCurrentUserData();
   const [userNotificationList, setUserNotificationList] = useState();
   useEffect(() => {
-    if (!isLoadingNotifcationList && !isLoadingUserData) {
+    if (
+      !isLoadingNotifcationList &&
+      !isLoadingCurrentUser &&
+      notificationList
+    ) {
       const notificationData = _.values(notificationList).filter(
         notification => notification?.recipient === currentUser?.userHandle
       );
@@ -35,7 +39,12 @@ export const NotificationContent = () => {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoadingNotifcationList, isLoadingUserData]);
+  }, [
+    isLoadingNotifcationList,
+    isLoadingCurrentUser,
+    notificationList,
+    currentUser,
+  ]);
   if (userNotificationList?.length > 0 && postList && commentList) {
     return _.map(userNotificationList, doc => (
       <NotificationCard

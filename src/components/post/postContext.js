@@ -42,7 +42,7 @@ export const PostProvider = ({ children }) => {
           return Promise.reject(err);
         })
         .finally(() => {
-          setLastRefreshPostList(Date.now);
+          setLastRefreshPostList(Date.now());
           setIsLoadingPostList(false);
           return Promise.resolve();
         });
@@ -152,7 +152,9 @@ export const usePostData = () => {
 
   if (
     !isLoadingPostList &&
-    (!lastRefreshPostList || lastRefreshPostList + 600 <= Date.now)
+    (!postList ||
+      !lastRefreshPostList ||
+      lastRefreshPostList + 600000 <= Date.now())
   ) {
     refreshPostList();
   }

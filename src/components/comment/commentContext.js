@@ -45,7 +45,7 @@ export const CommentProvider = ({ children }) => {
           return Promise.reject(err);
         })
         .finally(() => {
-          setLastRefreshCommentList(Date.now);
+          setLastRefreshCommentList(Date.now());
           setIsLoadingCommentList(false);
           return;
         });
@@ -200,7 +200,9 @@ export const useCommentListData = () => {
 
   if (
     !isLoadingCommentList &&
-    (!lastRefreshCommentList || lastRefreshCommentList + 600 <= Date.now)
+    (!commentList ||
+      !lastRefreshCommentList ||
+      lastRefreshCommentList + 600000 <= Date.now())
   ) {
     refreshCommentList();
   }

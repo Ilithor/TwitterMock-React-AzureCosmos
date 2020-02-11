@@ -29,13 +29,13 @@ export const DeleteCommentDialog = ({ postId }) => {
       Promise.all([refreshPostList(), refreshCommentList()]);
     });
   };
-  const makeDeleteButton = () => (
+  const DeleteButton = () => (
     <CustomButton tip='Delete Comment' onClick={handleOpen}>
       <Icon.DeleteOutline color='secondary' />
     </CustomButton>
   );
   if (!open) {
-    return makeDeleteButton();
+    return <DeleteButton />;
   }
   return (
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth='sm'>

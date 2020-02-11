@@ -35,7 +35,7 @@ export const LikeProvider = ({ children }) => {
           return Promise.reject(err);
         })
         .finally(() => {
-          setlastRefreshLikeList(Date.now);
+          setlastRefreshLikeList(Date.now());
           setIsLoadingLikeList(false);
           return;
         });
@@ -124,7 +124,9 @@ export const useLikeData = () => {
 
   if (
     !isLoadingLikeList &&
-    (!lastRefreshLikeList || lastRefreshLikeList + 600 <= Date.now)
+    (!likeList ||
+      !lastRefreshLikeList ||
+      lastRefreshLikeList + 600000 <= Date.now())
   ) {
     refreshLikeList();
   }

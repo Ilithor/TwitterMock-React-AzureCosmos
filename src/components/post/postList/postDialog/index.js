@@ -15,10 +15,10 @@ import * as Icon from '@material-ui/icons';
 
 // Context
 import { usePostData } from '../../postContext';
-import { useUserListData } from '../../../profile/userContext';
+import { useUserListData } from '../../../profile/user/userListContext';
 
 /** View component for displaying an individual post's content in a dialog box
- * 
+ *
  * @type {React.FunctionComponent}
  * @param {object} props
  * @param {string} props.postId
