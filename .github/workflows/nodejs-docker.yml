@@ -21,12 +21,12 @@ jobs:
     - run: npm run build --if-present
     
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag socmon
+      run: docker build . --file Dockerfile --tag ilithor/socmon
     - name: Publish Docker
       uses: elgohr/Publish-Docker-Github-Action@2.12
       with:
             # The name of the image you would like to push
-            name: socmon
+            name: ilithor/socmon
             # The login username for the registry
             username: ${{ secrets.DOCKER_USERNAME_ACCESS }}
             # The login password for the registry
