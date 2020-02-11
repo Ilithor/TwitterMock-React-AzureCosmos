@@ -24,7 +24,7 @@ jobs:
       with:
         login-server: socmon.azurecr.io
         username: ${{ secrets.REGISTRY_USERNAME }}
-        password: ${{ secrets.REGISTRY_PASSWORD }}
+        password: ${{ secrets.REGISTRY_PASSWORD2 }}
     - run: |
         docker build . -t ilithor/socmon:latest
         docker push ilithor/socmon:latest
