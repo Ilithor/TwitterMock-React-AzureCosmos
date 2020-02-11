@@ -20,14 +20,13 @@ jobs:
     - run: npm install
     - run: npm run build --if-present
     
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag ilithor/socmon
-    - name: Publish Docker
-      uses: elgohr/Publish-Docker-Github-Action@2.12
+    - uses: azure/docker-login@v1
       with:
-            # The name of the image you would like to push
-            name: ilithor/socmon
-            # The login username for the registry
-            username: ${{ secrets.DOCKER_USERNAME_ACCESS }}
-            # The login password for the registry
-            password: ${{ secrets.DOCKER_PASSWORD_ACCESS }}
+        login-server: contoso.azurecr.io
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+    
+    - name: Build the Docker image
+      run: docker build . -t ilithor/socmon
+    - name: Publish Docker
+      run: docker push ilithor/socmon
