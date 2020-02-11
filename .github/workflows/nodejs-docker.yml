@@ -1,0 +1,33 @@
+name: Node.js CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [8.x, 10.x, 12.x]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm install
+    - run: npm run build --if-present
+    
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag daryk/socmon
+    - name: Docker Publish
+      uses: manusa/actions-publish-docker@v1.0.1
+      with:
+        # Name of the Docker image
+        name: daryk/socmon
+        # Username for Docker registry
+        username: ${{ secrets.DOCKER_USERNAME_ACCESS }}
+        # Password for Docker registry
+        password: ${{ secrets.DOCKER_PASSWORD_ACCESS }}
