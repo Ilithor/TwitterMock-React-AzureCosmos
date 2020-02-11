@@ -22,7 +22,7 @@ jobs:
     
     - uses: azure/docker-login@v1
       with:
-        login-server: socmon.azurecr.io
+        login-server: https://socmon.azurecr.io
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD2 }}
     - run: |
