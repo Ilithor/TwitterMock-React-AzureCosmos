@@ -13,5 +13,6 @@ RUN npm install
 RUN ls -la /usr/src/app
 
 ENV PORT 80
+ENV NODE_ENV 'production'
 
 CMD [ "npm", "start" ]
