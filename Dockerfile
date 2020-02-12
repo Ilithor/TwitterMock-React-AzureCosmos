@@ -1,17 +1,13 @@
 FROM node:lts
 
-# Create app directory
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+ENV NODE_ENV 'production'
+ENV PORT 80
 
 # Bundle app source
-COPY /server /usr/src/app
+COPY /server .
 
 # Install app dependencies
 RUN npm install
 
-RUN ls -la /usr/src/app
-
-ENV PORT 80
 
 CMD [ "npm", "start" ]
