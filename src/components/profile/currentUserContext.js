@@ -1,7 +1,21 @@
 import React, { createContext, useContext, useState } from 'react';
 import * as fetchUtil from '../../util/fetch';
 
+/** @type {React.Context<CurrentUserContextProps>} */
 const currentUserContext = createContext();
+
+/**
+ * @typedef CurrentUserContextProps
+ * @property {Error} currentUserError
+ * @property {React.Dispatch} setCurrentUserError
+ * @property {boolean} isLoadingCurrentUser
+ * @property {React.Dispatch} setIsLoadingCurrentUser
+ * @property {Date} lastFetchCurrentUser
+ * @property {React.Dispatch} setLastFetchCurrentUser
+ * @property {User} currentUser
+ * @property {React.Dispatch} setCurrentUser
+ * @property {()=>void} fetchCurrentUser
+ */
 
 /** This is a react component which you wrap your entire application
  * to provide a "context", meaning: data you can access anywhere in the app.
@@ -12,10 +26,11 @@ const currentUserContext = createContext();
 export const CurrentUserProvider = ({ children }) => {
   const [currentUserError, setCurrentUserError] = useState();
   const [isLoadingCurrentUser, setIsLoadingCurrentUser] = useState(false);
+  const [lastFetchCurrentUser, setLastFetchCurrentUser] = useState();
   const [currentUser, setCurrentUser] = useState();
 
   /** Attempts to fetch the current user data
-   * 
+   *
    * @returns {void|Error}
    */
   const fetchCurrentUser = async () => {
@@ -35,6 +50,7 @@ export const CurrentUserProvider = ({ children }) => {
           return Promise.reject(err);
         })
         .finally(() => {
+          setLastFetchCurrentUser(Date.now());
           setIsLoadingCurrentUser(false);
           return;
         });
@@ -47,6 +63,7 @@ export const CurrentUserProvider = ({ children }) => {
     isLoadingCurrentUser,
     currentUser,
     fetchCurrentUser,
+    lastFetchCurrentUser,
   };
 
   return (
@@ -76,9 +93,15 @@ export const useCurrentUserData = () => {
     fetchCurrentUser,
     currentUserError,
     setCurrentUserError,
+    lastFetchCurrentUser,
   } = ctx;
 
-  if (!currentUser && !isLoadingCurrentUser) {
+  if (
+    !isLoadingCurrentUser &&
+    (!currentUser ||
+      !lastFetchCurrentUser ||
+      lastFetchCurrentUser + 600000 <= Date.now())
+  ) {
     fetchCurrentUser();
   }
 
