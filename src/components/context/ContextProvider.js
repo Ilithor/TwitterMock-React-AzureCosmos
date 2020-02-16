@@ -14,6 +14,7 @@ import { LikeProvider } from '../like/likeContext';
 import { CommentProvider } from '../comment/commentContext';
 import { LogoutProvider } from '../login/logoutContext';
 import { UserListProvider } from '../profile/user/userListContext';
+import { HelmetProvider } from '../../util/helmetContext';
 
 const theme = createMuiTheme({
   palette: {
@@ -24,9 +25,9 @@ const theme = createMuiTheme({
 
 /** Main provider that manages other providers
  *
- * @type {React.FunctionComponent}
  * @param {object} props
  * @param {React.ReactChild} props.children
+ * @returns {React.ReactElement}
  */
 export const ContextProvider = ({ children }) => (
   <SettingProvider>
@@ -38,7 +39,9 @@ export const ContextProvider = ({ children }) => (
               <PostProvider>
                 <LikeProvider>
                   <CommentProvider>
-                    <LogoutProvider>{children}</LogoutProvider>
+                    <LogoutProvider>
+                      <HelmetProvider>{children}</HelmetProvider>
+                    </LogoutProvider>
                   </CommentProvider>
                 </LikeProvider>
               </PostProvider>
