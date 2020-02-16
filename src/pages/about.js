@@ -43,6 +43,21 @@ export const AboutPage = () => {
           </big>
         );
       }
+      if (user?.userHandle === 'Jefferson') {
+        user.about = (
+          <big>
+            Jefferson helps with infrastructure design and code review. He is a
+            fullstack Software Engineer with a decade of experience doing IOT,
+            automation, and interface design. When not buried in the latest
+            project, he spends spare time mentoring young developers and
+            artists, studying the stars, and travelling. You can find him on{' '}
+            <Link to='https://www.linkedin.com/in/jefferson-eagley/'>
+              LinkedIn
+            </Link>
+            .
+          </big>
+        );
+      }
       return (
         <Card key={`dev-${user?.userHandle}`} className={classes?.card}>
           <CreateCardMedia userImage={user?.userImage} />
