@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 // Components
 import { LoginForm } from '../components/login';
@@ -12,14 +12,19 @@ import AppIcon from '../images/icon.png';
 
 // Context
 import { LoginProvider } from '../components/login/loginContext';
+import { useHelmetData } from '../util/helmetContext';
 
 /** Displays the login page
- * 
- * @type {React.FunctionComponent}
+ *
+ * @returns {React.ReactElement}
  */
 export const LoginPage = () => {
   const classes = useStyles();
-  return ((
+  const { setCurrentPage } = useHelmetData();
+  useEffect(() => {
+    setCurrentPage('Login');
+  });
+  return (
     <Grid container className={classes?.form}>
       <Grid item sm />
       <Grid item sm>
@@ -33,5 +38,5 @@ export const LoginPage = () => {
       </Grid>
       <Grid item sm />
     </Grid>
-  ));
+  );
 };

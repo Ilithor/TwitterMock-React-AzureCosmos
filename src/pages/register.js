@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 // Components
 import { RegisterForm } from '../components/register';
@@ -12,13 +12,18 @@ import AppIcon from '../images/icon.png';
 
 // Context
 import { RegisterProvider } from '../components/register/registerContext';
+import { useHelmetData } from '../util/helmetContext';
 
 /** Control that allows the user to register
- * 
- * @type {React.FunctionComponent}
+ *
+ * @returns {React.ReactElement}
  */
 export const RegisterPage = () => {
   const classes = useStyles();
+  const { setCurrentPage } = useHelmetData();
+  useEffect(() => {
+    setCurrentPage('Register');
+  });
   return (
     <Grid container className={classes?.form}>
       <Grid item sm />

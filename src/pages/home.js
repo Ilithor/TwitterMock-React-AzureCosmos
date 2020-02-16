@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import _ from 'lodash';
 
 // Components
@@ -15,16 +15,22 @@ import { useUserListData } from '../components/profile/user/userListContext';
 import { useAuthenticationData } from '../components/profile/authenticationContext';
 import { usePostData } from '../components/post/postContext';
 import { useLikeData } from '../components/like/likeContext';
+import { useHelmetData } from '../util/helmetContext';
 
 /** Displays the home page
  *
- * @type {React.FunctionComponent}
+ * @returns {React.ReactElement}
  */
 export const HomePage = () => {
   const { isAuthenticated } = useAuthenticationData();
   const { userList } = useUserListData();
   const { postList } = usePostData();
   const { likeList } = useLikeData();
+  const { setCurrentPage } = useHelmetData();
+
+  useEffect(() => {
+    setCurrentPage('Home');
+  });
 
   const PostList = () => {
     if (userList) {

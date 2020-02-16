@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 // Components
 import { DeleteUser } from '../components/setting/DeleteUser';
@@ -7,12 +7,19 @@ import { DeleteUser } from '../components/setting/DeleteUser';
 import { Grid } from '@material-ui/core';
 import { useStyles } from './page.style';
 
+// Context
+import { useHelmetData } from '../util/helmetContext';
+
 /** Displays the settings page
  *
- * @type {React.FunctionComponent}
+ * @returns {React.ReactElement}
  */
 export const SettingPage = () => {
   const classes = useStyles();
+  const { setCurrentPage } = useHelmetData();
+  useEffect(() => {
+    setCurrentPage('Settings');
+  });
   return (
     <Grid container className={classes?.settingButton}>
       <DeleteUser />

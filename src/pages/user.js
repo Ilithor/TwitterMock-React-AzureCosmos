@@ -13,15 +13,17 @@ import { Grid } from '@material-ui/core';
 import { useUserListData } from '../components/profile/user/userListContext';
 import { usePostData } from '../components/post/postContext';
 import { useLikeData } from '../components/like/likeContext';
+import { useHelmetData } from '../util/helmetContext';
 
 /** Displays the user's profile page
  *
- * @type {React.FunctionComponent}
+ * @returns {React.ReactElement}
  */
 export const UserPage = () => {
   const { postList } = usePostData();
   const { userList } = useUserListData();
   const { likeList } = useLikeData();
+  const { setCurrentPage } = useHelmetData();
   const [userPostList, setUserPostList] = useState({});
   const [userStaticProfile, setUserStaticProfile] = useState({});
   const params = useParams();
@@ -32,6 +34,7 @@ export const UserPage = () => {
     if (userData) {
       setUserStaticProfile(userData[0]);
     }
+    setCurrentPage(`${userData[0].userHandle}'s Profile`);
     const postData = _.values(postList).filter(
       post => post?.userHandle === params.userHandle
     );

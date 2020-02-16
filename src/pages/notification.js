@@ -1,16 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 
 // Components
 import { NotificationContent } from '../components/notification';
 
+// Context
+import { useHelmetData } from '../util/helmetContext';
+
 /** Displays an array of notifications for the user
- * 
- * @type {React.FunctionComponent}
+ *
+ * @returns {React.ReactElement}
  */
 export const NotificationPage = () => {
   dayjs.extend(relativeTime);
+  const { setCurrentPage } = useHelmetData();
+  useEffect(() => {
+    setCurrentPage('Notifications');
+  });
   return (
     <div>
       <h1>
