@@ -36,7 +36,7 @@ export const getUserList = async (req, res, next) => {
     aboutMe: user.bio.aboutMe,
     location: user.bio.location,
     website: user.bio.website,
-    admin: user.credential.admin,
+    isAdmin: user.credential.isAdmin,
   }));
   // Returns list of users in array
   return res.status(200).send(userList);
