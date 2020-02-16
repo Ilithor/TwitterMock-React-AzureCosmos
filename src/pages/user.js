@@ -34,7 +34,6 @@ export const UserPage = () => {
     if (userData) {
       setUserStaticProfile(userData[0]);
     }
-    setCurrentPage(`${userData[0].userHandle}'s Profile`);
     const postData = _.values(postList).filter(
       post => post?.userHandle === params.userHandle
     );
@@ -42,7 +41,13 @@ export const UserPage = () => {
       setUserPostList(postData);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userList, postList]);
+  }, [userList, postList, userStaticProfile]);
+  useEffect(() => {
+    if (userStaticProfile) {
+      setCurrentPage(`${userStaticProfile?.userHandle}'s Profile`);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userStaticProfile]);
   const PostList = () => {
     if (userPostList.length === 0) {
       return <p>No posts from this user</p>;
