@@ -15,12 +15,19 @@ import { useStyles } from './page.style';
 // Context
 import { useUserListData } from '../components/profile/user/userListContext';
 
+/** Displays the About Us page
+ *
+ * @returns {React.ReactElement}
+ */
 export const AboutPage = () => {
   const classes = useStyles();
   const [devList, setDevList] = useState();
   const { userList } = useUserListData();
   useEffect(() => {
-    const userData = _.values(userList).filter(user => user?.admin === true);
+    const userData = _(userList)
+      .values()
+      .filter(user => user.isAdmin)
+      .value();
     if (userData) {
       setDevList(userData);
     }
