@@ -14,7 +14,7 @@ const likeContext = createContext();
  */
 export const LikeProvider = ({ children }) => {
   const [likeError, setLikeError] = useState();
-  const [lastRefreshLikeList, setlastRefreshLikeList] = useState();
+  const [lastRefreshLikeList, setLastRefreshLikeList] = useState();
   /** @type {UseStateResult<_.Dictionary<Like>>} */
   const [likeList, setLikeList] = useState();
   const [isLoadingLikeList, setIsLoadingLikeList] = useState(false);
@@ -24,6 +24,7 @@ export const LikeProvider = ({ children }) => {
   const refreshLikeList = async () => {
     if (!isLoadingLikeList) {
       setIsLoadingLikeList(true);
+      setLastRefreshLikeList(Date.now());
       // Fetch list of likes
       await fetchUtil.user
         .fetchLikeList(localStorage?.Handle)
@@ -35,7 +36,6 @@ export const LikeProvider = ({ children }) => {
           return Promise.reject(err);
         })
         .finally(() => {
-          setlastRefreshLikeList(Date.now());
           setIsLoadingLikeList(false);
           return;
         });

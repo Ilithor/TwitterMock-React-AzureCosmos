@@ -29,6 +29,7 @@ export const CommentProvider = ({ children }) => {
   const refreshCommentList = async () => {
     if (!isLoadingCommentList) {
       setIsLoadingCommentList(true);
+      setLastRefreshCommentList(Date.now());
       // Fetch list of comments
       await fetchUtil.post
         .fetchCommentList()
@@ -45,7 +46,6 @@ export const CommentProvider = ({ children }) => {
           return Promise.reject(err);
         })
         .finally(() => {
-          setLastRefreshCommentList(Date.now());
           setIsLoadingCommentList(false);
           return;
         });

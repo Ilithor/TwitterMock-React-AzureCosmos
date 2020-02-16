@@ -34,6 +34,7 @@ export const UserListProvider = ({ children }) => {
   const refreshUserList = async () => {
     if (!isLoadingUserList) {
       setIsLoadingUserList(true);
+      setLastRefreshUserList(Date.now());
       await fetchUtil.user
         .fetchUserList()
         .then(res => {
@@ -46,7 +47,6 @@ export const UserListProvider = ({ children }) => {
           return Promise.reject(err);
         })
         .finally(() => {
-          setLastRefreshUserList(Date.now());
           setIsLoadingUserList(false);
           return;
         });

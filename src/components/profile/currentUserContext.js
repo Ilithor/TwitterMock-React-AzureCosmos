@@ -36,6 +36,7 @@ export const CurrentUserProvider = ({ children }) => {
   const fetchCurrentUser = async () => {
     if (localStorage?.Handle && !isLoadingCurrentUser) {
       setIsLoadingCurrentUser(true);
+      setLastFetchCurrentUser(Date.now());
       await fetchUtil.user
         .fetchUserData(localStorage?.Handle)
         .then(res => {
@@ -50,7 +51,6 @@ export const CurrentUserProvider = ({ children }) => {
           return Promise.reject(err);
         })
         .finally(() => {
-          setLastFetchCurrentUser(Date.now());
           setIsLoadingCurrentUser(false);
           return;
         });
