@@ -36,6 +36,7 @@ export const getUserList = async (req, res, next) => {
     aboutMe: user.bio.aboutMe,
     location: user.bio.location,
     website: user.bio.website,
+    isAdmin: user.credential.isAdmin,
   }));
   // Returns list of users in array
   return res.status(200).send(userList);
@@ -138,7 +139,7 @@ export const getUserDetail = async (req, res) => {
 /** Pushes post docs into post array
  *
  * @param {Document[]} postList
- * @param {Object} userData
+ * @param {object} userData
  * @returns {userData[Object]}
  */
 const pushPostIntoArray = (postList, userData) => {

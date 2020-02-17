@@ -47,7 +47,7 @@ export const Post = ({ post, user, like }) => {
   };
 
   return (
-    <Card className={classes.card}>
+    <Card className={classes?.card}>
       <ManageCardMedia />
       <PostContent post={post} like={like} />
     </Card>

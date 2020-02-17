@@ -16,8 +16,8 @@ export const useStyles = makeStyles(theme => ({
   },
   image: {
     margin: 'auto',
-    width: '76px',
-    height: '76px',
+    minWidth: '300px',
+    height: '300px',
   },
   pageTitle: {
     margin: '10px auto 10px auto',
@@ -25,5 +25,19 @@ export const useStyles = makeStyles(theme => ({
   settingButton: {
     display: 'flex',
     flexDirection: 'column',
+  },
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  content: {
+    padding: 25,
+    objectFit: 'cover',
+  },
+  card: {
+    position: 'relative',
+    display: 'flex',
+    marginTop: 20,
   },
 }));
