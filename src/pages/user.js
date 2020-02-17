@@ -13,15 +13,17 @@ import { Grid } from '@material-ui/core';
 import { useUserListData } from '../components/profile/user/userListContext';
 import { usePostData } from '../components/post/postContext';
 import { useLikeData } from '../components/like/likeContext';
+import { useHelmetData } from '../util/helmetContext';
 
 /** Displays the user's profile page
  *
- * @type {React.FunctionComponent}
+ * @returns {React.ReactElement}
  */
 export const UserPage = () => {
   const { postList } = usePostData();
   const { userList } = useUserListData();
   const { likeList } = useLikeData();
+  const { setCurrentPage } = useHelmetData();
   const [userPostList, setUserPostList] = useState({});
   const [userStaticProfile, setUserStaticProfile] = useState({});
   const params = useParams();
@@ -39,7 +41,13 @@ export const UserPage = () => {
       setUserPostList(postData);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [userList, postList]);
+  }, [userList, postList, userStaticProfile]);
+  useEffect(() => {
+    if (userStaticProfile) {
+      setCurrentPage(`${userStaticProfile?.userHandle}'s Profile`);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userStaticProfile]);
   const PostList = () => {
     if (userPostList.length === 0) {
       return <p>No posts from this user</p>;
