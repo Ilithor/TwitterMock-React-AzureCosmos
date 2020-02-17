@@ -42,6 +42,7 @@ export const NotificationProvider = ({ children }) => {
   const refreshNotificationList = async () => {
     if (!isLoadingNotifcationList) {
       setIsLoadingNotificationList(true);
+      setLastRefreshNotificationList(Date.now());
       // Fetch list of notifications
       await fetchUtil.user
         .fetchNotificationList()
@@ -57,7 +58,6 @@ export const NotificationProvider = ({ children }) => {
           return Promise.reject(err);
         })
         .finally(() => {
-          setLastRefreshNotificationList(Date.now());
           setIsLoadingNotificationList(false);
           return;
         });

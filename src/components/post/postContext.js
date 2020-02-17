@@ -29,6 +29,7 @@ export const PostProvider = ({ children }) => {
   const refreshPostList = async () => {
     if (!isLoadingPostList) {
       setIsLoadingPostList(true);
+      setLastRefreshPostList(Date.now());
       // Fetch list of posts
       await fetchUtil.post
         .fetchPostList()
@@ -42,7 +43,6 @@ export const PostProvider = ({ children }) => {
           return Promise.reject(err);
         })
         .finally(() => {
-          setLastRefreshPostList(Date.now());
           setIsLoadingPostList(false);
           return Promise.resolve();
         });
