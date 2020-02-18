@@ -14,6 +14,7 @@ import { AboutPage } from './pages/about';
 
 // Components
 import { Navbar } from './components/Navbar';
+import { Footer } from './components/Footer';
 
 // Context
 import { ContextProvider } from './components/context/ContextProvider';
@@ -44,6 +45,7 @@ export const App = () => (
           />
         </Switch>
       </div>
+      <Footer />
     </ContextProvider>
   </Router>
 );
