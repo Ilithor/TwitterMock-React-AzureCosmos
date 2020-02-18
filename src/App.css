@@ -7,7 +7,7 @@ body {
 }
 
 .container {
-  margin: 80px auto 0 auto;
+  margin: 80px auto 60px auto;
   max-width: 1200px;
 }
 
@@ -20,15 +20,15 @@ body {
 }
 
 .footer-container {
-  top: auto;
+  position: fixed;
+  left: 0;
   bottom: 0;
+  width: 100%;
+  background-color: blueviolet;
+  text-align: center;
 }
 
-.footer-buttons {
-  margin: auto;
-}
-
-.footer-buttons svg {
+.footer-container svg {
   color: #fff;
 }
 
