@@ -6,8 +6,14 @@ body {
   background-color: rgb(245, 245, 245);
 }
 
+.page-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 .container {
-  margin: 80px auto 60px auto;
+  margin: 80px auto 0 auto;
   max-width: 1200px;
 }
 
@@ -20,16 +26,18 @@ body {
 }
 
 .footer-container {
-  position: fixed;
-  left: 0;
-  bottom: 0;
+  margin-top: auto;
   width: 100%;
-  background-color: blueviolet;
+  height: 3em;
+  display: flex;
+  flex-direction: row;
+  background-color: lightgray;
   text-align: center;
 }
 
-.footer-container svg {
-  color: #fff;
+.footer-column {
+  margin: 10px auto;
+  flex-grow: 1;
 }
 
 a {
