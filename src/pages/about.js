@@ -42,12 +42,18 @@ export const AboutPage = () => {
             August of 2019. He spends his free time hiking, perusing local cafes
             and bakeries or planning his next international trip. You can find
             him on{' '}
-            <MuiLink href={'https://www.linkedin.com/in/daryk-kohler/'}>
+            <MuiLink
+              href={'https://www.linkedin.com/in/daryk-kohler/'}
+              target='_blank'
+              rel='noreferrer'
+            >
               LinkedIn
             </MuiLink>{' '}
             and the repo for the site on{' '}
             <MuiLink
               href={'https://github.com/Ilithor/SocMon-React-AzureCosmos'}
+              target='_blank'
+              rel='noreferrer'
             >
               Github
             </MuiLink>
@@ -63,7 +69,11 @@ export const AboutPage = () => {
             automation, and interface design. When not buried in the latest
             project, he spends spare time mentoring young developers and
             artists, studying the stars, and travelling. You can find him on{' '}
-            <MuiLink href='https://www.linkedin.com/in/jefferson-eagley/'>
+            <MuiLink
+              href={'https://www.linkedin.com/in/jefferson-eagley/'}
+              target='_blank'
+              rel='noreferrer'
+            >
               LinkedIn
             </MuiLink>
             .
