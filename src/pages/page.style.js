@@ -40,4 +40,7 @@ export const useStyles = makeStyles(theme => ({
     display: 'flex',
     marginTop: 20,
   },
+  aboutContent: {
+    textAlign: 'justify',
+  },
 }));
