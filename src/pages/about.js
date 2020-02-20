@@ -10,6 +10,7 @@ import {
   CardContent,
   Typography,
 } from '@material-ui/core';
+import MuiLink from '@material-ui/core/Link';
 import { useStyles } from './page.style';
 
 // Context
@@ -41,11 +42,21 @@ export const AboutPage = () => {
             August of 2019. He spends his free time hiking, perusing local cafes
             and bakeries or planning his next international trip. You can find
             him on{' '}
-            <Link to='https://www.linkedin.com/in/daryk-kohler/'>LinkedIn</Link>{' '}
+            <MuiLink
+              href={'https://www.linkedin.com/in/daryk-kohler/'}
+              target='_blank'
+              rel='noreferrer'
+            >
+              LinkedIn
+            </MuiLink>{' '}
             and the repo for the site on{' '}
-            <Link to='https://github.com/Ilithor/SocMon-React-AzureCosmos'>
+            <MuiLink
+              href={'https://github.com/Ilithor/SocMon-React-AzureCosmos'}
+              target='_blank'
+              rel='noreferrer'
+            >
               Github
-            </Link>
+            </MuiLink>
             .
           </big>
         );
@@ -58,9 +69,13 @@ export const AboutPage = () => {
             automation, and interface design. When not buried in the latest
             project, he spends spare time mentoring young developers and
             artists, studying the stars, and travelling. You can find him on{' '}
-            <Link to='https://www.linkedin.com/in/jefferson-eagley/'>
+            <MuiLink
+              href={'https://www.linkedin.com/in/jefferson-eagley/'}
+              target='_blank'
+              rel='noreferrer'
+            >
               LinkedIn
-            </Link>
+            </MuiLink>
             .
           </big>
         );
@@ -91,7 +106,7 @@ export const AboutPage = () => {
         {user?.userHandle}
       </Typography>
       <br />
-      <Typography>{user?.about}</Typography>
+      <Typography className={classes?.aboutContent}>{user?.about}</Typography>
     </CardContent>
   );
   return (

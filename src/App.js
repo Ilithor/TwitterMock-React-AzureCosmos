@@ -14,6 +14,7 @@ import { AboutPage } from './pages/about';
 
 // Components
 import { Navbar } from './components/Navbar';
+import { Footer } from './components/Footer';
 
 // Context
 import { ContextProvider } from './components/context/ContextProvider';
@@ -27,22 +28,25 @@ axios.defaults.baseURL = '/';
 export const App = () => (
   <Router>
     <ContextProvider>
-      <Navbar />
-      <div className='container'>
-        <Switch>
-          <Route exact path='/' component={HomePage} />
-          <Route path='/login' component={LoginPage} />
-          <Route path='/signup' component={RegisterPage} />
-          <Route path='/settings' component={SettingPage} />
-          <Route path='/notification' component={NotificationPage} />
-          <Route path='/about' component={AboutPage} />
-          <Route exact path='/u/:userHandle' component={UserPage} />
-          <Route
-            exact
-            path='/u/:userHandle/post/:postId'
-            component={UserPage}
-          />
-        </Switch>
+      <div className='page-layout'>
+        <Navbar />
+        <div className='container'>
+          <Switch>
+            <Route exact path='/' component={HomePage} />
+            <Route path='/login' component={LoginPage} />
+            <Route path='/signup' component={RegisterPage} />
+            <Route path='/settings' component={SettingPage} />
+            <Route path='/notification' component={NotificationPage} />
+            <Route path='/about' component={AboutPage} />
+            <Route exact path='/u/:userHandle' component={UserPage} />
+            <Route
+              exact
+              path='/u/:userHandle/post/:postId'
+              component={UserPage}
+            />
+          </Switch>
+        </div>
+        <Footer />
       </div>
     </ContextProvider>
   </Router>
