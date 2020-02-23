@@ -3,8 +3,28 @@ import jwt from 'jsonwebtoken';
 import env from '../environment/environment';
 import { findById } from '../handlers/find';
 
-/**
- * Checks if valid token is used
+/** Check if user is admin
+ *
+ * @type {RouteHandler}
+ */
+export const isAdmin = async (req, res, next) => {
+  const data = await this.authByToken(req).catch(err => {
+    console.error(err);
+    return Promise.reject(err);
+  });
+  const user = await findById(data).catch(err => {
+    console.error(err);
+    return Promise.reject(err);
+  });
+  if (user.credential.isAdmin === true) {
+    req.user = user;
+    next();
+  }
+  return Promise.reject();
+};
+
+/** Checks if valid token is used
+ *
  * @type {RouteHandler}
  */
 export const authUser = async (req, res, next) => {
