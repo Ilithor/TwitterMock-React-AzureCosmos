@@ -23,7 +23,6 @@ const router = express.Router();
 
 router.get('/', authUser, getAuthenticatedUser);
 router.post('/', authUser, addUserDetail);
-router.get('/salt', isAdmin, saltExistingPassword);
 router.get('/list', getUserList);
 router.post('/register', registerUser);
 router.post('/login', loginUser);

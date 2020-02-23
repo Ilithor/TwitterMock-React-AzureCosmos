@@ -57,25 +57,6 @@ export const fetchLikeList = async (req, res) => {
   return res.status(200).send(likeList);
 };
 
-/** Retrieves list of users and salts passwords
- *
- * @type {RouteHandler}
- */
-export const saltExistingPassword = async (req, res, next) => {
-  const data = await getList().catch(err => {
-    console.error(err);
-    return res.status(404);
-  });
-  for (const user of data) {
-    const salt = bcrypt.hashSync(user.credential.password, 10);
-    await findAndUpdatePassword(user.userHandle, salt).catch(err => {
-      console.error(err);
-      return res.send(err);
-    });
-  }
-  return res.status(200);
-};
-
 /** Registers the user
  *
  * @type {RouteHandler}
