@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
 import axios from 'axios';
+import bcrypt from 'bcryptjs';
 import * as fetchUtil from '../../util/fetch';
 import { useAuthenticationData } from '../profile/authenticationContext';
 
@@ -11,9 +12,10 @@ const registerContext = createContext();
  *
  * @param {object} props
  * @param {React.ReactChild} props.children
+ * @returns {React.FunctionComponent}
  */
 export const RegisterProvider = ({ children }) => {
-  const [registerError, setRegisterError] = useState('');
+  const [registerError, setRegisterError] = useState({});
   const [isLoadingRegister, setIsLoadingRegister] = useState(false);
   const { getAuthenticated } = useAuthenticationData();
 
@@ -25,6 +27,8 @@ export const RegisterProvider = ({ children }) => {
         setIsLoadingRegister(false);
         return Promise.reject(error);
       }
+      const saltedPassword = await saltPassword(userParam?.password);
+      userParam.password = saltedPassword;
       await fetchUtil.user
         .registerUser(userParam)
         .then(async res => {
@@ -45,9 +49,27 @@ export const RegisterProvider = ({ children }) => {
     }
   };
 
+  /** Salts provided password
+   *
+   * @param {string} password
+   * @returns {string}
+   */
+  const saltPassword = async password => {
+    const salt = await bcrypt.genSalt().catch(err => {
+      console.error(err);
+      Promise.reject(err);
+    });
+    const hash = await bcrypt.hash(password, salt).catch(err => {
+      console.error(err);
+      Promise.reject(err);
+    });
+    return hash;
+  };
+
   /** Sets the user token and authorization
    *
    * @param {string} token
+   * @returns {void}
    */
   const setAuthorizationHeader = token => {
     if (token?.length > 30) {
@@ -107,28 +129,25 @@ export const RegisterProvider = ({ children }) => {
    * @returns {UserRegisterParam}
    */
   const validationCheckRegister = registerParam => {
-    const err = {};
+    let err;
     if (isEmpty(registerParam?.email)) {
-      err.email = 'Must not be empty';
+      err = { email: 'Must not be empty' };
     } else if (!isEmail(registerParam?.email)) {
-      err.email = 'Must be a valid email address';
+      err = { email: 'Must be a valid email address' };
     }
     if (isEmpty(registerParam?.userHandle)) {
-      err.userHandle = 'Must not be empty';
+      err = { ...err, userHandle: 'Must not be empty' };
     }
     if (isEmpty(registerParam?.password)) {
-      err.password = 'Must not be empty';
+      err = { ...err, password: 'Must not be empty' };
     }
     if (isEmpty(registerParam?.confirmPassword)) {
-      err.confirmPassword = 'Must not be empty';
+      err = { ...err, confirmPassword: 'Must not be empty' };
     }
     if (registerParam?.password !== registerParam?.confirmPassword) {
-      err.confirmPassword = 'Password confirmation must match';
+      err = { ...err, confirmPassword: 'Password confirmation must match' };
     }
-    if (Object.keys(err) !== 0) {
-      setRegisterError(err);
-      return registerParam;
-    }
+    setRegisterError(err);
     return registerParam;
   };
 
