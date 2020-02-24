@@ -8,10 +8,9 @@ import {
   getAuthenticatedUser,
   getUserDetail,
   fetchLikeList,
-  saltExistingPassword,
   deleteUser,
 } from '../handlers/user';
-import { isAdmin, authUser } from '../util/auth';
+import { authUser } from '../util/auth';
 import {
   getNotification,
   markNotificationRead,
