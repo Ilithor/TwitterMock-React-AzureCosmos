@@ -64,12 +64,11 @@ export const register = async userParam => {
   if (invalid) {
     return Promise.reject(invalid);
   }
-  // Salt and hash password
-  user.credential.password = bcrypt.hashSync(userParam.password, 10);
 
   // Create user
   user.userHandle = userParam.userHandle;
   user.credential.email = userParam.email;
+  user.credential.password = userParam.password;
   user.bio.aboutMe = '';
   user.bio.website = '';
   user.bio.location = '';
@@ -110,7 +109,7 @@ export const login = async userParam => {
 /** Updates the current user's bio properties
  *
  * @param {object} userParam
- * @param {String} userId
+ * @param {string} userId
  * @returns {Promise<boolean>}
  */
 export const updateBio = async (userParam, userId) => {
