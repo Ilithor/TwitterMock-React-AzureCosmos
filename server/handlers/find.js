@@ -26,9 +26,13 @@ export const findByCredential = async user => {
     error.email = 'Email does not exist';
     return Promise.reject(error);
   }
-  if (
-    !bcrypt.compareSync(user.credential.password, foundUser.credential.password)
-  ) {
+  const checkPassword = await bcrypt
+    .compare(user.credential.password, foundUser.credential.password)
+    .catch(err => {
+      console.error(err);
+      return Promise.reject(err);
+    });
+  if (!checkPassword) {
     error.password = 'Invalid password';
     return Promise.reject(error);
   }
