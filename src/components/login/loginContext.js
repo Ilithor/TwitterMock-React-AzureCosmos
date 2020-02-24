@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState } from 'react';
 import axios from 'axios';
+import bcrypt from 'bcryptjs';
+import forge from 'node-forge';
 import * as fetchUtil from '../../util/fetch';
 import { useAuthenticationData } from '../profile/authenticationContext';
 
@@ -40,6 +42,13 @@ export const LoginProvider = ({ children }) => {
         setIsLoadingLogin(false);
         return Promise.reject(error);
       }
+      const hashedPassword = await hashPassword(userParam?.password).catch(
+        err => {
+          console.error(err);
+          return Promise.reject(err);
+        }
+      );
+      userParam.password = hashedPassword;
       await fetchUtil.user
         .loginUser(userParam)
         .then(async res => {
@@ -47,9 +56,7 @@ export const LoginProvider = ({ children }) => {
             return Promise.reject(res?.data);
           }
           if (!res?.data?.token || !res?.data?.userHandle) {
-            return Promise.reject({
-              general: 'Failed to login',
-            });
+            return Promise.reject(res?.data);
           }
           setAuthorizationHeader(res?.data?.token);
           setUserHandleHeader(res?.data?.userHandle);
@@ -63,6 +70,19 @@ export const LoginProvider = ({ children }) => {
           return;
         });
     }
+  };
+
+  /** Hashes provided password
+   *
+   * @param {string} password
+   * @returns {string | Error}
+   */
+  const hashPassword = async password => {
+    const md = forge.md.sha256.create();
+    md.update(password);
+    return md.digest().toHex();
+    // const saltedPassword = bcrypt.hashSync(md.digest().toHex());
+    // console.log(saltedPassword);
   };
 
   /** Sets the user token and authorization
