@@ -18,7 +18,7 @@ import {
 
 /** Displays the register form to the user
  *
- * @type {React.FunctionComponent}
+ * @returns {React.FunctionComponent}
  */
 export const RegisterForm = () => {
   const classes = useStyles();
@@ -37,7 +37,6 @@ export const RegisterForm = () => {
     userHandle: '',
   });
   const { email, password, confirmPassword, userHandle } = editorState;
-
   const handleSubmit = event => {
     if (!isLoadingRegister) {
       event.preventDefault();
@@ -61,9 +60,6 @@ export const RegisterForm = () => {
   };
 
   const handleChange = event => {
-    if (registerError) {
-      setRegisterError();
-    }
     const { name, value } = event?.target;
     setEditorState(validationCheckRegister({ ...editorState, [name]: value }));
   };
@@ -131,7 +127,7 @@ export const RegisterForm = () => {
         variant='contained'
         color='primary'
         className={classes?.button}
-        disabled={isLoadingRegister}
+        disabled={isLoadingRegister || registerError !== undefined}
       >
         Register
         {isLoadingRegister && (
