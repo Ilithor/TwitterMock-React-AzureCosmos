@@ -1,3 +1,4 @@
+import bcrypt from 'bcrypt';
 import { User } from '../models/user.model';
 import { Like } from '../models/like.model';
 import { Notification } from '../models/notification.model';
@@ -25,7 +26,13 @@ export const findByCredential = async user => {
     error.email = 'Email does not exist';
     return Promise.reject(error);
   }
-  if (user.credential.password !== foundUser.credential.password) {
+  const checkPassword = await bcrypt
+    .compare(user.credential.password, foundUser.credential.password)
+    .catch(err => {
+      console.error(err);
+      return Promise.reject(err);
+    });
+  if (!checkPassword) {
     error.password = 'Invalid password';
     return Promise.reject(error);
   }
@@ -62,7 +69,7 @@ export const findByHandle = async userHandle => {
 
 /** Returns post that matches _id
  *
- * @param {String} _id
+ * @param {string} _id
  * @returns {Promise<Post|PostNotFound>}
  */
 export const findPostById = async _id => {
@@ -177,6 +184,23 @@ export const findAndUpdatePostImage = async (userHandle, base64) => {
   });
 };
 
+/** Finds and updates user's password
+ *
+ * @param {string} userHandle
+ * @param {string} password
+ * @returns {void | Error}
+ */
+export const findAndUpdatePassword = async (userHandle, password) => {
+  await User.updateOne(
+    { userHandle },
+    { $set: { 'credential.password': password } },
+    { userFindAndModify: false }
+  ).catch(err => {
+    console.error(err);
+    return Promise.reject(err);
+  });
+};
+
 /** Finds post and updates like/comment count
  *
  * @param {string} _id
@@ -187,7 +211,7 @@ export const findAndUpdatePostImage = async (userHandle, base64) => {
 export const findPostAndUpdateCount = async (_id, likeCount, commentCount) => {
   await Post.updateOne(
     { _id },
-    { $set: { likeCount: likeCount, commentCount: commentCount } },
+    { $set: { likeCount, commentCount } },
     { useFindAndModify: false }
   ).catch(err => {
     console.error(err);
@@ -215,6 +239,7 @@ export const findAndDeleteLikeAndComment = async postId => {
 /** Finds notification and marks read as true
  *
  * @param {string} _id
+ * @returns {void | Error}
  */
 export const findNotificationAndUpdateRead = async _id => {
   await Notification.updateOne(
@@ -248,6 +273,7 @@ export const findUserAndUpdateImage = async (_id, base64) => {
  *
  * @param {User} userDetails
  * @param {string} _id
+ * @returns {void | Error}
  */
 export const findUserAndUpdateProfile = async (userDetails, _id) => {
   const { aboutMe, website, location } = userDetails.bio;
@@ -335,6 +361,11 @@ export const findUserAndUpdateProfile = async (userDetails, _id) => {
   }
 };
 
+/** Finds all user's posts and deletes them
+ *
+ * @param {string} userHandle
+ * @returns {void | Error}
+ */
 export const findAndDeleteAllPosts = async userHandle => {
   await Post.deleteMany({ userHandle }).catch(err => {
     console.error(err);

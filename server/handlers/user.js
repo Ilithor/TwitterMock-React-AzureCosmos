@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import bcrypt from 'bcrypt';
 import {
   getList,
   getLikeList,
@@ -12,6 +13,7 @@ import { dataUri } from '../util/multer';
 import {
   findById,
   findUserAndUpdateImage,
+  findAndUpdatePassword,
   findLikeByHandle,
   findByHandle,
   findPostByHandle,

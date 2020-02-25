@@ -1,4 +1,5 @@
 import mongo from 'mongodb';
+import bcrypt from 'bcrypt';
 import {
   findByCredential,
   findById,
@@ -17,6 +18,7 @@ import { Like } from '../models/like.model';
 mongoConnect();
 
 /** Returns a list of users
+ *
  * @returns {Promise<user[User]>}
  */
 export const getList = async () => {
@@ -31,6 +33,7 @@ export const getList = async () => {
 };
 
 /** Returns a list of likes
+ *
  * @returns {Promise<[Like]>}
  */
 export const getLikeList = async () => {
@@ -44,6 +47,7 @@ export const getLikeList = async () => {
 };
 
 /** Validates then creates new User
+ *
  * @param {UserRegistration} userParam
  * @returns {Promise<newUser[User]> | UserError}
  */
@@ -60,6 +64,7 @@ export const register = async userParam => {
   if (invalid) {
     return Promise.reject(invalid);
   }
+
   // Create user
   user.userHandle = userParam.userHandle;
   user.credential.email = userParam.email;
@@ -75,6 +80,7 @@ export const register = async userParam => {
 };
 
 /** Checks if user exists, and then generates a new token
+ *
  * @param {UserCredential} userParam
  * @returns {Promise<dataToReturn> | UserCredentialError}
  */
@@ -101,8 +107,9 @@ export const login = async userParam => {
 };
 
 /** Updates the current user's bio properties
- * @param {Object} userParam
- * @param {String} userId
+ *
+ * @param {object} userParam
+ * @param {string} userId
  * @returns {Promise<boolean>}
  */
 export const updateBio = async (userParam, userId) => {
