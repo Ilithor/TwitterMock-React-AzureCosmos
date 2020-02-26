@@ -42,13 +42,17 @@ export const registerUser = userData => post(endpoints.register, userData);
  * @returns {Promise<import("axios").AxiosResponse>}
  */
 export const fetchUserData = userHandle =>
-  get(endpoints.userData + `/${userHandle}`);
+  get(`${endpoints.userData}/${userHandle}`);
 
-/** Retrieves likes made by user
+/**
+ * Retrieves likes made by user
  *
+ * @param {string} userHandle
  * @returns {Promise<import("axios").AxiosResponse}
  */
-export const fetchLikeList = () => get(endpoints.userData + `/like`);
+export const fetchLikeList = userHandle =>
+  (userHandle && post(`${endpoints.userData}/like`, { userHandle })) ||
+  Promise.reject('userHandle was not defined');
 
 /** Retrives notifcations for user
  *
@@ -65,6 +69,11 @@ export const markNotificationRead = notificationId =>
   (notificationId && post(endpoints.notification, { notificationId })) ||
   Promise.reject('notificationId was not defined');
 
+/** Attempts to delete a notification
+ *
+ * @param {string} notificationId
+ * @returns {Promise<import("axios").AxiosResponse>}
+ */
 export const deleteNotification = notificationId =>
   notificationId && remove(`${endpoints.notification}/${notificationId}`);
 
