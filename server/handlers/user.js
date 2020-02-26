@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import bcrypt from 'bcrypt';
+//import bcrypt from 'bcrypt';
 import {
   getList,
   getLikeList,
@@ -13,7 +13,7 @@ import { dataUri } from '../util/multer';
 import {
   findById,
   findUserAndUpdateImage,
-  findAndUpdatePassword,
+  //findAndUpdatePassword,
   findLikeByHandle,
   findByHandle,
   findPostByHandle,
@@ -45,7 +45,7 @@ export const getUserList = async (req, res, next) => {
 };
 
 export const fetchLikeList = async (req, res) => {
-  const data = await getLikeList().catch(err => {
+  const data = await getLikeList(req.body.userHandle).catch(err => {
     console.error(err);
     return res.status(404);
   });

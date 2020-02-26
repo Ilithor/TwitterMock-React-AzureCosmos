@@ -26,7 +26,7 @@ router.get('/list', getUserList);
 router.post('/register', registerUser);
 router.post('/login', loginUser);
 router.post('/image', authUser, multerUploads, imageUpload);
-router.get('/like', fetchLikeList);
+router.post('/like', fetchLikeList);
 router.get('/notification', authUser, getNotification);
 router.post('/notification', authUser, markNotificationRead);
 router.delete('/notification/:notificationId', authUser, deleteNotification);

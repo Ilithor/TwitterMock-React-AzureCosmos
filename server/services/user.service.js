@@ -34,10 +34,11 @@ export const getList = async () => {
 
 /** Returns a list of likes
  *
+ * @param {string} userHandle
  * @returns {Promise<[Like]>}
  */
-export const getLikeList = async () => {
-  return await Like.find({})
+export const getLikeList = async userHandle => {
+  return await Like.find({ userHandle })
     .read(mongo.ReadPreference.NEAREST)
     .limit(100)
     .catch(err => {
