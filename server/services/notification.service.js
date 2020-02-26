@@ -20,8 +20,8 @@ export const getNotificationList = async () => {
  *
  * @param {string} recipient
  * @param {string} postId
- * @param {String} sender
- * @param {String} type
+ * @param {string} sender
+ * @param {string} type
  * @param {String} typeId
  */
 export const create = async (recipient, postId, sender, type, typeId) => {
@@ -35,11 +35,4 @@ export const create = async (recipient, postId, sender, type, typeId) => {
   };
   const newNotification = new Notification(dataForNotification);
   await newNotification.save();
-};
-
-export const findAndDeleteNotification = async _id => {
-  return await Notification.deleteOne({ _id }).catch(err => {
-    console.error(err);
-    return Promise.reject(err);
-  });
 };

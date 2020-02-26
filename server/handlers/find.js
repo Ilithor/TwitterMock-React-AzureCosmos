@@ -361,6 +361,18 @@ export const findUserAndUpdateProfile = async (userDetails, _id) => {
   }
 };
 
+/** Attempts to find and delete a notification
+ *
+ * @param {string} typeId
+ * @returns {void|Error}
+ */
+export const findAndDeleteNotification = async typeId => {
+  await Notification.deleteOne({ typeId }).catch(err => {
+    console.error(err);
+    return Promise.reject(err);
+  });
+};
+
 /** Finds all user's posts and deletes them
  *
  * @param {string} userHandle
