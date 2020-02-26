@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import _ from 'lodash';
+import { ToastContainer, toast } from 'react-toastify';
 
 // Components
 import { Post } from '../components/post/postList';
@@ -8,7 +9,8 @@ import { NewPost } from '../components/post/newPost';
 import { RecentCommentFeed } from '../components/comment/recentFeed';
 
 // MUI
-import { Grid } from '@material-ui/core';
+import { Grid, CircularProgress } from '@material-ui/core';
+import { useStyles } from './page.style';
 
 // Context
 import { useUserListData } from '../components/profile/user/userListContext';
@@ -22,8 +24,9 @@ import { useHelmetData } from '../util/helmetContext';
  * @returns {React.ReactElement}
  */
 export const HomePage = () => {
+  const classes = useStyles();
   const { isAuthenticated } = useAuthenticationData();
-  const { userList } = useUserListData();
+  const { userList, isLoadingUserList, userListError } = useUserListData();
   const { postList } = usePostData();
   const { likeList } = useLikeData();
   const { setCurrentPage } = useHelmetData();
@@ -33,6 +36,19 @@ export const HomePage = () => {
   });
 
   const PostList = () => {
+    if (isLoadingUserList) {
+      return (
+        <div className={classes?.spinnerDiv}>
+          <CircularProgress size={150} thickness={2} />
+        </div>
+      );
+    }
+    if (userListError) {
+      toast.error(userListError, {
+        position: toast.POSITION.BOTTOM_LEFT,
+        autoClose: 8000,
+      });
+    }
     if (userList) {
       return _.map(postList, post => (
         <Post
@@ -56,6 +72,7 @@ export const HomePage = () => {
     <Grid container spacing={2}>
       <Grid item md={8} sm={9} xs={12}>
         <CreatePostEditor />
+        <ToastContainer />
         <PostList />
       </Grid>
       <Grid item md={4} sm={3} xs={12}>
