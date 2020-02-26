@@ -3,6 +3,9 @@ import _ from 'lodash';
 
 import * as fetchUtil from '../../util/fetch';
 
+// Context
+import { useCurrentUserData } from '../profile/currentUserContext';
+
 /** @type {React.Context<{likeList:Like[],likeError:Error,refreshLikeList:()=>void}} */
 const likeContext = createContext();
 
@@ -109,6 +112,7 @@ export const LikeProvider = ({ children }) => {
  * @returns {Like[]}
  */
 export const useLikeData = () => {
+  const { currentUser } = useCurrentUserData();
   // Destructuring value from provider
   const ctx = useContext(likeContext);
 
@@ -128,6 +132,7 @@ export const useLikeData = () => {
 
   if (
     !isLoadingLikeList &&
+    currentUser &&
     (!likeList ||
       !lastRefreshLikeList ||
       lastRefreshLikeList + 600000 <= Date.now())
