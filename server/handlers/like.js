@@ -1,12 +1,14 @@
 import { create, remove } from '../services/like.service';
-import { createNotification, deleteNotification } from './notification';
+import { createNotification } from './notification';
 import {
   findPostById,
   findLikeByHandleAndPostId,
   findPostAndUpdateCount,
+  findAndDeleteNotification,
 } from './find';
 
 /** Like a post
+ *
  * @type {RouteHandler}
  */
 export const likePost = async (req, res, next) => {
@@ -49,6 +51,7 @@ export const likePost = async (req, res, next) => {
 };
 
 /** Unlike a post
+ *
  * @type {RouteHandler}
  */
 export const unlikePost = async (req, res, next) => {
@@ -70,10 +73,8 @@ export const unlikePost = async (req, res, next) => {
       postToUpdate.likeCount,
       postToUpdate.commentCount
     );
-    const userHandle = req.user.userHandle;
-    const type = 'like';
     const typeId = doc._id;
-    await deleteNotification(userHandle, type, typeId);
+    await findAndDeleteNotification(typeId);
     return res.status(200).send(true);
   }
 };
