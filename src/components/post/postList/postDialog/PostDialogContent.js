@@ -109,7 +109,7 @@ export const PostDialogContent = ({
         </Typography>
         <hr className={classes?.separator} />
         <Typography variant='body1'>{body}</Typography>
-        <Like postId={postId} like={likeList[params?.postId]} />
+        <Like postId={postId} like={likeList[postId]} />
         <span>
           {likeCount}
           <LikePlural />
