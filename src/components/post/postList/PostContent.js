@@ -67,6 +67,7 @@ export const PostContent = ({ post, like }) => {
 };
 
 /** View component for displaying an individual post's content
+ *
  * @typedef IPostContentComponentProps
  * @param {object} post
  */
