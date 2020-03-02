@@ -13,22 +13,16 @@ import * as Icon from '@material-ui/icons';
 
 /** Displays the dialog box that allows the user to create a post
  *
- * @type {React.FunctionComponent}
- * @param {object} props
- * @param {boolean} props.open
- * @param {React.ChangeEventHandler} props.handleClose
- * @param {React.ChangeEventHandler} props.handleSubmit
- * @param {Error} props.error
- * @param {React.ChangeEventHandler} props.handleChange
- * @param {boolean} props.isLoading
+ * @type {INewPostDisplayComponentProps}
+ * @returns {React.FunctionComponent}
  */
 export const NewPostDisplay = ({
   open,
+  isLoading,
+  error,
   handleClose,
   handleSubmit,
-  error,
   handleChange,
-  isLoading,
 }) => {
   const classes = useStyles();
   return (
@@ -52,3 +46,13 @@ export const NewPostDisplay = ({
     </Dialog>
   );
 };
+
+/**
+ * @typedef INewPostDisplayComponentProps
+ * @property {boolean} open
+ * @property {boolean} isLoading
+ * @property {Error} error
+ * @property {React.ChangeEventHandler} handleClose
+ * @property {React.ChangeEventHandler} handleSubmit
+ * @property {React.ChangeEventHandler} handleChange
+ */

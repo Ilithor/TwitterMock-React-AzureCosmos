@@ -16,11 +16,8 @@ import { useUserListData } from '../../profile/user/userListContext';
 
 /** View component for displaying an individual post on the site
  *
- * @type {React.FunctionComponent}
- * @param {object} props
- * @param {object} props.post
- * @param {object} props.user
- * @param {object} props.like
+ * @type {IPostComponentProps}
+ * @returns {React.FunctionComponent}
  */
 export const Post = ({ post, user, like }) => {
   const classes = useStyles();
@@ -53,3 +50,10 @@ export const Post = ({ post, user, like }) => {
     </Card>
   );
 };
+
+/**
+ * @typedef IPostComponentProps
+ * @property {Post} post
+ * @property {User} user
+ * @property {Like} like
+ */

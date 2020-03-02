@@ -17,10 +17,8 @@ import * as Icon from '@material-ui/icons';
 
 /** View component for displaying an individual post's content
  *
- * @type {React.FunctionComponent}
- * @param {object} props
- * @param {object} props.post
- * @param {object} props.like
+ * @type {IPostContentComponentProps}
+ * @returns {React.FunctionComponent}
  */
 export const PostContent = ({ post, like }) => {
   const classes = useStyles();
@@ -40,7 +38,7 @@ export const PostContent = ({ post, like }) => {
     <CardContent className={classes?.content}>
       <Typography
         variant='h5'
-        component={Link}
+        link={Link}
         to={`/u/${post?.userHandle}`}
         color='primary'
       >
@@ -66,7 +64,8 @@ export const PostContent = ({ post, like }) => {
   );
 };
 
-/** View component for displaying an individual post's content
+/**
  * @typedef IPostContentComponentProps
- * @param {object} post
+ * @property {Post} post
+ * @property {Like} like
  */

@@ -14,10 +14,9 @@ import * as Icon from '@material-ui/icons';
 import { usePostData } from '../../postContext';
 
 /** Displays the dialog box to delete the user's post
- * 
- * @type {React.FunctionComponent}
- * @param {object} props
- * @param {string} props.postId
+ *
+ * @type {IDeletePostDialogComponentProps}
+ * @returns {React.FunctionComponent}
  */
 export const DeletePostDialog = ({ postId }) => {
   const classes = useStyles();
@@ -55,3 +54,8 @@ export const DeletePostDialog = ({ postId }) => {
     </Dialog>
   );
 };
+
+/**
+ * @typedef IDeletePostDialogComponentProps
+ * @property {string} postId
+ */
