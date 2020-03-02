@@ -8,9 +8,8 @@ import * as Icon from '@material-ui/icons';
 
 /** View component for displaying an icon to unlike a post
  *
- * @type {React.FunctionComponent}
- * @param {object} props
- * @param {string} props.postId
+ * @type {IUnlikeButtonComponentProps}
+ * @returns {React.FunctionComponent}
  */
 export const UnlikeButton = ({ postId, onClick }) => {
   return (
@@ -22,5 +21,6 @@ export const UnlikeButton = ({ postId, onClick }) => {
 
 /**
  * @typedef IUnlikeButtonComponentProps
- * @param {string} postId
+ * @property {string} postId
+ * @property {()=>void} onClick
  */
