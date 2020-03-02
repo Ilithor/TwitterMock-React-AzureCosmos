@@ -17,11 +17,8 @@ import { useNotificationData } from '../notificationContext';
 
 /** Displays individual notification content
  *
- * @type {React.FunctionComponent}
- * @param {object} props
- * @param {object} props.notification
- * @param {string} props.postBody
- * @param {string} props.commentBody
+ * @type {INotificationCardContentComponentProps}
+ * @returns {React.FunctionComponent}
  */
 export const NotificationCardContent = ({
   notification,
@@ -91,3 +88,10 @@ export const NotificationCardContent = ({
     </CardContent>
   );
 };
+
+/**
+ * @typedef INotificationCardContentComponentProps
+ * @property {UserNotification} notification
+ * @property {string} postBody
+ * @property {string} commentBody
+ */

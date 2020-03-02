@@ -9,11 +9,8 @@ import { useStyles } from '../notification.style';
 
 /** Displays icon appropriate to notification type
  *
- * @type {React.FunctionComponent}
- * @param {object} props
- * @param {UserNotification} props.notification
- * @param {Post} props.post
- * @param {UserComment} props.comment
+ * @type {INotificationCardComponentProps}
+ * @returns {React.FunctionComponent}
  */
 export const NotificationCard = ({ notification, post, comment }) => {
   const classes = useStyles();
@@ -27,3 +24,10 @@ export const NotificationCard = ({ notification, post, comment }) => {
     </Card>
   );
 };
+
+/**
+ * @typedef INotificationCardComponentProps
+ * @property {UserNotification} notification
+ * @property {Post} post
+ * @property {UserComment} comment
+ */
