@@ -5,9 +5,8 @@ import * as Icon from '@material-ui/icons';
 
 /** Displays the user's website
  *
- * @type {React.FunctionComponent}
- * @param {object} props
- * @param {string} props.website
+ * @type {IWebsiteComponentProps}
+ * @returns {React.FunctionComponent}
  */
 export const Website = ({ website }) => {
   if (website) {
@@ -26,3 +25,8 @@ export const Website = ({ website }) => {
   }
   return <div />;
 };
+
+/**
+ * @typedef IWebsiteComponentProps
+ * @property {string} website
+ */

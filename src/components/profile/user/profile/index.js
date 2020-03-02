@@ -22,7 +22,7 @@ import { useLogoutData } from '../../../login/logoutContext';
 
 /** View component for displaying the user's profile
  *
- * @type {React.FunctionComponent}
+ * @returns {React.FunctionComponent}
  */
 export const ProfileDetail = () => {
   const classes = useStyles();

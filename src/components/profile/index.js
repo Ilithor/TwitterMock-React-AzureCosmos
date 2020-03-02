@@ -13,7 +13,7 @@ import { useAuthenticationData } from './authenticationContext';
 
 /** View component for displaying either the default or user profile
  *
- * @type {React.FunctionComponent}
+ * @returns {React.FunctionComponent}
  */
 export const Profile = () => {
   const classes = useStyles();

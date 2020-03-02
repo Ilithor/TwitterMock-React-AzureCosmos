@@ -16,7 +16,7 @@ import { useEditDetailData } from './editDetailContext';
 
 /** Control how the user edits their bio information
  *
- * @type {React.FunctionComponent}
+ * @returns {React.FunctionComponent}
  */
 export const EditDetail = () => {
   const classes = useStyles();

@@ -7,21 +7,16 @@ import { useStyles } from '../profile.style';
 
 /** Displays the default buttons when no user found
  *
- * @type {React.FunctionComponent}
+ * @returns {React.FunctionComponent}
  */
 export const DefaultProfileButton = () => {
   const classes = useStyles();
   return (
     <div className={classes?.buttons}>
-      <Button variant='contained' color='primary' component={Link} to='/login'>
+      <Button variant='contained' color='primary' link={Link} to='/login'>
         Login
       </Button>
-      <Button
-        variant='contained'
-        color='secondary'
-        component={Link}
-        to='/signup'
-      >
+      <Button variant='contained' color='secondary' link={Link} to='/signup'>
         Register
       </Button>
     </div>

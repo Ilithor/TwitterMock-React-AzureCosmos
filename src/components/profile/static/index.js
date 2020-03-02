@@ -13,9 +13,8 @@ import { useUserListData } from '../user/userListContext';
 
 /** Displays the profile of the selected user
  *
- * @type {React.FunctionComponent}
- * @param {object} props
- * @param {object} props.user
+ * @type {IStaticProfileComponentProps}
+ * @returns {React.FunctionComponent}
  */
 export const StaticProfile = ({ user }) => {
   const classes = useStyles();
@@ -44,3 +43,8 @@ export const StaticProfile = ({ user }) => {
     </div>
   );
 };
+
+/**
+ * @typedef IStaticProfileComponentProps
+ * @property {User} user
+ */

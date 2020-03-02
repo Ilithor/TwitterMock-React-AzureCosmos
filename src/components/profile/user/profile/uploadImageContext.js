@@ -11,9 +11,10 @@ const imageUploadContext = createContext();
 /**
  * @typedef ImageUploadContextProps
  * @property {Error} imageUploadError
- * @property {React.Dispatch} setImageUploadError
+ * @property {React.Dispatch<React.SetStateAction<Error>>} setImageUploadError
  * @property {boolean} isLoadingImageUpload
- * @property {React.Dispatch} setIsLoadingImageUpload
+ * @property {React.Dispatch<React.SetStateAction<boolean>>} setIsLoadingImageUpload
+ * @property {(formData:FormData)=>void} imageUpload
  */
 
 /** This is a react component which you wrap your entire application
@@ -21,6 +22,7 @@ const imageUploadContext = createContext();
  *
  * @param {object} props
  * @param {React.ReactChild} props.children
+ * @returns {React.FunctionComponent}
  */
 export const ImageUploadProvider = ({ children }) => {
   const [imageUploadError, setImageUploadError] = useState();
@@ -32,7 +34,7 @@ export const ImageUploadProvider = ({ children }) => {
   /** Updates the user's profile image
    *
    * @param {object} formData
-   * @returns {void|Error}
+   * @returns {Promise}
    */
   const imageUpload = async formData => {
     if (formData && localStorage?.Handle && !isLoadingImageUpload) {
@@ -73,9 +75,9 @@ export const ImageUploadProvider = ({ children }) => {
 /**
  * @typedef UseUploadImageDataResult
  * @property {Error} imageUploadError
- * @property {React.Dispatch} setImageUploadError
+ * @property {React.Dispatch<React.SetStateAction<Error>>} setImageUploadError
  * @property {boolean} isLoadingImageUpload
- * @property {()=>void} imageUpload
+ * @property {(formData:FormData)=>void} imageUpload
  */
 
 /** A hook for consuming our User context in a safe way
