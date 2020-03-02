@@ -15,7 +15,7 @@ import { useLoginData, useLoginValidationData } from './loginContext';
 
 /** View component for displaying the login form to the user
  *
- * @type {React.FunctionComponent}
+ * @returns {React.FunctionComponent}
  */
 export const LoginForm = () => {
   const classes = useStyles();
