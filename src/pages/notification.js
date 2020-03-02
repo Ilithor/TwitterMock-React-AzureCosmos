@@ -10,7 +10,7 @@ import { useHelmetData } from '../util/helmetContext';
 
 /** Displays an array of notifications for the user
  *
- * @returns {React.ReactElement}
+ * @returns {React.FunctionComponent}
  */
 export const NotificationPage = () => {
   dayjs.extend(relativeTime);

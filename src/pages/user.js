@@ -17,7 +17,7 @@ import { useHelmetData } from '../util/helmetContext';
 
 /** Displays the user's profile page
  *
- * @returns {React.ReactElement}
+ * @returns {React.FunctionComponent}
  */
 export const UserPage = () => {
   const { postList } = usePostData();
