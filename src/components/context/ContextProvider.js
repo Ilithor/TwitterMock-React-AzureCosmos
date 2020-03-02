@@ -25,9 +25,8 @@ const theme = createMuiTheme({
 
 /** Main provider that manages other providers
  *
- * @param {object} props
- * @param {React.ReactChild} props.children
- * @returns {React.ReactElement}
+ * @type {IContextProviderComponentProps}
+ * @returns {React.FunctionComponent}
  */
 export const ContextProvider = ({ children }) => (
   <SettingProvider>
@@ -52,3 +51,8 @@ export const ContextProvider = ({ children }) => (
     </ThemeProvider>
   </SettingProvider>
 );
+
+/**
+ * @typedef IContextProviderComponentProps
+ * @property {React.ReactChild} children
+ */
