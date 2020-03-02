@@ -23,7 +23,7 @@ axios.defaults.baseURL = '/';
 
 /** Displays the application to the user
  *
- * @type {React.FunctionComponent}
+ * @returns {React.FunctionComponent}
  */
 export const App = () => (
   <Router>
