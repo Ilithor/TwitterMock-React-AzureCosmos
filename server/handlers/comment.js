@@ -27,7 +27,7 @@ export const getCommentList = async (req, res) => {
       body: doc.body,
       createdAt: doc.createdAt,
     }));
-    return res.send(commentList);
+    return res.status(200).send(commentList);
   }
 };
 
