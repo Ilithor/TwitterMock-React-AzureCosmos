@@ -1,15 +1,21 @@
 import React from 'react';
+import _ from 'lodash';
+import { useHistory } from 'react-router-dom';
+
+// Components
+import { Comment } from '.';
+
+// MUI
 import {
   CardActionArea,
   Card,
   CardHeader,
   CardContent,
 } from '@material-ui/core';
+
+// Context
 import { useCommentListData } from './commentContext';
-import _ from 'lodash';
-import { Comment } from '.';
 import { usePostData } from '../post/postContext';
-import { useHistory } from 'react-router-dom';
 
 /** @type {React.FunctionComponent<CommentFeedCardProps>} */
 const CommentFeedCard = ({ comment }) => {
@@ -32,7 +38,7 @@ const CommentFeedCard = ({ comment }) => {
 
 /** Display for the latest couple comments
  *
- * @type {React.FunctionComponent}
+ * @returns {React.FunctionComponent}
  */
 export const RecentCommentFeed = () => {
   const { commentList } = useCommentListData();

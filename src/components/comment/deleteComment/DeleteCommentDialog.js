@@ -13,9 +13,8 @@ import { usePostData } from '../../post/postContext';
 
 /** Displays the dialog box for comment deletion confirmation
  *
- * @type {React.FunctionComponent}
- * @param {object} props
- * @param {string} props.postId
+ * @type {IDeleteCommentDialogComponentProps}
+ * @returns {React.FunctionComponent}
  */
 export const DeleteCommentDialog = ({ postId }) => {
   const { deleteComment } = useCommentData();
@@ -51,3 +50,8 @@ export const DeleteCommentDialog = ({ postId }) => {
     </Dialog>
   );
 };
+
+/**
+ * @typedef IDeleteCommentDialogComponentProps
+ * @property {string} postId
+ */
