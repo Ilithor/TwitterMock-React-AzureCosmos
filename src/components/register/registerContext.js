@@ -4,14 +4,30 @@ import bcrypt from 'bcryptjs';
 import * as fetchUtil from '../../util/fetch';
 import { useAuthenticationData } from '../profile/authenticationContext';
 
-/** @type {React.Context<{userList:User[],userError:Error,getData:()=>void}} */
+/** @type {React.Context<RegisterContextProps>} */
 const registerContext = createContext();
+
+/**
+ * @typedef RegisterContextProps
+ * @property {Error} registerError
+ * @property {React.Dispatch<React.SetStateAction<Error>>} setRegisterError
+ * @property {boolean} isLoadingRegister
+ * @property {React.Dispatch<React.SetStateAction<boolean>>} setIsLoadingRegister
+ * @property {(userParam:UserRegisterParam)=>void} registerUser
+ * @property {(password:string)=>string} saltPassword
+ * @property {(token:string)=>void} setAuthorizationHeader
+ * @property {(userHandle:string)=>void} setUserHandleHeader
+ * @property {(userParam:UserRegisterParam)=>Error} checkIfUndefined
+ * @property {(registerParam:UserRegisterParam)=>UserRegisterParam} validationCheckRegister
+ * @property {(string:string)=>boolean} isEmpty
+ * @property {(email:string)=>boolean} isEmail
+ *
+ */
 
 /** This is a react component which you wrap your entire application
  * to provide a "context", meaning: data you can access anywhere in the app.
  *
- * @param {object} props
- * @param {React.ReactChild} props.children
+ * @type {IRegisterProviderComponentProps}
  * @returns {React.FunctionComponent}
  */
 export const RegisterProvider = ({ children }) => {
@@ -19,6 +35,11 @@ export const RegisterProvider = ({ children }) => {
   const [isLoadingRegister, setIsLoadingRegister] = useState(false);
   const { getAuthenticated } = useAuthenticationData();
 
+  /** Attempts to register a new user
+   *
+   * @param {UserRegisterParam} userParam
+   * @returns {Promise}
+   */
   const registerUser = async userParam => {
     if (!isLoadingRegister) {
       setIsLoadingRegister(true);
@@ -82,6 +103,7 @@ export const RegisterProvider = ({ children }) => {
   /** Sets the user's handle in the local storage
    *
    * @param {string} userHandle
+   * @returns {void}
    */
   const setUserHandleHeader = userHandle => {
     if (userHandle !== 'undefined') {
@@ -91,7 +113,7 @@ export const RegisterProvider = ({ children }) => {
 
   /** Checks if params are undefined
    *
-   * @param {{email:string,userHandle:string,password:string,confirmPassword:string}} userParam
+   * @param {UserRegisterParam} userParam
    * @returns {Error}
    */
   const checkIfUndefined = userParam => {
@@ -195,7 +217,7 @@ export const RegisterProvider = ({ children }) => {
 
 /**
  * @typedef UseUserRegisterDataResult
- * @property {()=>void} registerUser
+ * @property {(userParam:UserRegisterParam)=>void} registerUser
  * @property {Error} registerError
  * @property {boolean} isLoadingRegister
  */
@@ -226,12 +248,17 @@ export const useUserRegisterData = () => {
   return { registerUser, registerError, setRegisterError, isLoadingRegister };
 };
 
+/**
+ * @typedef UseRegisterValidationDataResult
+ * @property {(registerParam:UserRegisterParam)=>UserRegisterParam} validationCheckRegister
+ */
+
 /** A hook for consuming our Register context in a safe way
  *
  * @example //getting the register validation function
  * import { useRegisterValidationData } from 'registerContext'
  * const { validationCheckRegister } = useRegisterValidationData();
- * @returns {Function}
+ * @returns {UseRegisterValidationDataResult}
  */
 export const useRegisterValidationData = () => {
   const ctx = useContext(registerContext);
@@ -246,6 +273,11 @@ export const useRegisterValidationData = () => {
 
   return { validationCheckRegister };
 };
+
+/**
+ * @typedef IRegisterProviderComponentProps
+ * @property {React.ReactChild} children
+ */
 
 /**
  * @typedef UserRegisterParam
