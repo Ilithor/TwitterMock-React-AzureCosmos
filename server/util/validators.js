@@ -20,7 +20,7 @@ export const validateLogin = user => {
   if (isEmpty(user.password)) {
     return Promise.reject({ password: 'Must not be empty' });
   }
-  return Promise.resolve();
+  return;
 };
 
 /** Checks if the user inputs are valid
@@ -42,7 +42,7 @@ export const validateRegister = async userParam => {
 /** Checks if the provided bio information is valid
  *
  * @param {UserBioUpdate} userParam User's bio info
- * @returns {Promise<UserBioUpdate>}
+ * @returns {UserBioUpdate}
  */
 export const validateUserDetail = userParam => {
   const userDetail = { aboutMe: '', website: '', location: '' };
@@ -66,13 +66,13 @@ export const validateUserDetail = userParam => {
   userDetail.aboutMe = aboutMe;
   userDetail.website = validatedWebsite;
   userDetail.location = location;
-  return Promise.resolve(userDetail);
+  return userDetail;
 };
 
 /** Checks if provided string is empty
  *
  * @param {string} string
- * @returns {Promise<Boolean>}
+ * @returns {boolean}
  */
 export const isEmpty = string => {
   if (string.trim() === '') {
@@ -85,7 +85,7 @@ export const isEmpty = string => {
 /** Checks if provided email is valid
  *
  * @param {string} email
- * @returns {Promise<boolean>}
+ * @returns {boolean}
  */
 export const isEmail = email => {
   // eslint-disable-next-line no-useless-escape
@@ -100,7 +100,7 @@ export const isEmail = email => {
 /** Checks if provided website is valid
  *
  * @param {string} website
- * @returns {Promise<boolean>}
+ * @returns {website}
  */
 export const isWebsite = website => {
   if (!_.includes(website, '.')) {

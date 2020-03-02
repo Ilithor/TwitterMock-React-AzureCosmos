@@ -13,7 +13,6 @@ import { dataUri } from '../util/multer';
 import {
   findById,
   findUserAndUpdateImage,
-  findAndUpdatePassword,
   findLikeByHandle,
   findByHandle,
   findPostByHandle,
@@ -44,6 +43,10 @@ export const getUserList = async (req, res, next) => {
   return res.status(200).send(userList);
 };
 
+/** Attempts to fetch the user's like list
+ *
+ * @type {RouteHandler}
+ */
 export const fetchLikeList = async (req, res) => {
   const data = await getLikeList().catch(err => {
     console.error(err);
@@ -142,7 +145,7 @@ export const getUserDetail = async (req, res) => {
  *
  * @param {Document[]} postList
  * @param {object} userData
- * @returns {userData[Object]}
+ * @returns {userData}
  */
 const pushPostIntoArray = (postList, userData) => {
   userData.post = _.map(postList, doc => ({

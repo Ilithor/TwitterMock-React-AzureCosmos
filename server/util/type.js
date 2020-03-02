@@ -62,12 +62,13 @@
 
 /**
  * @typedef Post
+ * @property {string} postId
  * @property {string} body
  * @property {string} userHandle
  * @property {string} userImage
  * @property {Date} createdAt
- * @property {Number} likeCount
- * @property {Number} commentCount
+ * @property {number} likeCount
+ * @property {number} commentCount
  */
 
 /**
@@ -93,7 +94,7 @@
 
 /**
  * @typedef UserNotification
- * @property {Boolean} read
+ * @property {boolean} read
  * @property {string} recipient
  * @property {string} postId
  * @property {string} sender
@@ -125,7 +126,7 @@
 
 /**
  * @typedef UserCommentError
- * @property {string} error
+ * @property {string} comment
  */
 
 /**

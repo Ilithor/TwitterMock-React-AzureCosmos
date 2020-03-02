@@ -44,7 +44,7 @@ export const authUser = async (req, res, next) => {
 /** Decodes token and returns _id
  *
  * @param {Request|string} req request passed in OR req.headers.authorization (both supported)
- * @returns {Promise<string>}
+ * @returns {string}
  */
 export const authByToken = req => {
   let idToken;
@@ -62,7 +62,7 @@ export const authByToken = req => {
   }
   try {
     const decoded = jwt.verify(idToken, env.jwt);
-    return Promise.resolve(decoded._id);
+    return decoded._id;
   } catch (err) {
     return Promise.reject({ token: 'Invalid token' });
   }
