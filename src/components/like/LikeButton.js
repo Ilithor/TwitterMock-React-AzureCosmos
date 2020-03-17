@@ -8,8 +8,8 @@ import * as Icon from '@material-ui/icons';
 
 /** View component for displaying an icon to like a post
  *
- * @type {React.FunctionComponent}
- * @param {object} props
+ * @type {ILikeButtonComponentProps}
+ * @returns {React.FunctionComponent}
  */
 export const LikeButton = ({ onClick }) => (
   <CustomButton tip='Like' onClick={onClick}>
@@ -19,4 +19,5 @@ export const LikeButton = ({ onClick }) => (
 
 /**
  * @typedef ILikeButtonComponentProps
+ * @property {()=>void} onClick
  */

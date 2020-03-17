@@ -22,7 +22,8 @@ export const getNotificationList = async () => {
  * @param {string} postId
  * @param {string} sender
  * @param {string} type
- * @param {String} typeId
+ * @param {string} typeId
+ * @returns {Promise}
  */
 export const create = async (recipient, postId, sender, type, typeId) => {
   const dataForNotification = {

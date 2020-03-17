@@ -16,7 +16,7 @@ import { useHelmetData } from '../util/helmetContext';
 
 /** Displays the login page
  *
- * @returns {React.ReactElement}
+ * @returns {React.FunctionComponent}
  */
 export const LoginPage = () => {
   const classes = useStyles();

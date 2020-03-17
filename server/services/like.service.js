@@ -1,6 +1,7 @@
 import { Like } from '../models/like.model';
 
 /** Create Like document
+ *
  * @param {Request} likeParam
  * @returns {Promise<Like>}
  */
@@ -17,8 +18,9 @@ export const create = async likeParam => {
 };
 
 /** Deletes Like document
- * @param {String} userHandle
- * @param {String} postId
+ *
+ * @param {string} userHandle
+ * @param {string} postId
  * @returns {Promise<Like>}
  */
 export const remove = async (userHandle, postId) => {

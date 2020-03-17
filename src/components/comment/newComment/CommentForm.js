@@ -15,9 +15,8 @@ import { CommentFormTextField } from './CommentFormTextField';
 
 /** Displays and handles the new comment form
  *
- * @type {React.FunctionComponent}
- * @param {object} props
- * @param {string} props.postId
+ * @type {ICommentFormComponentProps}
+ * @returns {React.FunctionComponent}
  */
 export const CommentForm = ({ postId }) => {
   const classes = useStyles();
@@ -72,3 +71,8 @@ export const CommentForm = ({ postId }) => {
     </Grid>
   );
 };
+
+/**
+ * @typedef ICommentFormComponentProps
+ * @property {string} postId
+ */

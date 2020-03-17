@@ -12,7 +12,7 @@ mongoConnection();
 /**Returns a user that has a matching email and password
  *
  * @param {User} user
- * @returns {Promise<User|UserCredentialError>}
+ * @returns {Promise<User>}
  */
 export const findByCredential = async user => {
   const error = {};
@@ -42,7 +42,7 @@ export const findByCredential = async user => {
 /** Returns a user that matches _id
  *
  * @param {string} _id
- * @returns {Promise<User|UserNotFound>}
+ * @returns {Promise<User>}
  */
 export const findById = async _id => {
   return await User.findOne({
@@ -56,7 +56,7 @@ export const findById = async _id => {
 /** Returns a user that matches handle
  *
  * @param {string} userHandle
- * @returns {Promise<User|UserNotFound>}
+ * @returns {Promise<User>}
  */
 export const findByHandle = async userHandle => {
   return await User.findOne({
@@ -70,7 +70,7 @@ export const findByHandle = async userHandle => {
 /** Returns post that matches _id
  *
  * @param {string} _id
- * @returns {Promise<Post|PostNotFound>}
+ * @returns {Promise<Post>}
  */
 export const findPostById = async _id => {
   return await Post.findOne({
@@ -84,7 +84,7 @@ export const findPostById = async _id => {
 /** Returns post that matches user handle
  *
  * @param {string} userHandle
- * @returns {Promise<Post|PostNotFound>}
+ * @returns {Promise<Post>}
  */
 export const findPostByHandle = async userHandle => {
   return await Post.find({
@@ -101,7 +101,7 @@ export const findPostByHandle = async userHandle => {
 /** Fetches all comments attached to PostId
  *
  * @param {string} postId
- * @returns {Promise<UserComment|NotificationNotFound>}
+ * @returns {Promise<UserComment>}
  */
 export const findCommentByPostId = async postId => {
   return await Comment.find({
@@ -153,7 +153,7 @@ export const findCommentByHandleAndPostId = async (userHandle, postId) => {
  *
  * @param {string} userHandle
  * @param {string} postId
- * @returns {Promise<Like[] | Error>}
+ * @returns {Promise<Like[]>}
  */
 export const findLikeByHandleAndPostId = async (userHandle, postId) => {
   return await Like.findOne({
@@ -171,7 +171,7 @@ export const findLikeByHandleAndPostId = async (userHandle, postId) => {
  *
  * @param {string} userHandle
  * @param {string} base64
- * @returns {void | Error}
+ * @returns {Promise}
  */
 export const findAndUpdatePostImage = async (userHandle, base64) => {
   await Post.updateMany(
@@ -188,7 +188,7 @@ export const findAndUpdatePostImage = async (userHandle, base64) => {
  *
  * @param {string} userHandle
  * @param {string} password
- * @returns {void | Error}
+ * @returns {Promise}
  */
 export const findAndUpdatePassword = async (userHandle, password) => {
   await User.updateOne(
@@ -206,7 +206,7 @@ export const findAndUpdatePassword = async (userHandle, password) => {
  * @param {string} _id
  * @param {number} likeCount
  * @param {number} commentCount
- * @returns {void | Error}
+ * @returns {Promise}
  */
 export const findPostAndUpdateCount = async (_id, likeCount, commentCount) => {
   await Post.updateOne(
@@ -239,7 +239,7 @@ export const findAndDeleteLikeAndComment = async postId => {
 /** Finds notification and marks read as true
  *
  * @param {string} _id
- * @returns {void | Error}
+ * @returns {Promise}
  */
 export const findNotificationAndUpdateRead = async _id => {
   await Notification.updateOne(
@@ -256,7 +256,7 @@ export const findNotificationAndUpdateRead = async _id => {
  *
  * @param {string} _id
  * @param {string} base64
- * @returns {void | Error}
+ * @returns {Promise}
  */
 export const findUserAndUpdateImage = async (_id, base64) => {
   await User.updateOne(
@@ -271,12 +271,12 @@ export const findUserAndUpdateImage = async (_id, base64) => {
 
 /** Finds and updates the user's profile bio
  *
- * @param {User} userDetails
+ * @param {User} userDetail
  * @param {string} _id
- * @returns {void | Error}
+ * @returns {Promise}
  */
-export const findUserAndUpdateProfile = async (userDetails, _id) => {
-  const { aboutMe, website, location } = userDetails.bio;
+export const findUserAndUpdateProfile = async (userDetail, _id) => {
+  const { aboutMe, website, location } = userDetail.bio;
 
   if (!aboutMe) {
     if (!website) {
@@ -364,7 +364,7 @@ export const findUserAndUpdateProfile = async (userDetails, _id) => {
 /** Attempts to find and delete a notification
  *
  * @param {string} typeId
- * @returns {void|Error}
+ * @returns {Promise}
  */
 export const findAndDeleteNotification = async typeId => {
   await Notification.deleteOne({ typeId }).catch(err => {
@@ -376,7 +376,7 @@ export const findAndDeleteNotification = async typeId => {
 /** Finds all user's posts and deletes them
  *
  * @param {string} userHandle
- * @returns {void | Error}
+ * @returns {Promise}
  */
 export const findAndDeleteAllPosts = async userHandle => {
   await Post.deleteMany({ userHandle }).catch(err => {

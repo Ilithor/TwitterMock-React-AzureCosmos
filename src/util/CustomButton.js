@@ -7,24 +7,14 @@ import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
 
 /** A Custom button that can take in various differen kinds of props
- * 
- * @type {React.FunctionComponent}
- * @param {object} props
- * @param {object} props.children
- * @param {Function} props.onClick
- * @param {React.FunctionComponent} props.component
- * @param {string} props.to
- * @param {string} props.tip
- * @param {string} props.btnClassName
- * @param {string} props.tipClassName
- * @param {boolean} props.disabled
- * @param {string} props.color
- * @param {string} props.variant
+ *
+ * @type {ICustomButtonComponentProps}
+ * @returns {React.FunctionComponent}
  */
 export const CustomButton = ({
   children,
   onClick,
-  component,
+  link,
   to,
   tip,
   btnClassName,
@@ -37,7 +27,7 @@ export const CustomButton = ({
     <span>
       <IconButton
         onClick={onClick}
-        component={component}
+        component={link}
         to={to}
         className={btnClassName}
         disabled={disabled}
@@ -49,3 +39,17 @@ export const CustomButton = ({
     </span>
   </Tooltip>
 );
+
+/**
+ * @typedef ICustomButtonComponentProps
+ * @property {React.ReactChild} children
+ * @property {()=>void} onClick
+ * @property {import("react-router-dom").Link} link
+ * @property {string} to
+ * @property {string} tip
+ * @property {string} btnClassName
+ * @property {string} tipClassName
+ * @property {boolean} disabled
+ * @property {string} color
+ * @property {string} variant
+ */

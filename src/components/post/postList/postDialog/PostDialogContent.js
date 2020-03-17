@@ -23,15 +23,8 @@ import { useLikeData } from '../../../like/likeContext';
 
 /** View component for displaying the content in a post's dialog box
  *
- * @type {React.FunctionComponent}
- * @param {object} props
- * @param {string} props.userHandle
- * @param {string} props.userImage
- * @param {string} props.createAt
- * @param {string} props.body
- * @param {string} props.postId
- * @param {number} props.likeCount
- * @param {number} props.commentCount
+ * @type {IPostDialogContentComponentProps}
+ * @returns {React.FunctionComponent}
  */
 export const PostDialogContent = ({
   userHandle,
@@ -96,7 +89,7 @@ export const PostDialogContent = ({
       </Grid>
       <Grid item sm={7}>
         <Typography
-          component={Link}
+          link={Link}
           color='primary'
           variant='h5'
           to={`/u/${userHandle}`}
@@ -127,3 +120,14 @@ export const PostDialogContent = ({
     </Grid>
   );
 };
+
+/**
+ * @typedef IPostDialogContentComponentProps
+ * @property {string} userHandle
+ * @property {string} userImage
+ * @property {Date} createAt
+ * @property {string} body
+ * @property {string} postId
+ * @property {number} likeCount
+ * @property {number} commentCount
+ */

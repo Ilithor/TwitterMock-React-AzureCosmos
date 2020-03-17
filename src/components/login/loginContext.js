@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
 import axios from 'axios';
-//import bcrypt from 'bcryptjs';
 import forge from 'node-forge';
 import * as fetchUtil from '../../util/fetch';
 
@@ -14,17 +13,24 @@ const loginContext = createContext();
 /**
  * @typedef LoginContextProps
  * @property {Error} loginError
- * @property {React.Dispatch} setLoginError
+ * @property {React.Dispatch<React.SetStateAction<Error>>} setLoginError
  * @property {boolean} isLoadingLogin
- * @property {React.Dispatch} setIsLoadingLogin
+ * @property {React.Dispatch<React.SetStateAction<boolean>>} setIsLoadingLogin
+ * @property {(userParam:UserLoginParam)=>void} loginUser
+ * @property {(password:string)=>string} hashPassword
+ * @property {(token:string)=>void} setAuthorizationHeader
+ * @property {(userHandle:string)=>void} setUserHandleHeader
+ * @property {(userParam:UserLoginParam)=>Error} checkIfUndefined
+ * @property {(userParam:UserLoginParam)=>UserLoginParam} validationCheckLogin
+ * @property {(string:string)=>boolean} isEmpty
+ * @property {(email:string)=>boolean} isEmail
  */
 
 /** This is a react component which you wrap your entire application
  * to provide a "context", meaning: data you can access anywhere in the app.
  *
- * @type {React.FunctionComponent}
- * @param {object} props
- * @param {React.ReactChild} props.children
+ * @type {ILoginProviderComponentProps}
+ * @returns {React.FunctionComponent}
  */
 export const LoginProvider = ({ children }) => {
   const [loginError, setLoginError] = useState();
@@ -36,7 +42,7 @@ export const LoginProvider = ({ children }) => {
   /** Attempts to login the user
    *
    * @param {UserLoginParam} userParam
-   * @returns {void|Error}
+   * @returns {Promise}
    */
   const loginUser = async userParam => {
     if (!isLoadingLogin) {
@@ -80,19 +86,18 @@ export const LoginProvider = ({ children }) => {
   /** Hashes provided password
    *
    * @param {string} password
-   * @returns {string | Error}
+   * @returns {string}
    */
-  const hashPassword = async password => {
+  const hashPassword = password => {
     const md = forge.md.sha256.create();
     md.update(password);
     return md.digest().toHex();
-    // const saltedPassword = bcrypt.hashSync(md.digest().toHex());
-    // console.log(saltedPassword);
   };
 
   /** Sets the user token and authorization
    *
    * @param {string} token
+   * @returns {void}
    */
   const setAuthorizationHeader = token => {
     if (token?.length > 30) {
@@ -105,6 +110,7 @@ export const LoginProvider = ({ children }) => {
   /** Sets the user's handle in the local storage
    *
    * @param {string} userHandle
+   * @returns {void}
    */
   const setUserHandleHeader = userHandle => {
     if (userHandle !== 'undefined') {
@@ -198,7 +204,7 @@ export const LoginProvider = ({ children }) => {
 
 /**
  * @typedef UseLoginValidationDataResult
- * @property {()=>void} validationCheckLogin
+ * @property {(userParam:UserLoginParam)=>UserLoginParam} validationCheckLogin
  * @property {Error} loginError
  */
 
@@ -226,7 +232,7 @@ export const useLoginValidationData = () => {
 /**
  * @typedef UseLoginDataResult
  * @property {boolean} isLoadingLogin
- * @property {()=>void} loginUser
+ * @property {(userParam:UserLoginParam)=>void} loginUser
  * @property {Error} loginError
  */
 
@@ -248,6 +254,11 @@ export const useLoginData = () => {
 
   return { isLoadingLogin, loginUser, loginError, setLoginError };
 };
+
+/**
+ * @typedef ILoginProviderComponentProps
+ * @property {React.ReactChild} children
+ */
 
 /**
  * @typedef UserLoginParam

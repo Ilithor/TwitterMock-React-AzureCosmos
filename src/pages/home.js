@@ -21,7 +21,7 @@ import { useHelmetData } from '../util/helmetContext';
 
 /** Displays the home page
  *
- * @returns {React.ReactElement}
+ * @returns {React.FunctionComponent}
  */
 export const HomePage = () => {
   const classes = useStyles();

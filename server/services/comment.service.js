@@ -5,6 +5,7 @@ import mongoConnection from '../util/mongo';
 mongoConnection();
 
 /** Retrieves entire list of comments
+ *
  * @returns {Promise<UserComment[]>}
  */
 export const getList = async () => {
@@ -19,8 +20,9 @@ export const getList = async () => {
 };
 
 /** Creates a new comment
+ *
  * @param {Request} commentParam
- * @returns {Promise<NewUserComment> | UserCommentError}
+ * @returns {Promise<NewUserComment>}
  */
 export const create = async commentParam => {
   // Validation
@@ -42,6 +44,7 @@ export const create = async commentParam => {
 };
 
 /** Deletes Comment document
+ *
  * @param {Request} commentParam
  * @returns {Promise<UserComment>}
  */

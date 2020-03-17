@@ -9,10 +9,8 @@ import { useCurrentUserData } from '../../profile/currentUserContext';
 
 /** Displays delete button for comments that match the current user
  *
- * @type {React.FunctionComponent}
- * @param {object} props
- * @param {string} props.postId
- * @param {string} props.userHandle
+ * @type {IDeleteCommentComponentProps}
+ * @returns {React.FunctionComponent}
  */
 export const DeleteComment = ({ postId, userHandle }) => {
   const { isAuthenticated } = useAuthenticationData();
@@ -22,3 +20,9 @@ export const DeleteComment = ({ postId, userHandle }) => {
   }
   return <div />;
 };
+
+/**
+ * @typedef IDeleteCommentComponentProps
+ * @property {string} postId
+ * @property {string} userHandle
+ */

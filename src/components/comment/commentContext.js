@@ -3,20 +3,44 @@ import _ from 'lodash';
 
 import * as fetchUtil from '../../util/fetch';
 
-/** @type {React.Context<{commentList:_.Dictionary<Comment>,commentError:Error,getData:()=>void}} */
+/** @type {CommentContextProps} */
 const commentContext = createContext();
+
+/**
+ * @typedef CommentContextProps
+ * @property {Error} commentError
+ * @property {React.Dispatch<React.SetStateAction<Error>>} setCommentError
+ * @property {Error} commentValidationError
+ * @property {React.Dispatch<React.SetStateAction<Error>>} setCommentValidationError
+ * @property {Date} lastRefreshCommentList
+ * @property {React.Dispatch<React.SetStateAction<Date>>} setLastRefreshCommentList
+ * @property {_.Dictionary<Comment>} commentList
+ * @property {React.Dispatch<React.SetStateAction<_.Dictionary<Comment>>>} setCommentList
+ * @property {boolean} isLoadingCommentList
+ * @property {React.Dispatch<React.SetStateAction<boolean>>} setIsLoadingCommentList
+ * @property {boolean} isLoadingCommentOnPost
+ * @property {React.Dispatch<React.SetStateAction<boolean>>} setIsLoadingCommentOnPost
+ * @property {boolean} isLoadingDeleteComment
+ * @property {React.Dispatch<React.SetStateAction<boolean>>} setIsLoadingDeleteComment
+ * @property {()=>void} refreshCommentList
+ * @property {(postId:string,commentData:UserCommentParam)=>void} commentOnPost
+ * @property {(commentParam:string)=>commentParam} validationCheckComment
+ * @property {(string:string)=>boolean} isEmpty
+ * @property {(commentId:string)=>void} deleteComment
+ *
+ */
 
 /** This is a react component which you wrap your entire application
  * to provide a "context", meaning: data you can access anywhere in the app.
  *
- * @type {React.FunctionComponent}
- * @param {object} props
- * @param {React.ReactChild} props.children
+ * @type {ICommentProviderComponentProps}
+ * @returns {React.FunctionComponent}
  */
 export const CommentProvider = ({ children }) => {
   const [commentError, setCommentError] = useState();
   const [commentValidationError, setCommentValidationError] = useState();
   const [lastRefreshCommentList, setLastRefreshCommentList] = useState();
+  /** @type {UseStateResult<_.Dictionary<Comment>>} */
   const [commentList, setCommentList] = useState();
   const [isLoadingCommentList, setIsLoadingCommentList] = useState(false);
   const [isLoadingCommentOnPost, setIsLoadingCommentOnPost] = useState(false);
@@ -24,7 +48,7 @@ export const CommentProvider = ({ children }) => {
 
   /** Refreshes the comment list
    *
-   * @returns {void | Error}
+   * @returns {Promise}
    */
   const refreshCommentList = async () => {
     if (!isLoadingCommentList) {
@@ -55,8 +79,8 @@ export const CommentProvider = ({ children }) => {
   /** Creates a new comment on a post
    *
    * @param {string} postId
-   * @param {object} commentData
-   * @returns {void | Error}
+   * @param {UserCommentParam} commentData
+   * @returns {Promise}
    */
   const commentOnPost = async (postId, commentData) => {
     if (postId && commentData && !isLoadingCommentOnPost) {
@@ -82,8 +106,8 @@ export const CommentProvider = ({ children }) => {
 
   /** Saves any errors in validation in commentError state
    *
-   * @param {object} commentParam
-   * @returns {UserCommentParam}
+   * @param {string} commentParam
+   * @returns {commentParam}
    */
   const validationCheckComment = commentParam => {
     const err = {};
@@ -112,8 +136,8 @@ export const CommentProvider = ({ children }) => {
 
   /** Deletes user comment
    *
-   * @param {string} commentId CommentId of the comment being deleted
-   * @returns {void | Error}
+   * @param {string} commentId
+   * @returns {Promise}
    */
   const deleteComment = async commentId => {
     if (commentId && !isLoadingDeleteComment) {
@@ -157,12 +181,18 @@ export const CommentProvider = ({ children }) => {
   );
 };
 
+/**
+ * @typedef UseCommentDataResult
+ * @property {(commentId:string)=>void} deleteComment
+ * @property {boolean} isLoadingDeleteComment
+ */
+
 /** A hook for consuming our Comment context in a safe way
  *
  * @example //getting the comment deleting function
  * import { useCommentData } from 'commentContext'
  * const { deleteComment } = useCommentData();
- * @returns {()=>void, boolean}
+ * @returns {UseCommentDataResult}
  */
 export const useCommentData = () => {
   const ctx = useContext(commentContext);
@@ -176,12 +206,19 @@ export const useCommentData = () => {
   return { deleteComment, isLoadingDeleteComment };
 };
 
+/**
+ * @typedef UseCommentListDataResult
+ * @property {_.Dictionary<Comment>} commentList
+ * @property {Error} commentError
+ * @property {()=>void} refreshCommentList
+ */
+
 /** A hook for consuming our Comment context in a safe way
  *
  * @example //getting the comment list
  * import { useCommentListData } from 'commentContext'
  * const { commentList } = useCommentListData();
- * @returns {{commentList:_.Dictionary<Comment>, commentError:Error, refreshCommentList:()=>void}}
+ * @returns {UseCommentListDataResult}
  */
 export const useCommentListData = () => {
   // Destructuring value from provider
@@ -215,12 +252,20 @@ export const useCommentListData = () => {
   };
 };
 
+/**
+ * @typedef UseCommentOnPostDataResult
+ * @property {Error} commentError
+ * @property {React.Dispatch<React.SetStateAction<Error>>} setCommentError
+ * @property {boolean} isLoadingCommentOnPost
+ * @property {(postId:string,commentData:UserCommentParam)=>void} commentOnPost
+ */
+
 /** A hook for consuming our Comment context in a safe way
  *
  * @example //getting the comment list
  * import { useCommentOnPostData } from 'commentContext'
  * const { commentOnPost } = useCommentOnPostData();
- * @returns {Error, Boolean, ()=>void}
+ * @returns {UseCommentOnPostDataResult}
  */
 export const useCommentOnPostData = () => {
   const ctx = useContext(commentContext);
@@ -245,6 +290,20 @@ export const useCommentOnPostData = () => {
   };
 };
 
+/**
+ * @typedef UseCommentValidationDataResult
+ * @property {(commentParam:string)=>commentParam} validationCheckComment
+ * @property {Error} commentValidationError
+ * @property {React.Dispatch<React.SetStateAction<Error>>} setCommentValidationError
+ */
+
+/** A hook for consuming our Comment context in a safe way
+ *
+ * @example //validating comment data
+ * import { useCommentValidationData } from 'commentContext'
+ * const { validationCheckComment } = useCommentValidationData();
+ * @returns {UseCommentValidationDataResult}
+ */
 export const useCommentValidationData = () => {
   const ctx = useContext(commentContext);
 
@@ -266,6 +325,11 @@ export const useCommentValidationData = () => {
     setCommentValidationError,
   };
 };
+
+/**
+ * @typedef ICommentProviderComponentProps
+ * @property {React.ReactChild} children
+ */
 
 /**
  * @typedef Comment

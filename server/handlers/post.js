@@ -8,6 +8,7 @@ import {
 import { deleteAllNotification } from './notification';
 
 /** Retrieves a list of posts
+ *
  * @type {RouteHandler}
  */
 export const getPostList = async (req, res, next) => {
@@ -31,6 +32,7 @@ export const getPostList = async (req, res, next) => {
 };
 
 /** Retrieves one post
+ *
  * @type {RouteHandler}
  */
 export const getPost = async (req, res) => {
@@ -48,6 +50,7 @@ export const getPost = async (req, res) => {
 };
 
 /** Creates a single post
+ *
  * @type {RouteHandler}
  */
 export const createPost = async (req, res, next) => {
@@ -61,6 +64,7 @@ export const createPost = async (req, res, next) => {
 };
 
 /** Deletes post
+ *
  * @type {RouteHandler}
  */
 export const deletePost = async (req, res, next) => {

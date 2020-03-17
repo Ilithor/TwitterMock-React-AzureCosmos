@@ -8,10 +8,13 @@ const userListContext = createContext();
 /**
  * @typedef UserListContextProps
  * @property {Error} userListError
- * @property {React.Dispatch} setUserListError
+ * @property {React.Dispatch<React.SetStateAction<Error>>} setUserListError
  * @property {boolean} isLoadingUserList
+ * @property {React.Dispatch<React.SetStateAction<boolean>>} setIsLoadingUserList
  * @property {_.Dictionary<User>} userList
+ * @property {React.Dispatch<React.SetStateAction<_.Dictionary<User>>>} setUserList
  * @property {Date} lastRefreshUserList
+ * @property {React.Dispatch<React.SetStateAction<Date>>} setLastRefreshUserList
  * @property {()=>void} refreshUserList
  */
 
@@ -20,16 +23,17 @@ const userListContext = createContext();
  *
  * @param {object} props
  * @param {React.ReactChild} props.children
+ * @returns {React.FunctionComponent}
  */
 export const UserListProvider = ({ children }) => {
   const [userListError, setUserListError] = useState();
   const [isLoadingUserList, setIsLoadingUserList] = useState(false);
-  const [lastRefreshUserList, setLastRefreshUserList] = useState();
   const [userList, setUserList] = useState();
+  const [lastRefreshUserList, setLastRefreshUserList] = useState();
 
   /** Refreshes the user list
    *
-   * @returns {void|Error}
+   * @returns {Promise}
    */
   const refreshUserList = async () => {
     if (!isLoadingUserList) {
@@ -69,6 +73,22 @@ export const UserListProvider = ({ children }) => {
   );
 };
 
+/**
+ * @typedef UseUserListDataResult
+ * @property {Error} userListError
+ * @property {React.Dispatch<React.SetStateAction<Error>>} setUserListError
+ * @property {boolean} isLoadingUserList
+ * @property {_.Dictionary<User>} userList
+ * @property {()=>void} refreshUserList
+ */
+
+/** A hook for consuming our User context in a safe way
+ *
+ * @example //getting the user list
+ * import { useUserListData } from 'userListContext'
+ * const { userList } = useUserListData();
+ * @returns {UseUserListDataResult}
+ */
 export const useUserListData = () => {
   const ctx = useContext(userListContext);
 

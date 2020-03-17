@@ -1,20 +1,20 @@
 import React, { createContext, useContext, useState } from 'react';
 import { Helmet } from 'react-helmet';
+
 /** @type {React.Context<HelmetContextProps>} */
 const helmetContext = createContext();
 
 /**
  * @typedef HelmetContextProps
  * @property {string} currentPage
- * @property {React.Dispatch} setCurrentPage
+ * @property {React.Dispatch<React.SetStateAction<string>>} setCurrentPage
  */
 
 /**This is a react component which you wrap your entire application
  * to provide a "context", meaning: data you can access anywhere in the app.
  *
- * @param {object} props
- * @param {React.ReactChild} props.children
- * @returns {React.ReactElement}
+ * @type {IHelmetProviderComponentProps}
+ * @returns {React.FunctionComponent}
  */
 export const HelmetProvider = ({ children }) => {
   const [currentPage, setCurrentPage] = useState('');
@@ -48,3 +48,8 @@ export const useHelmetData = () => {
 
   return { setCurrentPage };
 };
+
+/**
+ * @typedef IHelmetProviderComponentProps
+ * @property {React.ReactChild} children
+ */

@@ -12,7 +12,7 @@ mongoConnection();
 /** Retrieves all notifications
  *
  * @type {RouteHandler}
- * @returns {Notification[]}
+ * @returns {Promise<Notification[]>}
  */
 export const getNotification = async (req, res) => {
   const data = await getNotificationList().catch(err => {
@@ -39,7 +39,7 @@ export const getNotification = async (req, res) => {
  *  of a like or comment
  *
  * @type {RouteHandler}
- * @returns {Promise<void | Error>}
+ * @returns {Promise}
  */
 export const createNotification = async (
   recipient,

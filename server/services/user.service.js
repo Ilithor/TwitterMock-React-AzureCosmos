@@ -1,5 +1,4 @@
 import mongo from 'mongodb';
-import bcrypt from 'bcrypt';
 import {
   findByCredential,
   findById,
@@ -19,7 +18,7 @@ mongoConnect();
 
 /** Returns a list of users
  *
- * @returns {Promise<user[User]>}
+ * @returns {Promise<User[]>}
  */
 export const getList = async () => {
   return await User.find({})
@@ -35,7 +34,7 @@ export const getList = async () => {
 /** Returns a list of likes
  *
  * @param {string} userHandle
- * @returns {Promise<[Like]>}
+ * @returns {Promise<Like[]>}
  */
 export const getLikeList = async userHandle => {
   return await Like.find({ userHandle })
@@ -50,7 +49,7 @@ export const getLikeList = async userHandle => {
 /** Validates then creates new User
  *
  * @param {UserRegistration} userParam
- * @returns {Promise<newUser[User]> | UserError}
+ * @returns {Promise<UserNew>}
  */
 export const register = async userParam => {
   const credential = {};
@@ -83,7 +82,7 @@ export const register = async userParam => {
 /** Checks if user exists, and then generates a new token
  *
  * @param {UserCredential} userParam
- * @returns {Promise<dataToReturn> | UserCredentialError}
+ * @returns {Promise<{string}>}
  */
 export const login = async userParam => {
   // Validation
@@ -143,6 +142,7 @@ export const updateBio = async (userParam, userId) => {
 /** Attempts to find and delete the user
  *
  * @param {string} userHandle
+ * @returns {Promise<User>}
  */
 export const findAndDeleteUser = async userHandle => {
   return await User.deleteOne({ userHandle }).catch(err => {

@@ -7,21 +7,21 @@ const currentUserContext = createContext();
 /**
  * @typedef CurrentUserContextProps
  * @property {Error} currentUserError
- * @property {React.Dispatch} setCurrentUserError
+ * @property {React.Dispatch<React.SetStateAction<Error>>} setCurrentUserError
  * @property {boolean} isLoadingCurrentUser
- * @property {React.Dispatch} setIsLoadingCurrentUser
+ * @property {React.Dispatch<React.SetStateAction<boolean>>} setIsLoadingCurrentUser
  * @property {Date} lastFetchCurrentUser
- * @property {React.Dispatch} setLastFetchCurrentUser
+ * @property {React.Dispatch<React.SetStateAction<Date>>} setLastFetchCurrentUser
  * @property {User} currentUser
- * @property {React.Dispatch} setCurrentUser
+ * @property {React.Dispatch<React.SetStateAction<User>>} setCurrentUser
  * @property {()=>void} fetchCurrentUser
  */
 
 /** This is a react component which you wrap your entire application
  * to provide a "context", meaning: data you can access anywhere in the app.
  *
- * @param {object} props
- * @param {React.ReactChild} props.children
+ * @type {ICurrentUserProviderComponentProps}
+ * @returns {React.FunctionComponent}
  */
 export const CurrentUserProvider = ({ children }) => {
   const [currentUserError, setCurrentUserError] = useState();
@@ -73,6 +73,15 @@ export const CurrentUserProvider = ({ children }) => {
   );
 };
 
+/**
+ * @typedef useCurrentUserDataResult
+ * @property {boolean} [isLoadingCurrentUser]
+ * @property {User} [currentUser]
+ * @property {()=>void} fetchCurrentUser
+ * @property {Error} [currentUserError]
+ * @property {React.Dispatch<React.SetStateAction<Error>>} [setCurrentUserError]
+ */
+
 /** A hook for consuming our current user context in a safe way
  *
  * @example //getting the current user
@@ -116,10 +125,6 @@ export const useCurrentUserData = () => {
 };
 
 /**
- * @typedef useCurrentUserDataResult
- * @property {boolean} [isLoadingCurrentUser]
- * @property {User} [currentUser]
- * @property {()=>void} fetchCurrentUser
- * @property {Error} [currentUserError]
- * @property {React.Dispatch} [setCurrentUserError]
+ * @typedef ICurrentUserProviderComponentProps
+ * @property {React.ReactChild} children
  */

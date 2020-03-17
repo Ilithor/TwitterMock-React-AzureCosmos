@@ -16,7 +16,7 @@ import { useLogoutData } from './login/logoutContext';
 
 /** Shows the log in or log out button
  *
- * @type {React.FunctionComponent}
+ * @returns {React.FunctionComponent}
  */
 const ButtonLogInOut = () => {
   const { isAuthenticated } = useAuthenticationData();
@@ -29,17 +29,21 @@ const ButtonLogInOut = () => {
     );
   }
   return (
-    <CustomButton tip='Login' component={Link} to='/login'>
+    <CustomButton tip='Login' link={Link} to='/login'>
       <Icon.LockOpen />
     </CustomButton>
   );
 };
 
+/** Shows the settings button
+ *
+ * @returns {React.FunctionComponent}
+ */
 const ButtonSetting = () => {
   const { isAuthenticated } = useAuthenticationData();
   if (isAuthenticated) {
     return (
-      <CustomButton tip='Settings' component={Link} to='/settings'>
+      <CustomButton tip='Settings' link={Link} to='/settings'>
         <Icon.Settings />
       </CustomButton>
     );
@@ -49,7 +53,7 @@ const ButtonSetting = () => {
 
 /** Displays either signup button or empty div
  *
- * @type {React.FunctionComponent}
+ * @returns {React.FunctionComponent}
  */
 const ButtonRegister = () => {
   const { isAuthenticated } = useAuthenticationData();
@@ -57,7 +61,7 @@ const ButtonRegister = () => {
     return <div />;
   }
   return (
-    <CustomButton tip='Register' component={Link} to='/signup'>
+    <CustomButton tip='Register' link={Link} to='/signup'>
       <Icon.Assignment />
     </CustomButton>
   );
@@ -65,13 +69,13 @@ const ButtonRegister = () => {
 
 /** Displays either notification button or empty div
  *
- * @type {React.FunctionComponent}
+ * @returns {React.FunctionComponent}
  */
 const ButtonNotification = () => {
   const { isAuthenticated } = useAuthenticationData();
   if (isAuthenticated) {
     return (
-      <CustomButton tip='Notifications' component={Link} to='/notification'>
+      <CustomButton tip='Notifications' link={Link} to='/notification'>
         <Icon.Notifications />
       </CustomButton>
     );
@@ -81,12 +85,12 @@ const ButtonNotification = () => {
 
 /** View component for navbar
  *
- * @type {React.FunctionComponent}
+ * @returns {React.FunctionComponent}
  */
 export const Navbar = () => (
   <AppBar>
     <Toolbar className='nav-container'>
-      <CustomButton tip='Home' component={Link} to='/'>
+      <CustomButton tip='Home' link={Link} to='/'>
         <Icon.Home />
       </CustomButton>
       <ButtonNotification />

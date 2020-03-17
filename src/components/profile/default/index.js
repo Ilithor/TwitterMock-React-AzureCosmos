@@ -9,7 +9,7 @@ import { useStyles } from '../profile.style';
 
 /** View component for displaying the default profile view
  *
- * @type {React.FunctionComponent}
+ * @returns {React.FunctionComponent}
  */
 export const DefaultProfile = () => {
   const classes = useStyles();

@@ -25,13 +25,13 @@ export const fetchUserList = () => get(endpoints.userList);
 
 /** Attempts to log the user in
  *
- * @param {object} userData
+ * @param {{email:string,password:string}} userData
  * @returns {Promise<import("axios").AxiosResponse>}
  */
 export const loginUser = userData => post(endpoints.login, userData);
 /** Attempts to register the user
  *
- * @param {object} userData
+ * @param {{userHandle:string,email:string,password:string,confirmPassword:string}} userData
  * @returns {Promise<import("axios").AxiosResponse>}
  */
 export const registerUser = userData => post(endpoints.register, userData);
@@ -79,14 +79,14 @@ export const deleteNotification = notificationId =>
 
 /** Attempts to upload userImage
  *
- * @param {object} formData
+ * @param {FormData} formData
  * @returns {Promise<import("axios").AxiosResponse>}
  */
 export const uploadImage = formData => post(endpoints.uploadImage, formData);
 
 /** Attempts to update user details
  *
- * @param {object} userDetail
+ * @param {{aboutMe:string,website:string,location:string}} userDetail
  * @returns {Promise<import("axios").AxiosResponse>}
  */
 export const editUserDetail = userDetail =>

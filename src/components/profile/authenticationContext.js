@@ -4,8 +4,26 @@ import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 import { useCurrentUserData } from './currentUserContext';
 
+/** @type {React.Context<AuthenticationContextProps>} */
 const authenticationContext = createContext();
 
+/**
+ * @typedef AuthenticationContextProps
+ * @property {Error} authenticationError
+ * @property {React.Dispatch<React.SetStateAction<Error>>} setAuthenticationError
+ * @property {boolean} isLoadingAuthentication
+ * @property {React.Dispatch<React.SetStateAction<boolean>>} setIsLoadingAuthentication
+ * @property {boolean} isAuthenticated
+ * @property {React.Dispatch<React.SetStateAction<boolean>>} setIsAuthenticated
+ * @property {()=>void} getAuthenticated
+ */
+
+/** This is a react component which you wrap your entire application
+ * to provide a "context", meaning: data you can access anywhere in the app.
+ *
+ * @type {IAuthenticationProviderComponentProps}
+ * @returns {React.FunctionComponent}
+ */
 export const AuthenticationProvider = ({ children }) => {
   const history = useHistory();
   const { fetchCurrentUser } = useCurrentUserData();
@@ -18,6 +36,10 @@ export const AuthenticationProvider = ({ children }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  /** Attempts to authenticate the user
+   *
+   * @returns {Promise}
+   */
   const getAuthenticated = async () => {
     if (
       localStorage?.Token &&
@@ -69,6 +91,7 @@ export const AuthenticationProvider = ({ children }) => {
 /**
  * @typedef UseAuthenticationDataResult
  * @property {boolean} isAuthenticated
+ * @property {React.Dispatch<React.SetStateAction<boolean>>} setIsAuthenticated
  * @property {Error} authenticationError
  * @property {()=>void} getAuthenticated
  * @property {boolean} isLoadingAuthentication
@@ -106,3 +129,8 @@ export const useAuthenticationData = () => {
     isLoadingAuthentication,
   };
 };
+
+/**
+ * @typedef IAuthenticationProviderComponentProps
+ * @property {React.ReactChild} children
+ */
