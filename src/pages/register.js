@@ -16,7 +16,7 @@ import { useHelmetData } from '../util/helmetContext';
 
 /** Control that allows the user to register
  *
- * @returns {React.ReactElement}
+ * @returns {React.FunctionComponent}
  */
 export const RegisterPage = () => {
   const classes = useStyles();

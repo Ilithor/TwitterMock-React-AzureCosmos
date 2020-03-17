@@ -18,7 +18,7 @@ import { useUserListData } from '../components/profile/user/userListContext';
 
 /** Displays the About Us page
  *
- * @returns {React.ReactElement}
+ * @returns {React.FunctionComponent}
  */
 export const AboutPage = () => {
   const classes = useStyles();
@@ -99,7 +99,7 @@ export const AboutPage = () => {
     <CardContent className={classes?.content}>
       <Typography
         variant='h5'
-        component={Link}
+        link={Link}
         to={`/u/${user?.userHandle}`}
         color='primary'
       >

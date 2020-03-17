@@ -2,13 +2,24 @@ import React, { createContext, useContext } from 'react';
 import axios from 'axios';
 import { useAuthenticationData } from '../profile/authenticationContext';
 
+/** @type {React.Context<LogoutContextProps>} */
 const logoutContext = createContext();
 
+/**
+ * @typedef LogoutContextProps
+ * @property {()=>void} logoutUser
+ */
+
+/** This is a react component which you wrap your entire application
+ * to provide a "context", meaning: data you can access anywhere in the app.
+ *
+ * @type {ILogoutProviderComponentProps}
+ * @returns {React.FunctionComponent}
+ */
 export const LogoutProvider = ({ children }) => {
   const { setIsAuthenticated } = useAuthenticationData();
 
   /** Logouts the user
-   *
    */
   const logoutUser = () => {
     localStorage.removeItem('Token');
@@ -47,3 +58,8 @@ export const useLogoutData = () => {
 
   return { logoutUser };
 };
+
+/**
+ * @typedef ILogoutProviderComponentProps
+ * @property {React.ReactChild} children
+ */

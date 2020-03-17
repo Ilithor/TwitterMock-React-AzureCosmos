@@ -9,11 +9,8 @@ import { useCommentValidationData } from '../commentContext';
 
 /** Displays and handles the new comment text field
  *
- * @type {React.FunctionComponent}
- * @param {object} props
- * @param {Function} props.setBody
- * @param {Error} props.commentError
- * @param {string} props.body
+ * @type {ICommentFormTextFieldComponentProps}
+ * @returns {React.FunctionComponent}
  */
 export const CommentFormTextField = ({ setBody, commentError, body }) => {
   const classes = useStyles();
@@ -48,3 +45,10 @@ export const CommentFormTextField = ({ setBody, commentError, body }) => {
     />
   );
 };
+
+/**
+ * @typedef ICommentFormTextFieldComponentProps
+ * @property {React.Dispatch<React.SetStateAction<string>>} setBody
+ * @property {Error} commentError
+ * @property {string} body
+ */

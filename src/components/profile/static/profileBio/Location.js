@@ -5,9 +5,8 @@ import * as Icon from '@material-ui/icons';
 
 /** Displays the user's location
  *
- * @type {React.FunctionComponent}
- * @param {object} props
- * @param {string} props.location
+ * @type {ILocationComponentProps}
+ * @returns {React.FunctionComponent}
  */
 export const Location = ({ location }) => {
   if (Location) {
@@ -21,3 +20,8 @@ export const Location = ({ location }) => {
   }
   return <div />;
 };
+
+/**
+ * @typedef ILocationComponentProps
+ * @property {string} location
+ */

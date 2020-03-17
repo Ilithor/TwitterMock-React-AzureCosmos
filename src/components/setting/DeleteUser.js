@@ -11,7 +11,7 @@ import { useLogoutData } from '../login/logoutContext';
 
 /** Displays the dialog box to allow the user to delete their account
  *
- * @type {React.FunctionComponent}
+ * @returns {React.FunctionComponent}
  */
 export const DeleteUser = () => {
   const classes = useStyles();

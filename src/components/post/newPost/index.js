@@ -13,10 +13,9 @@ import * as Icon from '@material-ui/icons';
 // Context
 import { usePostData } from '../postContext';
 
-
 /** Handles new posts created by the user
- * 
- * @type {React.FunctionComponent}
+ *
+ * @returns {React.FunctionComponent}
  */
 export const NewPost = () => {
   const classes = useStyles();

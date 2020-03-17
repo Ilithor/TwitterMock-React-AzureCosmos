@@ -15,9 +15,8 @@ import { useUserListData } from '../profile/user/userListContext';
 
 /** Displays the comment card
  *
- * @type {React.FunctionComponent}
- * @param {Object} props
- * @param {Object} props.comment
+ * @type {ICommentComponentProps}
+ * @returns {React.FunctionComponent}
  */
 export const Comment = ({ comment }) => {
   const classes = useStyles();
@@ -35,7 +34,7 @@ export const Comment = ({ comment }) => {
       <CardContent className={classes?.cardContent}>
         <Typography
           variant='h5'
-          component={Link}
+          link={Link}
           to={`/user/${comment?.userHandle}`}
           color='primary'
         >
@@ -53,3 +52,17 @@ export const Comment = ({ comment }) => {
     </Card>
   );
 };
+
+/**
+ * @typedef ICommentComponentProps
+ * @property {Comment} comment
+ */
+
+/**
+ * @typedef Comment
+ * @property {string} commentId
+ * @property {string} userHandle
+ * @property {string} postId
+ * @property {string} body
+ * @property {Date} createdAt
+ */

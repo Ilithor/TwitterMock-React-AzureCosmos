@@ -7,12 +7,30 @@ import * as fetchUtil from '../../util/fetch';
 /** @type {React.Context<{notificationList:Notification[],notificationError:Error,getData:()=>void}>} */
 const notificationContext = createContext();
 
+/**
+ * @typedef NotificationContextProps
+ * @property {_.Dictionary<Notification>} notificationList
+ * @property {React.Dispatch<React.SetStateAction<_.Dictionary<Notification>>>} setNotificationList
+ * @property {Error} notificationError
+ * @property {React.Dispatch<React.SetStateAction<Error>>} setNotificationError
+ * @property {Date} lastRefreshNotificationList
+ * @property {React.Dispatch<React.SetStateAction<Date>>} setLastRefreshNotificationList
+ * @property {boolean} isLoadingNotificationList
+ * @property {React.Dispatch<React.SetStateAction<boolean>>} setIsLoadingNotificationList
+ * @property {boolean} isLoadingMarkNotificationRead
+ * @property {React.Dispatch<React.SetStateAction<boolean>>} setIsLoadingMarkNotificationRead
+ * @property {boolean} isLoadingDeleteNotification
+ * @property {React.Dispatch<React.SetStateAction<boolean>>} setIsLoadingDeleteNotification
+ * @property {()=>void} refreshNotificationList
+ * @property {(notification:Notification)=>void} markNotificationRead
+ * @property {(notificationId:string)=>void} deleteNotification
+ */
+
 /** This is a react component which you wrap your entire application
  * to provide a "context", meaning: data you can access anywhere in the app.
  *
- * @type {React.FunctionComponent}
- * @param {object} props
- * @param {React.ReactChild} props.children
+ * @type {INotificationProviderComponentProps}
+ * @returns {React.FunctionComponent}
  */
 export const NotificationProvider = ({ children }) => {
   /** @type {UseStateResult<_.Dictionary<Notification>>} */
@@ -23,7 +41,7 @@ export const NotificationProvider = ({ children }) => {
     lastRefreshNotificationList,
     setLastRefreshNotificationList,
   ] = useState();
-  const [isLoadingNotifcationList, setIsLoadingNotificationList] = useState(
+  const [isLoadingNotificationList, setIsLoadingNotificationList] = useState(
     false
   );
   const [
@@ -31,16 +49,16 @@ export const NotificationProvider = ({ children }) => {
     setIsLoadingMarkNotificationRead,
   ] = useState(false);
   const [
-    isLoadingdeleteNotification,
+    isLoadingDeleteNotification,
     setIsLoadingDeleteNotification,
   ] = useState(false);
 
   /** Refreshes the user's notification list
    *
-   * @returns {void, Error}
+   * @returns {Promise}
    */
   const refreshNotificationList = async () => {
-    if (!isLoadingNotifcationList) {
+    if (!isLoadingNotificationList) {
       setIsLoadingNotificationList(true);
       setLastRefreshNotificationList(Date.now());
       // Fetch list of notifications
@@ -67,7 +85,7 @@ export const NotificationProvider = ({ children }) => {
   /** Marks the provided notification as read
    *
    * @param {Notification} notification
-   * @returns {void | Error}
+   * @returns {Promise}
    */
   const markNotificationRead = async notification => {
     if (!isLoadingMarkNotificationRead) {
@@ -97,14 +115,14 @@ export const NotificationProvider = ({ children }) => {
 
   /** Deletes a notification
    *
-   * @param {string} notification
-   * @returns {void|Error}
+   * @param {string} notificationId
+   * @returns {Promise}
    */
-  const deleteNotification = async notification => {
-    if (!isLoadingdeleteNotification) {
+  const deleteNotification = async notificationId => {
+    if (!isLoadingDeleteNotification) {
       setIsLoadingDeleteNotification(true);
       await fetchUtil.user
-        .deleteNotification(notification)
+        .deleteNotification(notificationId)
         .then(async res => {
           if (res?.data === true) {
             await refreshNotificationList();
@@ -128,7 +146,7 @@ export const NotificationProvider = ({ children }) => {
     notificationList,
     refreshNotificationList,
     notificationError,
-    isLoadingNotifcationList,
+    isLoadingNotificationList,
     setIsLoadingNotificationList,
     lastRefreshNotificationList,
     markNotificationRead,
@@ -141,12 +159,22 @@ export const NotificationProvider = ({ children }) => {
   );
 };
 
+/**
+ * @typedef UseNotificationDataResult
+ * @property {_.Dictionary<Notification>} notificationList
+ * @property {()=>void} refreshNotificationList,
+ * @property {Error} notificationError,
+ * @property {boolean} isLoadingNotificationList,
+ * @property {(notification:Notification)=>void} markNotificationRead,
+ * @property {(notificationId:string)=>void} deleteNotification,
+ */
+
 /** A hook for consuming our Notification context in a safe way
  *
  * @example //getting the notification list
  * import { useNotificationData } from 'notificationContext'
  * const { notificationList } = useNotificationData();
- * @returns {Notification[]}
+ * @returns {UseNotificationDataResult}
  */
 export const useNotificationData = () => {
   // Destructuring value from provider
@@ -161,13 +189,13 @@ export const useNotificationData = () => {
     notificationList,
     refreshNotificationList,
     notificationError,
-    isLoadingNotifcationList,
+    isLoadingNotificationList,
     lastRefreshNotificationList,
     markNotificationRead,
     deleteNotification,
   } = ctx;
   if (
-    !isLoadingNotifcationList &&
+    !isLoadingNotificationList &&
     (!notificationList ||
       !lastRefreshNotificationList ||
       lastRefreshNotificationList + 600000 <= Date.now())
@@ -179,11 +207,16 @@ export const useNotificationData = () => {
     notificationList,
     refreshNotificationList,
     notificationError,
-    isLoadingNotifcationList,
+    isLoadingNotificationList,
     markNotificationRead,
     deleteNotification,
   };
 };
+
+/**
+ * @typedef INotificationProviderComponentProps
+ * @property {React.ReactChild} children
+ */
 
 /**
  * @typedef Notification

@@ -3,8 +3,27 @@ import _ from 'lodash';
 
 import * as fetchUtil from '../../util/fetch';
 
-/** @type {React.Context<{postList:Post[],postError:Error,refreshPostList:()=>void}} */
+/** @type {React.Context<PostContextProps>} */
 const postContext = createContext();
+
+/**
+ * @typedef PostContextProps
+ * @property {Error} postError
+ * @property {React.Dispatch<React.SetStateAction<Error>>} setPostError
+ * @property {Date} lastRefreshPostList
+ * @property {React.Dispatch<React.SetStateAction<Date>>} setLastRefreshPostList
+ * @property {_.Dictionary<Post>} postList
+ * @property {React.Dispatch<React.SetStateAction<_.Dictionary<Post>>>} setPostList
+ * @property {boolean} isLoadingPostList
+ * @property {React.Dispatch<React.SetStateAction<boolean>>} setIsLoadingPostList
+ * @property {boolean} isLoadingNewPost
+ * @property {React.Dispatch<React.SetStateAction<boolean>>} setIsLoadingNewPost
+ * @property {boolean} isLoadingDeletePost
+ * @property {React.Dispatch<React.SetStateAction<boolean>>} setIsLoadingDeletePost
+ * @property {()=>void} refreshPostList
+ * @property {(postParam:{body:string})=>void} newPost
+ * @property {(postId:string)=>void} deletePost
+ */
 
 /** This is a react component which you wrap your entire application
  * to provide a "context", meaning: data you can access anywhere in the app.
@@ -12,6 +31,7 @@ const postContext = createContext();
  * @param {object} props
  * @param {React.ReactChild} props.children
  * @param {()=>Promise<import('axios').AxiosResponse<Post[]>>} props.fetchPostList
+ * @returns {React.FunctionComponent}
  */
 export const PostProvider = ({ children }) => {
   const [postError, setPostError] = useState();
@@ -24,7 +44,7 @@ export const PostProvider = ({ children }) => {
 
   /** Refreshes the post list
    *
-   * @returns {void | Error}
+   * @returns {Promise}
    */
   const refreshPostList = async () => {
     if (!isLoadingPostList) {
@@ -51,8 +71,8 @@ export const PostProvider = ({ children }) => {
 
   /** Creates a new post with the provided user info
    *
-   * @param {object} postParam
-   * @returns {void | Error}
+   * @param {{body:string}} postParam
+   * @returns {Promise}
    */
   const newPost = async postParam => {
     if (postParam && !isLoadingNewPost) {
@@ -78,7 +98,7 @@ export const PostProvider = ({ children }) => {
   /** Deletes post with the provided postId
    *
    * @param {string} postId
-   * @returns {void | Error}
+   * @returns {Promise}
    */
   const deletePost = async postId => {
     if (postId && !isLoadingDeletePost) {
@@ -114,13 +134,14 @@ export const PostProvider = ({ children }) => {
   return <postContext.Provider value={value}>{children}</postContext.Provider>;
 };
 
-/** @typedef UsePostDataResult
+/**
+ * @typedef UsePostDataResult
  * @property {_.Dictionary<Post>} postList
  * @property {Error} [postError]
  * @property {boolean} isLoadingPostList
  * @property {boolean} isLoadingNewPost
- * @property {(id:string)=>void} deletePost
- * @property {(data:{body:string})=>void} newPost
+ * @property {(postId:string)=>void} deletePost
+ * @property {(postParam:{body:string})=>void} newPost
  * @property {()=>void} refreshPostList
  */
 

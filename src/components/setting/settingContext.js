@@ -2,16 +2,32 @@ import React, { createContext, useContext, useState } from 'react';
 
 import * as fetchUtil from '../../util/fetch';
 
+/** @type {React.Context<SettingContextProps>} */
 const settingContext = createContext();
 
+/**
+ * @typedef SettingContextProps
+ * @property {Error} settingError
+ * @property {React.Dispatch<React.SetStateAction<Error>>} setSettingError
+ * @property {boolean} isMatching
+ * @property {React.Dispatch<React.SetStateAction<boolean>>} setIsMatching
+ * @property {(userParam:UserParam)=>void} deleteUser
+ */
+
+/** This is a react component which you wrap your entire application
+ * to provide a "context", meaning: data you can access anywhere in the app.
+ *
+ * @type {ISettingProviderComponentProps}
+ * @returns {React.FunctionComponent}
+ */
 export const SettingProvider = ({ children }) => {
   const [settingError, setSettingError] = useState();
   const [isMatching, setIsMatching] = useState(false);
 
   /** Deletes the current user
    *
-   * @param {{userHandle:string}} userParam
-   * @returns {void|Error}
+   * @param {UserParam} userParam
+   * @returns {Promise}
    */
   const deleteUser = async userParam => {
     const success = await isMatch(userParam);
@@ -36,8 +52,8 @@ export const SettingProvider = ({ children }) => {
 
   /** Checks if provided userHandle matches the local storage
    *
-   * @param {{userHandle:string}} userParam
-   * @returns {boolean|{userHandle:string}}
+   * @param {UserParam} userParam
+   * @returns {boolean|UserParam}
    */
   const isMatch = userParam => {
     if (userParam?.userHandle === localStorage?.Handle) {
@@ -50,8 +66,8 @@ export const SettingProvider = ({ children }) => {
 
   /** Checks if the provider userHandle is valid
    *
-   * @param {{userHandle: string}} userParam
-   * @returns {{userHandle: string}}
+   * @param {UserParam} userParam
+   * @returns {UserParam}
    */
   const validationMatching = userParam => {
     let err;
@@ -102,9 +118,11 @@ export const SettingProvider = ({ children }) => {
   );
 };
 
-/** @typedef UseSettingDataResult
+/**
+ * @typedef UseSettingDataResult
  * @property {Error} [settingError]
- * @property {(data:{userHandle:string})=>void} deleteUser
+ * @property {React.Dispatch<React.SetStateAction<Error>>} setSettingError
+ * @property {(userParam:UserParam)=>void} deleteUser
  */
 
 /** A hook for consuming our Setting context in a safe way
@@ -128,9 +146,9 @@ export const useSettingData = () => {
   return { settingError, setSettingError, deleteUser };
 };
 
-/** @typedef UseValidationDeleteUserResult
- *
- * @property {(data:{userHandle:string})=>data:{userHandle:string}} validationMatching
+/**
+ * @typedef UseValidationDeleteUserResult
+ * @property {(userParam:UserParam)=>UserParam} validationMatching
  * @property {Error} settingError
  */
 
@@ -154,3 +172,13 @@ export const useValidationDeleteUser = () => {
 
   return { validationMatching, isMatching };
 };
+
+/**
+ * @typedef ISettingProviderComponentProps
+ * @property {React.ReactChild} children
+ */
+
+/**
+ * @typedef UserParam
+ * @property {string} userHandle
+ */

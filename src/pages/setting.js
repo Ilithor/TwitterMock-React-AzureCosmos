@@ -12,7 +12,7 @@ import { useHelmetData } from '../util/helmetContext';
 
 /** Displays the settings page
  *
- * @returns {React.ReactElement}
+ * @returns {React.FunctionComponent}
  */
 export const SettingPage = () => {
   const classes = useStyles();

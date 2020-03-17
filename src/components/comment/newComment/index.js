@@ -8,9 +8,8 @@ import { useAuthenticationData } from '../../profile/authenticationContext';
 
 /** Displays the new comment form if the user is authenticated
  *
- * @type {React.FunctionComponent}
- * @param {object} props
- * @param {string} props.postId
+ * @type {INewCommentComponentProps}
+ * @returns {React.FunctionComponent}
  */
 export const NewComment = ({ postId }) => {
   const { isAuthenticated } = useAuthenticationData();
@@ -24,3 +23,8 @@ export const NewComment = ({ postId }) => {
 
   return createCommentForm();
 };
+
+/**
+ * @typedef INewCommentComponentProps
+ * @property {string} postId
+ */

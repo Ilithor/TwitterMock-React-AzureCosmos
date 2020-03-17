@@ -17,10 +17,8 @@ import { usePostData } from '../post/postContext';
 
 /** View component for displaying either a like or unlike icon
  *
- * @type {React.FunctionComponent}
- * @param {object} props
- * @param {string} props.postId
- * @param {object} props.like
+ * @type {ILikeComponentProps}
+ * @returns {React.FunctionComponent}
  */
 export const Like = ({ postId, like }) => {
   const { isAuthenticated } = useAuthenticationData();
@@ -46,7 +44,7 @@ export const Like = ({ postId, like }) => {
   };
   if (!isAuthenticated) {
     return (
-      <CustomButton tip='Like' component={Link} to='/login'>
+      <CustomButton tip='Like' link={Link} to='/login'>
         <Icon.FavoriteBorder color='primary' />
       </CustomButton>
     );
@@ -56,3 +54,15 @@ export const Like = ({ postId, like }) => {
   }
   return <LikeButton onClick={onClickLike} />;
 };
+
+/**
+ * @typedef ILikeComponentProps
+ * @property {string} postId
+ * @property {Like} like
+ */
+
+/**
+ * @typedef Like
+ * @property {string} userHandle
+ * @property {string} postId
+ */

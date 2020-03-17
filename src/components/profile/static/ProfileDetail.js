@@ -14,15 +14,14 @@ import MuiLink from '@material-ui/core/Link';
 import * as Icon from '@material-ui/icons';
 
 /** Displays the user's bio
- * 
- * @type {React.FunctionComponent}
- * @param {object} props
- * @param {object} props.user 
+ *
+ * @type {IProfileDetailComponentProps}
+ * @returns {React.FunctionComponent}
  */
 export const ProfileDetail = ({ user }) => (
   <div className='profile-details'>
     <MuiLink
-      component={Link}
+      link={Link}
       to={`/u/${user?.userHandle}`}
       color='primary'
       variant='h5'
@@ -38,3 +37,8 @@ export const ProfileDetail = ({ user }) => (
     <span>Joined {dayjs(user?.createdAt).format('MMM YYYY')}</span>
   </div>
 );
+
+/**
+ * @typedef IProfileDetailComponentProps
+ * @property {User} user
+ */

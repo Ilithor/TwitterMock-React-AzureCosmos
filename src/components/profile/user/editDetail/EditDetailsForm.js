@@ -10,18 +10,14 @@ import { useEditDetailData } from './editDetailContext';
 
 /** Displays the edit form to edit the user's details
  *
- * @type {React.FunctionComponent}
- * @param {object} props
- * @param {string} props.aboutMe
- * @param {string} props.website
- * @param {string} props.location
- * @param {React.ChangeEventHandler} props.handleChange
+ * @type {IEditDetailsFormComponentProps}
+ * @returns {React.FunctionComponent}
  */
 export const EditDetailsForm = ({
   aboutMe,
-  handleChange,
   website,
   location,
+  handleChange,
 }) => {
   const classes = useStyles();
   const { editDetailError, detailError } = useEditDetailData();
@@ -79,3 +75,11 @@ export const EditDetailsForm = ({
     </form>
   );
 };
+
+/**
+ * @typedef IEditDetailsFormComponentProps
+ * @property {string} aboutMe
+ * @property {string} website
+ * @property {string} location
+ * @property {React.ChangeEventHandler} handleChange
+ */

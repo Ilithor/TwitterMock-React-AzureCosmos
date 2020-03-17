@@ -12,10 +12,8 @@ import { useCurrentUserData } from '../../currentUserContext';
 
 /** View component for displaying the userImage
  *
- * @type {React.FunctionComponent}
- * @param {object} props
- * @param {React.ChangeEventHandler} props.handleEditPhoto
- * @param {React.ChangeEventHandler} props.handleImageChange
+ * @type {IImageWrapperComponentProps}
+ * @returns {React.FunctionComponent}
  */
 export const ImageWrapper = ({ handleEditPhoto, handleImageChange }) => {
   const UserImage = () => {
@@ -42,3 +40,9 @@ export const ImageWrapper = ({ handleEditPhoto, handleImageChange }) => {
     </div>
   );
 };
+
+/**
+ * @typedef IImageWrapperComponentProps
+ * @property {React.ChangeEventHandler} handleEditPhoto
+ * @property {React.ChangeEventHandler} handleImageChange
+ */

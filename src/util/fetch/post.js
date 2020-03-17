@@ -20,7 +20,7 @@ export const fetchPost = postId => get(`${endpoints.post}${postId}`);
 
 /** Creates a new post
  *
- * @param {object} newPost
+ * @param {{body:string}} newPost
  * @returns {Promise<import("axios").AxiosResponse>}
  */
 export const createPost = newPost => post(endpoints.post, newPost);
@@ -48,7 +48,7 @@ export const fetchCommentList = () => get(`${endpoints.post}comment`);
 /** Comment on post
  *
  * @param {string} postId
- * @param {object} commentData
+ * @param {{body:string}} commentData
  * @returns {Promise<import("axios").AxiosResponse>}
  */
 export const commentOnPost = (postId, commentData) =>

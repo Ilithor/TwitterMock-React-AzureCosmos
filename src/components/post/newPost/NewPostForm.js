@@ -6,18 +6,14 @@ import { useStyles } from '../post.style';
 
 /** Form for the user to create a post
  *
- * @type {React.FunctionComponent}
- * @param {object} props
- * @param {React.ChangeEventHandler} props.handleSubmit
- * @param {Error} props.error
- * @param {React.ChangeEventHandler} props.handleChange
- * @param {boolean} props.isLoading
+ * @type {INewPostFormComponentProps}
+ * @returns {React.FunctionComponent}
  */
 export const NewPostForm = ({
-  handleSubmit,
   error,
-  handleChange,
   isLoading,
+  handleSubmit,
+  handleChange,
 }) => {
   const classes = useStyles();
   return (
@@ -50,3 +46,11 @@ export const NewPostForm = ({
     </form>
   );
 };
+
+/**
+ * @typedef INewPostFormComponentProps
+ * @property {Error} error
+ * @property {boolean} isLoading
+ * @property {React.ChangeEventHandler} handleSubmit
+ * @property {React.ChangeEventHandler} handleChange
+ */

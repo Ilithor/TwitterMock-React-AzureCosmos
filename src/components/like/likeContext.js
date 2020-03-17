@@ -3,14 +3,37 @@ import _ from 'lodash';
 
 import * as fetchUtil from '../../util/fetch';
 
-/** @type {React.Context<{likeList:Like[],likeError:Error,refreshLikeList:()=>void}} */
+// Context
+import { useCurrentUserData } from '../profile/currentUserContext';
+
+/** @type {React.Context<LikeContextProps>} */
 const likeContext = createContext();
+
+/**
+ * @typedef LikeContextProps
+ * @property {Error} likeError
+ * @property {React.Dispatch<React.SetStateAction<Error>>} setLikeError
+ * @property {Date} lastRefreshLikeList
+ * @property {React.Dispatch<React.SetStateAction<Date>>} setLastRefreshLikeList
+ * @property {_.Dictionary<Like>} likeList
+ * @property {React.Dispatch<React.SetStateAction<_.Dictionary<Like>>>} setLikeList
+ * @property {boolean} isLoadingLikeList
+ * @property {React.Dispatch<React.SetStateAction<boolean>>} setIsLoadingLikeList
+ * @property {boolean} isLoadingLikePost
+ * @property {React.Dispatch<React.SetStateAction<boolean>>} setIsLoadingLikePost
+ * @property {boolean} isLoadingUnlikePost
+ * @property {React.Dispatch<React.SetStateAction<boolean>>} setIsLoadingUnlikePost
+ * @property {()=>void} refreshLikeList
+ * @property {(postId:string)=>void} likePost
+ * @property {(postId:string)=>void} unlikePost
+ */
 
 /** This is a react component which you wrap your entire application
  * to provide a "context", meaning: data you can access anywhere in the app.
  *
  * @param {object} props
  * @param {React.ReactChild} props.children
+ * @returns {React.FunctionComponent}
  */
 export const LikeProvider = ({ children }) => {
   const [likeError, setLikeError] = useState();
@@ -21,6 +44,10 @@ export const LikeProvider = ({ children }) => {
   const [isLoadingLikePost, setIsLoadingLikePost] = useState(false);
   const [isLoadingUnlikePost, setIsLoadingUnlikePost] = useState(false);
 
+  /** Attempts to retrieve a new like list
+   *
+   * @returns {void|Error}
+   */
   const refreshLikeList = async () => {
     if (!isLoadingLikeList) {
       setIsLoadingLikeList(true);
@@ -42,6 +69,11 @@ export const LikeProvider = ({ children }) => {
     }
   };
 
+  /** Attempts to like a post
+   *
+   * @param {string} postId
+   * @returns {void|Error}
+   */
   const likePost = async postId => {
     if ((postId, !isLoadingLikePost)) {
       setIsLoadingLikePost(true);
@@ -63,6 +95,11 @@ export const LikeProvider = ({ children }) => {
     }
   };
 
+  /** Attempts to unlike a post
+   *
+   * @param {string} postId
+   * @returns {void|Error}
+   */
   const unlikePost = async postId => {
     if (postId && !isLoadingUnlikePost) {
       setIsLoadingUnlikePost(true);
@@ -97,12 +134,22 @@ export const LikeProvider = ({ children }) => {
   return <likeContext.Provider value={value}>{children}</likeContext.Provider>;
 };
 
+/**
+ * @typedef UseLikeDataResult
+ * @property {Like[]} likeList
+ * @property {Error} likeError
+ * @property {boolean} isLoadingLikeList
+ * @property {(postId:string)=>void} likePost
+ * @property {(postId:string)=>void} unlikePost
+ * @property {()=>void} refreshLikeList
+ */
+
 /** A hook for consuming our Like context in a safe way
  *
  * @example //getting the like list
  * import { useLikeData } from 'likeContext'
  * const { likeList } = useLikeData();
- * @returns {Like[]}
+ * @returns {UseLikeDataResult}
  */
 export const useLikeData = () => {
   // Destructuring value from provider

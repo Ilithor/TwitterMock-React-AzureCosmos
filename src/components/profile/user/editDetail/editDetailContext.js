@@ -10,15 +10,20 @@ const editDetailContext = createContext();
 /**
  * @typedef EditDetailContextProps
  * @property {Error} editDetailError
- * @property {React.Dispatch} setEditDetailError
- * @property {()=>void} editDetail
+ * @property {React.Dispatch<React.SetStateAction<Error>>} setEditDetailError
+ * @property {boolean} isLoadingEditDetail
+ * @property {React.Dispatch<React.SetStateAction<boolean>>} setIsLoadingEditDetail
+ * @property {(userParam:UserDetailParam)=>void} editDetail
+ * @property {(userParam:UserDetailParam)=>UserDetailParam} validationCheckUserDetail
+ * @property {(string:string)=>boolean} isEmpty
+ * @property {(website:string)=>boolean} isWebsite
  */
 
 /** This is a react component which you wrap your entire application
  * to provide a "context", meaning: data you can access anywhere in the app.
  *
- * @param {object} props
- * @param {React.ReactChild} props.children
+ * @type {EditDetailProviderComponentProps}
+ * @returns {React.FunctionComponent}
  */
 export const EditDetailProvider = ({ children }) => {
   const [editDetailError, setEditDetailError] = useState();
@@ -27,8 +32,8 @@ export const EditDetailProvider = ({ children }) => {
 
   /** Attempts to edit the user's bio
    *
-   * @param {{aboutMe:string,website:string,location:string}} userParam
-   * @returns {void|Error}
+   * @param {UserDetailParam} userParam
+   * @returns {Promise}
    */
   const editDetail = async userParam => {
     if (userParam && !isLoadingEditDetail) {
@@ -63,8 +68,8 @@ export const EditDetailProvider = ({ children }) => {
 
   /** Checks if the user details provided are valid
    *
-   * @param {{aboutMe:string,website:string,location:string}} userParam
-   * @returns {{aboutMe:string,website:string,location:string}}
+   * @param {UserDetailParam} userParam
+   * @returns {UserDetailParam}
    */
   const validationCheckUserDetail = userParam => {
     let err;
@@ -129,6 +134,22 @@ export const EditDetailProvider = ({ children }) => {
   );
 };
 
+/**
+ * @typedef UseEditDetailDataResult
+ * @property {Error} editDetailError
+ * @property {React.Dispatch<React.SetStateAction<Error>>} setEditDetailError
+ * @property {(userParam:UserDetailParam)=>void} editDetail
+ * @property {(userParam:UserDetailParam)=>UserDetailParam} validationCheckUserDetail
+ * @property {boolean} isLoadingEditDetail
+ */
+
+/** A hook for consuming our Notification context in a safe way
+ *
+ * @example //getting the editDetail function
+ * import { useEditDetailData } from 'editDetailContext'
+ * const { editDetail } = useEditDetailData();
+ * @returns {UseEditDetailDataResult}
+ */
 export const useEditDetailData = () => {
   const ctx = useContext(editDetailContext);
 
@@ -152,3 +173,15 @@ export const useEditDetailData = () => {
     isLoadingEditDetail,
   };
 };
+
+/**
+ * @typedef EditDetailProviderComponentProps
+ * @property {React.ReactChild} children
+ */
+
+/**
+ * @typedef UserDetailParam
+ * @property {string} aboutMe
+ * @property {string} website
+ * @property {string} location
+ */

@@ -5,9 +5,8 @@ import { Typography } from '@material-ui/core';
 
 /** Displays the user's about me
  *
- * @type {React.FunctionComponent}
- * @param {object} props
- * @param {string} props.aboutMe
+ * @type {IAboutMeComponentProps}
+ * @returns {React.FunctionComponent}
  */
 export const AboutMe = ({ aboutMe }) => {
   if (aboutMe) {
@@ -15,3 +14,8 @@ export const AboutMe = ({ aboutMe }) => {
   }
   return <div />;
 };
+
+/**
+ * @typedef IAboutMeComponentProps
+ * @property {string} aboutMe
+ */

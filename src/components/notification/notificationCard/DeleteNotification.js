@@ -14,9 +14,8 @@ import { useNotificationData } from '../notificationContext';
 
 /** Displays a dialog box for notification deletion
  *
- * @param {object} props
- * @param {Notification} props.notification
- * @returns {React.ReactElement}
+ * @type {IDeleteNotificationComponentProps}
+ * @returns {React.FunctionComponent}
  */
 export const DeleteNotification = ({ notification }) => {
   const { refreshNotificationList, deleteNotification } = useNotificationData();
@@ -52,6 +51,11 @@ export const DeleteNotification = ({ notification }) => {
     </Dialog>
   );
 };
+
+/**
+ * @typedef IDeleteNotificationComponentProps
+ * @property {Notification} notification
+ */
 
 /**
  * @typedef Notification

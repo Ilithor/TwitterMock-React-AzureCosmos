@@ -14,7 +14,7 @@ import { EditDetailProvider } from './editDetail/editDetailContext';
 
 /** View component for displaying the user's profile
  *
- * @type {React.FunctionComponent}
+ * @returns {React.FunctionComponent}
  */
 export const UserProfile = () => {
   const classes = useStyles();

@@ -11,20 +11,12 @@ import * as Icon from '@material-ui/icons';
 
 /** View component for displaying the user's profile details
  *
- * @type {React.FunctionComponent}
- * @param {object} props
- * @param {string} props.userHandle
- * @param {object} props.bio
- * @param {string} props.createdAt
+ * @type {IProfileBioComponentProps}
+ * @returns {React.FunctionComponent}
  */
 export const ProfileBio = ({ userHandle, bio, createdAt }) => (
   <div className='profile-details'>
-    <MuiLink
-      component={Link}
-      to={`/u/${userHandle}`}
-      color='primary'
-      variant='h5'
-    >
+    <MuiLink link={Link} to={`/u/${userHandle}`} color='primary' variant='h5'>
       @{userHandle}
     </MuiLink>
     <hr />
@@ -53,3 +45,17 @@ export const ProfileBio = ({ userHandle, bio, createdAt }) => (
     </span>
   </div>
 );
+
+/**
+ * @typedef IProfileBioComponentProps
+ * @property {string} userHandle
+ * @property {Bio} bio
+ * @property {string} createdAt
+ */
+
+/**
+ * @typedef Bio
+ * @property {string} aboutMe
+ * @property {string} location
+ * @property {string} website
+ */

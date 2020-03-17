@@ -19,10 +19,8 @@ import { useUserListData } from '../../../profile/user/userListContext';
 
 /** View component for displaying an individual post's content in a dialog box
  *
- * @type {React.FunctionComponent}
- * @param {object} props
- * @param {string} props.postId
- * @param {string} props.userHandle
+ * @type {IPostDialogComponentProps}
+ * @returns {React.FunctionComponent}
  */
 export const PostDialog = ({ postId, userHandle }) => {
   const { postList } = usePostData();
@@ -84,3 +82,9 @@ export const PostDialog = ({ postId, userHandle }) => {
     </Fragment>
   );
 };
+
+/**
+ * @typedef IPostDialogComponentProps
+ * @property {string} postId
+ * @property {string} userHandle
+ */

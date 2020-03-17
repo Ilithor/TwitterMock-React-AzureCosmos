@@ -5,7 +5,8 @@ import mongoConnection from '../util/mongo';
 mongoConnection();
 
 /** Retrieves all posts in desc order
- * @returns {Promise<post[Post[]]>}
+ *
+ * @returns {Promise<Post[]>}
  */
 export const getList = async () => {
   return await Post.find({})
@@ -19,7 +20,8 @@ export const getList = async () => {
 };
 
 /** Creates and saves new post
- * @param {Object} postParam
+ *
+ * @param {object} postParam
  * @param {User} user
  * @returns {Promise<Post>}
  */
@@ -40,7 +42,9 @@ export const create = async (postParam, user) => {
 };
 
 /** Deletes post
- * @param {String} _id
+ *
+ * @param {string} _id
+ * @returns {Promise<Post>}
  */
 export const findAndDeletePost = async _id => {
   return await Post.deleteOne({

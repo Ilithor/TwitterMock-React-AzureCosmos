@@ -13,16 +13,9 @@ import {
 } from '@material-ui/core';
 
 /** Displays the dialog box to edit the user's details
- * 
- * @type {React.FunctionComponent}
- * @param {object} props
- * @param {boolean} props.open
- * @param {string} props.aboutMe
- * @param {string} props.website
- * @param {string} props.location
- * @param {React.ChangeEventHandler} props.handleChange
- * @param {React.ChangeEventHandler} props.handleSubmit
- * @param {React.ChangeEventHandler} props.handleClose
+ *
+ * @type {IEditDetailsDisplayComponentProps}
+ * @returns {React.FunctionComponent}
  */
 export const EditDetailsDisplay = ({
   open,
@@ -53,3 +46,14 @@ export const EditDetailsDisplay = ({
     </DialogActions>
   </Dialog>
 );
+
+/**
+ * @typedef IEditDetailsDisplayComponentProps
+ * @property {boolean} open
+ * @property {string} aboutMe
+ * @property {string} website
+ * @property {string} location
+ * @property {React.ChangeEventHandler} handleChange
+ * @property {React.ChangeEventHandler} handleSubmit
+ * @property {React.ChangeEventHandler} handleClose
+ */
