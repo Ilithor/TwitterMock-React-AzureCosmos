@@ -5,11 +5,12 @@ import {
   findPostById,
   findPostAndUpdateCount,
   findCommentByHandleAndPostId,
+  findAndDeleteNotification,
 } from './find';
-import { deleteNotification } from './notification';
 
 /**
  * Attempts to retrieve a full comment list
+ *
  * @type {RouteHandler}
  */
 export const getCommentList = async (req, res) => {
@@ -32,6 +33,7 @@ export const getCommentList = async (req, res) => {
 };
 
 /** Create a comment on a post
+ *
  * @type {RouteHandler}
  */
 export const commentOnPost = async (req, res, next) => {
@@ -62,6 +64,7 @@ export const commentOnPost = async (req, res, next) => {
 };
 
 /** Deletes a comment on a post
+ *
  * @type {RouteHandler}
  */
 export const deleteComment = async (req, res, next) => {
@@ -87,9 +90,7 @@ export const deleteComment = async (req, res, next) => {
     postToUpdate.likeCount,
     postToUpdate.commentCount
   );
-  const userHandle = req.user.userHandle;
-  const type = 'comment';
   const typeId = comment._id;
-  await deleteNotification(userHandle, type, typeId);
+  await findAndDeleteNotification(typeId);
   return res.status(200).send(true);
 };

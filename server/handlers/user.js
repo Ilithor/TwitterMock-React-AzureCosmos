@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import bcrypt from 'bcrypt';
 import {
   getList,
   getLikeList,
@@ -48,7 +47,7 @@ export const getUserList = async (req, res, next) => {
  * @type {RouteHandler}
  */
 export const fetchLikeList = async (req, res) => {
-  const data = await getLikeList().catch(err => {
+  const data = await getLikeList(req.body.userHandle).catch(err => {
     console.error(err);
     return res.status(404);
   });

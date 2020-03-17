@@ -37,10 +37,3 @@ export const create = async (recipient, postId, sender, type, typeId) => {
   const newNotification = new Notification(dataForNotification);
   await newNotification.save();
 };
-
-export const findAndDeleteNotification = async _id => {
-  return await Notification.deleteOne({ _id }).catch(err => {
-    console.error(err);
-    return Promise.reject(err);
-  });
-};

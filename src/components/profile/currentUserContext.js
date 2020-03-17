@@ -107,6 +107,7 @@ export const useCurrentUserData = () => {
 
   if (
     !isLoadingCurrentUser &&
+    !currentUserError &&
     (!currentUser ||
       !lastFetchCurrentUser ||
       lastFetchCurrentUser + 600000 <= Date.now())

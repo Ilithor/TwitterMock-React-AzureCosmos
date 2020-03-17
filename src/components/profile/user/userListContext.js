@@ -107,6 +107,7 @@ export const useUserListData = () => {
 
   if (
     !isLoadingUserList &&
+    !userListError &&
     (!userList ||
       !lastRefreshUserList ||
       lastRefreshUserList + 600000 <= Date.now())

@@ -56,7 +56,11 @@ export const LikeProvider = ({ children }) => {
       await fetchUtil.user
         .fetchLikeList(localStorage?.Handle)
         .then(res => {
-          setLikeList(_.keyBy(res.data, 'postId'));
+          setLikeList(
+            _(res?.data)
+              .keyBy('postId')
+              .value()
+          );
         })
         .catch(err => {
           setLikeError(err);
@@ -152,6 +156,7 @@ export const LikeProvider = ({ children }) => {
  * @returns {UseLikeDataResult}
  */
 export const useLikeData = () => {
+  const { currentUser } = useCurrentUserData();
   // Destructuring value from provider
   const ctx = useContext(likeContext);
 
@@ -171,6 +176,7 @@ export const useLikeData = () => {
 
   if (
     !isLoadingLikeList &&
+    currentUser &&
     (!likeList ||
       !lastRefreshLikeList ||
       lastRefreshLikeList + 600000 <= Date.now())

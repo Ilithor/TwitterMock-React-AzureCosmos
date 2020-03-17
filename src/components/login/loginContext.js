@@ -2,7 +2,10 @@ import React, { createContext, useContext, useState } from 'react';
 import axios from 'axios';
 import forge from 'node-forge';
 import * as fetchUtil from '../../util/fetch';
+
+// Context
 import { useAuthenticationData } from '../profile/authenticationContext';
+import { useLikeData } from '../like/likeContext';
 
 /** @type {React.Context<LoginContextProps>} */
 const loginContext = createContext();
@@ -34,6 +37,7 @@ export const LoginProvider = ({ children }) => {
   const [isLoadingLogin, setIsLoadingLogin] = useState(false);
 
   const { getAuthenticated } = useAuthenticationData();
+  const { refreshLikeList } = useLikeData();
 
   /** Attempts to login the user
    *
@@ -67,6 +71,7 @@ export const LoginProvider = ({ children }) => {
           setAuthorizationHeader(res?.data?.token);
           setUserHandleHeader(res?.data?.userHandle);
           await getAuthenticated();
+          await refreshLikeList(res?.data?.userHandle);
         })
         .catch(err => {
           return Promise.reject(err);
