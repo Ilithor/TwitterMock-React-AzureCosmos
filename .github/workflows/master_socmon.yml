@@ -1,0 +1,34 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy container app to Azure Web App - socmon
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build-and-deploy:
+    runs-on: 'ubuntu-latest'
+
+    steps:
+    - uses: actions/checkout@master
+
+    - uses: azure/docker-login@v1
+      with:
+        login-server: https://socmon.azurecr.io/
+        username: ${{ secrets.AzureAppService_ContainerUsername_283d179e67b5415ba6fd9cefbb635ab1 }}
+        password: ${{ secrets.AzureAppService_ContainerPassword_30b6b831fadb4f2380cc0df5466a611f }}
+
+    - run: |
+        docker build . -t socmon.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_283d179e67b5415ba6fd9cefbb635ab1 }}/ilithor/socmon:${{ github.sha }}
+        docker push socmon.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_283d179e67b5415ba6fd9cefbb635ab1 }}/ilithor/socmon:${{ github.sha }}
+
+    - name: Deploy to Azure Web App
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'socmon'
+        slot-name: 'production'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_69d80ae38bb44ecfb806263721898ea0 }}
+        images: 'socmon.azurecr.io/${{ secrets.AzureAppService_ContainerUsername_283d179e67b5415ba6fd9cefbb635ab1 }}/ilithor/socmon:${{ github.sha }}'
