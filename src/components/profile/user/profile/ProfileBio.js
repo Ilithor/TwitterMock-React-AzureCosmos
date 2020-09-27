@@ -33,9 +33,11 @@ export const ProfileBio = ({ userHandle, bio, createdAt }) => (
     {bio?.website && (
       <Fragment>
         <Icon.Link color='primary' />
-        <a href={bio?.website} target='_blank' rel='noopener noreferrer'>
-          {bio?.website}
-        </a>
+        {bio?.website && (
+          <a href={bio.website} target='_blank' rel='noopener noreferrer'>
+            {bio?.website}
+          </a>
+        )}
         <hr />
       </Fragment>
     )}

@@ -27,7 +27,8 @@
     "react-dom": "^16.12.0",
     "react-helmet": "^5.2.1",
     "react-router-dom": "^5.1.2",
-    "react-toastify": "^5.5.0"
+    "react-toastify": "^5.5.0",
+    "rimraf": "^3.0.2"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.3",
@@ -43,7 +44,8 @@
     "start": "concurrently \"react-scripts start\" \"npm run start:server\"",
     "start:server": "nodemon --watch server -r esm server/server.js",
     "dev": "set debug=true && npm start",
-    "build": "react-scripts build && move-cli build ./server/client",
+    "clean": "rimraf build server/client",
+    "build": "npm run clean && react-scripts build && move-cli build ./server/client",
     "postinstall": "cd server&&npm install",
     "test": "react-scripts test --env=jsdom",
     "format": "prettier --write \"src/**/*.{js,css}\"",
