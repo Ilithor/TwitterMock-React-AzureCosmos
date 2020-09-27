@@ -1,6 +1,6 @@
 import './type';
 import jwt from 'jsonwebtoken';
-import env from '../environment/environment';
+import env from '../config/environment';
 import { findById } from '../handlers/find';
 
 /** Check if user is admin

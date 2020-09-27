@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import env from '../environment/environment';
+import env from '../config/environment';
 
 /** Generates a new user token
  *
