@@ -28,6 +28,6 @@
     "@types/react-dom": "^16.9.5"
   },
   "scripts": {
-    "start": "nodemon --watch server -r esm ./server.js"
+    "start": "npx nodemon --watch server -r esm ./server.js"
   }
 }
