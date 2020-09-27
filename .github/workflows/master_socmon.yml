@@ -32,4 +32,4 @@ jobs:
         app-name: 'socmon'
         slot-name: 'production'
         publish-profile: ${{ secrets.AzureAppService_PublishProfile_6a317178d1a64c96aefd7dbc4fb389c4 }}
-        package: .
+        package: server
