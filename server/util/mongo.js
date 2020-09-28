@@ -8,9 +8,13 @@ const mongoUri = `mongodb://${env.dbName}:${env.key}@${env.dbName}.documents.azu
 const localMongoUri = `mongodb+srv://${env.localUsername}:${env.localPassword}@gonkzonk-ytla5.azure.mongodb.net/test?retryWrites=true&w=majority`;
 
 export default () => {
-  return mongoose.connect(localMongoUri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-  });
+  return mongoose
+    .connect(localMongoUri, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      useCreateIndex: true,
+    })
+    .catch(reason => {
+      throw new Error(reason);
+    });
 };

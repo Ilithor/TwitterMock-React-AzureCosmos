@@ -4,7 +4,7 @@ import postController from './post';
 const router = express.Router();
 
 router.all('/alive', (req, res) => {
-  res.status(200).send('Hi');
+  res.status(200).send('<h1>Hi 🙋‍♂️</h1>');
 });
 
 // Post routes
