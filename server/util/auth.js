@@ -5,7 +5,7 @@ import { findById } from '../handlers/find';
 
 /** Check if user is admin
  *
- * @type {RouteHandler}
+ * @type {import('express').Handler}
  */
 export const isAdmin = async (req, res, next) => {
   const data = await this.authByToken(req).catch(err => {
@@ -25,7 +25,7 @@ export const isAdmin = async (req, res, next) => {
 
 /** Checks if valid token is used
  *
- * @type {RouteHandler}
+ * @type {import('express').Handler}
  */
 export const authUser = async (req, res, next) => {
   const data = await this.authByToken(req).catch(err => {

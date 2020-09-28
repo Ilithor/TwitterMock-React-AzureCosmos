@@ -20,7 +20,7 @@ import {
 
 /** Retrieves the list of users
  *
- * @type {RouteHandler}
+ * @type {import('express').Handler}
  */
 export const getUserList = async (req, res, next) => {
   const data = await getList().catch(err => {
@@ -44,7 +44,7 @@ export const getUserList = async (req, res, next) => {
 
 /** Attempts to fetch the user's like list
  *
- * @type {RouteHandler}
+ * @type {import('express').Handler}
  */
 export const fetchLikeList = async (req, res) => {
   const data = await getLikeList(req.body.userHandle).catch(err => {
@@ -61,7 +61,7 @@ export const fetchLikeList = async (req, res) => {
 
 /** Registers the user
  *
- * @type {RouteHandler}
+ * @type {import('express').Handler}
  */
 export const registerUser = async (req, res, next) => {
   const user = await register(req.body).catch(err => {
@@ -82,7 +82,7 @@ export const registerUser = async (req, res, next) => {
 
 /** Logins the user
  *
- * @type {RouteHandler}
+ * @type {import('express').Handler}
  */
 export const loginUser = async (req, res, next) => {
   const data = await login(req.body).catch(err => {
@@ -102,7 +102,7 @@ export const loginUser = async (req, res, next) => {
 
 /** Get own user details
  *
- * @type {RouteHandler}
+ * @type {import('express').Handler}
  */
 export const getAuthenticatedUser = async (req, res) => {
   const userData = {};
@@ -117,7 +117,7 @@ export const getAuthenticatedUser = async (req, res) => {
 
 /** Retrieves any user details
  *
- * @type {RouteHandler}
+ * @type {import('express').Handler}
  */
 export const getUserDetail = async (req, res) => {
   const { userHandle } = req.params;
@@ -161,7 +161,7 @@ const pushPostIntoArray = (postList, userData) => {
 
 /** Edits the current user's profile with the params provided by said user
  *
- * @type {RouteHandler}
+ * @type {import('express').Handler}
  */
 export const addUserDetail = async (req, res, next) => {
   const userParam = req.body;
@@ -182,7 +182,7 @@ export const addUserDetail = async (req, res, next) => {
 
 /** Converts the uploaded image to base64 and uploads it as a property in the User doc
  *
- * @type {RouteHandler}
+ * @type {import('express').Handler}
  */
 export const imageUpload = async (req, res, next) => {
   if (!req.file) {
@@ -205,7 +205,7 @@ export const imageUpload = async (req, res, next) => {
 
 /** Attempts to delete the user and all their content
  *
- * @type {RouteHandler}
+ * @type {import('express').Handler}
  */
 export const deleteUser = async (req, res, next) => {
   const user = await findAndDeleteUser(req.params.userHandle).catch(err => {

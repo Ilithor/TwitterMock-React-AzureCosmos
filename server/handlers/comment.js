@@ -11,7 +11,7 @@ import {
 /**
  * Attempts to retrieve a full comment list
  *
- * @type {RouteHandler}
+ * @type {import('express').Handler}
  */
 export const getCommentList = async (req, res) => {
   const data = await getList().catch(err => {
@@ -34,7 +34,7 @@ export const getCommentList = async (req, res) => {
 
 /** Create a comment on a post
  *
- * @type {RouteHandler}
+ * @type {import('express').Handler}
  */
 export const commentOnPost = async (req, res, next) => {
   const post = await findPostById(req.params.postId).catch(err => {
@@ -65,7 +65,7 @@ export const commentOnPost = async (req, res, next) => {
 
 /** Deletes a comment on a post
  *
- * @type {RouteHandler}
+ * @type {import('express').Handler}
  */
 export const deleteComment = async (req, res, next) => {
   const post = await findPostById(req.params.postId).catch(err => {

@@ -9,7 +9,7 @@ import {
 
 /** Like a post
  *
- * @type {RouteHandler}
+ * @type {import('express').Handler}
  */
 export const likePost = async (req, res, next) => {
   const post = await findPostById(req.params.postId).catch(err => {
@@ -52,7 +52,7 @@ export const likePost = async (req, res, next) => {
 
 /** Unlike a post
  *
- * @type {RouteHandler}
+ * @type {import('express').Handler}
  */
 export const unlikePost = async (req, res, next) => {
   const post = await findPostById(req.params.postId).catch(err => {

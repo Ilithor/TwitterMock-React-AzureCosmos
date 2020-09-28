@@ -11,7 +11,7 @@ mongoConnection();
 
 /** Retrieves all notifications
  *
- * @type {RouteHandler}
+ * @type {import('express').Handler}
  * @returns {Promise<Notification[]>}
  */
 export const getNotification = async (req, res) => {
@@ -38,7 +38,7 @@ export const getNotification = async (req, res) => {
 /** Creates notification upon successful creation
  *  of a like or comment
  *
- * @type {RouteHandler}
+ * @type {import('express').Handler}
  * @returns {Promise}
  */
 export const createNotification = async (
@@ -56,7 +56,7 @@ export const createNotification = async (
 
 /** Marks notification as read by user
  *
- * @type {RouteHandler}
+ * @type {import('express').Handler}
  */
 export const markNotificationRead = async (req, res) => {
   await findNotificationAndUpdateRead(req.body.notificationId).catch(err => {
@@ -68,7 +68,7 @@ export const markNotificationRead = async (req, res) => {
 
 /** Deletes a notification
  *
- * @type {RouteHandler}
+ * @type {import('express').Handler}
  */
 export const deleteNotification = async (req, res) => {
   const notification = await findAndDeleteNotification(

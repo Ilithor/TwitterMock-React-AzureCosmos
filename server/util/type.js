@@ -1,8 +1,4 @@
 /**
- * @typedef {(req:Request, res:Response, next:()=>void)} RouteHandler
- */
-
-/**
  * @typedef UserCredential
  * @property {string} email
  * @property {string} password

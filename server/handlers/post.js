@@ -9,7 +9,7 @@ import { deleteAllNotification } from './notification';
 
 /** Retrieves a list of posts
  *
- * @type {RouteHandler}
+ * @type {import('express').Handler}
  */
 export const getPostList = async (req, res, next) => {
   const data = await getList().catch(err => {
@@ -33,7 +33,7 @@ export const getPostList = async (req, res, next) => {
 
 /** Retrieves one post
  *
- * @type {RouteHandler}
+ * @type {import('express').Handler}
  */
 export const getPost = async (req, res) => {
   const returnPost = await findPostById(req.params.postId).catch(err => {
@@ -51,7 +51,7 @@ export const getPost = async (req, res) => {
 
 /** Creates a single post
  *
- * @type {RouteHandler}
+ * @type {import('express').Handler}
  */
 export const createPost = async (req, res, next) => {
   const doc = await create(req.body, req.user).catch(err => {
@@ -65,7 +65,7 @@ export const createPost = async (req, res, next) => {
 
 /** Deletes post
  *
- * @type {RouteHandler}
+ * @type {import('express').Handler}
  */
 export const deletePost = async (req, res, next) => {
   const post = await findAndDeletePost(req.params.postId).catch(err => {
