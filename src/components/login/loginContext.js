@@ -52,12 +52,7 @@ export const LoginProvider = ({ children }) => {
         setIsLoadingLogin(false);
         return Promise.reject(error);
       }
-      const hashedPassword = await hashPassword(userParam?.password).catch(
-        err => {
-          console.error(err);
-          return Promise.reject(err);
-        }
-      );
+      const hashedPassword = await hashPassword(userParam?.password);
       userParam.password = hashedPassword;
       await fetchUtil.user
         .loginUser(userParam)

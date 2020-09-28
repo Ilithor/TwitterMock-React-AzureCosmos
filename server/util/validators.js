@@ -20,7 +20,7 @@ export const validateLogin = user => {
   if (isEmpty(user.password)) {
     return Promise.reject({ password: 'Must not be empty' });
   }
-  return;
+  return Promise.resolve();
 };
 
 /** Checks if the user inputs are valid
