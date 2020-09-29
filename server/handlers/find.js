@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { User } from '../models/user.model';
 import { Like } from '../models/like.model';
 import { Notification } from '../models/notification.model';
@@ -36,7 +36,7 @@ export const findByCredential = async user => {
     error.password = 'Invalid password';
     return Promise.reject(error);
   }
-  return foundUser;
+  return Promise.resolve(foundUser);
 };
 
 /** Returns a user that matches _id

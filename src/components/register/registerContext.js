@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState } from 'react';
 import axios from 'axios';
 import bcrypt from 'bcryptjs';
+import forge from 'node-forge';
 import * as fetchUtil from '../../util/fetch';
 import { useAuthenticationData } from '../profile/authenticationContext';
 
@@ -14,7 +15,7 @@ const registerContext = createContext();
  * @property {boolean} isLoadingRegister
  * @property {React.Dispatch<React.SetStateAction<boolean>>} setIsLoadingRegister
  * @property {(userParam:UserRegisterParam)=>void} registerUser
- * @property {(password:string)=>string} saltPassword
+ * @property {(password:string)=>string} hashPassword
  * @property {(token:string)=>void} setAuthorizationHeader
  * @property {(userHandle:string)=>void} setUserHandleHeader
  * @property {(userParam:UserRegisterParam)=>Error} checkIfUndefined
@@ -48,7 +49,7 @@ export const RegisterProvider = ({ children }) => {
         setIsLoadingRegister(false);
         return Promise.reject(error);
       }
-      const saltedPassword = await saltPassword(userParam?.password);
+      const saltedPassword = await hashPassword(userParam?.password);
       userParam.password = saltedPassword;
       await fetchUtil.user
         .registerUser(userParam)
@@ -75,15 +76,15 @@ export const RegisterProvider = ({ children }) => {
    * @param {string} password
    * @returns {string}
    */
-  const saltPassword = async password => {
-    const salt = await bcrypt.genSalt().catch(err => {
-      console.error(err);
-      Promise.reject(err);
-    });
-    const hash = await bcrypt.hash(password, salt).catch(err => {
-      console.error(err);
-      Promise.reject(err);
-    });
+  const hashPassword = async password => {
+    const md = forge.md.sha256.create();
+    md.update(password);
+    const hash = await bcrypt
+      .hash(md.digest().toHex(), process.env.SOCMON_SALT)
+      .catch(err => {
+        console.error(err);
+        Promise.reject(err);
+      });
     return hash;
   };
 
