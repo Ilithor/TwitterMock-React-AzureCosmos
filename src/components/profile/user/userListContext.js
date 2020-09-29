@@ -11,8 +11,8 @@ const userListContext = createContext();
  * @property {React.Dispatch<React.SetStateAction<Error>>} setUserListError
  * @property {boolean} isLoadingUserList
  * @property {React.Dispatch<React.SetStateAction<boolean>>} setIsLoadingUserList
- * @property {_.Dictionary<User>} userList
- * @property {React.Dispatch<React.SetStateAction<_.Dictionary<User>>>} setUserList
+ * @property {_.Dictionary<UserData>} userList
+ * @property {React.Dispatch<React.SetStateAction<_.Dictionary<UserData>>>} setUserList
  * @property {Date} lastRefreshUserList
  * @property {React.Dispatch<React.SetStateAction<Date>>} setLastRefreshUserList
  * @property {()=>void} refreshUserList
@@ -21,9 +21,7 @@ const userListContext = createContext();
 /** This is a react component which you wrap your entire application
  * to provide a "context", meaning: data you can access anywhere in the app.
  *
- * @param {object} props
- * @param {React.ReactChild} props.children
- * @returns {React.FunctionComponent}
+ * @type {React.FunctionComponent}
  */
 export const UserListProvider = ({ children }) => {
   const [userListError, setUserListError] = useState();
@@ -52,7 +50,6 @@ export const UserListProvider = ({ children }) => {
         })
         .finally(() => {
           setIsLoadingUserList(false);
-          return;
         });
     }
   };
@@ -78,7 +75,7 @@ export const UserListProvider = ({ children }) => {
  * @property {Error} userListError
  * @property {React.Dispatch<React.SetStateAction<Error>>} setUserListError
  * @property {boolean} isLoadingUserList
- * @property {_.Dictionary<User>} userList
+ * @property {_.Dictionary<UserData>} userList
  * @property {()=>void} refreshUserList
  */
 

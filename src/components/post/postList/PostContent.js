@@ -17,8 +17,7 @@ import * as Icon from '@material-ui/icons';
 
 /** View component for displaying an individual post's content
  *
- * @type {IPostContentComponentProps}
- * @returns {React.FunctionComponent}
+ * @type {React.FunctionComponent<IPostContentComponentProps>}
  */
 export const PostContent = ({ post, like }) => {
   const classes = useStyles();
@@ -59,13 +58,13 @@ export const PostContent = ({ post, like }) => {
       <span>
         {post?.commentCount} <CommentPlural />
       </span>
-      <PostDialog postId={post?.postId} userHandle={post?.userHandle} />
+      <PostDialog post={post} userHandle={post?.userHandle} />
     </CardContent>
   );
 };
 
 /**
  * @typedef IPostContentComponentProps
- * @property {Post} post
+ * @property {PostData} post
  * @property {Like} like
  */

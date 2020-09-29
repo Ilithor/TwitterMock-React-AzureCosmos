@@ -14,7 +14,6 @@ import { useStyles } from '../../post.style';
 import * as Icon from '@material-ui/icons';
 
 // Context
-import { usePostData } from '../../postContext';
 import { useUserListData } from '../../../profile/user/userListContext';
 
 /** View component for displaying an individual post's content in a dialog box
@@ -22,20 +21,18 @@ import { useUserListData } from '../../../profile/user/userListContext';
  * @type {IPostDialogComponentProps}
  * @returns {React.FunctionComponent}
  */
-export const PostDialog = ({ postId, userHandle }) => {
-  const { postList } = usePostData();
+export const PostDialog = ({ post, userHandle }) => {
   const { userList, isLoadingUserList } = useUserListData();
   const classes = useStyles();
   const params = useParams();
   const location = useLocation();
-  const open = params?.postId === postId;
-  const post = postList[postId];
+  const open = params?.postId === post?.postId;
   const history = useHistory();
   const handleOpen = () => {
-    history.push(`/u/${userHandle}/post/${postId}`);
+    history.push(`/u/${userHandle}/post/${post?.postId}`);
   };
   const handleClose = () => {
-    history.push(location.pathname.replace(`/post/${postId}`, ''));
+    history.push(location.pathname.replace(`/post/${post?.postId}`, ''));
   };
   const DialogContentEditor = () => {
     if (!isLoadingUserList) {
@@ -46,7 +43,7 @@ export const PostDialog = ({ postId, userHandle }) => {
           userImage={userImage}
           createdAt={post?.createdAt}
           body={post?.body}
-          postId={postId}
+          postId={post?.postId}
           likeCount={post?.likeCount}
           commentCount={post?.commentCount}
         />

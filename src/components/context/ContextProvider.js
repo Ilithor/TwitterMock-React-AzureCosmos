@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserRouter } from 'react-router-dom';
 
 // MUI
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
@@ -29,27 +30,29 @@ const theme = createMuiTheme({
  * @returns {React.FunctionComponent}
  */
 export const ContextProvider = ({ children }) => (
-  <SettingProvider>
-    <ThemeProvider theme={theme}>
-      <CurrentUserProvider>
-        <AuthenticationProvider>
-          <UserListProvider>
-            <NotificationProvider>
-              <PostProvider>
-                <LikeProvider>
-                  <CommentProvider>
-                    <LogoutProvider>
-                      <HelmetProvider>{children}</HelmetProvider>
-                    </LogoutProvider>
-                  </CommentProvider>
-                </LikeProvider>
-              </PostProvider>
-            </NotificationProvider>
-          </UserListProvider>
-        </AuthenticationProvider>
-      </CurrentUserProvider>
-    </ThemeProvider>
-  </SettingProvider>
+  <BrowserRouter>
+    <SettingProvider>
+      <ThemeProvider theme={theme}>
+        <CurrentUserProvider>
+          <AuthenticationProvider>
+            <UserListProvider>
+              <NotificationProvider>
+                <PostProvider>
+                  <LikeProvider>
+                    <CommentProvider>
+                      <LogoutProvider>
+                        <HelmetProvider>{children}</HelmetProvider>
+                      </LogoutProvider>
+                    </CommentProvider>
+                  </LikeProvider>
+                </PostProvider>
+              </NotificationProvider>
+            </UserListProvider>
+          </AuthenticationProvider>
+        </CurrentUserProvider>
+      </ThemeProvider>
+    </SettingProvider>
+  </BrowserRouter>
 );
 
 /**

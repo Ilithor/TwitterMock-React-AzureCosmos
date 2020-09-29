@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Route, Switch } from 'react-router-dom';
 import './App.css';
 import axios from 'axios';
 
@@ -26,28 +26,26 @@ axios.defaults.baseURL = '/';
  * @returns {React.FunctionComponent}
  */
 export const App = () => (
-  <Router>
-    <ContextProvider>
-      <div className='page-layout'>
-        <Navbar />
-        <div className='container'>
-          <Switch>
-            <Route exact path='/' component={HomePage} />
-            <Route path='/login' component={LoginPage} />
-            <Route path='/signup' component={RegisterPage} />
-            <Route path='/settings' component={SettingPage} />
-            <Route path='/notification' component={NotificationPage} />
-            <Route path='/about' component={AboutPage} />
-            <Route exact path='/u/:userHandle' component={UserPage} />
-            <Route
-              exact
-              path='/u/:userHandle/post/:postId'
-              component={UserPage}
-            />
-          </Switch>
-        </div>
-        <Footer />
+  <ContextProvider>
+    <div className='page-layout'>
+      <Navbar />
+      <div className='container'>
+        <Switch>
+          <Route exact path='/' component={HomePage} />
+          <Route path='/login' component={LoginPage} />
+          <Route path='/signup' component={RegisterPage} />
+          <Route path='/settings' component={SettingPage} />
+          <Route path='/notification' component={NotificationPage} />
+          <Route path='/about' component={AboutPage} />
+          <Route exact path='/u/:userHandle' component={UserPage} />
+          <Route
+            exact
+            path='/u/:userHandle/post/:postId'
+            component={UserPage}
+          />
+        </Switch>
       </div>
-    </ContextProvider>
-  </Router>
+      <Footer />
+    </div>
+  </ContextProvider>
 );

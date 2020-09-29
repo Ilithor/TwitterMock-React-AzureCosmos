@@ -16,24 +16,24 @@ import { useUserListData } from '../../profile/user/userListContext';
 
 /** View component for displaying an individual post on the site
  *
- * @type {IPostComponentProps}
- * @returns {React.FunctionComponent}
+ * @type {React.FunctionComponent<IPostComponentProps>}
  */
 export const Post = ({ post, user, like }) => {
   const classes = useStyles();
-  const { currentUser } = useCurrentUserData();
-  const { refreshUserList } = useUserListData();
+  // const { currentUser } = useCurrentUserData();
+  // const { refreshUserList } = useUserListData();
   dayjs.extend(relativeTime);
   if (!post) {
-    return;
+    return null;
   }
 
   const ManageCardMedia = () => {
-    if (post?.userHandle === currentUser?.userHandle) {
-      if (currentUser?.bio?.userImage !== user?.userImage) {
-        refreshUserList();
-      }
-    }
+    // if (post?.userHandle === currentUser?.userHandle) {
+    //   if (currentUser?.bio?.userImage !== user?.userImage) {
+    //     console.log('hi');
+    //     refreshUserList();
+    //   }
+    // }
     return (
       <CardMedia
         image={user?.userImage || defaultImage}
@@ -53,7 +53,7 @@ export const Post = ({ post, user, like }) => {
 
 /**
  * @typedef IPostComponentProps
- * @property {Post} post
- * @property {User} user
- * @property {Like} like
+ * @property {PostData} post
+ * @property {UserData} user
+ * @property {LikeData} like
  */
