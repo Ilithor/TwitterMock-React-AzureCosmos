@@ -6,12 +6,10 @@ import {
   ILikeButtonComponentProps,
 } from './LikeButton';
 
-jest.mock('axios');
-
-describe('like.likeButton should', () => {
+describe('likeButton should', () => {
   /**  @type {ILikeButtonComponentProps} */
   const defaultProps = {};
-  /** Create an testing-library+jest wrapper for the UX version of the component.
+  /** Create an testing-library wrapper for the UX version of the component.
    *
    * @param {ILikeButtonComponentProps} [props]
    */

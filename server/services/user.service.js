@@ -97,10 +97,7 @@ export const login = async userParam => {
     console.error(err);
     return Promise.reject(err);
   });
-  const token = await generateUserToken(userLoggedIn).catch(err => {
-    console.error(err);
-    return Promise.reject(err);
-  });
+  const token = await generateUserToken(userLoggedIn);
   const dataToReturn = { token };
   dataToReturn.userHandle = userLoggedIn.userHandle;
   return dataToReturn;

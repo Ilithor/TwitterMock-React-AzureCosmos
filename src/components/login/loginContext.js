@@ -73,7 +73,6 @@ export const LoginProvider = ({ children }) => {
         })
         .finally(() => {
           setIsLoadingLogin(false);
-          return;
         });
     }
   };

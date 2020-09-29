@@ -15,7 +15,7 @@ import {
 describe('post should', () => {
   /**  @type {IPostComponentProps} */
   const defaultProps = {};
-  /** Create an testing-library+jest wrapper for the UX version of the component.
+  /** Create an testing-library wrapper for the UX version of the component.
    *
    * @param {IPostComponentProps} [props]
    */
@@ -34,7 +34,6 @@ describe('post should', () => {
   });
   it('render 1 element', async () => {
     const { rerender } = renderViewWrapper();
-    // expect((await screen.findByTestId('container')).children).toHaveLength(0);
     rerender(
       <div data-testid='container'>
         <ContextProvider>

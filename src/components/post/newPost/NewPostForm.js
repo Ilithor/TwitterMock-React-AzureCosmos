@@ -20,7 +20,6 @@ export const NewPostForm = ({
     <form onSubmit={handleSubmit}>
       <TextField
         name='body'
-        type='text'
         label='New Post'
         multiline
         rows='3'

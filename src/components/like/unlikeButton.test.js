@@ -6,12 +6,10 @@ import {
   IUnlikeButtonComponentProps,
 } from './UnlikeButton';
 
-jest.mock('axios');
-
-describe('like.UnlikeButton should', () => {
+describe('unlikeButton should', () => {
   /**  @type {IUnlikeButtonComponentProps} */
   const defaultProps = {};
-  /** Create an testing-library+jest wrapper for the UX version of the component.
+  /** Create an testing-library wrapper for the UX version of the component.
    *
    * @param {IUnlikeButtonComponentProps} [props]
    */
