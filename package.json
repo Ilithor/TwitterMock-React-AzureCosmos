@@ -31,11 +31,15 @@
     "rimraf": "^3.0.2"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.0.4",
+    "@testing-library/user-event": "^12.1.6",
     "babel-eslint": "^10.0.3",
     "concurrently": "^5.1.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
     "lint-staged": "^10.0.7",
+    "msw": "^0.21.2",
     "nodemon": "^2.0.2",
     "prettier": "^1.19.1",
     "react-scripts": "^3.3.1"
@@ -47,7 +51,7 @@
     "clean": "rimraf build server/client",
     "build": "npm run clean && react-scripts build && move-cli build ./server/client",
     "postinstall": "cd server&&npm install",
-    "test": "react-scripts test --env=jsdom",
+    "test": "react-scripts test --env=jsdom-fourteen",
     "format": "prettier --write \"src/**/*.{js,css}\"",
     "eject": "react-scripts eject"
   },
