@@ -12,16 +12,15 @@ const currentUserContext = createContext();
  * @property {React.Dispatch<React.SetStateAction<boolean>>} setIsLoadingCurrentUser
  * @property {Date} lastFetchCurrentUser
  * @property {React.Dispatch<React.SetStateAction<Date>>} setLastFetchCurrentUser
- * @property {User} currentUser
- * @property {React.Dispatch<React.SetStateAction<User>>} setCurrentUser
+ * @property {UserData} currentUser
+ * @property {React.Dispatch<React.SetStateAction<UserData>>} setCurrentUser
  * @property {()=>void} fetchCurrentUser
  */
 
 /** This is a react component which you wrap your entire application
  * to provide a "context", meaning: data you can access anywhere in the app.
  *
- * @type {ICurrentUserProviderComponentProps}
- * @returns {React.FunctionComponent}
+ * @type {React.FunctionComponent}
  */
 export const CurrentUserProvider = ({ children }) => {
   const [currentUserError, setCurrentUserError] = useState();
@@ -76,7 +75,7 @@ export const CurrentUserProvider = ({ children }) => {
 /**
  * @typedef useCurrentUserDataResult
  * @property {boolean} [isLoadingCurrentUser]
- * @property {User} [currentUser]
+ * @property {UserData} [currentUser]
  * @property {()=>void} fetchCurrentUser
  * @property {Error} [currentUserError]
  * @property {React.Dispatch<React.SetStateAction<Error>>} [setCurrentUserError]
@@ -123,8 +122,3 @@ export const useCurrentUserData = () => {
     setCurrentUserError,
   };
 };
-
-/**
- * @typedef ICurrentUserProviderComponentProps
- * @property {React.ReactChild} children
- */

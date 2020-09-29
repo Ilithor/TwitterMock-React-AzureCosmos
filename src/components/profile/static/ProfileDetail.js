@@ -40,5 +40,5 @@ export const ProfileDetail = ({ user }) => (
 
 /**
  * @typedef IProfileDetailComponentProps
- * @property {User} user
+ * @property {UserData} user
  */

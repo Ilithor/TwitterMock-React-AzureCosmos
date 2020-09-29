@@ -3,8 +3,8 @@ import env from '../config/environment';
 
 /** Generates a new user token
  *
- * @param {UserNew} user
- * @returns {Token}
+ * @param {NewUserData} user
+ * @returns {TokenData}
  */
 export const generateUserToken = user => {
   const token = jwt.sign({ _id: user._id }, env.jwt, {

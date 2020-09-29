@@ -46,5 +46,5 @@ export const StaticProfile = ({ user }) => {
 
 /**
  * @typedef IStaticProfileComponentProps
- * @property {User} user
+ * @property {UserData} user
  */

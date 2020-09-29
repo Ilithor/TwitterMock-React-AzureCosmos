@@ -3,7 +3,7 @@ import { Like } from '../models/like.model';
 /** Create Like document
  *
  * @param {Request} likeParam
- * @returns {Promise<Like>}
+ * @returns {Promise<LikeData>}
  */
 export const create = async likeParam => {
   // Construct needed properties for the document
@@ -21,7 +21,7 @@ export const create = async likeParam => {
  *
  * @param {string} userHandle
  * @param {string} postId
- * @returns {Promise<Like>}
+ * @returns {Promise<LikeData>}
  */
 export const remove = async (userHandle, postId) => {
   return await Like.findOneAndDelete({ userHandle, postId }).catch(err => {

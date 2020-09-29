@@ -91,7 +91,7 @@ export const NotificationCardContent = ({
 
 /**
  * @typedef INotificationCardContentComponentProps
- * @property {UserNotification} notification
+ * @property {NotificationData} notification
  * @property {string} postBody
  * @property {string} commentBody
  */

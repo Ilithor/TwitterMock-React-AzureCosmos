@@ -1,22 +1,22 @@
 /**
- * @typedef UserCredential
+ * @typedef UserCredentialData
  * @property {string} email
  * @property {string} password
  */
 
 /**
- * @typedef UserCredentialError
+ * @typedef UserCredentialDataError
  * @property {string} email
  * @property {string} password
  */
 
 /**
- * @typedef UserNotFound
+ * @typedef UserDataError
  * @property {string} user
  */
 
 /**
- * @typedef UserBio
+ * @typedef UserBioData
  * @property {string} aboutMe
  * @property {string} website
  * @property {string} location
@@ -24,16 +24,16 @@
  */
 
 /**
- * @typedef User
+ * @typedef UserData
  * @property {Date} createdAt
  * @property {string} userHandle
- * @property {UserCredential} credential
- * @property {UserBio} bio
- * @property {LikeList} like
+ * @property {UserCredentialData} credential
+ * @property {UserBioData} bio
+ * @property {LikeListData} like
  */
 
 /**
- * @typedef UserRegistration
+ * @typedef RegistrationData
  * @property {string} email
  * @property {string} userHandle
  * @property {string} password
@@ -41,14 +41,14 @@
  */
 
 /**
- * @typedef UserBioUpdate
+ * @typedef UserBioData
  * @property {string} bio
  * @property {string} website
  * @property {string} location
  */
 
 /**
- * @typedef UserNew
+ * @typedef NewUserData
  * @property {string} _id
  * @property {string} email
  * @property {string} userHandle
@@ -57,7 +57,7 @@
  */
 
 /**
- * @typedef Post
+ * @typedef PostData
  * @property {string} postId
  * @property {string} body
  * @property {string} userHandle
@@ -68,28 +68,23 @@
  */
 
 /**
- * @typedef PostError
- * @property {string} body
- */
-
-/**
- * @typedef PostNotFound
+ * @typedef PostDataError
  * @property {string} post
  */
 
 /**
- * @typedef LikeList
- * @property {Like} like
+ * @typedef LikeListData
+ * @property {LikeData} like
  */
 
 /**
- * @typedef Like
+ * @typedef LikeData
  * @property {string} userHandle
  * @property {string} postId
  */
 
 /**
- * @typedef UserNotification
+ * @typedef NotificationData
  * @property {boolean} read
  * @property {string} recipient
  * @property {string} postId
@@ -99,12 +94,12 @@
  */
 
 /**
- * @typedef NotificationNotFound
+ * @typedef NotificationDataError
  * @property {string} notification
  */
 
 /**
- * @typedef NewUserComment
+ * @typedef NewCommentData
  * @property {string} userHandle
  * @property {string} postId
  * @property {string} userImage
@@ -113,7 +108,7 @@
  */
 
 /**
- * @typedef UserComment
+ * @typedef CommentData
  * @property {string} userHandle
  * @property {string} postId
  * @property {string} body
@@ -121,19 +116,19 @@
  */
 
 /**
- * @typedef UserCommentError
+ * @typedef CommentDataError
  * @property {string} comment
  */
 
 /**
- * @typedef UserError
+ * @typedef UserDataError
  * @property {string} email
  * @property {string} password
  * @property {string} userHandle
  */
 
 /**
- * @typedef Token
+ * @typedef TokenData
  * @property {string} token
  */
 

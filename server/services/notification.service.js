@@ -3,7 +3,7 @@ import mongo from 'mongodb';
 
 /** Find all notifications
  *
- * @returns {Promise<UserNotification>}
+ * @returns {Promise<NotificationData>}
  */
 export const getNotificationList = async () => {
   return await Notification.find({})

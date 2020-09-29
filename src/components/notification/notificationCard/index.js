@@ -27,7 +27,7 @@ export const NotificationCard = ({ notification, post, comment }) => {
 
 /**
  * @typedef INotificationCardComponentProps
- * @property {UserNotification} notification
- * @property {Post} post
- * @property {UserComment} comment
+ * @property {NotificationData} notification
+ * @property {PostData} post
+ * @property {CommentData} comment
  */

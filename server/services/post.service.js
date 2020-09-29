@@ -6,7 +6,7 @@ mongoConnection();
 
 /** Retrieves all posts in desc order
  *
- * @returns {Promise<Post[]>}
+ * @returns {Promise<PostData[]>}
  */
 export const getList = async () => {
   return await Post.find({})
@@ -22,8 +22,8 @@ export const getList = async () => {
 /** Creates and saves new post
  *
  * @param {object} postParam
- * @param {User} user
- * @returns {Promise<Post>}
+ * @param {UserData} user
+ * @returns {Promise<PostData>}
  */
 export const create = async (postParam, user) => {
   // Validation
@@ -44,7 +44,7 @@ export const create = async (postParam, user) => {
 /** Deletes post
  *
  * @param {string} _id
- * @returns {Promise<Post>}
+ * @returns {Promise<PostData>}
  */
 export const findAndDeletePost = async _id => {
   return await Post.deleteOne({

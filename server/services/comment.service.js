@@ -6,7 +6,7 @@ mongoConnection();
 
 /** Retrieves entire list of comments
  *
- * @returns {Promise<UserComment[]>}
+ * @returns {Promise<CommentData[]>}
  */
 export const getList = async () => {
   return await Comment.find({})
@@ -22,7 +22,7 @@ export const getList = async () => {
 /** Creates a new comment
  *
  * @param {Request} commentParam
- * @returns {Promise<NewUserComment>}
+ * @returns {Promise<NewCommentData>}
  */
 export const create = async commentParam => {
   // Validation
@@ -46,7 +46,7 @@ export const create = async commentParam => {
 /** Deletes Comment document
  *
  * @param {Request} commentParam
- * @returns {Promise<UserComment>}
+ * @returns {Promise<CommentData>}
  */
 export const remove = async commentParam => {
   return await Comment.findOneAndDelete({

@@ -7,7 +7,7 @@ mongoConnection();
 
 /** Checks if the email and password are valid
  *
- * @param {UserCredential} user
+ * @param {UserCredentialData} user
  * @returns {void}
  */
 export const validateLogin = user => {
@@ -25,8 +25,8 @@ export const validateLogin = user => {
 
 /** Checks if the user inputs are valid
  *
- * @param {UserRegistration} userParam
- * @returns {Promise<UserError>}
+ * @param {RegistrationData} userParam
+ * @returns {Promise<UserDataError>}
  */
 export const validateRegister = async userParam => {
   let error;
@@ -41,8 +41,8 @@ export const validateRegister = async userParam => {
 
 /** Checks if the provided bio information is valid
  *
- * @param {UserBioUpdate} userParam User's bio info
- * @returns {UserBioUpdate}
+ * @param {UserBioData} userParam User's bio info
+ * @returns {UserBioData}
  */
 export const validateUserDetail = userParam => {
   const userDetail = { aboutMe: '', website: '', location: '' };

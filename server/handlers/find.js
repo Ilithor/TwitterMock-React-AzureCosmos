@@ -11,8 +11,8 @@ mongoConnection();
 
 /**Returns a user that has a matching email and password
  *
- * @param {User} user
- * @returns {Promise<User>}
+ * @param {UserData} user
+ * @returns {Promise<UserData>}
  */
 export const findByCredential = async user => {
   const error = {};
@@ -42,7 +42,7 @@ export const findByCredential = async user => {
 /** Returns a user that matches _id
  *
  * @param {string} _id
- * @returns {Promise<User>}
+ * @returns {Promise<UserData>}
  */
 export const findById = async _id => {
   return await User.findOne({
@@ -56,7 +56,7 @@ export const findById = async _id => {
 /** Returns a user that matches handle
  *
  * @param {string} userHandle
- * @returns {Promise<User>}
+ * @returns {Promise<UserData>}
  */
 export const findByHandle = async userHandle => {
   return await User.findOne({
@@ -70,7 +70,7 @@ export const findByHandle = async userHandle => {
 /** Returns post that matches _id
  *
  * @param {string} _id
- * @returns {Promise<Post>}
+ * @returns {Promise<PostData>}
  */
 export const findPostById = async _id => {
   return await Post.findOne({
@@ -84,7 +84,7 @@ export const findPostById = async _id => {
 /** Returns post that matches user handle
  *
  * @param {string} userHandle
- * @returns {Promise<Post>}
+ * @returns {Promise<PostData>}
  */
 export const findPostByHandle = async userHandle => {
   return await Post.find({
@@ -101,7 +101,7 @@ export const findPostByHandle = async userHandle => {
 /** Fetches all comments attached to PostId
  *
  * @param {string} postId
- * @returns {Promise<UserComment>}
+ * @returns {Promise<CommentData>}
  */
 export const findCommentByPostId = async postId => {
   return await Comment.find({
@@ -118,7 +118,7 @@ export const findCommentByPostId = async postId => {
 /** Find all likes by userHandle
  *
  * @param {string} userHandle
- * @returns {Promise<Like[]|any[]>}
+ * @returns {Promise<LikeData[]|any[]>}
  */
 export const findLikeByHandle = async userHandle => {
   return await Like.find({
@@ -135,7 +135,7 @@ export const findLikeByHandle = async userHandle => {
  *
  * @param {string} userHandle
  * @param {string} postId
- * @returns {Promise<UserComment>}
+ * @returns {Promise<CommentData>}
  */
 export const findCommentByHandleAndPostId = async (userHandle, postId) => {
   return await Comment.find({
@@ -153,7 +153,7 @@ export const findCommentByHandleAndPostId = async (userHandle, postId) => {
  *
  * @param {string} userHandle
  * @param {string} postId
- * @returns {Promise<Like[]>}
+ * @returns {Promise<LikeData[]>}
  */
 export const findLikeByHandleAndPostId = async (userHandle, postId) => {
   return await Like.findOne({
@@ -271,7 +271,7 @@ export const findUserAndUpdateImage = async (_id, base64) => {
 
 /** Finds and updates the user's profile bio
  *
- * @param {User} userDetail
+ * @param {UserData} userDetail
  * @param {string} _id
  * @returns {Promise}
  */
