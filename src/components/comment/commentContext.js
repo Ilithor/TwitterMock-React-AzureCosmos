@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState } from 'react';
 import _ from 'lodash';
 
 import * as fetchUtil from '../../util/fetch';
+import { useQueryGate } from '../../util/queryGate';
 
 /** @type {CommentContextProps} */
 const commentContext = createContext();
@@ -45,34 +46,34 @@ export const CommentProvider = ({ children }) => {
   const [isLoadingCommentList, setIsLoadingCommentList] = useState(false);
   const [isLoadingCommentOnPost, setIsLoadingCommentOnPost] = useState(false);
   const [isLoadingDeleteComment, setIsLoadingDeleteComment] = useState(false);
+  const gate = useQueryGate();
 
   /** Refreshes the comment list
    *
    * @returns {Promise}
    */
   const refreshCommentList = async () => {
-    if (!isLoadingCommentList) {
-      setIsLoadingCommentList(true);
-      setLastRefreshCommentList(Date.now());
-      // Fetch list of comments
-      await fetchUtil.post
-        .fetchCommentList()
-        .then(res => {
-          if (Array.isArray(res?.data)) {
-            setCommentList(_.keyBy(res.data, 'commentId'));
-          } else {
-            setCommentError(res?.data);
-            return Promise.reject(res?.data);
-          }
-        })
-        .catch(err => {
-          setCommentError(err);
-          return Promise.reject(err);
-        })
-        .finally(() => {
-          setIsLoadingCommentList(false);
-          return;
-        });
+    if (await gate.allowQuery(refreshCommentList.name)) {
+      if (!isLoadingCommentList) {
+        setIsLoadingCommentList(true);
+        setLastRefreshCommentList(Date.now());
+        // Fetch list of comments
+        await fetchUtil.post
+          .fetchCommentList()
+          .then(res => {
+            if (Array.isArray(res?.data)) {
+              setCommentList(_.keyBy(res.data, 'commentId'));
+            } else {
+              setCommentError(res?.data);
+              return Promise.reject(res?.data);
+            }
+          })
+          .catch(err => {
+            setCommentError(err);
+            return Promise.reject(err);
+          })
+          .finally(() => setIsLoadingCommentList(false));
+      }
     }
   };
 
@@ -97,10 +98,7 @@ export const CommentProvider = ({ children }) => {
         .catch(err => {
           return Promise.reject(err);
         })
-        .finally(() => {
-          setIsLoadingCommentOnPost(false);
-          return;
-        });
+        .finally(() => setIsLoadingCommentOnPost(false));
     }
   };
 
@@ -155,10 +153,7 @@ export const CommentProvider = ({ children }) => {
           setCommentError(err);
           return Promise.reject(err);
         })
-        .finally(() => {
-          setIsLoadingDeleteComment(false);
-          return;
-        });
+        .finally(() => setIsLoadingDeleteComment(false));
     }
   };
 

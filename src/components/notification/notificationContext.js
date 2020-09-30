@@ -3,6 +3,7 @@ import _ from 'lodash';
 import { useHistory } from 'react-router-dom';
 
 import * as fetchUtil from '../../util/fetch';
+import { useQueryGate } from '../../util/queryGate';
 
 /** @type {React.Context<{notificationList:Notification[],notificationError:Error,getData:()=>void}>} */
 const notificationContext = createContext();
@@ -52,33 +53,33 @@ export const NotificationProvider = ({ children }) => {
     isLoadingDeleteNotification,
     setIsLoadingDeleteNotification,
   ] = useState(false);
+  const gate = useQueryGate();
 
   /** Refreshes the user's notification list
    *
    * @returns {Promise}
    */
   const refreshNotificationList = async () => {
-    if (!isLoadingNotificationList) {
-      setIsLoadingNotificationList(true);
-      setLastRefreshNotificationList(Date.now());
-      // Fetch list of notifications
-      await fetchUtil.user
-        .fetchNotificationList()
-        .then(res => {
-          if (Array.isArray(res?.data)) {
-            setNotificationList(_.keyBy(res?.data, 'notificationId'));
-          } else {
-            setNotificationError(res?.data);
-          }
-        })
-        .catch(err => {
-          setNotificationError(err);
-          return Promise.reject(err);
-        })
-        .finally(() => {
-          setIsLoadingNotificationList(false);
-          return;
-        });
+    if (await gate.allowQuery(refreshNotificationList.name)) {
+      if (!isLoadingNotificationList) {
+        setIsLoadingNotificationList(true);
+        setLastRefreshNotificationList(Date.now());
+        // Fetch list of notifications
+        await fetchUtil.user
+          .fetchNotificationList()
+          .then(res => {
+            if (Array.isArray(res?.data)) {
+              setNotificationList(_.keyBy(res?.data, 'notificationId'));
+            } else {
+              setNotificationError(res?.data);
+            }
+          })
+          .catch(err => {
+            setNotificationError(err);
+            return Promise.reject(err);
+          })
+          .finally(() => setIsLoadingNotificationList(false));
+      }
     }
   };
 
@@ -108,7 +109,6 @@ export const NotificationProvider = ({ children }) => {
           history.push(
             `/u/${notification?.recipient}/post/${notification?.postId}`
           );
-          return;
         });
     }
   };
@@ -134,10 +134,7 @@ export const NotificationProvider = ({ children }) => {
           setNotificationError(err);
           return Promise.reject(err);
         })
-        .finally(() => {
-          setIsLoadingDeleteNotification(false);
-          return;
-        });
+        .finally(() => setIsLoadingDeleteNotification(false));
     }
   };
 

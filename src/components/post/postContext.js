@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState } from 'react';
 import _ from 'lodash';
 
 import * as fetchUtil from '../../util/fetch';
+import { useQueryGate } from '../../util/queryGate';
 
 /** @type {React.Context<PostContextProps>} */
 const postContext = createContext();
@@ -41,31 +42,31 @@ export const PostProvider = ({ children }) => {
   const [isLoadingPostList, setIsLoadingPostList] = useState(false);
   const [isLoadingNewPost, setIsLoadingNewPost] = useState(false);
   const [isLoadingDeletePost, setIsLoadingDeletePost] = useState(false);
+  const gate = useQueryGate();
 
   /** Refreshes the post list
    *
    * @returns {Promise}
    */
   const refreshPostList = async () => {
-    if (!isLoadingPostList) {
-      setIsLoadingPostList(true);
-      setLastRefreshPostList(Date.now());
-      // Fetch list of posts
-      await fetchUtil.post
-        .fetchPostList()
-        .then(res => {
-          if (res?.data) {
-            setPostList(_.keyBy(res.data, 'postId'));
-          }
-        })
-        .catch(err => {
-          setPostError(err);
-          return Promise.reject(err);
-        })
-        .finally(() => {
-          setIsLoadingPostList(false);
-          return Promise.resolve();
-        });
+    if (await gate.allowQuery(refreshPostList.name)) {
+      if (!isLoadingPostList) {
+        setIsLoadingPostList(true);
+        setLastRefreshPostList(Date.now());
+        // Fetch list of posts
+        await fetchUtil.post
+          .fetchPostList()
+          .then(res => {
+            if (res?.data) {
+              setPostList(_.keyBy(res.data, 'postId'));
+            }
+          })
+          .catch(err => {
+            setPostError(err);
+            return Promise.reject(err);
+          })
+          .finally(() => setIsLoadingPostList(false));
+      }
     }
   };
 
@@ -88,10 +89,7 @@ export const PostProvider = ({ children }) => {
           setPostError(err);
           Promise.reject(err);
         })
-        .finally(() => {
-          setIsLoadingNewPost(false);
-          return;
-        });
+        .finally(() => setIsLoadingNewPost(false));
     }
   };
 
@@ -112,10 +110,7 @@ export const PostProvider = ({ children }) => {
           setPostError(err);
           return Promise.reject(err);
         })
-        .finally(() => {
-          setIsLoadingDeletePost(false);
-          return Promise.resolve();
-        });
+        .finally(() => setIsLoadingDeletePost(false));
     }
   };
 

@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState } from 'react';
 import _ from 'lodash';
 
 import * as fetchUtil from '../../util/fetch';
+import { useQueryGate } from '../../util/queryGate';
 
 // Context
 import { useCurrentUserData } from '../profile/currentUserContext';
@@ -43,33 +44,33 @@ export const LikeProvider = ({ children }) => {
   const [isLoadingLikeList, setIsLoadingLikeList] = useState(false);
   const [isLoadingLikePost, setIsLoadingLikePost] = useState(false);
   const [isLoadingUnlikePost, setIsLoadingUnlikePost] = useState(false);
+  const gate = useQueryGate();
 
   /** Attempts to retrieve a new like list
    *
    * @returns {void|Error}
    */
   const refreshLikeList = async () => {
-    if (!isLoadingLikeList) {
-      setIsLoadingLikeList(true);
-      setLastRefreshLikeList(Date.now());
-      // Fetch list of likes
-      await fetchUtil.user
-        .fetchLikeList(localStorage?.Handle)
-        .then(res => {
-          setLikeList(
-            _(res?.data)
-              .keyBy('postId')
-              .value()
-          );
-        })
-        .catch(err => {
-          setLikeError(err);
-          return Promise.reject(err);
-        })
-        .finally(() => {
-          setIsLoadingLikeList(false);
-          return;
-        });
+    if (await gate.allowQuery(refreshLikeList.name)) {
+      if (!isLoadingLikeList) {
+        setIsLoadingLikeList(true);
+        setLastRefreshLikeList(Date.now());
+        // Fetch list of likes
+        await fetchUtil.user
+          .fetchLikeList(localStorage?.Handle)
+          .then(res => {
+            setLikeList(
+              _(res?.data)
+                .keyBy('postId')
+                .value()
+            );
+          })
+          .catch(err => {
+            setLikeError(err);
+            return Promise.reject(err);
+          })
+          .finally(() => setIsLoadingLikeList(false));
+      }
     }
   };
 
@@ -92,10 +93,7 @@ export const LikeProvider = ({ children }) => {
           setLikeError(err);
           return Promise.reject(err);
         })
-        .finally(() => {
-          setIsLoadingLikePost(false);
-          return;
-        });
+        .finally(() => setIsLoadingLikePost(false));
     }
   };
 
@@ -118,10 +116,7 @@ export const LikeProvider = ({ children }) => {
           setLikeError(err);
           return Promise.reject(err);
         })
-        .finally(() => {
-          setIsLoadingUnlikePost(false);
-          return;
-        });
+        .finally(() => setIsLoadingUnlikePost(false));
     }
   };
 

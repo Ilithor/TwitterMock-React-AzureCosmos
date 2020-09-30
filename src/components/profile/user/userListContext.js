@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState } from 'react';
 import _ from 'lodash';
 import * as fetchUtil from '../../../util/fetch';
+import { useQueryGate } from '../../../util/queryGate';
 
 /** @type {React.Context<UserListContextProps>} */
 const userListContext = createContext();
@@ -28,29 +29,30 @@ export const UserListProvider = ({ children }) => {
   const [isLoadingUserList, setIsLoadingUserList] = useState(false);
   const [userList, setUserList] = useState();
   const [lastRefreshUserList, setLastRefreshUserList] = useState();
+  const gate = useQueryGate();
 
   /** Refreshes the user list
    *
    * @returns {Promise}
    */
   const refreshUserList = async () => {
-    if (!isLoadingUserList) {
-      setIsLoadingUserList(true);
-      setLastRefreshUserList(Date.now());
-      await fetchUtil.user
-        .fetchUserList()
-        .then(res => {
-          if (Array.isArray(res?.data)) {
-            setUserList(_.keyBy(res?.data, 'userHandle'));
-          }
-        })
-        .catch(err => {
-          setUserListError(err);
-          return Promise.reject(err);
-        })
-        .finally(() => {
-          setIsLoadingUserList(false);
-        });
+    if (await gate.allowQuery(refreshUserList.name)) {
+      if (!isLoadingUserList) {
+        setIsLoadingUserList(true);
+        setLastRefreshUserList(Date.now());
+        await fetchUtil.user
+          .fetchUserList()
+          .then(res => {
+            if (Array.isArray(res?.data)) {
+              setUserList(_.keyBy(res?.data, 'userHandle'));
+            }
+          })
+          .catch(err => {
+            setUserListError(err);
+            return Promise.reject(err);
+          })
+          .finally(() => setIsLoadingUserList(false));
+      }
     }
   };
 

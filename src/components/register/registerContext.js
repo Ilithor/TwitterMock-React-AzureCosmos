@@ -43,14 +43,14 @@ export const RegisterProvider = ({ children }) => {
    */
   const registerUser = async userParam => {
     if (!isLoadingRegister) {
-      setIsLoadingRegister(true);
+      // setIsLoadingRegister(true);
       const error = await checkIfUndefined(userParam);
       if (error) {
         setIsLoadingRegister(false);
         return Promise.reject(error);
       }
-      const saltedPassword = await hashPassword(userParam?.password);
-      userParam.password = saltedPassword;
+      const hashedPassword = await hashPassword(userParam?.password);
+      userParam.password = hashedPassword;
       await fetchUtil.user
         .registerUser(userParam)
         .then(async res => {
@@ -71,21 +71,30 @@ export const RegisterProvider = ({ children }) => {
     }
   };
 
-  /** Salts provided password
+  /** Hashes provided password
    *
    * @param {string} password
    * @returns {string}
    */
   const hashPassword = async password => {
+    const encryptedPassword = await encryptPassword(password);
+    const salt = await bcrypt.genSalt(12);
+    const hash = await bcrypt.hash(encryptedPassword, salt).catch(err => {
+      console.error(err);
+      Promise.reject(err);
+    });
+    return hash;
+  };
+
+  /** Converts password to sha256
+   *
+   * @param {string} password
+   * @returns {string}
+   */
+  const encryptPassword = async password => {
     const md = forge.md.sha256.create();
     md.update(password);
-    const hash = await bcrypt
-      .hash(md.digest().toHex(), process.env.SOCMON_SALT)
-      .catch(err => {
-        console.error(err);
-        Promise.reject(err);
-      });
-    return hash;
+    return md.digest().toHex();
   };
 
   /** Sets the user token and authorization

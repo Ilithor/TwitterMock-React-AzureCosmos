@@ -21,8 +21,7 @@ const authenticationContext = createContext();
 /** This is a react component which you wrap your entire application
  * to provide a "context", meaning: data you can access anywhere in the app.
  *
- * @type {IAuthenticationProviderComponentProps}
- * @returns {React.FunctionComponent}
+ * @type {React.FunctionComponent}
  */
 export const AuthenticationProvider = ({ children }) => {
   const history = useHistory();
@@ -65,10 +64,7 @@ export const AuthenticationProvider = ({ children }) => {
             setAuthenticationError(err);
             return Promise.reject(err);
           })
-          .finally(() => {
-            setIsLoadingAuthentication(false);
-            return;
-          });
+          .finally(() => setIsLoadingAuthentication(false));
       }
     }
   };

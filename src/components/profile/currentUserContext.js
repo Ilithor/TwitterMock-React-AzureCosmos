@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
 import * as fetchUtil from '../../util/fetch';
+import { useQueryGate } from '../../util/queryGate';
 
 /** @type {React.Context<CurrentUserContextProps>} */
 const currentUserContext = createContext();
@@ -27,32 +28,32 @@ export const CurrentUserProvider = ({ children }) => {
   const [isLoadingCurrentUser, setIsLoadingCurrentUser] = useState(false);
   const [lastFetchCurrentUser, setLastFetchCurrentUser] = useState();
   const [currentUser, setCurrentUser] = useState();
+  const gate = useQueryGate();
 
   /** Attempts to fetch the current user data
    *
    * @returns {void|Error}
    */
   const fetchCurrentUser = async () => {
-    if (localStorage?.Handle && !isLoadingCurrentUser) {
-      setIsLoadingCurrentUser(true);
-      setLastFetchCurrentUser(Date.now());
-      await fetchUtil.user
-        .fetchUserData(localStorage?.Handle)
-        .then(res => {
-          if (res?.data) {
-            setCurrentUser(res?.data?.user);
-          } else {
-            setCurrentUserError(res?.data);
-          }
-        })
-        .catch(err => {
-          setCurrentUserError(err);
-          return Promise.reject(err);
-        })
-        .finally(() => {
-          setIsLoadingCurrentUser(false);
-          return;
-        });
+    if (await gate.allowQuery(fetchCurrentUser.name)) {
+      if (localStorage?.Handle && !isLoadingCurrentUser) {
+        setIsLoadingCurrentUser(true);
+        setLastFetchCurrentUser(Date.now());
+        await fetchUtil.user
+          .fetchUserData(localStorage?.Handle)
+          .then(res => {
+            if (res?.data) {
+              setCurrentUser(res?.data?.user);
+            } else {
+              setCurrentUserError(res?.data);
+            }
+          })
+          .catch(err => {
+            setCurrentUserError(err);
+            return Promise.reject(err);
+          })
+          .finally(() => setIsLoadingCurrentUser(false));
+      }
     }
   };
 
