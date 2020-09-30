@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 // MUI
 import { Button } from '@material-ui/core';
@@ -11,12 +11,21 @@ import { useStyles } from '../profile.style';
  */
 export const DefaultProfileButton = () => {
   const classes = useStyles();
+  const history = useHistory();
   return (
     <div className={classes?.buttons}>
-      <Button variant='contained' color='primary' link={Link} to='/login'>
+      <Button
+        variant='contained'
+        color='primary'
+        onClick={() => history.push('/login')}
+      >
         Login
       </Button>
-      <Button variant='contained' color='secondary' link={Link} to='/signup'>
+      <Button
+        variant='contained'
+        color='secondary'
+        onClick={() => history.push('/signup')}
+      >
         Register
       </Button>
     </div>
