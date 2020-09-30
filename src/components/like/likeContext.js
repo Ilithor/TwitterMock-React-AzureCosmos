@@ -32,9 +32,7 @@ const likeContext = createContext();
 /** This is a react component which you wrap your entire application
  * to provide a "context", meaning: data you can access anywhere in the app.
  *
- * @param {object} props
- * @param {React.ReactChild} props.children
- * @returns {React.FunctionComponent}
+ * @type {React.FunctionComponent}
  */
 export const LikeProvider = ({ children }) => {
   const [likeError, setLikeError] = useState();
