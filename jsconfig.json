@@ -1,5 +1,5 @@
 {
   "typeAcquisition": { "include": ["jest"] },
   "exclude": ["node_modules", "build", "dist"],
-  "include": ["src"]
+  "include": ["src", "type.js"]
 }
