@@ -19,11 +19,13 @@ export const NewPostForm = ({
   return (
     <form onSubmit={handleSubmit}>
       <TextField
-        name='body'
+        id='New Post'
+        name='New Post'
+        title='New Post'
         label='New Post'
+        type='textarea'
         multiline
         rows='3'
-        placeholder='Type post here...'
         error={error?.body ? true : false}
         helperText={error?.body}
         className={classes?.textField}
@@ -31,6 +33,7 @@ export const NewPostForm = ({
         fullWidth
       />
       <Button
+        name='submit'
         type='submit'
         variant='contained'
         color='primary'

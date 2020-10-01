@@ -35,6 +35,7 @@ const handlers = [
     return respondWithData(dummyPostList.find(post => post.postId === postId));
   }),
   rest.get(/\/post\/comment/, respondWithData(dummyCommentList)),
+  rest.post(/\/post/, respondWithData()),
 ];
 
 const server = setupServer(...handlers);
