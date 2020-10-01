@@ -46,7 +46,7 @@ export const authUser = async (req, res, next) => {
  * @param {Request|string} req request passed in OR req.headers.authorization (both supported)
  * @returns {string}
  */
-export const authByToken = req => {
+export const authByToken = async req => {
   let idToken;
   if (
     req.headers &&
